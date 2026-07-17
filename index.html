@@ -79,7 +79,7 @@
         .theme-bg-input { background-color: var(--input-bg); }
         
         /* [BLOCO 2: COMPONENTES DE INTERFACE] */
-        header { background-color: var(--header-bg); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-color); z-index: 100; flex-shrink: 0; padding: clamp(0.35rem, 0.3vw, 0.6rem) clamp(1rem, 1.5vw, 2rem); }
+        header { background-color: var(--header-bg); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-color); z-index: 100; flex-shrink: 0; padding: clamp(0.3rem, 0.4vw, 0.75rem) clamp(0.8rem, 1.4vw, 2.5rem); }
         
         /* O palco principal ocupa todo o espaço restante */
         #content-canvas { 
@@ -153,6 +153,8 @@
         .nav-link { font-weight: 400; font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; padding: 0.5rem 1.2rem; border-radius: 2rem; transition: 0.3s; }
         .nav-link.active { color: white; background: var(--accent-blue); }
 
+        .btn-cadastrar { font-size: 9px; letter-spacing: 0.1em; }
+
         .btn-icon { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--input-bg); border: 1px solid var(--border-color); transition: 0.2s; flex-shrink: 0; }
         .btn-icon:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
         .btn-icon.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
@@ -173,7 +175,7 @@
         #context-menu.show { display: block; opacity: 1; }
         #context-menu.fade-out { opacity: 0; }
 
-        .logo-header { height: clamp(28px, 2.5vw, 44px); width: auto; max-height: 100%; object-fit: contain; }
+        .logo-header { height: clamp(24px, 2.6vw, 56px); width: auto; max-height: 100%; object-fit: contain; }
 
         /* MODAL PREMIUM */
         .modal-premium {
@@ -1776,39 +1778,68 @@
         }
         .list-controls button:hover { transform: scale(1.04); }
         /* === RESPONSIVIDADE TOTAL: HD / FHD / 2K / 4K === */
-        @media (max-width: 1366px) {
-            html { font-size: 14px; }
-            header { padding: 0.35rem 1rem; }
-            .btn-icon { width: 30px; height: 30px; }
-            .zoom-btn, .view-btn { width: 26px; height: 26px; }
-            #content-canvas { padding: 1rem; }
-            .dynamic-grid { row-gap: 1rem; column-gap: 1rem; }
-            .dashboard-cards { gap: 0.5rem; }
-            .dashboard-card { padding: 1rem; }
-            .dashboard-card .dc-value { font-size: 28px; }
-            .dashboard-charts-grid { gap: 0.75rem; }
+
+        /* HD / Notebook (até 1280px) — Compacto */
+        @media (max-width: 1280px) {
+            html { font-size: 13px; }
+            header { padding: 0.35rem 0.85rem; }
+            .logo-header { height: 26px; }
+            .btn-icon { width: 30px; height: 30px; font-size: 0.65rem; }
+            .zoom-btn, .view-btn { width: 24px; height: 24px; font-size: 0.55rem; }
+            .nav-link { font-size: 8px; padding: 0.4rem 0.9rem; }
+            .btn-cadastrar { font-size: 8px; padding: 0.45rem 0.9rem; }
+            #content-canvas { padding: 0.85rem; }
+            .dynamic-grid { row-gap: 0.85rem; column-gap: 0.85rem; }
+            .dashboard-cards { gap: 0.4rem; }
+            .dashboard-card { padding: 0.85rem; }
+            .dashboard-card .dc-value { font-size: 26px; }
+            .dashboard-charts-grid { gap: 0.5rem; }
         }
-        @media (min-width: 1367px) and (max-width: 1920px) {
+
+        /* FHD / Desktop padrão (1281px — 1920px) — Confortável */
+        @media (min-width: 1281px) and (max-width: 1920px) {
             html { font-size: 15px; }
-            header { padding: 0.45rem 1.25rem; }
-            #content-canvas { padding: 1.5rem; }
-            .dynamic-grid { row-gap: 1.25rem; column-gap: 1.25rem; }
+            header { padding: 0.55rem 1.3rem; }
+            .logo-header { height: clamp(32px, 2.6vw, 40px); }
+            .btn-icon { width: 36px; height: 36px; font-size: 0.75rem; }
+            .zoom-btn, .view-btn { width: 30px; height: 30px; font-size: 0.6rem; }
+            .nav-link { font-size: 9.5px; padding: 0.5rem 1.3rem; }
+            .btn-cadastrar { font-size: 9.5px; padding: 0.55rem 1.2rem; }
+            #content-canvas { padding: 1.4rem; }
+            .dynamic-grid { row-gap: 1.3rem; column-gap: 1.3rem; }
+            .dashboard-cards { gap: 0.65rem; }
+            .dashboard-card { padding: 1.1rem; }
+            .dashboard-card .dc-value { font-size: 32px; }
+            .dashboard-charts-grid { gap: 0.85rem; }
         }
+
+        /* 2K / WQHD (1921px — 2560px) — Amplo */
         @media (min-width: 1921px) and (max-width: 2560px) {
             html { font-size: 16px; }
-            header { padding: 0.5rem 1.75rem; }
-            .btn-icon { width: 36px; height: 36px; }
+            header { padding: 0.65rem 1.75rem; }
+            .logo-header { height: clamp(38px, 2.4vw, 46px); }
+            .btn-icon { width: 40px; height: 40px; font-size: 0.8rem; }
+            .zoom-btn, .view-btn { width: 33px; height: 33px; font-size: 0.65rem; }
+            .nav-link { font-size: 10.5px; padding: 0.55rem 1.5rem; }
+            .btn-cadastrar { font-size: 10.5px; padding: 0.6rem 1.4rem; }
             #content-canvas { padding: 2rem; }
             .dynamic-grid { row-gap: 1.75rem; column-gap: 1.75rem; }
+            .dashboard-cards { gap: 0.85rem; }
+            .dashboard-card { padding: 1.3rem; }
             .dashboard-card .dc-value { font-size: 38px; }
+            .dashboard-charts-grid { gap: 1rem; }
             .modal-premium-inner { max-width: 60rem; }
         }
+
+        /* 4K / UHD (acima de 2560px) — Expansivo */
         @media (min-width: 2561px) {
             html { font-size: 18px; }
-            header { padding: 0.6rem 2.5rem; }
-            .btn-icon { width: 40px; height: 40px; font-size: 0.85rem; }
-            .zoom-btn, .view-btn { width: 32px; height: 32px; font-size: 0.7rem; }
-            .nav-link { font-size: 11px; padding: 0.6rem 1.5rem; }
+            header { padding: 0.75rem 2.5rem; }
+            .logo-header { height: clamp(44px, 2.2vw, 56px); }
+            .btn-icon { width: 46px; height: 46px; font-size: 0.9rem; }
+            .zoom-btn, .view-btn { width: 36px; height: 36px; font-size: 0.7rem; }
+            .nav-link { font-size: 12px; padding: 0.6rem 1.6rem; }
+            .btn-cadastrar { font-size: 12px; padding: 0.65rem 1.6rem; }
             #content-canvas { padding: 2.5rem; }
             .dynamic-grid { row-gap: 2rem; column-gap: 2rem; }
             .movie-card { border-radius: 1.5rem; }
@@ -1840,7 +1871,7 @@
                 <span onclick="Logic.setMainView('estreias')" id="link-estreias" class="nav-link">Estréias</span>
             </nav>
 
-            <button onclick="UI.openModal('modal-cadastro')" class="bg-blue-600 text-white px-4 py-2 rounded-full font-black text-[9px] hover:bg-blue-700 transition uppercase tracking-widest shadow-lg shrink-0">
+            <button onclick="UI.openModal('modal-cadastro')" class="btn-cadastrar bg-blue-600 text-white px-4 py-2 rounded-full font-black hover:bg-blue-700 transition uppercase tracking-widest shadow-lg shrink-0">
                 <i class="fas fa-plus mr-1"></i> Cadastrar
             </button>
 
@@ -1954,7 +1985,7 @@
         <div class="max-w-4xl mx-auto relative flex items-center">
             <i class="fas fa-search absolute left-5 text-blue-500"></i>
             <input type="text" id="main-search" placeholder="pesquise títulos, diretores, elencos, ... (use + busca booleana)" class="w-full theme-bg-input theme-border rounded-2xl py-2.5 pl-12 pr-20 outline-none text-sm" oninput="Logic.handleSearch(this.value)">
-            <button onclick="Logic.clearSearch()" class="absolute right-4 text-[0.65rem] font-normal uppercase text-red-500">Limpar</button>
+            <button onclick="Logic.clearSearch()" class="absolute right-4 w-6 h-6 flex items-center justify-center rounded-full text-red-500 hover:bg-red-500 hover:text-white transition" title="Limpar pesquisa"><i class="fas fa-times text-xs"></i></button>
         </div>
     </div>
 

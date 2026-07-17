@@ -89,3 +89,72 @@ Sempre faça uma revisão e checklist antes me entregar as novas implementaçõe
 ```
 
 **Preservação:** O sistema de navegação entre abas (Filmes/Séries/Estreias), o estado ativo, e todos os handlers `onclick="Logic.setMainView(...)"` permanecem inalterados.
+
+---
+
+### 5. Logotipo: Remoção definitiva do base64 e substituição por arquivo cinecatalogo.png
+
+**Arquivo:** `index.html` + `projeto_catalogo/index.html` — HTML + CSS + JavaScript
+
+**O que foi feito:**
+- Confirmado e garantido que **nenhum** `<img>` com `src="data:image/png;base64,..."` permanece em nenhum dos arquivos do projeto.
+- O logotipo é exibido exclusivamente通过 arquivo `cinecatalogo.png` na raiz do projeto, dentro de uma `<div>` individual:
+  ```html
+  <div id="logo-img" class="logo-header" style="display:flex;align-items:center">
+      <img src="cinecatalogo.png" alt="CineCatalog Elo" style="height:100%;width:auto;object-fit:contain">
+  </div>
+  ```
+- A classe `.logo-header` garante escala responsiva fluida com a barra principal:
+  ```css
+  .logo-header { height: clamp(28px, 2.5vw, 44px); width: auto; max-height: 100%; object-fit: contain; }
+  ```
+- A função `applyConfig()` foi atualizada em **ambos** os arquivos para buscar o `<img>` interno do container `<div>`, mantendo compatibilidade com logotipos personalizados via Configurações.
+
+**Preservação:** A função `applyConfig()` só sobrescreve o logotipo se o utilizador tiver configurado um logo personalizado. Caso contrário, o `cinecatalogo.png` da raiz é sempre exibido.
+
+---
+
+### 6. Barra de Pesquisa: Botão "X" substituindo texto "LIMPAR"
+
+**Arquivo:** `index.html` + `projeto_catalogo/index.html` — HTML
+
+**O que foi feito:**
+- Substituído o botão de texto "Limpar" por um botão circular com ícone "X" (Font Awesome `fa-times`):
+  ```html
+  <button onclick="Logic.clearSearch()" class="absolute right-4 w-6 h-6 flex items-center justify-center rounded-full text-red-500 hover:bg-red-500 hover:text-white transition" title="Limpar pesquisa">
+      <i class="fas fa-times text-xs"></i>
+  </button>
+  ```
+- O botão mantém a mesma posição absoluta à direita dentro da barra de pesquisa.
+- Inclui efeito hover: fundo vermelho com ícone branco ao passar o mouse.
+- Adicionado `title="Limpar pesquisa"` para acessibilidade.
+- A função `Logic.clearSearch()` continua sendo chamada normalmente.
+
+**Preservação:** A lógica de pesquisa, o handler `oninput="Logic.handleSearch(this.value)"`, e todas as funcionalidades de busca permanecem intactas.
+
+---
+
+### 7. Escala Proporcional do Header acima de 1280px
+
+**Arquivo:** `index.html` — `<style>` (base + 4 media queries)
+
+**O que foi feito:**
+- Redesenhados os 4 breakpoints responsivos com ponto de partida em **1280px**:
+  - **≤1280px (HD/Notebook):** Tudo compacto — header 0.35rem, logo 26px, btn-icon 30px, nav-link 8px.
+  - **1281–1920px (FHD/Desktop):** Tudo proporcionalmente maior — header 0.55rem, logo 32–40px, btn-icon 36px, nav-link 9.5px.
+  - **1921–2560px (2K/WQHD):** Tudo amplo — header 0.65rem, logo 38–46px, btn-icon 40px, nav-link 10.5px.
+  - **≥2561px (4K/UHD):** Tudo expansivo — header 0.75rem, logo 44–56px, btn-icon 46px, nav-link 12px.
+- Cada breakpoint ajusta **proporcionalmente**:
+  - **Header:** padding vertical e horizontal
+  - **Logo:** altura via `clamp()` fluido
+  - **Botões de ícone:** `.btn-icon` (30→36→40→46px)
+  - **Botões de zoom/visualização:** `.zoom-btn` e `.view-btn` (24→30→33→36px)
+  - **Nav-links:** font-size e padding (8→9.5→10.5→12px)
+  - **Botão +CADASTRAR:** nova classe `.btn-cadastrar` com font-size e padding escalados (8→9.5→10.5→12px)
+  - **Grid de cards:** row-gap e column-gap
+  - **Dashboard:** cards, valores, gráficos
+  - **Canvas principal:** padding
+- O padding base do `<header>` usa `clamp()` fluido: `clamp(0.3rem, 0.4vw, 0.75rem)` × `clamp(0.8rem, 1.4vw, 2.5rem)`
+- A altura do logo usa `clamp(24px, 2.6vw, 56px)` na base, refinada em cada breakpoint
+
+**Preservação:** Nenhuma funcionalidade existente foi alterada. Todos os handlers, classes, variáveis e lógica de negócio mantidos intactos.
