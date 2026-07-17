@@ -3125,7 +3125,13 @@
                     <i class="fas fa-info-circle text-blue-500 text-2xl"></i>
                     <span class="text-[1rem] font-black uppercase tracking-widest" style="color:var(--text-color);-webkit-text-fill-color:var(--text-color)">FUNCIONALIDADES</span>
                 </div>
-                <button onclick="UI.closeModal('modal-info')" class="btn-close-premium" ><i class="fas fa-times text-xs"></i></button>
+                <div class="flex items-center gap-2">
+                    <button onclick="window.open('manual_do_catalogo.html','_blank')" class="flex items-center gap-2 px-3 py-1.5 rounded-full text-[0.65rem] font-black uppercase tracking-wider transition-all" style="background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;box-shadow:0 4px 15px rgba(59,130,246,0.35);cursor:pointer;border:none" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 25px rgba(59,130,246,0.5)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 15px rgba(59,130,246,0.35)'" title="Abrir Manual do Catálogo em nova aba">
+                        <i class="fas fa-book-open" style="font-size:12px"></i>
+                        <span>Manual</span>
+                    </button>
+                    <button onclick="UI.closeModal('modal-info')" class="btn-close-premium" ><i class="fas fa-times text-xs"></i></button>
+                </div>
             </div>
             <div class="p-5 overflow-y-auto custom-scroll" style="max-height:82vh">
                 <div style="font-size:0.7rem;font-weight:600;color:var(--text-secondary);margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.1em">Clique num ícone para saber mais</div>

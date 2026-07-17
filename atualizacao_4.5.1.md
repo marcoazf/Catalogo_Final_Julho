@@ -502,3 +502,48 @@ Tudo que usa unidades `rem` (padding, margin, gap, border-radius, font-size de T
 | Nenhuma funcionalidade existente alterada | OK |
 | Paletas, tipografia, layout, espaçamentos preservados | OK |
 | Todos os IDs, classes e handlers mantidos | OK |
+
+---
+
+### 20. Botão Manual do Catálogo no Modal Funcionalidades + Responsividade do Manual
+
+**Arquivos:** `index.html` (HTML) + `manual_do_catalogo.html` (CSS)
+
+**O que foi feito:**
+
+**A) Botão destacado no modal Funcionalidades (`modal-info`):**
+- Adicionado botão com gradiente azul→roxo (`linear-gradient(135deg,#3B82F6,#8B5CF6)`) no header do modal Funcionalidades, ao lado do botão de fechar.
+- Ícone elegante `fa-book-open` (Font Awesome) com label "Manual".
+- O botão abre `manual_do_catalogo.html` em nova aba via `window.open('manual_do_catalogo.html','_blank')`.
+- A janela Funcionalidades permanece aberta por baixo da nova aba do Manual, acessível após o fecho.
+- Efeito hover: elevação com `translateY(-2px)` e sombra ampliada.
+- Botão de fechar (X) mantido intacto ao lado direito.
+
+**B) Responsividade do manual (`manual_do_catalogo.html`):**
+- Adicionados 3 breakpoints de media queries para diferentes resoluções:
+  - **FHD (1280px–1920px):** Padding 2.5rem/3rem, max-width 1280px, h1 2rem, parágrafos 1rem, nav links 0.85rem.
+  - **2K (1921px–2560px):** Padding 3rem/4rem, max-width 1400px, h1 2.4rem, parágrafos 1.1rem, nav links 0.95rem.
+  - **4K (≥2561px):** Padding 4rem/6rem, max-width 1600px, h1 3rem, parágrafos 1.25rem, nav links 1.1rem, badges 1rem.
+- Todos os elementos escalam proporcionalmente: títulos, parágrafos, tabelas, badges, kbd, nav links, back-top.
+
+**Preservação:** O modal Funcionalidades mantém todas as funcionalidades existentes (grid de 28 funcionalidades, descrições, handlers). O botão X de fechar continua funcionando. Nenhum handler, classe ou variável existente foi alterado.
+
+---
+
+### Checklist Final (v4.5.1 — Item 20)
+
+| Verificação | Status |
+|---|---|
+| Botão Manual com gradiente azul→roxo no header | OK |
+| Ícone fa-book-open elegante | OK |
+| window.open em nova aba (_blank) | OK |
+| Modal Funcionalidades permanece aberta | OK |
+| Botão X de fechar preservado | OK |
+| Hover com elevação e sombra | OK |
+| Manual responsivo FHD (1280–1920px) | OK |
+| Manual responsivo 2K (1921–2560px) | OK |
+| Manual responsivo 4K (≥2561px) | OK |
+| Todos os elementos do manual escalam | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |

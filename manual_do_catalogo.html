@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual do Catálogo — CineCatalog Elo</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter','Segoe UI',sans-serif; background: #0f172a; color: #e2e8f0; padding: 2rem; max-width: 1200px; margin: 0 auto; line-height: 1.8; }
+h1 { font-size: 1.8rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; background: linear-gradient(135deg,#60A5FA,#A78BFA); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.25rem; }
+.subtitle { color: #94a3b8; font-size: 0.95rem; margin-bottom: 2rem; border-bottom: 1px solid #1e293b; padding-bottom: 1rem; }
+h2 { font-size: 1.2rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.04em; color: #3B82F6; margin: 1.5rem 0 0.75rem; padding-bottom: 0.3rem; border-bottom: 1px solid #1e293b; }
+h3 { font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: #F59E0B; margin: 1rem 0 0.5rem; }
+p, li { font-size: 0.95rem; color: #cbd5e1; margin-bottom: 0.5rem; }
+ul, ol { padding-left: 1.5rem; margin-bottom: 0.75rem; }
+li { margin-bottom: 0.3rem; }
+code { background: #1e293b; color: #22D3EE; padding: 0.1rem 0.3rem; border-radius: 0.3rem; font-size: 0.85rem; }
+table { width: 100%; border-collapse: collapse; margin: 0.75rem 0; font-size: 0.9rem; }
+th { background: #1e293b; color: #60A5FA; padding: 0.5rem; text-align: left; font-weight: 700; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; border: 1px solid #334155; }
+td { padding: 0.4rem 0.5rem; border: 1px solid #334155; color: #cbd5e1; }
+.badge { display: inline-block; padding: 0.15rem 0.4rem; border-radius: 0.3rem; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+.badge-blue { background: rgba(59,130,246,0.15); color: #60A5FA; }
+.badge-amber { background: rgba(245,158,11,0.15); color: #FBBF24; }
+.badge-red { background: rgba(239,68,68,0.15); color: #F87171; }
+.badge-green { background: rgba(34,197,94,0.15); color: #22C55E; }
+.badge-purple { background: rgba(139,92,246,0.15); color: #A78BFA; }
+kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; border-radius: 0.3rem; font-size: 0.8rem; font-weight: 700; color: #e2e8f0; }
+.nav { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 2rem; }
+.nav a { padding: 0.3rem 0.7rem; border-radius: 0.5rem; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; background: #1e293b; color: #94a3b8; text-decoration: none; transition: 0.2s; }
+.nav a:hover { background: rgba(59,130,246,0.15); color: #60A5FA; }
+.back-top { display: block; text-align: right; margin-top: 0.5rem; }
+.back-top a { color: #4B5563; font-size: 0.85rem; text-decoration: none; transition: color 0.2s; }
+.back-top a:hover { color: #60A5FA; }
+.back-top i { font-size: 1rem; }
+
+/* === RESPONSIVIDADE: FHD / 2K / 4K === */
+
+/* FHD (1920px) — Confortável */
+@media (min-width: 1280px) and (max-width: 1920px) {
+    body { padding: 2.5rem 3rem; max-width: 1280px; }
+    h1 { font-size: 2rem; }
+    .subtitle { font-size: 1rem; }
+    h2 { font-size: 1.3rem; }
+    h3 { font-size: 1rem; }
+    p, li { font-size: 1rem; }
+    code { font-size: 0.9rem; }
+    table { font-size: 0.95rem; }
+    th { font-size: 0.8rem; }
+    .badge { font-size: 0.75rem; }
+    .nav a { font-size: 0.85rem; padding: 0.35rem 0.8rem; }
+}
+
+/* 2K / WQHD (1921px — 2560px) — Amplo */
+@media (min-width: 1921px) and (max-width: 2560px) {
+    body { padding: 3rem 4rem; max-width: 1400px; }
+    h1 { font-size: 2.4rem; }
+    .subtitle { font-size: 1.15rem; }
+    h2 { font-size: 1.5rem; }
+    h3 { font-size: 1.15rem; }
+    p, li { font-size: 1.1rem; }
+    code { font-size: 1rem; }
+    table { font-size: 1.05rem; }
+    th { font-size: 0.9rem; padding: 0.6rem; }
+    td { padding: 0.5rem 0.6rem; }
+    .badge { font-size: 0.85rem; padding: 0.2rem 0.5rem; }
+    .nav a { font-size: 0.95rem; padding: 0.4rem 0.9rem; }
+    .back-top a { font-size: 0.95rem; }
+}
+
+/* 4K / UHD (acima de 2560px) — Expansivo */
+@media (min-width: 2561px) {
+    body { padding: 4rem 6rem; max-width: 1600px; }
+    h1 { font-size: 3rem; }
+    .subtitle { font-size: 1.35rem; margin-bottom: 2.5rem; }
+    h2 { font-size: 1.8rem; margin: 2rem 0 1rem; }
+    h3 { font-size: 1.35rem; margin: 1.5rem 0 0.75rem; }
+    p, li { font-size: 1.25rem; }
+    code { font-size: 1.1rem; padding: 0.15rem 0.45rem; }
+    table { font-size: 1.2rem; }
+    th { font-size: 1rem; padding: 0.7rem 0.8rem; }
+    td { padding: 0.6rem 0.8rem; }
+    .badge { font-size: 1rem; padding: 0.25rem 0.6rem; }
+    kbd { font-size: 1rem; padding: 0.15rem 0.5rem; }
+    .nav { gap: 0.5rem; margin-bottom: 2.5rem; }
+    .nav a { font-size: 1.1rem; padding: 0.45rem 1rem; border-radius: 0.6rem; }
+    .back-top a { font-size: 1.1rem; }
+    .back-top i { font-size: 1.2rem; }
+}
+</style>
+</head>
+<body>
+<h1>Manual do Catálogo</h1>
+<p class="subtitle">CineCatalog Elo — Edição Premium | Versão 28.2 <span class="badge badge-blue">ÍCONE DA APP</span></p>
+
+<div class="nav">
+<a href="#s1">1. Visão Geral</a>
+<a href="#s2">2. Abas</a>
+<a href="#s3">3. Cadastro</a>
+<a href="#s4">4. Géneros</a>
+<a href="#s5">5. Pesquisa</a>
+<a href="#s6">6. Modos de Visualização</a>
+<a href="#s7">7. Gerir Géneros</a>
+<a href="#s8">8. Sugestão Diária</a>
+<a href="#s9">9. Configurações</a>
+<a href="#s10">10. Primeiros Passos</a>
+<a href="#s11">11. Personalização Cards</a>
+<a href="#s12">12. Atalhos</a>
+<a href="#s13">13. Backup</a>
+<a href="#s14">14. Atualizações</a>
+<a href="#s15">15. Executar Mídia</a>
+<a href="#s16">16. Smart TV</a>
+<a href="#s17">17. Dicas</a>
+<a href="#s18">18. Problemas</a>
+<a href="#s19">19. Segurança</a>
+<a href="#s20">20. Ícone da Aplicação</a>
+<a href="#s21">21. Novidades v28.1</a>
+<a href="#s22">22. Novidades v28.2</a>
+</div>
+
+<h2 id="s1">1. Visão Geral</h2>
+<p>O CineCatalog Elo é um sistema completo de gestão de acervo cinematográfico. Permite cadastrar filmes, séries e estreias, organizar por géneros, avaliar com estrelas, favoritar, criar lembretes, gerar listas A4 e muito mais.</p>
+<ul>
+<li>Todo o código está num único ficheiro <code>index.html</code></li>
+<li>Os dados são armazenados no <code>localStorage</code> do navegador</li>
+<li>Suporta exportação/importação JSON para backup</li>
+<li>Funciona em navegadores desktop, Electron e Smart TV</li>
+<li>Auto salvamento para ficheiro na pasta do acervo configurada</li>
+</ul>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s2">2. Abas (Filmes / Séries / Estreias)</h2>
+<p>No topo do header encontra três abas de navegação principal:</p>
+<ul>
+<li><span class="badge badge-blue">Filmes</span> — Lista todos os filmes cadastrados</li>
+<li><span class="badge badge-purple">Séries</span> — Lista todas as séries cadastradas</li>
+<li><span class="badge badge-amber">Estreias</span> — Lista estreias futuras e passadas</li>
+</ul>
+<p>Ao clicar numa aba, o conteúdo do acervo é filtrado automaticamente.</p>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s3">3. Cadastro de Filmes/Séries</h2>
+<p>Clique no botão <span class="badge badge-blue">CADASTRAR</span> no header para abrir o modal de cadastro.</p>
+<ul>
+<li><strong>Filmes:</strong> Título, Ano, Duração, Diretor, Elenco, Género, Sinopse, Capa, Trailer, Media, Classificação (estrelas), Status (Novo/Assistir/Favorito)</li>
+<li><strong>Séries:</strong> Título, Ano, Duração, Temporada, Episódio, Diretor, Elenco, Género, Sinopse, Capa, Trailer, Media, Classificação, Status</li>
+<li><strong>Estreias:</strong> Data, Título, Tipo (Filme/Série), Trailer URL. Suporta múltiplas estreias dinâmicas com adição/remoção em tempo real</li>
+<li>Preenchimento automático dos campos de caminho (Cards, Vídeos) conforme configurado</li>
+</ul>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s4">4. Cadastro — Géneros Personalizados</h2>
+<p>Pode gerir géneros diretamente no modal de cadastro, clicando no ícone de engrenagem ao lado do campo "Géneros".</p>
+<ul>
+<li>Adicione novos géneros digitando e clicando em "Add"</li>
+<li>Remova géneros com o botão X vermelho</li>
+<li>Os géneros são guardados no <code>localStorage</code></li>
+<li>No modal GERIR GÉNERO (Configurações), o título tem ícone <i class="fas fa-tags"></i> e fonte 20% maior</li>
+<li>A lista de categorias tem fonte aumentada e peso 400 para melhor legibilidade</li>
+</ul>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s5">5. Pesquisa com Destaque Neon</h2>
+<p>Clique no ícone <i class="fas fa-search"></i> (ou pressione <kbd>Ctrl+F</kbd>) para abrir a barra de pesquisa.</p>
+<ul>
+<li>Pesquisa por título, diretor, elenco, género, sinopse</li>
+<li>Mínimo de 3 caracteres</li>
+<li>Resultados destacados com neon <span class="badge badge-amber">laranja</span></li>
+<li>Suporta pesquisa por voz (navegadores com <code>SpeechRecognition</code>)</li>
+</ul>
+<h3>Pesquisa Booleana</h3>
+<p>Use o operador <code>+</code> entre termos para combinar múltiplos critérios. O sistema filtra itens que correspondem a <strong>todos</strong> os termos.</p>
+<p>Exemplos:</p>
+<table>
+<tr><th>Exemplo</th><th>O que faz</th></tr>
+<tr><td><code>ação</code></td><td>Encontra todos os filmes/séries com "ação" no título, género ou sinopse</td></tr>
+<tr><td><code>ação+2023</code></td><td>Filmes de ação do ano 2023</td></tr>
+<tr><td><code>terror+2024+alemão</code></td><td>Filmes de terror alemães de 2024</td></tr>
+<tr><td><code>star+wars</code></td><td>Busca exata por "star wars" (ambos os termos presentes)</td></tr>
+<tr><td><code>comédia+romance+2022</code></td><td>Comédias românticas de 2022</td></tr>
+<tr><td><code>nolan+ficção</code></td><td>Filmes do diretor Christopher Nolan no género ficção científica</td></tr>
+</table>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s6">6. Modos de Visualização</h2>
+<p>Três modos disponíveis no header:</p>
+<ul>
+<li><span class="badge badge-blue">Carrossel</span> — Navegação horizontal com setas, duas linhas visíveis</li>
+<li><span class="badge badge-green">Grelha</span> — Organizado por categorias com secções</li>
+<li><span class="badge badge-purple">Cine Marquee</span> — Animação contínua com efeito de marquee</li>
+</ul>
+<p>Use o menu de contexto (ícone <i class="fas fa-ellipsis-v"></i>) para configurar velocidade e efeito da animação.</p>
+<p>Botões de zoom (1X a 4X) para ajustar o número de colunas visíveis.</p>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s7">7. Gerenciar Géneros</h2>
+<p>No modal de Configurações, seção "Gerenciar Géneros":</p>
+<ul>
+<li>Adicione géneros usando o campo de texto + botão "Add"</li>
+<li>Remova géneros clicando no X</li>
+<li>Os géneros aparecem automaticamente nos dropdowns do cadastro e da configuração</li>
+<li>Dropdown de géneros na Config em ordem alfabética</li>
+</ul>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s8">8. Sugestão Diária</h2>
+<p>O sistema pode sugerir um filme/série aleatório:</p>
+<ul>
+<li>Ative em Configurações → secção "Sugestões"</li>
+<li>Filtros: Novo, Assistir, Favoritos — se nenhum marcado, sugere de todo o acervo</li>
+<li>A sugestão aparece automaticamente uma vez por sessão (não se repete até recarregar a página)</li>
+<li>Clique "Nova Sugestão" para outra escolha aleatória</li>
+<li>Botão "ASSISTIR" usa o sistema de reprodução padrão</li>
+</ul>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s9">9. Configurações</h2>
+<p>Clique no ícone <i class="fas fa-cog"></i> no header para abrir as configurações.</p>
+<ul>
+<li><strong>Caminhos:</strong> Pastas absolutas para Cards, Vídeos, Backups e Acervo Geral</li>
+<li><strong>Acervo Geral:</strong> Nome do ficheiro + pasta de destino para auto salvamento</li>
+<li><strong>Auto Salvamento:</strong> Ativar/desativar — salva automaticamente na pasta do Acervo</li>
+<li><strong>Gestão de Mídia:</strong> Seletor de player de vídeo (VLC, MPC-HC, PotPlayer, MPV, Windows Media Player) — o player escolhido abre em ecrã cheio/maximizado</li>
+<li><strong>Notificações:</strong> Ativar/desativar pop-ups de estreias, duração configurável</li>
+<li><strong>Sugestões:</strong> Ativar/desativar com filtros (Novo, Assistir, Favoritos)</li>
+<li><strong>Personalização dos Cards:</strong> Cores, tamanhos, opacidade com pré-visualização em tempo real</li>
+<li><strong>Personalização do Rodapé:</strong> Texto, cores e tamanhos dos elementos do footer</li>
+<li><strong>Gerenciar Géneros:</strong> Adicionar/remover géneros globalmente (ícone <i class="fas fa-tags"></i> no título)</li>
+<li><strong>Reset:</strong> Limpar acervo completo (remove todos os dados do localStorage)</li>
+</ul>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s10">10. Primeiros Passos — Configuração Inicial</h2>
+<p>Para começar a usar o CineCatalog Elo corretamente, siga estas recomendações na ordem indicada.</p>
+
+<h3>10.1 Configurar os Caminhos (Pastas do Acervo)</h3>
+<p>Abra as <strong>Configurações</strong> (ícone <i class="fas fa-cog"></i> no header) e localize a secção <strong>Caminhos</strong>.</p>
+<ul>
+<li><strong>Cards:</strong> Pasta onde serão guardadas as imagens de capa dos filmes/séries (ex: <code>D:\ACERVO\CARDS</code>)</li>
+<li><strong>Vídeos:</strong> Pasta onde estão armazenados os ficheiros de mídia (ex: <code>D:\ACERVO\VIDEOS</code>)</li>
+<li><strong>Backups:</strong> Pasta para exportar e importar o ficheiro JSON de backup</li>
+<li><strong>Acervo Geral:</strong> Define o nome do ficheiro (ex: <code>meu_acervo.json</code>) e a pasta onde o auto salvamento guardará os dados</li>
+</ul>
+<p>Use o botão <span class="badge badge-blue">📁</span> ao lado de cada campo para abrir o seletor de pastas. No Electron, abre o diálogo nativo do sistema; no navegador, usa a File System Access API.</p>
+<p><strong>Importante:</strong> Os caminhos devem ser absolutos (ex: <code>C:\Users\...\ACERVO\CARDS</code>) e as pastas devem existir no disco.</p>
+<p><strong>Preenchimento Automático:</strong> Quando os caminhos Cards e Vídeos estão configurados, o sistema tenta preencher automaticamente os campos "Capa" e "Mídia" no formulário de cadastro, usando como base o título do filme/série.</p>
+
+<h3>10.2 Configurar o Auto Salvamento</h3>
+<p>Na mesma secção de Configurações:</p>
+<ol>
+<li>Defina um <strong>nome para o ficheiro</strong> do acervo (ex: <code>acervo.json</code>)</li>
+<li>Escolha a <strong>pasta de destino</strong> onde o ficheiro será salvo</li>
+<li>Ative o toggle <strong>"Auto Salvamento"</strong></li>
+</ol>
+<p>Quando ativo, o sistema guarda automaticamente o estado completo do acervo no ficheiro sempre que houver alterações (adicionar, editar, remover itens, favoritar, etc.).</p>
+<p>No rodapé, um indicador com ícone de disquete <i class="fas fa-save"></i> mostra o estado:</p>
+<ul>
+<li><span style="color:#3B82F6">Azul neon</span> = Auto salvamento ativo</li>
+<li><span style="color:#6B7280">Cinza</span> = Auto salvamento desligado</li>
+</ul>
+
+<h3>10.3 Exportar / Importar JSON (Backup)</h3>
+<p>O sistema permite exportar e importar todo o acervo num único ficheiro JSON.</p>
+<p><strong>Exportar:</strong> Clique no ícone <i class="fas fa-download"></i> no header. O navegador descarrega um ficheiro <code>cinecatalog_backup_YYYY-MM-DD_HHmmss.json</code> com todos os dados.</p>
+<p><strong>Importar:</strong> Clique no ícone <i class="fas fa-upload"></i> no header e selecione um ficheiro JSON válido. O sistema substitui o acervo atual pelos dados importados.</p>
+
+<h3>10.4 O Ficheiro JSON — O que guarda e qual a sua importância</h3>
+<p>O ficheiro JSON é a <strong>base de dados completa</strong> do CineCatalog Elo. Ele contém:</p>
+<ul>
+<li>Todos os filmes, séries e estreias cadastrados (com título, ano, género, sinopse, elenco, etc.)</li>
+<li>Status de cada item: Novo, Assistir, Favorito</li>
+<li>Avaliações por estrelas (0–5)</li>
+<li>Lembretes e notificações associados a cada item</li>
+<li>Episódios de séries (títulos, durações, links)</li>
+<li>Datas de criação e IDs únicos</li>
+<li>Preferências de géneros personalizados</li>
+</ul>
+<p><strong>Importância:</strong> Este ficheiro é a cópia de segurança do seu acervo. Se o <code>localStorage</code> do navegador for limpo ou corrompido, pode restaurar todos os dados importando este JSON. Guarde-o num local seguro (disco externo, nuvem) e faça exportações periódicas.</p>
+<p>O JSON segue o formato padrão e pode ser aberto em qualquer editor de texto para consulta ou edição manual avançada.</p>
+
+<h3>10.5 Verificação após Configuração</h3>
+<ul>
+<li>Confirme que o indicador de auto salvamento no rodapé está <span style="color:#3B82F6">azul</span></li>
+<li>Faça um teste: cadastre um filme, depois exporte o JSON e verifique se o ficheiro contém os dados</li>
+<li>Importe o ficheiro exportado para um perfil/navegador diferente para confirmar que a restauração funciona</li>
+</ul>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s11">11. Personalização dos Cards</h2>
+<p>Na secção "Personalização dos Cards" das Configurações:</p>
+<ul>
+<li>Cor e opacidade das estrelas, ano, texto de status</li>
+<li>Cores de fundo para status: Novo, Assistir, Favorito</li>
+<li>Cor do texto e fundo do género no topo do card</li>
+<li>Tamanho do texto do género</li>
+<li>Cor e opacidade do placeholder</li>
+<li>Pré-visualização em tempo real do card e do rodapé</li>
+</ul>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s12">12. Atalhos de Teclado</h2>
+<p>Os atalhos são <strong>totalmente personalizáveis</strong> através do botão <i class="fas fa-keyboard"></i> no header. Clique no ícone para abrir o gestor de atalhos, clique num atalho e pressione a combinação de teclas pretendida. As alterações são guardadas automaticamente no <code>localStorage</code>.</p>
+<p>Atalhos predefinidos (podem ser reatribuídos):</p>
+<table>
+<tr><th>Atalho</th><th>Ação</th></tr>
+<tr><td><kbd>Ctrl+1</kbd></td><td>Aba Filmes</td></tr>
+<tr><td><kbd>Ctrl+2</kbd></td><td>Aba Séries</td></tr>
+<tr><td><kbd>Ctrl+3</kbd></td><td>Aba Estreias</td></tr>
+<tr><td><kbd>Ctrl+F</kbd></td><td>Pesquisar</td></tr>
+<tr><td><kbd>Ctrl+E</kbd></td><td>Cadastrar novo item</td></tr>
+<tr><td><kbd>Ctrl+I</kbd></td><td>Abrir INFO do item selecionado</td></tr>
+<tr><td><kbd>Ctrl+M</kbd></td><td>Abrir menu de contexto</td></tr>
+<tr><td><kbd>Ctrl+T</kbd></td><td>Alternar modo de visualização</td></tr>
+</table>
+<p>Atalhos fixos (não reatribuíveis):</p>
+<table>
+<tr><th>Atalho</th><th>Ação</th></tr>
+<tr><td><kbd>F5</kbd></td><td>Desabilitado (prevenção)</td></tr>
+<tr><td><kbd>F12</kbd></td><td>Desabilitado (prevenção)</td></tr>
+<tr><td><kbd>F11</kbd></td><td>Desabilitado (prevenção)</td></tr>
+<tr><td><kbd>ESC</kbd></td><td>Fechar pop-ups e modais</td></tr>
+<tr><td><kbd>→ ← ↑ ↓</kbd></td><td>Navegação DPAD entre cards (Smart TV)</td></tr>
+</table>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s13">13. Backup e Restauração</h2>
+<ul>
+<li><strong>Exportar:</strong> Clique no ícone <i class="fas fa-download"></i> para descarregar o acervo em JSON</li>
+<li><strong>Importar:</strong> Clique no ícone <i class="fas fa-upload"></i> para selecionar um ficheiro JSON</li>
+<li><strong>Auto Salvamento:</strong> Guarda automaticamente no localStorage + ficheiro na pasta do Acervo</li>
+<li><strong>Pasta do Acervo:</strong> Configure nome + diretório nas Configurações → Caminhos</li>
+<li>Consulte a secção <a href="#s10">10. Primeiros Passos</a> para instruções detalhadas sobre JSON, exportação e importação</li>
+</ul>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s14">14. Atualizações</h2>
+<p>O sistema verifica atualizações automaticamente através da GitHub API.</p>
+<ul>
+<li>Badge da versão no footer: <span class="badge badge-blue">v28.2</span></li>
+<li>Clique no badge para verificar manualmente</li>
+<li>Se atualizado: badge verde <span class="badge badge-green">✓ Atualizado</span></li>
+<li>Se nova versão: badge âmbar com link para download</li>
+<li>Repositório: <code>marcoazf/Cine-Catalogo-Jonas</code></li>
+</ul>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s15">15. Executar Mídia (playMedia)</h2>
+<p>O sistema usa a função <code>Logic.playMedia(id)</code> para reproduzir vídeos:</p>
+<ul>
+<li>No Electron: usa <code>electronAPI.openMedia()</code> ou <code>electronAPI.openWithPlayer()</code> com o player selecionado (VLC, MPC-HC, etc.)</li>
+<li>Players abrem em tela cheia/maximizado automaticamente</li>
+<li>No navegador: fallback para <code>window.open()</code></li>
+<li>Trailers abrem no navegador padrão em tela cheia</li>
+<li>Os botões "EXECUTAR FILME" e "EXECUTAR EPISÓDIO" nos modais INFO usam este sistema</li>
+<li>O botão "ASSISTIR" na Sugestão do Dia também usa <code>playMedia()</code></li>
+</ul>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s16">16. Smart TV e Controle Remoto</h2>
+<p>O sistema foi otimizado para Smart TV com suporte a DPAD:</p>
+<ul>
+<li><strong>1920px+</strong>: 8 colunas no grid, modais maiores</li>
+<li><strong>Focus visible</strong>: contorno laranja <code>#FF6B00</code> ao navegar com teclado/remoto</li>
+<li><strong>Setas direcionais</strong>: <kbd>→</kbd> <kbd>←</kbd> <kbd>↑</kbd> <kbd>↓</kbd> para navegar entre cards</li>
+<li><strong>Cards com tabIndex</strong>: todos os cards são focáveis</li>
+</ul>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s17">17. Dicas de Uso</h2>
+<ul>
+<li>Use a pesquisa booleana com <code>+</code> para combinar termos: <code>terror+2024+alemão</code></li>
+<li>A avaliação por estrelas (0-5) aparece nos cards e modais INFO</li>
+<li>Lembretes combinam Filmes + Séries no mesmo painel numerado</li>
+<li>Personalize as cores do rodapé nos campos com color picker visual</li>
+<li>Use o modo "Grelha" para ver filmes organizados por género</li>
+<li>O auto-salvamento pode ser ativado/desativado nas configurações</li>
+<li>Pode desativar notificações de estreias nas configurações</li>
+<li>A sugestão aleatória usa todo o acervo se nenhum filtro estiver marcado</li>
+<li>O coração de favoritos está sempre visível no card — clique para favoritar (vermelho) / desfavoritar (branco transparente)</li>
+</ul>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s18">18. Solução de Problemas</h2>
+<table>
+<tr><th>Problema</th><th>Solução</th></tr>
+<tr><td>Dados não carregam</td><td>Verifique se o <code>localStorage</code> não está corrompido. Use "Importar" para restaurar um backup</td></tr>
+<tr><td>Imagens não aparecem</td><td>Verifique se as URLs das capas são acessíveis. Use formato JPG/PNG/WEBP</td></tr>
+<tr><td>Pesquisa por voz não funciona</td><td>Apenas disponível em navegadores Chrome/Edge com suporte a <code>SpeechRecognition</code></td></tr>
+<tr><td>Electron não abre mídia</td><td>Verifique se o caminho do ficheiro está correto e se o <code>main.js</code> tem o handler <code>openMedia</code></td></tr>
+<tr><td>Atualização não detectada</td><td>Clique no badge da versão no footer para verificar manualmente. Verifique a ligação à internet</td></tr>
+<tr><td>Cards lentos</td><td>O sistema usa lazy loading com IntersectionObserver e batches de 48 cards</td></tr>
+<tr><td>Reset do acervo</td><td>Use o botão "Reset Geral" nas Configurações (remove todos os dados)</td></tr>
+<tr><td>Player não abre maximizado</td><td>No Electron, o sistema tenta passar flags de fullscreen. Verifique se o player suporta</td></tr>
+</table>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s19">19. Segurança</h2>
+<ul>
+<li><strong>Teclas bloqueadas:</strong> F12, F11, F5, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U — impedem acesso a DevTools</li>
+<li><strong>Context menu:</strong> Clique direito desabilitado em toda a aplicação (exceto menu personalizado)</li>
+<li><strong>Anti-frame:</strong> A página não pode ser carregada dentro de iframes (clickjacking)</li>
+<li><strong>Console:</strong> Desabilitado em produção (não localhost/file)</li>
+<li><strong>DevTools hook:</strong> Detectores de DevTools neutralizados</li>
+<li><strong>Fechamento:</strong> Aviso ao fechar com modal de cadastro aberto</li>
+</ul>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s20">20. Ícone da Aplicação</h2>
+<p>A aplicação inclui um ícone personalizado (<code>icon.png</code>) utilizado:</p>
+<ul>
+<li>Na janela do Electron (title bar e taskbar)</li>
+<li>No instalador do Windows (NSIS)</li>
+<li>No atalho da aplicação</li>
+</ul>
+<p>O ficheiro <code>icon.png</code> encontra-se na raiz do projeto e é referenciado no <code>electron/main.js</code>.</p>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<p style="margin-top:2rem;text-align:center;color:#475569;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em">CineCatalog Elo v28.2 — Edição Premium — Jonas Theodoro</p>
+
+<h2 id="s21">21. Novidades da Versão 28.1</h2>
+<ul>
+<li><strong>Gestão de Mídia:</strong> Seletor de player de vídeo (VLC, MPC-HC, PotPlayer, MPV) nas Configurações</li>
+<li><strong>Watch Session:</strong> Ao executar um filme já iniciado, o sistema pergunta se deseja continuar de onde parou</li>
+<li><strong>Coração nos Cards:</strong> Ícone de favorito sempre visível no card — clique para favoritar/desfavoritar instantaneamente</li>
+<li><strong>Pesquisa Booleana:</strong> Use <code>+</code> entre termos para combinar critérios (ex: <code>ação+2023</code>)</li>
+<li><strong>Auto Salvamento com Disquete:</strong> Indicador visual no rodapé com ícone <i class="fas fa-save"></i> — azul quando ativo, cinza quando desligado</li>
+<li><strong>Estreias com Tipo:</strong> Dropdown "Filmes" / "Série" no cadastro de estreias, campo Data antes do Título</li>
+<li><strong>Footer Reformulado:</strong> Status do utilizador ao centro, estatísticas e auto-save à direita</li>
+<li><strong>Versão 28.1:</strong> Badge atualizado no footer, verificação de versão via GitHub API</li>
+<li><strong>Manual atualizado:</strong> Página mais larga (1200px), secção de Primeiros Passos, exemplos de busca booleana</li>
+</ul>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s22">22. Novidades da Versão 28.2</h2>
+<ul>
+<li><strong>Atalhos Personalizáveis:</strong> Novo gestor de atalhos (ícone <i class="fas fa-keyboard"></i> no header) — cada utilizador pode reatribuir os 8 atalhos principais com validação de conflitos</li>
+<li><strong>Auto Salvamento Simplificado:</strong> Indicador no rodapé agora apenas com ícone <i class="fas fa-save"></i> (sem texto), mais compacto e elegante</li>
+<li><strong>Caminho dos CARDS Preservado:</strong> Ao remover a capa de um filme/série, o caminho absoluto da pasta CARDS é mantido no campo — basta clicar "Carregar capa" para reusar</li>
+<li><strong>Estreias Simplificadas:</strong> Botões "Aplicar +" e "Aplicar" removidos — as estreias são guardadas automaticamente via <code>saveMovie()</code> e auto-save</li>
+<li><strong>Trailer em Tela Cheia:</strong> Links de trailer nos modais INFO abrem no navegador em ecrã completo (<code>fullscreen=1</code>)</li>
+<li><strong>Cadastro Contextual:</strong> Botão CADASTRAR abre automaticamente a tab correspondente à vista atual (filmes/séries/estreias)</li>
+<li><strong>Placeholder Atualizado:</strong> Campo "Realizador" renomeado para "Diretor(a)" nos formulários de cadastro</li>
+<li><strong>Watch Session Removida:</strong> Funcionalidade "Continuar Assistindo" removida a pedido do utilizador</li>
+<li><strong>Versão 28.2:</strong> Badge atualizado, footer e documentação refletem a nova versão</li>
+</ul>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+</body>
+</html>
