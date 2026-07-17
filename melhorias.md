@@ -1,0 +1,6 @@
+Realize as seguintes implementações por etapa, seguindo uma a uma. Ao final, adicione-a de forma numerada no documento "atualizacao_4.5.1.md". Efetue as seguintes melhorias, sem afetar ou interferir nas funcionalidades já existentes.
+
+a) aumente um pouco o tamanho da fonte do texto "auto-save-text" e também do ícone que fica girando no rodapé e também do texto do desenvolvedor no rodapé "ELO SISTEMA E TECNOLOGIA | 2026 - CREATED FOR JONAS THEODORO". Troque o texto em inglês por este em português: "ELO SISTEMA E TECNOLOGIA | 2026 - CRIADO PARA JONAS THEODORO".
+
+
+Sempre faça uma revisão e checklist antes me entregar as novas implementações. Gere uma sintaxe limpa, fazendo uma revisão completa – verificando que todos os novos elementos, arrays e handlers existem coritem corretamente. Garanta que todas as funcionalidades, classes, variáveis estão funcionando perfeitamente, não foram alteradas ou mexidas e preservadas nas novas implementações de melhorias. Garanta que nada do que estava funcionando corretamente, seja influenciada ou gere alguma ruptura no aplicativo. sempre mantenha inicialmente tudo o que já funciona e está devidamente ajustado, como: paletas de cores, tipografia, layout, espaçamentos, divs e ids, entre outros itens...

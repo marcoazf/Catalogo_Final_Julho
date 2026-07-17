@@ -249,3 +249,29 @@ Tudo que usa unidades `rem` (padding, margin, gap, border-radius, font-size de T
 - Fallback para 'filmes' caso `APP_STATE.currentView` não esteja definido.
 
 **Preservação:** O fluxo de edição via context menu (que já chama `switchTab(movie.type)` depois do `openModal`) continua funcionando corretamente. Todas as outras chamadas a `openModal('modal-cadastro')` são compatíveis.
+
+---
+
+### 11. Ampliação de Fontes no Rodapé e Tradução do Texto do Desenvolvedor
+
+**Arquivo:** `index.html` — HTML (rodapé) + JavaScript (defaults de configuração)
+
+**O que foi feito:**
+- **Texto do desenvolvedor no rodapé** — aumentado de `text-[0.6rem]` para `text-[0.75rem]`, tornando mais legível em qualquer resolução.
+- **Ícone giratório de auto-save** (`fa-circle-notch` com `animation:spin`) — aumentado de `text-[10px]` para `text-[14px]`, ficando mais visível e proporcional ao texto ao lado.
+- **Texto "Auto Salvamento Activado"** — aumentado de `text-[0.65rem]` para `text-[0.8rem]`, com melhor legibilidade.
+- **Tradução do texto do criador** — substituído `CREATED FOR JONAS THEODORO` por `CRIADO PARA JONAS THEODORO` em todos os pontos do sistema:
+  - HTML direto no rodapé
+  - Placeholder do campo de configuração (`cfg-footer-created-text`)
+  - Valor padrão do `footerCreatedText` no objeto de configuração
+  - Fallback da função de preview (`_updateConfigPreview`)
+  - Factory defaults (reset de configurações)
+
+| Elemento | Antes | Depois |
+|---|---|---|
+| Texto desenvolvedor | `text-[0.6rem]` | `text-[0.75rem]` |
+| Ícone giratório | `text-[10px]` | `text-[14px]` |
+| Texto auto-save | `text-[0.65rem]` | `text-[0.8rem]` |
+| Texto criador | `CREATED FOR JONAS THEODORO` | `CRIADO PARA JONAS THEODORO` |
+
+**Preservação:** Todos os handlers, funções JavaScript, sistema de configuração de rodapé via `cfg-footer-*`, cores, ícones e funcionalidade de auto-save mantidos intactos. A alteração é puramente visual e de tradução.

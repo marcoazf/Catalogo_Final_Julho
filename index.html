@@ -2009,12 +2009,12 @@
 
     <!-- [BLOCO 6: FOOTER FIXO] -->
     <footer class="px-6 py-2 border-t theme-border flex justify-between items-center bg-black/20">
-        <div class="text-[0.6rem] text-gray-400 uppercase tracking-widest font-medium">
-            ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CREATED FOR JONAS THEODORO</span>
+        <div class="text-[0.75rem] text-gray-400 uppercase tracking-widest font-medium">
+            ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CRIADO PARA JONAS THEODORO</span>
         </div>
         <div id="auto-save-indicator" class="flex items-center gap-2" style="display:none">
-            <i id="auto-save-icon" class="fas fa-circle-notch text-[10px]" style="color:#22C55E;animation:spin 1.5s linear infinite"></i>
-            <span id="auto-save-text" class="text-[0.65rem] font-black uppercase tracking-widest" style="color:#22C55E">Auto Salvamento Activado</span>
+            <i id="auto-save-icon" class="fas fa-circle-notch text-[14px]" style="color:#22C55E;animation:spin 1.5s linear infinite"></i>
+            <span id="auto-save-text" class="text-[0.8rem] font-black uppercase tracking-widest" style="color:#22C55E">Auto Salvamento Activado</span>
         </div>
         <div id="user-action-status" class="text-[0.6rem] text-emerald-500 font-bold uppercase opacity-0 pointer-events-none transition-opacity duration-300"></div>
         <div id="stats-counter" class="text-orange-400 font-black text-[0.75rem] uppercase" style="text-shadow:0 0 8px rgba(251,146,60,0.5)">0 TÍTULOS NO ACERVO JONAS</div>
@@ -2973,7 +2973,7 @@
                         </div>
                         <div class="config-row" style="grid-column:1/-1">
                             <label>Texto Criador</label>
-                            <input type="text" id="cfg-footer-created-text" class="field-premium" placeholder="CREATED FOR JONAS THEODORO" oninput="UI._updateConfigPreview()">
+                            <input type="text" id="cfg-footer-created-text" class="field-premium" placeholder="CRIADO PARA JONAS THEODORO" oninput="UI._updateConfigPreview()">
                         </div>
                         <div class="config-row">
                             <label>Font Size</label>
@@ -3338,7 +3338,7 @@
                 autoSave: false,
                 autoSavePath: '',
                 footerDevText: 'ELO SISTEMA E TECNOLOGIA | 2026 - ',
-                footerCreatedText: 'CREATED FOR JONAS THEODORO',
+                footerCreatedText: 'CRIADO PARA JONAS THEODORO',
                 footerDevSize: '0.6rem',
                 footerDevColor: '#9CA3AF',
                 footerCreatedSize: '0.6rem',
@@ -5931,7 +5931,7 @@
                 var footerPreview = document.getElementById('cfg-footer-preview');
                 if (footerPreview) {
                     var fDevText = getVal('cfg-footer-dev-text') || 'ELO SISTEMA E TECNOLOGIA | 2026 - ';
-                    var fCreatedText = getVal('cfg-footer-created-text') || 'CREATED FOR JONAS THEODORO';
+                    var fCreatedText = getVal('cfg-footer-created-text') || 'CRIADO PARA JONAS THEODORO';
                     var fDevSize = getVal('cfg-footer-dev-size') || '0.6rem';
                     var fDevColor = getVal('cfg-footer-dev-color') || '#9CA3AF';
                     var fCreatedSize = getVal('cfg-footer-created-size') || '0.6rem';
@@ -6169,7 +6169,7 @@
             resetFooterToDefault() {
                 var defaults = {
                     'cfg-footer-dev-text': 'ELO SISTEMA E TECNOLOGIA | 2026 - ',
-                    'cfg-footer-created-text': 'CREATED FOR JONAS THEODORO',
+                    'cfg-footer-created-text': 'CRIADO PARA JONAS THEODORO',
                     'cfg-footer-dev-size': '0.6rem',
                     'cfg-footer-dev-color': '#9CA3AF',
                     'cfg-footer-created-size': '0.6rem',
