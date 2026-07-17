@@ -1,0 +1,38 @@
+{
+  "movies": [
+    {
+      "id": "1781309794525",
+      "_createdAt": "1781309794525",
+      "type": "filmes",
+      "originalTitle": "Oblivion",
+      "titlePt": "Oblivion",
+      "year": "2024",
+      "duration": "120",
+      "desc": "Em 2077, a Terra está devastada por uma guerra nuclear contra alienígenas. Jack Harper (Tom Cruise) é o responsável por reparar os drones que protegem os extratores de energia do planeta. Após resgatar uma mulher misteriosa de uma nave caída, Jack tem suas memórias e certezas sobre a guerra questionadas.",
+      "director": "",
+      "cast": "Tom Cruise",
+      "genre": "Ação",
+      "image": "file:///C:/Users/55199/Desktop/14_Catalogo_Jonas/cards/01-oblivion.jpg",
+      "trailUrl": "https://www.youtube.com/watch?v=OIRN1jdT9ck",
+      "otherInfo": "",
+      "mediaFile": "C:\\Users\\55199\\Desktop\\14_Catalogo_Jonas\\filmes\\O-Bunker-Projeto-12.mp4",
+      "statuses": {
+        "new": false,
+        "watch": true,
+        "favorite": false
+      },
+      "stars": "3",
+      "_searchMatch": false
+    }
+  ],
+  "categories": [
+    "Ação",
+    "Comédia",
+    "Drama",
+    "Ficção Científica",
+    "Terror"
+  ],
+  "config": {
+    "theme": "dark"
+  }
+}

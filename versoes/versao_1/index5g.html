@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineCatalog Elo | v1.1.7 - Jonas Theodoro</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            /* Tema Noite (Padrão) */
+            --bg-color: rgb(17, 24, 39);
+            --text-color: #f3f4f6;
+            --header-bg: rgba(17, 24, 39, 0.98);
+            --card-bg: #1f2937;
+            --input-bg: #1f2937;
+            --border-color: #374151;
+            --text-secondary: #9ca3af;
+            --marquee-speed: 50s;
+            --marquee-dir: forwards;
+            /* Zoom Control */
+            --cards-per-row: 8;
+        }
+
+        body.light-mode {
+            --bg-color: rgb(248, 250, 252);
+            --text-color: rgb(15, 23, 42);
+            --header-bg: rgba(255, 255, 255, 0.98);
+            --card-bg: #ffffff;
+            --input-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --text-secondary: #475569;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; 
+        }
+
+        /* Melhoria da Barra de Rolagem Vertical */
+        .custom-scroll::-webkit-scrollbar {
+            width: 10px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 10px;
+            border: 3px solid var(--bg-color);
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
+        }
+
+        /* Impedir rolagem horizontal global */
+        #content-canvas {
+            overflow-x: hidden !important;
+        }
+
+        .theme-border { border: 1px solid var(--border-color); }
+        .theme-bg-input { background-color: var(--input-bg); }
+        .theme-text-sec { color: var(--text-secondary); }
+
+        header {
+            background-color: var(--header-bg);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+            z-index: 60;
+        }
+
+        .tools-bar {
+            background-color: var(--bg-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            z-index: 50;
+            flex-shrink: 0;
+        }
+
+        #content-canvas {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            scroll-behavior: smooth;
+        }
+
+        footer {
+            background-color: var(--header-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 0.75rem 2rem;
+            flex-shrink: 0;
+            z-index: 60;
+        }
+
+        /* Indicador de Lembrete Premium (Sininho) */
+        #bell-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background-color: #ef4444; 
+            color: white;
+            font-size: 10px;
+            font-weight: 900;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--header-bg);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            z-index: 10;
+        }
+        #bell-badge.hidden { display: none; }
+
+        /* Movie Card & Destaques */
+        .movie-card {
+            width: 100%;
+            aspect-ratio: 9 / 14;
+            position: relative;
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+        }
+
+        .movie-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            z-index: 10;
+        }
+
+        /* Ajuste específico para o Marquee */
+        .marquee-wrapper .movie-card {
+            width: calc((100vw - 8rem) / 6.5);
+            flex-shrink: 0;
+        }
+
+        .movie-card.highlighted {
+            border: 2px solid #3b82f6 !important;
+            box-shadow: 0 0 15px 2px rgba(59, 130, 246, 0.6), inset 0 0 10px rgba(59, 130, 246, 0.2);
+        }
+
+        .movie-card.search-match {
+            border: 3px solid #10b981 !important;
+            box-shadow: 0 0 20px 5px rgba(16, 185, 129, 0.7), inset 0 0 10px rgba(16, 185, 129, 0.3);
+            transform: scale(1.03);
+            z-index: 15;
+        }
+
+        .movie-card img { width: 100%; height: 100%; object-fit: cover; }
+
+        .card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .movie-card:hover .card-overlay { opacity: 1; }
+
+        .play-hint {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(59, 130, 246, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+        }
+        .movie-card:hover .play-hint {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .star-rating i { color: #4b5563; cursor: pointer; transition: color 0.2s; }
+        .star-rating i.active { color: #f59e0b; }
+
+        .dynamic-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(var(--cards-per-row), minmax(0, 1fr));
+            width: 100%;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .marquee-container {
+            width: 100%;
+            overflow: hidden;
+            padding: 2rem 0;
+        }
+        .marquee-wrapper {
+            display: flex;
+            width: max-content;
+            animation: marquee var(--marquee-speed) linear infinite;
+            animation-direction: var(--marquee-dir);
+        }
+        .marquee-wrapper:hover { animation-play-state: paused; }
+
+        .modal {
+            background-color: rgba(0, 0, 0, 0.85);
+            display: none; align-items: center; justify-content: center;
+            z-index: 200; backdrop-filter: blur(8px);
+        }
+        .modal.active { display: flex; }
+
+        #context-menu {
+            display: none; position: fixed; z-index: 1000;
+            background: var(--card-bg); border: 1px solid var(--border-color);
+            border-radius: 0.75rem; min-width: 220px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); overflow: hidden;
+        }
+
+        .carousel-track {
+            display: flex; 
+            overflow-x: auto; 
+            scroll-behavior: smooth;
+            gap: 1.5rem; 
+            padding: 1rem 0; /* Padding aumentado para não cortar sombra/hover */
+            scrollbar-width: none;
+            width: 100%;
+        }
+        .carousel-track::-webkit-scrollbar { display: none; }
+
+        .drop-zone {
+            border: 2px dashed #3b82f6;
+            transition: background 0.2s;
+        }
+        .drop-zone.dragover {
+            background: rgba(59, 130, 246, 0.1);
+            border-style: solid;
+        }
+    </style>
+</head>
+<body class="antialiased custom-scroll">
+
+    <header class="px-8 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
+                <i class="fas fa-film text-white"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-black italic tracking-tighter uppercase">CineCatalog <span class="text-blue-500">Elo</span></h1>
+                <p class="text-[9px] theme-text-sec font-bold uppercase tracking-widest">Premium v1.1.7 | Jonas Theodoro</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <div class="relative mr-2">
+                <button onclick="toggleRemindersPopup()" class="w-10 h-10 rounded-full theme-bg-input flex items-center justify-center theme-border hover:border-blue-500 transition shadow-sm relative">
+                    <i class="fas fa-bell"></i>
+                    <span id="bell-badge" class="hidden">0</span>
+                </button>
+            </div>
+
+            <div class="flex theme-bg-input rounded-full p-1 mr-2 theme-border">
+                <button onclick="setZoom(1)" id="z1" class="zoom-btn w-8 h-8 rounded-full text-[10px] font-bold bg-blue-600 text-white transition">1X</button>
+                <button onclick="setZoom(2)" id="z2" class="zoom-btn w-8 h-8 rounded-full text-[10px] font-bold hover:bg-blue-600 transition">2X</button>
+                <button onclick="setZoom(3)" id="z3" class="zoom-btn w-8 h-8 rounded-full text-[10px] font-bold hover:bg-blue-600 transition">3X</button>
+                <button onclick="setZoom(4)" id="z4" class="zoom-btn w-8 h-8 rounded-full text-[10px] font-bold hover:bg-blue-600 transition">4X</button>
+            </div>
+
+            <button onclick="toggleTheme()" class="w-10 h-10 rounded-full theme-bg-input flex items-center justify-center theme-border hover:border-blue-500 transition shadow-sm">
+                <i class="fas fa-moon" id="theme-icon"></i>
+            </button>
+
+            <button onclick="toggleModal('modal-cadastro')" class="bg-blue-600 text-white px-6 py-2 rounded-full font-black text-[10px] hover:bg-blue-700 transition uppercase tracking-widest shadow-lg">
+                <i class="fas fa-plus mr-1"></i> Cadastrar
+            </button>
+
+            <div class="flex items-center theme-bg-input rounded-full p-1 theme-border">
+                <button onclick="exportData()" title="Exportar JSON" class="w-8 h-8 flex items-center justify-center hover:text-blue-500"><i class="fas fa-download text-xs"></i></button>
+                <label class="w-8 h-8 flex items-center justify-center hover:text-blue-500 cursor-pointer">
+                    <i class="fas fa-upload text-xs"></i>
+                    <input type="file" id="import-json" class="hidden" onchange="importData(event)">
+                </label>
+            </div>
+
+            <button onclick="toggleModal('modal-info')" class="theme-text-sec hover:text-blue-500 ml-2 transition"><i class="fas fa-info-circle text-xl"></i></button>
+        </div>
+    </header>
+
+    <div class="tools-bar flex flex-col lg:flex-row gap-4 items-center justify-between">
+        <div class="relative w-full lg:w-[400px] group">
+            <i class="fas fa-search absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-blue-500 transition"></i>
+            <input type="text" id="main-search" placeholder="Pesquisar no seu acervo Jonas..." 
+                class="w-full theme-bg-input theme-border rounded-2xl py-3 pl-14 pr-14 focus:ring-2 focus:ring-blue-500 outline-none text-sm transition-all shadow-sm">
+            <button onclick="startVoiceSearch()" class="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-blue-500 transition">
+                <i class="fas fa-microphone" id="mic-icon"></i>
+            </button>
+        </div>
+
+        <div id="marquee-controls" class="hidden flex items-center gap-4 px-4 py-2 bg-emerald-600/5 rounded-2xl border border-emerald-600/20">
+            <span class="text-[9px] font-black uppercase text-emerald-500 italic">Cine-Marquee:</span>
+            <input type="range" id="m-speed" min="10" max="100" value="50" oninput="updateMarqueeConfig()" class="w-20 accent-emerald-600">
+            <div class="flex gap-1">
+                <button onclick="setMarqueeDir('forwards')" class="w-6 h-6 rounded bg-emerald-600/20 hover:bg-emerald-600 text-[8px] transition"><i class="fas fa-arrow-left"></i></button>
+                <button onclick="setMarqueeDir('reverse')" class="w-6 h-6 rounded bg-emerald-600/20 hover:bg-emerald-600 text-[8px] transition"><i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+            <select id="filter-category" onchange="renderMovies()" class="theme-bg-input theme-border rounded-xl px-4 py-2.5 text-xs font-bold outline-none cursor-pointer shadow-sm">
+                <option value="all">Géneros: Todos</option>
+            </select>
+            <select id="filter-watched" onchange="renderMovies()" class="theme-bg-input theme-border rounded-xl px-4 py-2.5 text-xs font-bold outline-none cursor-pointer shadow-sm">
+                <option value="all">Status: Todos</option>
+                <option value="watched">Assistidos</option>
+                <option value="not-watched">Não Assistidos</option>
+                <option value="highlighted">Favoritos / Destacados</option>
+            </select>
+            
+            <div class="flex theme-bg-input rounded-xl p-1 theme-border shadow-sm">
+                <button onclick="setViewMode('carousel')" class="view-btn w-9 h-9 rounded-lg flex items-center justify-center hover:bg-blue-600 transition" title="Carrossel"><i class="fas fa-stream text-xs"></i></button>
+                <button onclick="setViewMode('grid-global')" class="view-btn w-9 h-9 rounded-lg flex items-center justify-center bg-blue-600 text-white transition" title="Grelha Dinâmica"><i class="fas fa-border-all text-xs"></i></button>
+                <button onclick="setViewMode('marquee')" class="view-btn w-9 h-9 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition" title="Cine-Marquee"><i class="fas fa-play text-xs"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <main id="content-canvas" class="custom-scroll">
+        <div id="movies-container"></div>
+    </main>
+
+    <footer>
+        <div class="flex justify-between items-center text-[10px] font-bold theme-text-sec uppercase tracking-widest transition-colors">
+            <div>Elo Sistema e Tecnoligia | 2026 - created for Jonas Theodoro</div>
+            <div id="stats-counter" class="text-blue-500 font-black">A CARREGAR...</div>
+        </div>
+    </footer>
+
+    <div id="modal-cadastro" class="modal fixed inset-0 p-6">
+        <div class="theme-bg-input w-full max-w-6xl rounded-[2.5rem] overflow-hidden flex flex-col max-h-[92vh] shadow-2xl theme-border">
+            <div class="p-8 border-b theme-border flex justify-between items-center bg-opacity-30">
+                <h2 class="text-2xl font-black italic uppercase tracking-tighter">Gestão do Acervo Jonas</h2>
+                <button onclick="toggleModal('modal-cadastro')" class="w-10 h-10 rounded-full theme-bg-input theme-border flex items-center justify-center transition hover:bg-red-500 hover:text-white"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="movie-form" class="p-8 overflow-y-auto grid grid-cols-1 md:grid-cols-4 gap-8 custom-scroll" onsubmit="saveMovie(event)">
+                <input type="hidden" id="edit-id">
+                <div class="space-y-4">
+                    <label class="text-[10px] font-black uppercase theme-text-sec block tracking-widest">Geral</label>
+                    <input type="text" id="f-title-pt" required placeholder="Título PT" class="w-full theme-bg-input p-4 rounded-2xl theme-border outline-none focus:ring-2 focus:ring-blue-600 transition">
+                    <input type="text" id="f-title-en" placeholder="Título Original" class="w-full theme-bg-input p-4 rounded-2xl theme-border outline-none">
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="number" id="f-year" placeholder="Ano" class="w-full theme-bg-input p-4 rounded-2xl theme-border outline-none">
+                        <input type="number" id="f-duration" placeholder="Duração (min)" class="w-full theme-bg-input p-4 rounded-2xl theme-border outline-none">
+                    </div>
+                    <textarea id="f-desc" placeholder="Sinopse do filme..." class="w-full theme-bg-input p-4 rounded-2xl h-24 theme-border outline-none resize-none text-xs"></textarea>
+                </div>
+                <div class="space-y-4">
+                    <label class="text-[10px] font-black uppercase theme-text-sec block tracking-widest">Técnico & Categorias</label>
+                    <input type="text" id="f-director" placeholder="Diretor/Realizador" class="w-full theme-bg-input p-4 rounded-2xl theme-border outline-none">
+                    <input type="text" id="f-actors" placeholder="Elenco Principal" class="w-full theme-bg-input p-4 rounded-2xl theme-border outline-none">
+                    <div class="flex gap-2">
+                        <select id="f-cat-select" class="flex-1 theme-bg-input p-4 rounded-2xl theme-border outline-none text-xs"></select>
+                        <button type="button" onclick="addGenre()" class="bg-blue-600 text-white px-4 rounded-2xl hover:bg-blue-700 transition"><i class="fas fa-plus"></i></button>
+                        <button type="button" onclick="removeGenre()" class="bg-red-600 text-white px-4 rounded-2xl hover:bg-red-700 transition"><i class="fas fa-minus"></i></button>
+                    </div>
+                    <div class="flex flex-col items-center gap-2 pt-2">
+                        <div class="star-rating flex gap-3 text-2xl" id="star-input-container">
+                            <i class="fas fa-star" data-v="1"></i><i class="fas fa-star" data-v="2"></i><i class="fas fa-star" data-v="3"></i><i class="fas fa-star" data-v="4"></i><i class="fas fa-star" data-v="5"></i>
+                        </div>
+                        <input type="hidden" id="f-stars-val" value="0">
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <label class="text-[10px] font-black uppercase theme-text-sec block tracking-widest">Capa</label>
+                    <input type="text" id="f-img-url" placeholder="URL da Imagem" class="w-full theme-bg-input p-4 rounded-2xl theme-border outline-none text-xs shadow-sm mb-2">
+                    <div id="image-drop-zone" class="w-full aspect-[9/12] theme-bg-input rounded-2xl overflow-hidden relative theme-border border-dashed border-2 flex items-center justify-center group shadow-inner drop-zone">
+                        <img id="f-preview" src="" class="w-full h-full object-cover hidden">
+                        <div id="preview-placeholder" class="text-center px-4">
+                            <i class="fas fa-cloud-upload-alt text-2xl opacity-20 mb-2"></i>
+                            <div class="text-[8px] font-black opacity-30 uppercase">Arraste ou Cole a imagem aqui</div>
+                        </div>
+                        <button type="button" onclick="resetPreview()" class="absolute top-2 right-2 w-8 h-8 bg-red-600 text-white rounded-full hidden group-hover:flex items-center justify-center transition"><i class="fas fa-trash"></i></button>
+                    </div>
+                    <input type="file" id="f-img-file" class="hidden" accept="image/*" onchange="previewFile(this)">
+                    <button type="button" onclick="document.getElementById('f-img-file').click()" class="w-full py-2 theme-bg-input theme-border rounded-xl text-[9px] uppercase font-bold hover:bg-blue-500 transition">Carregar Ficheiro Local</button>
+                </div>
+                <div class="space-y-4">
+                    <label class="text-[10px] font-black uppercase tracking-widest text-blue-500 block italic">Status & Execução</label>
+                    <div class="bg-blue-500/5 p-4 rounded-2xl border border-blue-500/20 space-y-3">
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" id="f-watched" class="w-4 h-4 accent-blue-600">
+                            <span class="text-xs font-bold uppercase">Assistido</span>
+                        </label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="number" id="f-watched-year" placeholder="Ano" class="w-full theme-bg-input p-2 rounded-lg theme-border outline-none text-xs">
+                            <input type="date" id="f-watched-date" class="w-full theme-bg-input p-2 rounded-lg theme-border outline-none text-xs">
+                        </div>
+                    </div>
+                    <input type="text" id="f-path" placeholder="C:\Caminho\Do\Filme.mkv" class="w-full bg-blue-500/5 theme-text-sec p-4 rounded-2xl border border-blue-500/20 outline-none text-xs">
+                    <button type="submit" class="w-full bg-blue-600 text-white py-5 rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:bg-blue-700 transition">Salvar Registro</button>
+                    <button type="button" onclick="toggleModal('modal-cadastro')" class="w-full py-2 theme-text-sec font-bold uppercase text-[10px]">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-movie-info" class="modal fixed inset-0 p-6">
+        <div class="theme-bg-input w-full max-w-4xl rounded-[3rem] p-0 border theme-border shadow-2xl overflow-hidden relative flex flex-col md:flex-row h-auto max-h-[85vh]">
+            <button onclick="navigateInfo(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-black/50 text-white hover:bg-blue-600 transition flex items-center justify-center"><i class="fas fa-chevron-left"></i></button>
+            <button onclick="navigateInfo(1)" class="absolute right-4 top-1/2 -translate-y-1/2 z-30 w-12 h-12 rounded-full bg-black/50 text-white hover:bg-blue-600 transition flex items-center justify-center"><i class="fas fa-chevron-right"></i></button>
+            <button onclick="toggleModal('modal-movie-info')" class="absolute top-6 right-6 z-30 w-10 h-10 rounded-full bg-black/50 text-white hover:bg-red-600 transition flex items-center justify-center"><i class="fas fa-times"></i></button>
+            <div class="w-full md:w-1/3 h-[400px] md:h-auto bg-gray-900"><img id="info-img" src="" class="w-full h-full object-cover"></div>
+            <div class="w-full md:w-2/3 p-10 overflow-y-auto custom-scroll flex flex-col">
+                <div id="info-category" class="inline-block bg-blue-600 text-white text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-widest mb-4 w-fit"></div>
+                <h2 id="info-title-pt" class="text-4xl font-black italic uppercase tracking-tighter mb-1"></h2>
+                <p id="info-title-en" class="text-sm theme-text-sec font-bold uppercase tracking-widest mb-6 opacity-60"></p>
+                <div class="grid grid-cols-3 gap-4 mb-8">
+                    <div class="theme-bg-input p-4 rounded-2xl theme-border text-center"><div class="text-[9px] uppercase font-black opacity-40 mb-1">Ano</div><div id="info-year" class="font-black text-blue-500"></div></div>
+                    <div class="theme-bg-input p-4 rounded-2xl theme-border text-center"><div class="text-[9px] uppercase font-black opacity-40 mb-1">Duração</div><div id="info-duration" class="font-black"></div></div>
+                    <div id="info-watched-badge" class="theme-bg-input p-4 rounded-2xl theme-border text-center"><div class="text-[9px] uppercase font-black opacity-40 mb-1">Status</div><div id="info-watched" class="font-black text-xs uppercase"></div></div>
+                </div>
+                <p id="info-desc" class="theme-text-sec text-sm leading-relaxed mb-8 italic"></p>
+                <div class="space-y-4 mb-8">
+                    <div><span class="text-[9px] font-black uppercase text-blue-500 mr-2">Diretor:</span><span id="info-director" class="text-sm font-bold"></span></div>
+                    <div><span class="text-[9px] font-black uppercase text-blue-500 mr-2">Elenco:</span><span id="info-actors" class="text-sm font-bold"></span></div>
+                </div>
+                <div class="mt-auto flex gap-4">
+                    <button id="info-btn-play" class="flex-1 bg-blue-600 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl hover:bg-blue-700 transition">Executar Filme</button>
+                    <button onclick="editFromInfo()" class="px-6 theme-bg-input theme-border rounded-2xl hover:text-blue-500 transition"><i class="fas fa-edit"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-lembrete" class="modal fixed inset-0 p-6">
+        <div class="theme-bg-input w-full max-w-md rounded-[2.5rem] p-10 border theme-border text-center shadow-2xl relative">
+            <h3 class="text-xl font-black mb-2 uppercase italic tracking-tighter">Nota de Lembrete</h3>
+            <p id="reminder-movie-title" class="text-[10px] theme-text-sec mb-6 font-bold uppercase tracking-widest text-blue-500"></p>
+            <textarea id="reminder-text" placeholder="Escreva o lembrete para Jonas..." class="w-full theme-bg-input p-5 rounded-2xl theme-border outline-none text-sm h-32 resize-none mb-8"></textarea>
+            <div class="flex gap-4">
+                <button onclick="toggleModal('modal-lembrete')" class="flex-1 theme-bg-input theme-border py-4 rounded-2xl font-black text-[10px] tracking-widest uppercase">Voltar</button>
+                <button onclick="saveReminder()" class="flex-1 bg-blue-600 text-white py-4 rounded-2xl font-black text-[10px] tracking-widest uppercase shadow-lg hover:bg-blue-700 transition">Salvar Nota</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-reminders-list" class="modal fixed inset-0 p-6">
+        <div class="theme-bg-input w-full max-w-2xl rounded-[3rem] p-10 border theme-border shadow-2xl flex flex-col max-h-[80vh]">
+            <h3 class="text-3xl font-black italic uppercase tracking-tighter mb-8">Lista de <span class="text-blue-500">Lembretes</span></h3>
+            <div id="reminders-list-container" class="custom-scroll overflow-y-auto space-y-4 pr-4"></div>
+            <button onclick="toggleModal('modal-reminders-list')" class="mt-8 theme-text-sec uppercase font-black text-[10px] hover:text-blue-500 transition">Sair da Lista</button>
+        </div>
+    </div>
+
+    <div id="modal-info" class="modal fixed inset-0 p-6">
+        <div class="theme-bg-input w-full max-w-3xl rounded-[3rem] border theme-border shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-10 pb-6">
+                <h2 class="text-4xl font-black italic mb-2 uppercase tracking-tighter">GUIA <span class="text-blue-500">ELO</span> JONAS</h2>
+                <p class="text-[10px] theme-text-sec font-bold uppercase tracking-[0.3em] mb-8">Premium Acervo Management</p>
+            </div>
+            <div class="px-10 overflow-y-auto custom-scroll flex-1">
+                <div id="info-grid-main" class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+                    <div class="theme-bg-input theme-border p-4 rounded-2xl text-center flex flex-col items-center gap-2 group hover:border-blue-500 transition-all"><i class="fas fa-magnifying-glass-plus text-blue-500 text-xl"></i><span class="text-[8px] font-black uppercase tracking-widest">Zoom 1X-4X</span></div>
+                    <div class="theme-bg-input theme-border p-4 rounded-2xl text-center flex flex-col items-center gap-2 group hover:border-blue-500 transition-all"><i class="fas fa-images text-blue-500 text-xl"></i><span class="text-[8px] font-black uppercase tracking-widest">Posters Pro</span></div>
+                    <div class="theme-bg-input theme-border p-4 rounded-2xl text-center flex flex-col items-center gap-2 group hover:border-blue-500 transition-all"><i class="fas fa-microphone text-blue-500 text-xl"></i><span class="text-[8px] font-black uppercase tracking-widest">Busca Voz</span></div>
+                    <div class="theme-bg-input theme-border p-4 rounded-2xl text-center flex flex-col items-center gap-2 group hover:border-blue-500 transition-all"><i class="fas fa-heart text-blue-500 text-xl"></i><span class="text-[8px] font-black uppercase tracking-widest">Favoritos</span></div>
+                    <div class="theme-bg-input theme-border p-4 rounded-2xl text-center flex flex-col items-center gap-2 group hover:border-blue-500 transition-all"><i class="fas fa-file-export text-blue-500 text-xl"></i><span class="text-[8px] font-black uppercase tracking-widest">Backup JSON</span></div>
+                </div>
+                <div id="info-list-full" class="hidden space-y-4 mb-8">
+                    <h3 class="text-xs font-black uppercase text-blue-500 italic mb-4">Funcionalidades:</h3>
+                    <div class="space-y-2 text-[11px] theme-text-sec font-medium">
+                        <div class="flex gap-4 p-3 theme-bg-input theme-border rounded-xl"> <span class="text-blue-500 font-black">01.</span> Zoom Adaptativo dinâmico.</div>
+                        <div class="flex gap-4 p-3 theme-bg-input theme-border rounded-xl"> <span class="text-blue-500 font-black">02.</span> Posters via URL, Arrasto ou Colagem.</div>
+                        <div class="flex gap-4 p-3 theme-bg-input theme-border rounded-xl"> <span class="text-blue-500 font-black">03.</span> Menu de Contexto Avançado.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-10 pt-4 flex flex-col gap-4">
+                <button id="btn-show-more-info" onclick="toggleExtraInfo()" class="w-full theme-bg-input theme-border py-4 rounded-2xl font-black uppercase text-[9px] tracking-widest hover:text-blue-500 transition">Exibir Mais Funcionalidades</button>
+                <button onclick="toggleModal('modal-info')" class="w-full bg-blue-600 text-white py-6 rounded-[2rem] font-black uppercase text-xs tracking-[0.3em] shadow-xl hover:bg-blue-700 transition">ENTENDIDO!</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="context-menu">
+        <div class="p-2 space-y-1">
+            <button onclick="openInfoModalCtx()" class="w-full text-left px-5 py-3 hover:bg-blue-600 hover:text-white rounded-lg flex items-center gap-4 text-xs font-black uppercase transition tracking-widest"><i class="fas fa-info-circle"></i> Informações</button>
+            <button onclick="openReminderModalCtx()" class="w-full text-left px-5 py-3 hover:bg-blue-600 hover:text-white rounded-lg flex items-center gap-4 text-xs font-black uppercase transition tracking-widest"><i class="fas fa-sticky-note"></i> Lembrete</button>
+            <button onclick="toggleHighlightCtx()" class="w-full text-left px-5 py-3 hover:bg-blue-600 hover:text-white rounded-lg flex items-center gap-4 text-xs font-black uppercase transition tracking-widest"><i class="fas fa-highlighter"></i> Favoritar</button>
+            <div class="border-t theme-border my-2 opacity-50"></div>
+            <button onclick="editMovieCtx()" class="w-full text-left px-5 py-3 hover:bg-blue-600 hover:text-white rounded-lg flex items-center gap-4 text-xs font-black uppercase transition tracking-widest"><i class="fas fa-edit"></i> Editar</button>
+            <button onclick="deleteMovieCtx()" class="w-full text-left px-5 py-3 hover:bg-red-600 hover:text-white rounded-lg flex items-center gap-4 text-xs font-black uppercase text-red-500 tracking-widest"><i class="fas fa-trash"></i> Eliminar</button>
+        </div>
+    </div>
+
+    <div id="modal-confirm" class="modal fixed inset-0 p-6">
+        <div class="theme-bg-input w-full max-w-md rounded-[3rem] p-12 border theme-border text-center shadow-2xl relative">
+            <h3 class="text-2xl font-black mb-4 uppercase italic tracking-tighter">Iniciar Filme?</h3>
+            <p id="confirm-msg" class="text-[9px] theme-text-sec mb-10 leading-relaxed font-bold uppercase tracking-widest"></p>
+            <div class="flex gap-4">
+                <button onclick="toggleModal('modal-confirm')" class="flex-1 theme-bg-input theme-border py-4 rounded-2xl font-black text-[10px] tracking-widest uppercase">Não</button>
+                <button id="btn-execute-real" class="flex-1 bg-blue-600 text-white py-4 rounded-2xl font-black text-[10px] tracking-widest uppercase shadow-lg hover:bg-blue-700 transition">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let movies = [];
+        let viewMode = 'grid-global';
+        let currentZoomLevel = 1;
+        let selectedId = null;
+        let genres = ["Ação", "Aventura", "Comédia", "Drama", "Ficção", "Terror", "Animação", "Documentário", "Suspense", "Policial"];
+        
+        const speak = (text) => {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'pt-PT';
+            utterance.rate = 1.1;
+            window.speechSynthesis.speak(utterance);
+        };
+
+        window.onload = () => {
+            initGenreSelects();
+            renderMovies();
+            initStarRating();
+            initDragAndDrop();
+            initPasteSupport();
+            
+            document.getElementById('main-search').addEventListener('input', () => renderMovies());
+            window.addEventListener('click', () => { document.getElementById('context-menu').style.display = 'none'; });
+            window.addEventListener('keydown', (e) => {
+                if(e.key === 'Escape') document.querySelectorAll('.modal').forEach(m => m.classList.remove('active'));
+            });
+        };
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            document.getElementById('theme-icon').className = document.body.classList.contains('light-mode') ? 'fas fa-sun' : 'fas fa-moon';
+        }
+
+        function setZoom(level) {
+            currentZoomLevel = level;
+            const map = { 1: 8, 2: 7, 3: 6, 4: 5 };
+            document.body.style.setProperty('--cards-per-row', map[level]);
+            document.querySelectorAll('.zoom-btn').forEach(b => b.classList.remove('bg-blue-600', 'text-white'));
+            document.getElementById(`z${level}`).classList.add('bg-blue-600', 'text-white');
+            renderMovies();
+        }
+
+        function toggleModal(id) {
+            const el = document.getElementById(id);
+            if(!el) return;
+            el.classList.toggle('active');
+            if(el.classList.contains('active')) {
+                if(id === 'modal-cadastro') setTimeout(() => document.getElementById('f-title-pt').focus(), 150);
+                if(id === 'modal-lembrete') setTimeout(() => document.getElementById('reminder-text').focus(), 150);
+            } else {
+                if(id === 'modal-cadastro') {
+                    document.getElementById('movie-form').reset();
+                    resetPreview(); resetStars(); document.getElementById('edit-id').value = '';
+                }
+            }
+        }
+
+        function toggleExtraInfo() {
+            const grid = document.getElementById('info-grid-main');
+            const list = document.getElementById('info-list-full');
+            const btn = document.getElementById('btn-show-more-info');
+            list.classList.toggle('hidden');
+            grid.classList.toggle('hidden');
+            btn.innerText = list.classList.contains('hidden') ? "Exibir Mais Funcionalidades" : "Voltar aos Ícones";
+        }
+
+        function setViewMode(mode) { 
+            viewMode = mode; 
+            document.getElementById('marquee-controls').classList.toggle('hidden', mode !== 'marquee');
+            document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('bg-blue-600', 'text-white'));
+            const btnMap = { 'carousel': 0, 'grid-global': 1, 'marquee': 2 };
+            document.querySelectorAll('.view-btn')[btnMap[mode]].classList.add('bg-blue-600', 'text-white');
+            renderMovies(); 
+        }
+
+        function initDragAndDrop() {
+            const zone = document.getElementById('image-drop-zone');
+            zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('dragover'); });
+            zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault(); zone.classList.remove('dragover');
+                const file = e.dataTransfer.files[0];
+                if(file && file.type.startsWith('image/')) handleImageFile(file);
+            });
+        }
+
+        function initPasteSupport() {
+            document.addEventListener('paste', (e) => {
+                if (!document.getElementById('modal-cadastro').classList.contains('active')) return;
+                const items = e.clipboardData.items;
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].type.indexOf('image') !== -1) { handleImageFile(items[i].getAsFile()); break; }
+                }
+            });
+        }
+
+        function handleImageFile(file) {
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                document.getElementById('f-img-url').value = ev.target.result;
+                setPreview(ev.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function previewFile(input) { if(input.files && input.files[0]) handleImageFile(input.files[0]); }
+        document.getElementById('f-img-url').oninput = (e) => setPreview(e.target.value);
+
+        function setPreview(src) {
+            const img = document.getElementById('f-preview');
+            const ph = document.getElementById('preview-placeholder');
+            if(src) { img.src = src; img.classList.remove('hidden'); ph.classList.add('hidden'); }
+        }
+
+        function resetPreview() {
+            document.getElementById('f-preview').classList.add('hidden');
+            document.getElementById('preview-placeholder').classList.remove('hidden');
+            document.getElementById('f-img-file').value = '';
+            document.getElementById('f-img-url').value = '';
+        }
+
+        function initGenreSelects() { updateGenreSelects(); }
+        function addGenre() {
+            const val = prompt("Novo género para o acervo?");
+            if(val && !genres.includes(val)) { genres.push(val); updateGenreSelects(); }
+        }
+        function removeGenre() {
+            const sel = document.getElementById('f-cat-select');
+            if(confirm(`Remover categoria "${sel.value}"?`)) {
+                genres = genres.filter(g => g !== sel.value); updateGenreSelects();
+            }
+        }
+        function updateGenreSelects() {
+            ['f-cat-select', 'filter-category'].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                const current = el.value;
+                el.innerHTML = id === 'filter-category' ? '<option value="all">Géneros: Todos</option>' : '';
+                genres.sort().forEach(g => el.add(new Option(g, g)));
+                el.value = current || (id === 'filter-category' ? 'all' : genres[0]);
+            });
+        }
+
+        function initStarRating() {
+            const stars = document.querySelectorAll('#star-input-container i');
+            stars.forEach(s => {
+                s.onclick = () => {
+                    const v = parseInt(s.dataset.v);
+                    document.getElementById('f-stars-val').value = v;
+                    updateStars(v);
+                };
+                s.onmouseenter = () => updateStars(parseInt(s.dataset.v));
+                s.onmouseleave = () => updateStars(parseInt(document.getElementById('f-stars-val').value));
+            });
+        }
+        function updateStars(val) {
+            document.querySelectorAll('#star-input-container i').forEach(s => {
+                s.classList.toggle('active', parseInt(s.dataset.v) <= val);
+            });
+        }
+        function resetStars() { document.getElementById('f-stars-val').value = 0; updateStars(0); }
+
+        function saveMovie(e) {
+            e.preventDefault();
+            const id = document.getElementById('edit-id').value;
+            const data = {
+                id: id || Date.now().toString(),
+                titlePt: document.getElementById('f-title-pt').value,
+                titleEn: document.getElementById('f-title-en').value,
+                year: document.getElementById('f-year').value,
+                duration: document.getElementById('f-duration').value,
+                desc: document.getElementById('f-desc').value,
+                director: document.getElementById('f-director').value,
+                actors: document.getElementById('f-actors').value,
+                category: document.getElementById('f-cat-select').value,
+                watched: document.getElementById('f-watched').checked,
+                watchedYear: document.getElementById('f-watched-year').value,
+                watchedDate: document.getElementById('f-watched-date').value,
+                stars: parseInt(document.getElementById('f-stars-val').value),
+                image: document.getElementById('f-img-url').value || 'https://via.placeholder.com/300x533?text=S/C',
+                path: document.getElementById('f-path').value,
+                highlighted: false,
+                reminder: null
+            };
+            if(id) {
+                const idx = movies.findIndex(m => m.id === id);
+                data.highlighted = movies[idx].highlighted;
+                data.reminder = movies[idx].reminder;
+                movies[idx] = data;
+            } else movies.push(data);
+            toggleModal('modal-cadastro'); renderMovies();
+        }
+
+        function renderMovies() {
+            const container = document.getElementById('movies-container');
+            const search = document.getElementById('main-search').value.toLowerCase();
+            const catF = document.getElementById('filter-category').value;
+            const watF = document.getElementById('filter-watched').value;
+            
+            let filtered = [...movies];
+            if(search.length >= 2) { 
+                filtered = filtered.filter(m => 
+                    m.titlePt.toLowerCase().includes(search) || 
+                    m.titleEn.toLowerCase().includes(search) ||
+                    m.actors.toLowerCase().includes(search)
+                ); 
+            }
+            if(catF !== 'all') filtered = filtered.filter(m => m.category === catF);
+            if(watF === 'watched') filtered = filtered.filter(m => m.watched);
+            if(watF === 'not-watched') filtered = filtered.filter(m => !m.watched);
+            if(watF === 'highlighted') filtered = filtered.filter(m => m.highlighted);
+
+            container.innerHTML = '';
+            
+            if(viewMode === 'marquee') {
+                container.className = "marquee-container";
+                const wrapper = document.createElement('div');
+                wrapper.className = "marquee-wrapper";
+                const row1 = document.createElement('div'); row1.className = "flex gap-6 mb-6";
+                const row2 = document.createElement('div'); row2.className = "flex gap-6";
+                const split = Math.ceil(filtered.length / 2);
+                renderList(filtered.slice(0, split), row1, search);
+                renderList(filtered.slice(split), row2, search);
+                const col1 = document.createElement('div'); col1.appendChild(row1); col1.appendChild(row2);
+                const col2 = col1.cloneNode(true); col2.className = "ml-6";
+                wrapper.appendChild(col1); wrapper.appendChild(col2);
+                container.appendChild(wrapper);
+            } 
+            else if(viewMode === 'carousel' && !search && catF === 'all' && watF === 'all') {
+                container.className = "";
+                const cats = [...new Set(movies.map(m => m.category))];
+                cats.sort().forEach(c => {
+                    const list = filtered.filter(m => m.category === c);
+                    if(list.length > 0) createRow(container, c, list, search);
+                });
+            } else {
+                container.className = "dynamic-grid";
+                renderList(filtered, container, search);
+            }
+            document.getElementById('stats-counter').innerText = `${filtered.length} TITULOS NO ACERVO`;
+            updateBellCounter();
+        }
+
+        function createRow(parent, title, list, search) {
+            const row = document.createElement('div');
+            row.className = "mb-12 relative w-full";
+            row.innerHTML = `<div class="flex justify-between items-center mb-4"><h3 class="text-[10px] font-black uppercase tracking-[0.4em] theme-text-sec flex items-center gap-4"><span class="w-12 h-[2px] bg-blue-600"></span> ${title} (${list.length})</h3><div class="flex gap-2"><button onclick="scrollCarousel('${title}', -1)" class="w-8 h-8 rounded-full theme-bg-input theme-border flex items-center justify-center hover:bg-blue-600 transition"><i class="fas fa-chevron-left text-xs"></i></button><button onclick="scrollCarousel('${title}', 1)" class="w-8 h-8 rounded-full theme-bg-input theme-border flex items-center justify-center hover:bg-blue-600 transition"><i class="fas fa-chevron-right text-xs"></i></button></div></div>`;
+            const track = document.createElement('div'); 
+            track.className = "carousel-track"; 
+            track.id = `track-${title}`;
+            
+            // Map de largura para garantir que o card não corte
+            const widthMap = { 1: '12.5%', 2: '14.28%', 3: '16.66%', 4: '20%' };
+            
+            list.forEach(m => {
+                const cardWrapper = document.createElement('div');
+                cardWrapper.style.flex = `0 0 ${widthMap[currentZoomLevel]}`;
+                cardWrapper.style.minWidth = "120px"; // Garantia mínima
+                const card = createCardElement(m, search);
+                cardWrapper.appendChild(card);
+                track.appendChild(cardWrapper);
+            });
+            row.appendChild(track); parent.appendChild(row);
+        }
+
+        function renderList(list, parent, search) {
+            list.forEach(m => parent.appendChild(createCardElement(m, search)));
+        }
+
+        function createCardElement(m, search) {
+            const card = document.createElement('div');
+            const isMatch = search.length >= 3 && m.titlePt.toLowerCase().includes(search);
+            card.className = `movie-card ${m.highlighted ? 'highlighted' : ''} ${isMatch ? 'search-match' : ''}`;
+            card.dataset.id = m.id;
+            card.oncontextmenu = (e) => showContext(e, m.id);
+            card.onclick = () => fillInfoModal(m); // Abrir detalhes ao clicar
+            const stars = '★'.repeat(m.stars) + '☆'.repeat(5-m.stars);
+            
+            card.innerHTML = `
+                <img src="${m.image}" loading="lazy">
+                <div class="play-hint"><i class="fas fa-play"></i></div>
+                <div class="card-overlay">
+                    <div class="mb-auto flex justify-between items-start">
+                        <span class="bg-blue-600 text-white text-[7px] font-black px-2 py-1 rounded uppercase">${m.category}</span>
+                        <div class="flex gap-1">
+                            ${m.highlighted ? '<i class="fas fa-heart text-blue-500 text-[10px]"></i>' : ''}
+                            ${m.reminder ? '<i class="fas fa-sticky-note text-yellow-500 text-[10px]"></i>' : ''}
+                            ${m.watched ? '<i class="fas fa-check-circle text-emerald-500 text-[10px]"></i>' : ''}
+                        </div>
+                    </div>
+                    <h4 class="text-white font-black text-[9px] uppercase truncate mb-1">${m.titlePt}</h4>
+                    <div class="text-yellow-400 text-[8px] mb-1">${stars}</div>
+                    <div class="text-[7px] text-slate-300 font-bold uppercase tracking-widest">${m.year} • ${m.duration}m</div>
+                </div>`;
+            return card;
+        }
+
+        function showContext(e, id) { 
+            e.preventDefault(); selectedId = id; 
+            const menu = document.getElementById('context-menu'); 
+            menu.style.display = 'block'; menu.style.left = e.pageX + 'px'; menu.style.top = e.pageY + 'px'; 
+        }
+
+        function openInfoModalCtx() { const m = movies.find(x => x.id === selectedId); if(m) fillInfoModal(m); }
+
+        function fillInfoModal(m) {
+            selectedId = m.id;
+            document.getElementById('info-img').src = m.image;
+            document.getElementById('info-title-pt').innerText = m.titlePt;
+            document.getElementById('info-title-en').innerText = m.titleEn || '---';
+            document.getElementById('info-year').innerText = m.year;
+            document.getElementById('info-duration').innerText = m.duration + ' min';
+            document.getElementById('info-category').innerText = m.category;
+            document.getElementById('info-desc').innerText = m.desc || 'Sem sinopse.';
+            document.getElementById('info-director').innerText = m.director || 'Desconhecido';
+            document.getElementById('info-actors').innerText = m.actors || 'Não listado';
+            
+            const wat = document.getElementById('info-watched');
+            const bdg = document.getElementById('info-watched-badge');
+            wat.innerText = m.watched ? `Assistido (${m.watchedYear})` : "Não assistido";
+            wat.className = m.watched ? "font-black text-emerald-500 text-[10px] uppercase" : "font-black text-red-500 text-[10px] uppercase";
+            bdg.className = m.watched ? "bg-emerald-500/10 p-4 rounded-2xl border border-emerald-500/20 text-center" : "theme-bg-input p-4 rounded-2xl theme-border text-center";
+
+            document.getElementById('info-btn-play').onclick = () => requestExecution(m.id);
+            if(!document.getElementById('modal-movie-info').classList.contains('active')) toggleModal('modal-movie-info');
+        }
+
+        function navigateInfo(dir) {
+            const idx = movies.findIndex(m => m.id === selectedId);
+            let n = (idx + dir + movies.length) % movies.length;
+            fillInfoModal(movies[n]);
+        }
+
+        function editFromInfo() { toggleModal('modal-movie-info'); editMovieCtx(); }
+        function toggleHighlightCtx() { 
+            const m = movies.find(x => x.id === selectedId); 
+            if(m) { m.highlighted = !m.highlighted; speak(m.highlighted ? "Destacado" : "Destaque removido"); renderMovies(); } 
+        }
+
+        function exportData() { 
+            const blob = new Blob([JSON.stringify(movies, null, 2)], {type: 'application/json'}); 
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `acervo_jonas.json`; a.click(); speak("Exportado");
+        }
+
+        function importData(e) { 
+            const file = e.target.files[0]; if(!file) return;
+            const reader = new FileReader(); 
+            reader.onload = (ev) => { try { movies = JSON.parse(ev.target.result); renderMovies(); updateGenreSelects(); speak("Importado"); } catch(err) { alert("Erro"); } };
+            reader.readAsText(file);
+        }
+
+        function scrollCarousel(id, dir) { const el = document.getElementById(`track-${id}`); el.scrollLeft += (el.offsetWidth * 0.8) * dir; }
+        
+        function editMovieCtx() { 
+            const m = movies.find(x => x.id === selectedId); if(!m) return; 
+            toggleModal('modal-cadastro'); 
+            document.getElementById('edit-id').value = m.id; 
+            document.getElementById('f-title-pt').value = m.titlePt; 
+            document.getElementById('f-year').value = m.year; 
+            document.getElementById('f-duration').value = m.duration; 
+            document.getElementById('f-desc').value = m.desc;
+            document.getElementById('f-director').value = m.director; 
+            document.getElementById('f-actors').value = m.actors;
+            document.getElementById('f-cat-select').value = m.category; 
+            document.getElementById('f-watched').checked = m.watched;
+            document.getElementById('f-watched-year').value = m.watchedYear;
+            document.getElementById('f-stars-val').value = m.stars; updateStars(m.stars); 
+            document.getElementById('f-img-url').value = m.image; setPreview(m.image); 
+            document.getElementById('f-path').value = m.path;
+        }
+
+        function deleteMovieCtx() { if(confirm("Apagar Jonas?")) { movies = movies.filter(x => x.id !== selectedId); renderMovies(); } }
+        
+        function requestExecution(id) { 
+            const m = movies.find(x => x.id === id); 
+            if(!m || !m.path) return alert("Caminho vazio!"); 
+            document.getElementById('confirm-msg').innerHTML = `Filme: <strong class="text-blue-500">${m.titlePt}</strong><br><small>${m.path}</small>`; 
+            document.getElementById('btn-execute-real').onclick = () => { 
+                window.open(`file:///${m.path.replace(/\\/g, '/')}`, '_blank'); 
+                toggleModal('modal-confirm'); 
+            }; 
+            toggleModal('modal-confirm'); 
+        }
+
+        function updateBellCounter() {
+            const count = movies.filter(m => m.reminder).length;
+            const badge = document.getElementById('bell-badge');
+            badge.innerText = count; badge.classList.toggle('hidden', count === 0);
+        }
+
+        function openReminderModalCtx() {
+            const m = movies.find(x => x.id === selectedId); if(!m) return;
+            document.getElementById('reminder-movie-title').innerText = m.titlePt;
+            document.getElementById('reminder-text').value = m.reminder || '';
+            toggleModal('modal-lembrete');
+        }
+
+        function saveReminder() {
+            const m = movies.find(x => x.id === selectedId);
+            if(m) { m.reminder = document.getElementById('reminder-text').value.trim() || null; updateBellCounter(); toggleModal('modal-lembrete'); renderMovies(); }
+        }
+
+        function toggleRemindersPopup() {
+            const container = document.getElementById('reminders-list-container');
+            const list = movies.filter(m => m.reminder);
+            container.innerHTML = list.length > 0 ? '' : '<p class="text-xs text-center opacity-50 py-10">Vazio Jonas.</p>';
+            list.forEach(m => {
+                const item = document.createElement('div');
+                item.className = "flex items-center gap-4 p-4 theme-bg-input rounded-3xl theme-border shadow-sm";
+                item.innerHTML = `<div class="w-12 h-16 rounded overflow-hidden flex-shrink-0 theme-border"><img src="${m.image}" class="w-full h-full object-cover"></div><div class="flex-1"><h4 class="text-[10px] font-black uppercase text-blue-500 mb-1">${m.titlePt}</h4><p class="text-[11px] theme-text-sec italic">"${m.reminder}"</p></div><button onclick="removeReminder('${m.id}')" class="w-10 h-10 hover:text-red-500 transition"><i class="fas fa-trash-alt"></i></button>`;
+                container.appendChild(item);
+            });
+            toggleModal('modal-reminders-list');
+        }
+
+        function removeReminder(id) {
+            const m = movies.find(x => x.id === id);
+            if(m) { m.reminder = null; updateBellCounter(); toggleRemindersPopup(); renderMovies(); }
+        }
+
+        function startVoiceSearch() {
+            const rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            rec.lang = 'pt-PT';
+            const mic = document.getElementById('mic-icon');
+            mic.className = "fas fa-spinner fa-spin text-red-500";
+            rec.onresult = (e) => { document.getElementById('main-search').value = e.results[0][0].transcript; renderMovies(); mic.className = "fas fa-microphone"; };
+            rec.onerror = () => mic.className = "fas fa-microphone";
+            rec.start();
+        }
+
+        function updateMarqueeConfig() { document.body.style.setProperty('--marquee-speed', (110 - document.getElementById('m-speed').value) + 's'); }
+        function setMarqueeDir(dir) { document.body.style.setProperty('--marquee-dir', dir); }
+    </script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<UserControl x:Class="CineCatalog.Controls.MovieCard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:conv="clr-namespace:CineCatalog.Converters"
+             mc:Ignorable="d"
+             d:DesignHeight="420" d:DesignWidth="270"
+             x:Name="CardRoot">
+
+    <UserControl.Resources>
+        <conv:ImagePathConverter x:Key="ImgConv" />
+        <conv:BoolToVisibilityConverter x:Key="VisConv" />
+    </UserControl.Resources>
+
+    <Border CornerRadius="16"
+            BorderBrush="{Binding BorderBrush, ElementName=CardRoot, FallbackValue=#374151}"
+            BorderThickness="1"
+            Background="#1f2937"
+            Cursor="Hand"
+            ToolTip="{Binding Title, ElementName=CardRoot}">
+
+        <Border.Style>
+            <Style TargetType="Border">
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect BlurRadius="12" ShadowDepth="4" Color="#000" Opacity="0.3" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Border.Style>
+
+        <Grid>
+            <!-- Image -->
+            <Image Source="{Binding ImagePath, ElementName=CardRoot, Converter={StaticResource ImgConv}}"
+                   Stretch="UniformToFill"
+                   VerticalAlignment="Center"
+                   Visibility="{Binding HasImage, ElementName=CardRoot, Converter={StaticResource VisConv}}" />
+
+            <!-- Placeholder when no image -->
+            <Border Background="#111827"
+                    Visibility="{Binding HasImage, ElementName=CardRoot, Converter={StaticResource VisConv}, ConverterParameter=invert}">
+                <Viewbox Width="48" Height="48" Opacity="0.3">
+                    <Canvas Width="24" Height="24">
+                        <TextBlock Text="🎬" FontSize="48" />
+                    </Canvas>
+                </Viewbox>
+            </Border>
+
+            <!-- Gradient overlay at bottom -->
+            <Border VerticalAlignment="Bottom"
+                    Height="100"
+                    Background="LinearGradientBrush(0,0,0,1,Colors.Transparent,Colors.Black)">
+                <Grid Margin="12">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <!-- Title -->
+                    <TextBlock Grid.Row="0"
+                               Text="{Binding Title, ElementName=CardRoot}"
+                               FontWeight="Black"
+                               FontSize="12"
+                               Foreground="White"
+                               TextTrimming="CharacterEllipsis"
+                               TextWrapping="NoWrap"
+                               TextTransform="Uppercase" />
+
+                    <!-- Year + Rating -->
+                    <Grid Grid.Row="1" Margin="0,4,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                   Text="{Binding Year, ElementName=CardRoot, TargetNullValue='----', FallbackValue='----'}"
+                                   FontSize="10"
+                                   FontWeight="Bold"
+                                   Foreground="#60A5FA" />
+
+                        <TextBlock Grid.Column="2"
+                                   Text="{Binding Rating, ElementName=CardRoot, StringFormat={}{0}★}"
+                                   FontSize="10"
+                                   Foreground="#FBBF24"
+                                   FontWeight="Bold" />
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <!-- Favorite badge -->
+            <Border HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Margin="8"
+                    Background="#EF4444"
+                    Width="24" Height="24"
+                    CornerRadius="12"
+                    BorderThickness="2"
+                    BorderBrush="#1f2937"
+                    Visibility="{Binding IsFavorite, ElementName=CardRoot, Converter={StaticResource VisConv}}">
+                <TextBlock Text="♥"
+                           FontSize="12"
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
+            </Border>
+
+            <!-- Watched badge -->
+            <Border HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Margin="8"
+                    Background="#10B981"
+                    Width="24" Height="24"
+                    CornerRadius="12"
+                    BorderThickness="2"
+                    BorderBrush="#1f2937"
+                    Visibility="{Binding Watched, ElementName=CardRoot, Converter={StaticResource VisConv}}">
+                <TextBlock Text="✓"
+                           FontSize="12"
+                           Foreground="White"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontWeight="Bold" />
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>

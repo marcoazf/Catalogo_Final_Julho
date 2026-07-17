@@ -1,0 +1,259 @@
+<Window x:Class="CineCatalog.Views.ItemDetailDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:CineCatalog.ViewModels"
+        xmlns:conv="clr-namespace:CineCatalog.Converters"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance vm:ItemDetailViewModel}"
+        Title="Registar no Acervo"
+        Height="650" Width="900"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="NoResize">
+
+    <Window.Resources>
+        <conv:BoolToVisibilityConverter x:Key="VisConv" />
+    </Window.Resources>
+
+    <Border Background="#1f2937" CornerRadius="40" BorderBrush="#374151" BorderThickness="1" Margin="20">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="40" ShadowDepth="8" Color="#000" Opacity="0.5" />
+        </Border.Effect>
+
+        <Grid Margin="32">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Grid Grid.Row="0" Margin="0,0,0,24">
+                <TextBlock Text="REGISTAR NO ACERVO" FontSize="18" FontWeight="Black" Foreground="White" />
+                <Button Content="✕" Click="CloseButton_Click"
+                        HorizontalAlignment="Right" Background="Transparent"
+                        BorderThickness="0" Foreground="#9CA3AF"
+                        FontSize="18" Cursor="Hand" Width="32" Height="32" />
+            </Grid>
+
+            <!-- Type switcher -->
+            <Border Grid.Row="1" Background="#111827" BorderBrush="#374151" BorderThickness="1"
+                    CornerRadius="20" Padding="4" Margin="0,0,0,24" HorizontalAlignment="Left">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" Content="FILME"
+                            Click="TypeSwitch_Click" Tag="Movie"
+                            Padding="20,8" FontSize="10" FontWeight="Black" Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="Foreground" Value="#9CA3AF" />
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="16" Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Type}" Value="Movie">
+                                        <Setter Property="Background" Value="#3B82F6" />
+                                        <Setter Property="Foreground" Value="White" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <Button Grid.Column="1" Content="SÉRIE"
+                            Click="TypeSwitch_Click" Tag="Series"
+                            Padding="20,8" FontSize="10" FontWeight="Black" Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="Foreground" Value="#9CA3AF" />
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="16" Padding="{TemplateBinding Padding}">
+                                                <ContentPresenter />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Type}" Value="Series">
+                                        <Setter Property="Background" Value="#3B82F6" />
+                                        <Setter Property="Foreground" Value="White" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- Form -->
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="3*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left: Image preview -->
+                    <Border Grid.Column="0" Background="#111827" BorderBrush="#374151" BorderThickness="1"
+                            CornerRadius="16" Margin="0,0,24,0" Height="400" VerticalAlignment="Top">
+                        <Grid>
+                            <Image Source="{Binding ImagePath, Converter={x:Static conv:FilePathToImageConverter.Instance}}"
+                                   Stretch="UniformToFill"
+                                   Visibility="{Binding ImagePath, Converter={x:Static conv:FileExistsToVisibilityConverter.Instance}}" />
+                            <TextBlock Text="POSTER" FontSize="10" FontWeight="Black"
+                                       Foreground="#4B5563" HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Visibility="{Binding ImagePath, Converter={x:Static conv:FileExistsToCollapsedConverter.Instance}}" />
+                            <Button Content="SELECIONAR IMAGEM" Command="{Binding PickImageCommand}"
+                                    VerticalAlignment="Bottom" Margin="16"
+                                    Padding="12,8" FontSize="8" FontWeight="Black"
+                                    Background="#3B82F6" Foreground="White" BorderThickness="0"
+                                    CornerRadius="8" Cursor="Hand" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Right: Fields -->
+                    <StackPanel Grid.Column="1" Margin="0,0,0,16">
+                        <TextBlock Text="Título" FontSize="9" FontWeight="Bold" Foreground="#9CA3AF" Margin="0,0,0,4" />
+                        <TextBox Text="{Binding Title}" FontSize="13" FontWeight="Bold"
+                                 Background="#111827" BorderBrush="#374151" BorderThickness="1"
+                                 CornerRadius="8" Padding="12,8" Foreground="White" Margin="0,0,0,16" />
+
+                        <TextBlock Text="Ano" FontSize="9" FontWeight="Bold" Foreground="#9CA3AF" Margin="0,0,0,4" />
+                        <TextBox Text="{Binding Year, TargetNullValue=''}" FontSize="12"
+                                 Background="#111827" BorderBrush="#374151" BorderThickness="1"
+                                 CornerRadius="8" Padding="12,8" Foreground="White" Margin="0,0,0,16" />
+
+                        <TextBlock Text="Género" FontSize="9" FontWeight="Bold" Foreground="#9CA3AF" Margin="0,0,0,4" />
+                        <TextBox Text="{Binding Genre}" FontSize="12"
+                                 Background="#111827" BorderBrush="#374151" BorderThickness="1"
+                                 CornerRadius="8" Padding="12,8" Foreground="White" Margin="0,0,0,16" />
+
+                        <!-- Movie-specific: Director -->
+                        <TextBlock Text="{Binding Type, StringFormat='{0}: Realizador/Autor'}"
+                                   FontSize="9" FontWeight="Bold" Foreground="#9CA3AF" Margin="0,0,0,4"
+                                   Visibility="{Binding IsMovie, Converter={StaticResource VisConv}}" />
+                        <TextBox Text="{Binding DirectorOrCreator}" FontSize="12"
+                                 Background="#111827" BorderBrush="#374151" BorderThickness="1"
+                                 CornerRadius="8" Padding="12,8" Foreground="White" Margin="0,0,0,16"
+                                 Visibility="{Binding IsMovie, Converter={StaticResource VisConv}}" />
+
+                        <!-- Series-specific: Creator -->
+                        <TextBlock Text="Criador" FontSize="9" FontWeight="Bold" Foreground="#9CA3AF" Margin="0,0,0,4"
+                                   Visibility="{Binding IsSeries, Converter={StaticResource VisConv}}" />
+                        <TextBox Text="{Binding DirectorOrCreator}" FontSize="12"
+                                 Background="#111827" BorderBrush="#374151" BorderThickness="1"
+                                 CornerRadius="8" Padding="12,8" Foreground="White" Margin="0,0,0,16"
+                                 Visibility="{Binding IsSeries, Converter={StaticResource VisConv}}" />
+
+                        <!-- Movie-only: Duration -->
+                        <TextBlock Text="Duração (minutos)" FontSize="9" FontWeight="Bold" Foreground="#9CA3AF" Margin="0,0,0,4"
+                                   Visibility="{Binding IsMovie, Converter={StaticResource VisConv}}" />
+                        <TextBox Text="{Binding Duration}" FontSize="12"
+                                 Background="#111827" BorderBrush="#374151" BorderThickness="1"
+                                 CornerRadius="8" Padding="12,8" Foreground="White" Margin="0,0,0,16"
+                                 Visibility="{Binding IsMovie, Converter={StaticResource VisConv}}" />
+
+                        <!-- Series-only -->
+                        <StackPanel Visibility="{Binding IsSeries, Converter={StaticResource VisConv}}" Margin="0,0,0,16">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="16" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Temporadas" FontSize="9" FontWeight="Bold" Foreground="#9CA3AF" Margin="0,0,0,4" />
+                                    <TextBox Text="{Binding Seasons}" FontSize="12"
+                                             Background="#111827" BorderBrush="#374151" BorderThickness="1"
+                                             CornerRadius="8" Padding="12,8" Foreground="White" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Episódios" FontSize="9" FontWeight="Bold" Foreground="#9CA3AF" Margin="0,0,0,4" />
+                                    <TextBox Text="{Binding Episodes}" FontSize="12"
+                                             Background="#111827" BorderBrush="#374151" BorderThickness="1"
+                                             CornerRadius="8" Padding="12,8" Foreground="White" />
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+
+                        <!-- Description -->
+                        <TextBlock Text="Sinopse" FontSize="9" FontWeight="Bold" Foreground="#9CA3AF" Margin="0,0,0,4" />
+                        <TextBox Text="{Binding Description}" FontSize="11"
+                                 Background="#111827" BorderBrush="#374151" BorderThickness="1"
+                                 CornerRadius="8" Padding="12,8" Foreground="White"
+                                 Height="80" AcceptsReturn="True"
+                                 TextWrapping="Wrap" Margin="0,0,0,16" />
+
+                        <!-- Media file -->
+                        <TextBlock Text="Arquivo de Mídia" FontSize="9" FontWeight="Bold" Foreground="#9CA3AF" Margin="0,0,0,4" />
+                        <Border Background="#111827" BorderBrush="#374151" BorderThickness="1" CornerRadius="8" Padding="12,8" Margin="0,0,0,16">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding MediaPath}"
+                                           FontSize="10" Foreground="#9CA3AF"
+                                           TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                                <Button Grid.Column="1" Content="SELECIONAR" Command="{Binding PickMediaCommand}"
+                                        Padding="12,6" FontSize="8" FontWeight="Black"
+                                        Background="#3B82F6" Foreground="White" BorderThickness="0"
+                                        CornerRadius="6" Cursor="Hand" />
+                            </Grid>
+                        </Border>
+
+                        <!-- Rating stars -->
+                        <TextBlock Text="Avaliação" FontSize="9" FontWeight="Bold" Foreground="#9CA3AF" Margin="0,0,0,4" />
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                            <Button Content="★" Tag="1" Click="Star_Click" FontSize="24" Background="Transparent" BorderThickness="0" Cursor="Hand" Margin="0,0,4,0" />
+                            <Button Content="★" Tag="2" Click="Star_Click" FontSize="24" Background="Transparent" BorderThickness="0" Cursor="Hand" Margin="0,0,4,0" />
+                            <Button Content="★" Tag="3" Click="Star_Click" FontSize="24" Background="Transparent" BorderThickness="0" Cursor="Hand" Margin="0,0,4,0" />
+                            <Button Content="★" Tag="4" Click="Star_Click" FontSize="24" Background="Transparent" BorderThickness="0" Cursor="Hand" Margin="0,0,4,0" />
+                            <Button Content="★" Tag="5" Click="Star_Click" FontSize="24" Background="Transparent" BorderThickness="0" Cursor="Hand" />
+                        </StackPanel>
+
+                        <!-- Tags -->
+                        <TextBlock Text="Tags (separadas por vírgula)" FontSize="9" FontWeight="Bold" Foreground="#9CA3AF" Margin="0,0,0,4" />
+                        <TextBox Text="{Binding Tags}" FontSize="11"
+                                 Background="#111827" BorderBrush="#374151" BorderThickness="1"
+                                 CornerRadius="8" Padding="12,8" Foreground="White" Margin="0,0,0,16" />
+                    </StackPanel>
+                </Grid>
+            </ScrollViewer>
+
+            <!-- Footer buttons -->
+            <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,24,0,0">
+                <Button Content="CANCELAR" Click="CancelButton_Click"
+                        Padding="24,10" FontSize="10" FontWeight="Black" Margin="0,0,12,0"
+                        Background="#374151" Foreground="#9CA3AF" BorderThickness="0"
+                        CornerRadius="8" Cursor="Hand" />
+                <Button Content="GUARDAR DADOS" Click="SaveButton_Click"
+                        Padding="24,10" FontSize="10" FontWeight="Black"
+                        Background="#3B82F6" Foreground="White" BorderThickness="0"
+                        CornerRadius="8" Cursor="Hand" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

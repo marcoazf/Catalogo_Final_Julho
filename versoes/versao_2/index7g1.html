@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineCatalog Elo | v1.2.6 - Edição Premium</title>
+    
+    <!-- RECURSOS EXTERNOS -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* [BLOCO 1: IDENTIDADE VISUAL E ESTRUTURA FIXA] */
+        :root {
+            --bg-color: rgb(17, 24, 39);
+            --text-color: #f3f4f6;
+            --header-bg: rgba(17, 24, 39, 0.98);
+            --card-bg: #1f2937;
+            --input-bg: #1f2937;
+            --border-color: #374151;
+            --text-secondary: #9ca3af;
+            --accent-blue: #3b82f6;
+            --cards-per-row: 8;
+        }
+
+        body.light-mode {
+            --bg-color: rgb(248, 250, 252);
+            --text-color: rgb(15, 23, 42);
+            --header-bg: rgba(255, 255, 255, 0.98);
+            --card-bg: #ffffff;
+            --input-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --text-secondary: #475569;
+        }
+
+        /* Layout inabalável: Header e Footer fixos, Main expande */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; 
+            margin: 0;
+        }
+
+        /* UTILITÁRIOS */
+        .custom-scroll::-webkit-scrollbar { width: 5px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: var(--accent-blue); border-radius: 10px; }
+        .theme-border { border: 1px solid var(--border-color); }
+        .theme-bg-input { background-color: var(--input-bg); }
+        
+        /* [BLOCO 2: COMPONENTES DE INTERFACE] */
+        header { background-color: var(--header-bg); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-color); z-index: 100; flex-shrink: 0; }
+        
+        /* O palco principal ocupa todo o espaço restante */
+        #content-canvas { 
+            flex-grow: 1; 
+            overflow-y: auto; 
+            padding: 2rem; 
+            position: relative; 
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Centralização absoluta do Empty State */
+        #empty-state {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none; /* Controlado via JS */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+            pointer-events: none;
+        }
+
+        .movie-card {
+            width: 100%; aspect-ratio: 9 / 14; position: relative; border-radius: 1rem; overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; background: var(--card-bg); border: 1px solid var(--border-color);
+        }
+        .movie-card:hover { transform: translateY(-8px); z-index: 10; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        
+        .dynamic-grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(var(--cards-per-row), minmax(0, 1fr)); width: 100%; }
+
+        .modal { background-color: rgba(0, 0, 0, 0.9); display: none; align-items: center; justify-content: center; z-index: 200; backdrop-filter: blur(8px); }
+        .modal.active { display: flex; }
+
+        .nav-link { font-weight: 900; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; padding: 0.5rem 1.2rem; border-radius: 2rem; transition: 0.3s; }
+        .nav-link.active { color: white; background: var(--accent-blue); }
+
+        .btn-icon { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--input-bg); border: 1px solid var(--border-color); transition: 0.2s; }
+        .btn-icon:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
+
+        .zoom-btn { width: 28px; height: 28px; border-radius: 50%; font-size: 8px; font-weight: 900; transition: 0.2s; }
+        .zoom-btn.active { background: var(--accent-blue); color: white; }
+
+        .view-btn { width: 28px; height: 28px; border-radius: 50%; font-size: 10px; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+        .view-btn.active { background: var(--accent-blue); color: white; }
+
+        #search-bar-container { background: var(--header-bg); border-bottom: 1px solid var(--border-color); max-height: 0; overflow: hidden; opacity: 0; transition: 0.3s; flex-shrink: 0; }
+        #search-bar-container.active { max-height: 70px; opacity: 1; padding: 1rem 2rem; }
+
+        footer { background-color: var(--header-bg); border-top: 1px solid var(--border-color); flex-shrink: 0; z-index: 60; }
+
+        #context-menu { display: none; position: fixed; z-index: 1000; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 0.75rem; min-width: 180px; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+    </style>
+</head>
+<body class="antialiased custom-scroll">
+
+    <!-- [BLOCO 3: HEADER COMPLETO] -->
+    <header class="px-6 py-3 flex items-center justify-between gap-2">
+        <div class="flex items-center gap-3 shrink-0">
+            <div class="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center shadow-lg">
+                <i class="fas fa-film text-white text-sm"></i>
+            </div>
+            <div class="hidden md:block">
+                <h1 class="text-sm font-black italic uppercase tracking-tighter leading-tight">CineCatalog <span class="text-blue-500">Elo</span></h1>
+                <p class="text-[7px] text-gray-500 font-bold uppercase tracking-widest">Premium v1.1.7</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2 flex-grow justify-end">
+            <button onclick="UI.toggleSearchBar()" class="btn-icon" title="Pesquisar"><i class="fas fa-search text-xs"></i></button>
+
+            <nav class="flex gap-1 theme-bg-input p-1 rounded-full theme-border mx-1">
+                <span onclick="Logic.setMainView('filmes')" id="link-filmes" class="nav-link active">Filmes</span>
+                <span onclick="Logic.setMainView('series')" id="link-series" class="nav-link">Séries</span>
+            </nav>
+
+            <button onclick="UI.toggleModal('modal-cadastro')" class="bg-blue-600 text-white px-4 py-2 rounded-full font-black text-[9px] hover:bg-blue-700 transition uppercase tracking-widest shadow-lg shrink-0">
+                <i class="fas fa-plus mr-1"></i> Cadastrar
+            </button>
+
+            <div class="flex items-center gap-1.5 ml-1">
+                <button onclick="UI.toggleReminders()" class="btn-icon relative">
+                    <i class="fas fa-bell text-xs"></i>
+                    <span id="bell-badge" class="hidden absolute -top-1 -right-1 bg-red-500 text-[7px] w-3.5 h-3.5 rounded-full flex items-center justify-center border-2 border-slate-900">0</span>
+                </button>
+
+                <div class="hidden lg:flex theme-bg-input rounded-full p-1 theme-border gap-0.5">
+                    <button onclick="UI.setZoom(1)" id="z1" class="zoom-btn active">1X</button>
+                    <button onclick="UI.setZoom(2)" id="z2" class="zoom-btn">2X</button>
+                    <button onclick="UI.setZoom(3)" id="z3" class="zoom-btn">3X</button>
+                    <button onclick="UI.setZoom(4)" id="z4" class="zoom-btn">4X</button>
+                </div>
+
+                <button onclick="UI.toggleModal('modal-dashboard')" class="btn-icon"><i class="fas fa-chart-pie text-xs"></i></button>
+
+                <div class="relative">
+                    <button onclick="UI.toggleFilters()" id="btn-filters" class="btn-icon"><i class="fas fa-filter text-xs"></i></button>
+                    <div id="filters-dropdown" class="hidden absolute top-full right-0 mt-2 theme-bg-input theme-border rounded-xl p-2 min-w-[150px] shadow-2xl z-[110]">
+                        <button onclick="Logic.applyFilter('all')" class="w-full text-left p-2 text-[9px] uppercase font-bold hover:text-blue-500">Todos</button>
+                        <button onclick="Logic.applyFilter('fav')" class="w-full text-left p-2 text-[9px] uppercase font-bold hover:text-blue-500">Favoritos</button>
+                    </div>
+                </div>
+
+                <div class="hidden sm:flex theme-bg-input rounded-full p-1 theme-border gap-0.5">
+                    <button class="view-btn"><i class="fas fa-stream"></i></button>
+                    <button class="view-btn active"><i class="fas fa-border-all"></i></button>
+                    <button class="view-btn"><i class="fas fa-play"></i></button>
+                </div>
+
+                <button onclick="UI.toggleTheme()" class="btn-icon"><i class="fas fa-moon text-xs" id="theme-icon"></i></button>
+
+                <div class="flex theme-bg-input rounded-full p-1 theme-border gap-1">
+                    <button onclick="Logic.exportData()" class="w-6 h-6 flex items-center justify-center hover:text-blue-500"><i class="fas fa-download text-[9px]"></i></button>
+                    <label class="w-6 h-6 flex items-center justify-center hover:text-blue-500 cursor-pointer">
+                        <i class="fas fa-upload text-[9px]"></i>
+                        <input type="file" class="hidden" onchange="Logic.importData(event)">
+                    </label>
+                </div>
+
+                <button onclick="UI.toggleModal('modal-config')" class="btn-icon"><i class="fas fa-cog text-xs"></i></button>
+                <button onclick="UI.toggleModal('modal-info')" class="btn-icon"><i class="fas fa-info-circle text-xs"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <!-- [BLOCO 4: BUSCA] -->
+    <div id="search-bar-container">
+        <div class="max-w-4xl mx-auto relative flex items-center">
+            <i class="fas fa-search absolute left-5 text-blue-500"></i>
+            <input type="text" id="main-search" placeholder="Pesquisar títulos, realizadores..." class="w-full theme-bg-input theme-border rounded-2xl py-2.5 pl-12 pr-20 outline-none text-xs" oninput="Logic.handleSearch(this.value)">
+            <button onclick="Logic.clearSearch()" class="absolute right-4 text-[9px] font-black uppercase text-red-500">Limpar</button>
+        </div>
+    </div>
+
+    <!-- [BLOCO 5: CANVAS PRINCIPAL] -->
+    <main id="content-canvas" class="custom-scroll">
+        <!-- Empty State ajustado para centralização real -->
+        <div id="empty-state">
+            <div class="w-24 h-24 bg-blue-600/10 rounded-[2rem] flex items-center justify-center mb-6 border border-blue-500/20 shadow-2xl">
+                <i class="fas fa-film text-blue-500 text-4xl"></i>
+            </div>
+            <h2 class="text-4xl font-black italic uppercase tracking-tighter mb-2">ACERVO VAZIO</h2>
+            <div class="text-[10px] theme-text-sec font-bold uppercase tracking-[0.2em] space-y-1">
+                <p>O SEU CINEMA PARTICULAR COMEÇA...</p>
+                <p>COM O PRIMEIRO CADASTRO</p>
+            </div>
+        </div>
+        
+        <!-- Grid de filmes -->
+        <div id="movies-container"></div>
+    </main>
+
+    <!-- [BLOCO 6: FOOTER FIXO] -->
+    <footer class="px-6 py-2 border-t theme-border flex justify-between items-center bg-black/20">
+        <div class="text-[9px] theme-text-sec uppercase tracking-widest font-medium">
+            ELO SISTEMA E TECNOLIGIA | 2026 - <span class="opacity-50">CREATED FOR JONAS THEODORO</span>
+        </div>
+        <div id="user-action-status" class="text-[9px] text-emerald-500 font-bold uppercase opacity-0 pointer-events-none transition-opacity duration-300"></div>
+        <div id="stats-counter" class="text-blue-500 font-black text-[9px] uppercase">0 TÍTULOS NO ACERVO JONAS</div>
+    </footer>
+
+    <!-- [BLOCO 7: MODAIS] -->
+    <div id="modal-cadastro" class="modal fixed inset-0 p-4">
+        <div class="theme-bg-input w-full max-w-4xl rounded-[2.5rem] overflow-hidden theme-border shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="flex items-center justify-between border-b theme-border px-8 py-4">
+                <h2 class="text-sm font-black uppercase italic tracking-tighter">REGISTAR NO <span class="text-blue-500">ACERVO</span></h2>
+                <div class="flex gap-2">
+                    <button onclick="UI.switchTab('filmes')" id="tab-filmes" class="nav-link active">Filmes</button>
+                    <button onclick="UI.switchTab('series')" id="tab-series" class="nav-link">Séries</button>
+                </div>
+                <button onclick="UI.toggleModal('modal-cadastro')" class="w-8 h-8 rounded-full theme-bg-input border theme-border hover:bg-red-500 transition"><i class="fas fa-times text-xs"></i></button>
+            </div>
+            <form id="movie-form" class="p-8 grid grid-cols-1 md:grid-cols-3 gap-6 overflow-y-auto custom-scroll" onsubmit="Logic.saveMovie(event)">
+                <input type="hidden" id="edit-id">
+                <input type="hidden" id="current-tab-type" value="filmes">
+                
+                <div class="space-y-4">
+                    <input type="text" id="f-title-pt" placeholder="Título do Conteúdo" class="w-full theme-bg-input p-3 rounded-xl border theme-border outline-none text-xs" required>
+                    <textarea id="f-desc" placeholder="Sinopse Curta..." class="w-full theme-bg-input p-3 rounded-xl border theme-border outline-none text-[10px] h-32 resize-none"></textarea>
+                    <div class="flex items-center justify-between p-3 bg-white/5 rounded-xl border theme-border">
+                        <span class="text-[9px] font-bold uppercase">Avaliação:</span>
+                        <div id="star-input-container" class="text-gray-400 space-x-1">
+                            <i class="fas fa-star cursor-pointer" data-v="1"></i><i class="fas fa-star cursor-pointer" data-v="2"></i><i class="fas fa-star cursor-pointer" data-v="3"></i><i class="fas fa-star cursor-pointer" data-v="4"></i><i class="fas fa-star cursor-pointer" data-v="5"></i>
+                        </div>
+                        <input type="hidden" id="f-stars-val" value="0">
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="aspect-[9/14] theme-bg-input border theme-border rounded-2xl overflow-hidden relative group">
+                        <img id="f-preview" src="" class="w-full h-full object-cover hidden">
+                        <div id="preview-placeholder" class="absolute inset-0 flex items-center justify-center text-[8px] opacity-30 font-black">PREVER POSTER</div>
+                    </div>
+                    <input type="text" id="f-img-url" placeholder="URL da Imagem (9:14)" class="w-full theme-bg-input p-3 rounded-xl border theme-border outline-none text-[10px]" oninput="UI.updatePreview(this.value)">
+                </div>
+
+                <div class="space-y-4 flex flex-col">
+                    <input type="number" id="f-year" placeholder="Ano de Lançamento" class="w-full theme-bg-input p-3 rounded-xl border theme-border outline-none text-xs">
+                    <select id="f-status" class="w-full theme-bg-input p-3 rounded-xl border theme-border outline-none text-xs font-bold">
+                        <option value="Novo">STATUS: NOVO</option>
+                        <option value="Favorito">STATUS: FAVORITO</option>
+                        <option value="Assistir">STATUS: ASSISTIR</option>
+                    </select>
+                    <div class="flex items-center gap-3 p-3 bg-white/5 rounded-xl border theme-border">
+                        <input type="checkbox" id="f-watched" class="w-4 h-4">
+                        <span class="text-[9px] font-black uppercase">JÁ ASSISTIDO</span>
+                    </div>
+                    <button type="submit" class="mt-auto w-full bg-blue-600 text-white py-4 rounded-xl font-black uppercase text-[10px] tracking-widest shadow-xl">Guardar Dados</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Menu Contextual -->
+    <div id="context-menu">
+        <div class="p-2 space-y-1">
+            <button onclick="Logic.editMovieCtx()" class="w-full text-left px-4 py-2 hover:bg-blue-600 hover:text-white rounded-lg flex items-center gap-3 text-[10px] font-black uppercase transition"><i class="fas fa-edit"></i> Editar</button>
+            <button onclick="Logic.deleteMovieCtx()" class="w-full text-left px-4 py-2 hover:bg-red-600 hover:text-white rounded-lg flex items-center gap-3 text-[10px] font-black uppercase text-red-500 transition"><i class="fas fa-trash"></i> Eliminar</button>
+        </div>
+    </div>
+
+    <!-- [BLOCO 8: NÚCLEO DE LÓGICA] -->
+    <script>
+        const APP_STATE = {
+            movies: [],
+            currentView: 'filmes',
+            activeFilter: 'all',
+            searchQuery: '',
+            selectedId: null,
+            searchTimer: null
+        };
+
+        const Storage = {
+            save() {
+                localStorage.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
+                Logic.showStatus('Sincronizado');
+            },
+            load() {
+                const data = localStorage.getItem('cinecatalog_v126');
+                if (data) APP_STATE.movies = JSON.parse(data);
+                Render.all();
+            }
+        };
+
+        const Render = {
+            all() {
+                const container = document.getElementById('movies-container');
+                const emptyState = document.getElementById('empty-state');
+                
+                const filtered = APP_STATE.movies.filter(m => {
+                    const matchType = (APP_STATE.currentView === 'filmes' && m.type === 'filmes') || 
+                                     (APP_STATE.currentView === 'series' && m.type === 'series');
+                    const matchSearch = m.titlePt.toLowerCase().includes(APP_STATE.searchQuery.toLowerCase());
+                    let matchFilter = true;
+                    if (APP_STATE.activeFilter === 'fav') matchFilter = m.status === 'Favorito';
+                    return matchType && matchSearch && matchFilter;
+                });
+
+                container.innerHTML = '';
+                
+                // Exibição condicional do Empty State
+                if (filtered.length === 0) {
+                    emptyState.style.display = 'flex';
+                } else {
+                    emptyState.style.display = 'none';
+                    container.className = "dynamic-grid";
+                    filtered.forEach(m => container.appendChild(this.createCard(m)));
+                }
+
+                document.getElementById('stats-counter').innerText = `${filtered.length} TÍTULOS NO ACERVO JONAS`;
+            },
+
+            createCard(data) {
+                const div = document.createElement('div');
+                div.className = `movie-card ${data.status === 'Favorito' ? 'border-red-500/50 shadow-[0_0_15px_rgba(239,68,68,0.2)]' : ''}`;
+                div.innerHTML = `
+                    <img src="${data.image}" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/300x450?text=S/Poster'">
+                    <div class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black to-transparent">
+                        <h4 class="text-white font-black text-[8px] uppercase truncate">${data.titlePt}</h4>
+                        <div class="flex justify-between items-center mt-1">
+                            <span class="text-[7px] text-blue-400 font-bold">${data.year || '----'}</span>
+                            <div class="text-[7px] text-yellow-500">${'★'.repeat(data.stars || 0)}</div>
+                        </div>
+                    </div>
+                `;
+                div.oncontextmenu = (e) => Logic.openContextMenu(e, data.id);
+                return div;
+            }
+        };
+
+        const Logic = {
+            saveMovie(e) {
+                e.preventDefault();
+                const id = document.getElementById('edit-id').value;
+                const movieData = {
+                    id: id || Date.now().toString(),
+                    type: document.getElementById('current-tab-type').value,
+                    titlePt: document.getElementById('f-title-pt').value,
+                    desc: document.getElementById('f-desc').value,
+                    year: document.getElementById('f-year').value,
+                    image: document.getElementById('f-img-url').value || 'https://via.placeholder.com/300x450',
+                    status: document.getElementById('f-status').value,
+                    watched: document.getElementById('f-watched').checked,
+                    stars: document.getElementById('f-stars-val').value
+                };
+
+                if (id) {
+                    const idx = APP_STATE.movies.findIndex(m => m.id === id);
+                    APP_STATE.movies[idx] = movieData;
+                } else {
+                    APP_STATE.movies.push(movieData);
+                }
+
+                Storage.save();
+                Render.all();
+                UI.toggleModal('modal-cadastro');
+                e.target.reset();
+                document.getElementById('edit-id').value = '';
+                document.querySelectorAll('#star-input-container i').forEach(s => s.classList.remove('text-yellow-500'));
+            },
+
+            deleteMovieCtx() {
+                if(confirm("Eliminar permanentemente?")) {
+                    APP_STATE.movies = APP_STATE.movies.filter(m => m.id !== APP_STATE.selectedId);
+                    Storage.save();
+                    Render.all();
+                }
+            },
+
+            editMovieCtx() {
+                const movie = APP_STATE.movies.find(m => m.id === APP_STATE.selectedId);
+                if (!movie) return;
+                UI.toggleModal('modal-cadastro');
+                UI.switchTab(movie.type);
+                document.getElementById('edit-id').value = movie.id;
+                document.getElementById('f-title-pt').value = movie.titlePt;
+                document.getElementById('f-desc').value = movie.desc;
+                document.getElementById('f-year').value = movie.year;
+                document.getElementById('f-img-url').value = movie.image;
+                document.getElementById('f-status').value = movie.status;
+                document.getElementById('f-watched').checked = movie.watched;
+                document.getElementById('f-stars-val').value = movie.stars;
+                UI.updatePreview(movie.image);
+                
+                const val = movie.stars;
+                document.querySelectorAll('#star-input-container i').forEach(s => s.classList.toggle('text-yellow-500', s.dataset.v <= val));
+            },
+
+            handleSearch(val) {
+                clearTimeout(APP_STATE.searchTimer);
+                APP_STATE.searchTimer = setTimeout(() => {
+                    APP_STATE.searchQuery = val;
+                    Render.all();
+                }, 300);
+            },
+
+            clearSearch() {
+                document.getElementById('main-search').value = '';
+                this.handleSearch('');
+            },
+
+            setMainView(type) {
+                APP_STATE.currentView = type;
+                document.getElementById('link-filmes').classList.toggle('active', type === 'filmes');
+                document.getElementById('link-series').classList.toggle('active', type === 'series');
+                Render.all();
+            },
+
+            applyFilter(f) {
+                APP_STATE.activeFilter = f;
+                Render.all();
+                document.getElementById('filters-dropdown').classList.add('hidden');
+            },
+
+            openContextMenu(e, id) {
+                e.preventDefault();
+                APP_STATE.selectedId = id;
+                const menu = document.getElementById('context-menu');
+                menu.style.display = 'block';
+                menu.style.left = `${e.pageX}px`;
+                menu.style.top = `${e.pageY}px`;
+            },
+
+            showStatus(msg) {
+                const el = document.getElementById('user-action-status');
+                el.innerText = `● ${msg}`;
+                el.style.opacity = '1';
+                setTimeout(() => el.style.opacity = '0', 2000);
+            },
+
+            exportData() {
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(APP_STATE.movies));
+                const dl = document.createElement('a');
+                dl.setAttribute("href", dataStr);
+                dl.setAttribute("download", "CineCatalog_Backup.json");
+                dl.click();
+            },
+
+            importData(e) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    APP_STATE.movies = JSON.parse(event.target.result);
+                    Storage.save();
+                    Render.all();
+                };
+                reader.readAsText(e.target.files[0]);
+            }
+        };
+
+        const UI = {
+            toggleModal(id) { document.getElementById(id).classList.toggle('active'); },
+            toggleSearchBar() { document.getElementById('search-bar-container').classList.toggle('active'); },
+            toggleFilters() { document.getElementById('filters-dropdown').classList.toggle('hidden'); },
+            toggleTheme() {
+                document.body.classList.toggle('light-mode');
+                document.getElementById('theme-icon').className = document.body.classList.contains('light-mode') ? 'fas fa-sun' : 'fas fa-moon';
+            },
+            switchTab(type) {
+                document.getElementById('tab-filmes').classList.toggle('active', type === 'filmes');
+                document.getElementById('tab-series').classList.toggle('active', type === 'series');
+                document.getElementById('current-tab-type').value = type;
+            },
+            updatePreview(url) {
+                const img = document.getElementById('f-preview');
+                const placeholder = document.getElementById('preview-placeholder');
+                if (url) { img.src = url; img.classList.remove('hidden'); placeholder.classList.add('hidden'); }
+                else { img.classList.add('hidden'); placeholder.classList.remove('hidden'); }
+            },
+            setZoom(lvl) {
+                const map = { 1: 8, 2: 6, 3: 5, 4: 4 };
+                document.body.style.setProperty('--cards-per-row', map[lvl]);
+                document.querySelectorAll('.zoom-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === lvl));
+            }
+        };
+
+        window.onload = () => {
+            Storage.load();
+            window.addEventListener('click', (e) => {
+                if (!e.target.closest('#context-menu')) document.getElementById('context-menu').style.display = 'none';
+            });
+            document.querySelectorAll('#star-input-container i').forEach(star => {
+                star.onclick = () => {
+                    const v = star.dataset.v;
+                    document.getElementById('f-stars-val').value = v;
+                    document.querySelectorAll('#star-input-container i').forEach(s => s.classList.toggle('text-yellow-500', s.dataset.v <= v));
+                }
+            });
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
+    <Title>CineCatalog Elo</Title>
+    <Version>2.0.0</Version>
+    <Description>Catálogo de filmes e séries — Edição Desktop</Description>
+    <Company>Elo Sistema e Tecnologia</Company>
+    <Product>CineCatalog Elo</Product>
+    <PackageIcon>Assets\app.ico</PackageIcon>
+    <AssemblyName>CineCatalog</AssemblyName>
+    <RootNamespace>CineCatalog</RootNamespace>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="System.Text.Json" Version="8.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Data\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\*" />
+  </ItemGroup>
+
+</Project>

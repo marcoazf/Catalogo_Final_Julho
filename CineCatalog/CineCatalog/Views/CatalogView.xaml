@@ -1,0 +1,358 @@
+<UserControl x:Class="CineCatalog.Views.CatalogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:CineCatalog.ViewModels"
+             xmlns:ctrl="clr-namespace:CineCatalog.Controls"
+             xmlns:conv="clr-namespace:CineCatalog.Converters"
+             mc:Ignorable="d"
+             d:DesignHeight="800" d:DesignWidth="1200"
+             d:DataContext="{d:DesignInstance vm:CatalogViewModel}">
+
+    <UserControl.Resources>
+        <conv:BoolToVisibilityConverter x:Key="VisConv" />
+        <conv:StringNotEmptyConverter x:Key="StrNotEmpty" />
+    </UserControl.Resources>
+
+    <Grid Background="{DynamicResource BgColor}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Search bar -->
+        <Border Grid.Row="0"
+                Background="{DynamicResource HeaderBg}"
+                BorderBrush="{DynamicResource BorderColor}"
+                BorderThickness="0,0,0,1"
+                Padding="16,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- View switcher -->
+                <Border Grid.Column="0"
+                        Background="{DynamicResource InputBg}"
+                        BorderBrush="{DynamicResource BorderColor}"
+                        BorderThickness="1"
+                        CornerRadius="20"
+                        Padding="4"
+                        Margin="0,0,12,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0" Content="FILMES"
+                                Command="{Binding SetViewCommand}" CommandParameter="Movies"
+                                Padding="16,6" FontSize="10" FontWeight="Black" Cursor="Hand">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+                                    <Setter Property="BorderThickness" Value="0" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}" CornerRadius="16" Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter />
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CurrentView}" Value="Movies">
+                                            <Setter Property="Background" Value="#3B82F6" />
+                                            <Setter Property="Foreground" Value="White" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <Button Grid.Column="1" Content="SÉRIES"
+                                Command="{Binding SetViewCommand}" CommandParameter="Series"
+                                Padding="16,6" FontSize="10" FontWeight="Black" Cursor="Hand">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+                                    <Setter Property="BorderThickness" Value="0" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}" CornerRadius="16" Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter />
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding CurrentView}" Value="Series">
+                                            <Setter Property="Background" Value="#3B82F6" />
+                                            <Setter Property="Foreground" Value="White" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <!-- Search input -->
+                <Border Grid.Column="1"
+                        Background="{DynamicResource InputBg}"
+                        BorderBrush="{DynamicResource BorderColor}"
+                        BorderThickness="1"
+                        CornerRadius="16"
+                        Padding="12,8" Margin="0,0,12,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="🔍" FontSize="12" Margin="0,0,8,0" VerticalAlignment="Center" />
+
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Foreground="{DynamicResource TextColor}"
+                                 FontSize="12"
+                                 CaretBrush="{DynamicResource TextColor}"
+                                 VerticalAlignment="Center"
+                                 Padding="0">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="TextBox">
+                                                <ScrollViewer x:Name="PART_ContentHost" Background="Transparent" />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+
+                        <Button Grid.Column="2" Content="LIMPAR"
+                                Command="{Binding ClearSearchCommand}"
+                                Background="Transparent" BorderThickness="0"
+                                FontSize="9" FontWeight="Black" Foreground="#EF4444"
+                                Cursor="Hand" VerticalAlignment="Center"
+                                Visibility="{Binding SearchQuery, Converter={StaticResource StrNotEmpty}}" />
+                    </Grid>
+                </Border>
+
+                <!-- Zoom + Action buttons -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Background="{DynamicResource InputBg}"
+                            BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="20" Padding="4">
+                    <Button Content="1X" Command="{Binding SetZoomCommand}" CommandParameter="1" Width="28" Height="28" FontSize="9" FontWeight="Black" Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="14" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ZoomLevel}" Value="1">
+                                        <Setter Property="Background" Value="#3B82F6" />
+                                        <Setter Property="Foreground" Value="White" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button Content="2X" Command="{Binding SetZoomCommand}" CommandParameter="2" Width="28" Height="28" FontSize="9" FontWeight="Black" Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="14" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ZoomLevel}" Value="2">
+                                        <Setter Property="Background" Value="#3B82F6" />
+                                        <Setter Property="Foreground" Value="White" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button Content="3X" Command="{Binding SetZoomCommand}" CommandParameter="3" Width="28" Height="28" FontSize="9" FontWeight="Black" Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="14" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ZoomLevel}" Value="3">
+                                        <Setter Property="Background" Value="#3B82F6" />
+                                        <Setter Property="Foreground" Value="White" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button Content="4X" Command="{Binding SetZoomCommand}" CommandParameter="4" Width="28" Height="28" FontSize="9" FontWeight="Black" Cursor="Hand">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="Foreground" Value="{DynamicResource TextSecondary}" />
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border Background="{TemplateBinding Background}" CornerRadius="14" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ZoomLevel}" Value="4">
+                                        <Setter Property="Background" Value="#3B82F6" />
+                                        <Setter Property="Foreground" Value="White" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+
+                <!-- Action buttons -->
+                <StackPanel Grid.Column="3" Orientation="Horizontal" Margin="12,0,0,0">
+                    <Button Content="＋" Command="{Binding AddItemCommand}"
+                            Width="34" Height="34"
+                            Background="#3B82F6" Foreground="White"
+                            BorderThickness="0"
+                            CornerRadius="17"
+                            FontSize="16" FontWeight="Bold"
+                            Cursor="Hand" Margin="0,0,6,0" />
+
+                    <Button Content="⤓" Command="{Binding ExportBackupCommand}"
+                            Width="34" Height="34"
+                            Background="{DynamicResource InputBg}"
+                            Foreground="{DynamicResource TextColor}"
+                            BorderBrush="{DynamicResource BorderColor}"
+                            BorderThickness="1"
+                            CornerRadius="17"
+                            FontSize="14"
+                            Cursor="Hand" Margin="0,0,6,0" />
+
+                    <Button Content="⤒" Command="{Binding ImportBackupCommand}"
+                            Width="34" Height="34"
+                            Background="{DynamicResource InputBg}"
+                            Foreground="{DynamicResource TextColor}"
+                            BorderBrush="{DynamicResource BorderColor}"
+                            BorderThickness="1"
+                            CornerRadius="17"
+                            FontSize="14"
+                            Cursor="Hand" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Loading overlay -->
+        <Border Grid.Row="1" Background="{DynamicResource BgColor}"
+                Visibility="{Binding IsLoading, Converter={StaticResource VisConv}}">
+            <TextBlock Text="CARREGANDO..."
+                       FontSize="14" FontWeight="Bold"
+                       Foreground="{DynamicResource TextMuted}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+        </Border>
+
+        <!-- Empty state -->
+        <Border Grid.Row="1" Background="{DynamicResource BgColor}"
+                Visibility="{Binding IsEmpty, Converter={StaticResource VisConv}}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="🎬" FontSize="64" HorizontalAlignment="Center" />
+                <TextBlock Text="ACERVO VAZIO"
+                           FontSize="28" FontWeight="Black" FontStyle="Italic"
+                           Foreground="{DynamicResource TextColor}"
+                           HorizontalAlignment="Center" Margin="0,16,0,0" />
+                <TextBlock Text="{Binding CurrentView, StringFormat='NENHUM {0} CADASTRADO'}"
+                           FontSize="10" FontWeight="Bold"
+                           Foreground="{DynamicResource TextMuted}"
+                           HorizontalAlignment="Center" Margin="0,8,0,0" />
+            </StackPanel>
+        </Border>
+
+        <!-- Items grid with virtualization -->
+        <Border Grid.Row="1"
+                Visibility="{Binding IsLoading, Converter={StaticResource VisConv}, ConverterParameter=invert}">
+            <ScrollViewer x:Name="MainScroll"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled"
+                          Padding="24"
+                          Background="{DynamicResource BgColor}">
+
+                <ItemsControl x:Name="ItemsControl"
+                              ItemsSource="{Binding FilteredItems}"
+                              VirtualizingPanel.IsVirtualizing="True"
+                              VirtualizingPanel.VirtualizationMode="Recycling"
+                              VirtualizingPanel.CacheLength="20,10"
+                              VirtualizingPanel.CacheLengthUnit="Item"
+                              ScrollViewer.CanContentScroll="True">
+
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel Orientation="Horizontal" IsItemsHost="True" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <ItemsPresenter />
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ctrl:MovieCard Width="200" Height="300"
+                                            Margin="8"
+                                            Item="{Binding}"
+                                            ItemClicked="MovieCard_Clicked"
+                                            ItemRightClicked="MovieCard_RightClicked"
+                                            FavoriteToggled="MovieCard_FavoriteToggled" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Border>
+    </Grid>
+</UserControl>
