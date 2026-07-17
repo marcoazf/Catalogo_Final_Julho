@@ -275,3 +275,230 @@ Tudo que usa unidades `rem` (padding, margin, gap, border-radius, font-size de T
 | Texto criador | `CREATED FOR JONAS THEODORO` | `CRIADO PARA JONAS THEODORO` |
 
 **Preservação:** Todos os handlers, funções JavaScript, sistema de configuração de rodapé via `cfg-footer-*`, cores, ícones e funcionalidade de auto-save mantidos intactos. A alteração é puramente visual e de tradução.
+
+---
+
+### 12. Ocultação da Seção de Logotipo nas Configurações
+
+**Arquivo:** `index.html` — HTML (modal config)
+
+**O que foi feito:**
+- A seção inteira "Logotipo" (URL da Imagem, preview, botão de seleção) foi ocultada com `style="display:none"` no container `div.config-section`.
+- O elemento foi preservado no DOM (não removido) para manter compatibilidade com o sistema de logotipo personalizado via `applyConfig()`.
+- O logotipo na barra principal continua funcionando normalmente via `cinecatalogo.png` e configurações existentes.
+
+**Preservação:** A função `applyConfig()` continua buscando `cfg.logo` e aplicando ao elemento `#logo-img`. Nenhuma funcionalidade de logotipo foi perdida — a seção está apenas oculta da interface.
+
+---
+
+### 13. Seção Caminhos: Labels, Auto-Toggle e Caminhos Completos
+
+**Arquivo:** `index.html` — HTML (seção Caminhos) + JavaScript (`pickFolder`, novos handlers)
+
+**O que foi feito:**
+- **Labels renomeados:**
+  - "Vídeos" → **"Filmes"**
+  - "Backups" → **"Séries"**
+  - "Cards" e "Acervo Geral" mantidos
+- **Texto do botão:** "Activar" → **"ATIVAR"** em todos os 4 switches de caminho
+- **Placeholders atualizados** para refletir os novos nomes (ex: `C:\Users\...\Filmes`)
+- **Caminho completo:** A função `pickFolder()` foi modificada para sempre usar o `_legacyPick()` primeiro, que obtém o caminho completo do sistema de arquivos via `this.files[0].path` (Electron) ou `webkitRelativePath` (browser). A API `showDirectoryPicker` (que só retornava o nome da pasta) foi removida do fluxo principal.
+- **Auto-toggle ON:** Quando o usuário seleciona uma pasta, o checkbox correspondente é automaticamente ativado via `_autoActivatePath()`.
+- **Auto-toggle OFF:** Quando o usuário edita manualmente o campo de caminho e o esvazia, o checkbox é automaticamente desativado via `_onPathInput()`.
+- **Handlers `oninput`** adicionados a cada campo de caminho para monitorar mudanças em tempo real.
+
+| Funcionalidade | Antes | Depois |
+|---|---|---|
+| Label Vídeos | "Vídeos" | "Filmes" |
+| Label Backups | "Backups" | "Séries" |
+| Botão switch | "Activar" | "ATIVAR" |
+| Seleção de pasta | `showDirectoryPicker` (nome apenas) | `_legacyPick` (caminho completo) |
+| Auto-toggle | Manual | Automático (ON ao selecionar, OFF ao limpar) |
+
+**Preservação:** As chaves internas (`cfg-path-videos`, `cfg-path-backups`, `cfg-path-videos-active`, `cfg-path-backups-active`) foram mantidas idênticas para preservar a compatibilidade com dados existentes no localStorage e com a função `applyConfig()`.
+
+---
+
+### 14. Auto Salvamento: Campo de Pasta Removido
+
+**Arquivo:** `index.html` — HTML (seção Auto Salvamento) + JavaScript (`ConfigAutoSave`, `_scheduleAutoSave`, `_getAcervoDirHandle`, `_getAcervoDirHandleForSave`)
+
+**O que foi feito:**
+- O campo "Pasta" e seu botão de seleção foram removidos da seção Auto Salvamento — agora só existe o toggle ON/OFF.
+- **Texto do switch:** "Activar" → **"ATIVAR"**
+- A referência `cfg.autoSavePath` foi removida de `UI.applyConfig()` e `UI._populateConfigForm()`.
+- A função `ConfigAutoSave()` agora chama `saveConfig()` diretamente (localStorage) antes de agendar o backup em arquivo.
+- A função `_scheduleAutoSave()` agora salva no localStorage primeiro, e só salva em arquivo se `cfg.pathAcervo` estiver ativo.
+- `_getAcervoDirHandle()` foi atualizada para usar `cfg.pathAcervo` + `cfg.pathAcervoActive` em vez de `cfg.autoSavePath`.
+- `_getAcervoDirHandleForSave()` foi simplificada para usar apenas `cfg.pathAcervo`.
+- O valor `autoSavePath: ''` foi mantido nos defaults do `loadConfig()` para retrocompatibilidade.
+
+**Preservação:** O toggle de auto-salvamento funciona como antes. O salvamento em localStorage é imediato. O salvamento em arquivo continua funcionando via `cfg.pathAcervo` se configurado.
+
+---
+
+### 15. Sugestão de Filmes/Séries: Sempre Sugerir
+
+**Arquivo:** `index.html` — JavaScript (`pickSuggestion`) + HTML (descrição da seção)
+
+**O que foi feito:**
+- A função `pickSuggestion()` foi modificada para **sempre sugerir** um filme ou série, mesmo que nenhum título tenha os status configurados (Novo, Assistir, Favoritos).
+- **Lógica atual:** Primeiro tenta filtrar por status selecionados. Se nenhum candidato for encontrado, faz fallback para **qualquer** filme/série do acervo.
+- **Removida** a mensagem de erro "Selecione pelo menos um filtro nas configurações" (que bloqueava quando nenhum filtro estava ativo).
+- A descrição na interface foi atualizada: *"Exibe um filme/série aleatório ao abrir o catálogo. Se nenhum tiver o status selecionado, qualquer título será sugerido."*
+
+**Fluxo:**
+1. Filtra por status selecionados (se houver candidatos → usa esses)
+2. Se nenhum candidato → filtra todos os filmes/séries do acervo
+3. Se acervo vazio → mostra "Nenhum filme/série no acervo"
+
+**Preservação:** Os toggles de filtro (Novo, Assistir, Favoritos) continuam funcionando para priorizar títulos com esses status. A mudança apenas garante que a sugestão nunca falhe por falta de candidatos.
+
+---
+
+### 16. Botão APLICAR: Verificação de Integridade
+
+**Arquivo:** `index.html` — JavaScript (`UI.applyConfig()`)
+
+**O que foi feito:**
+- Verificação completa do fluxo `UI.applyConfig()` → confirmando que todas as configurações são coletadas dos campos HTML, salvas via `saveConfig()` (localStorage) e aplicadas via `applyConfig()` (DOM + CSS variables).
+- Todos os campos de configuração estão sendo salvos corretamente: Logotipo, Acervo Vazio, Cards, Caminhos (Cards/Filmes/Séries/Acervo), Auto Salvamento, Notificações, Sugestões, Rodapé, Placeholder.
+- A remoção de `autoSavePath` do fluxo de `applyConfig` foi verificada — não há referências órfãs.
+
+**Preservação:** O botão "Aplicar" continua funcionando como antes, agora com todas as novas seções integradas corretamente.
+
+---
+
+### Checklist Final
+
+| Verificação | Status |
+|---|---|
+| Seção Logotipo ocultada | OK |
+| Caminhos: labels renomeados (Filmes, Séries) | OK |
+| Caminhos: "ATIVAR" em todos os switches | OK |
+| Caminhos: caminho completo ao selecionar pasta | OK |
+| Caminhos: auto-toggle ON ao selecionar | OK |
+| Caminhos: auto-toggle OFF ao limpar campo | OK |
+| Auto Salvamento: campo de pasta removido | OK |
+| Auto Salvamento: toggle "ATIVAR" | OK |
+| Auto Salvamento: saveConfig() imediato no toggle | OK |
+| Sugestão: fallback para qualquer título | OK |
+| Botão APLICAR: todas as configs salvas | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
+
+---
+
+### 17. Botão Filtro: Toggle Azul (Ativar/Desativar)
+
+**Arquivo:** `index.html` — JavaScript (`UI.toggleFilters`, `Logic.applyFilter`, `Logic.setYearFilter`, click-outside handler)
+
+**O que foi feito:**
+- O botão Filtro (`#btn-filters`) agora fica com a classe `active` (fundo azul) quando o dropdown de filtros está aberto.
+- Ao clicar novamente no botão, o dropdown fecha e o azul é removido.
+- Ao clicar fora do dropdown ou em qualquer filtro, o dropdown fecha e o azul também é removido.
+- A classe `active` é adicionada via `btn.classList.toggle('active', opening)` no `toggleFilters()`.
+- A classe `active` é removida em 3 pontos: `applyFilter()`, `setYearFilter()` e no handler de click-outside.
+- O CSS `.btn-icon.active` já existia (fundo azul, texto branco, borda azul) — nenhuma alteração de CSS necessária.
+
+**Preservação:** Todas as funcionalidades de filtro (dropdown, aplicação, ordenação, filtros por ano/gênero/status) permanecem intactas. A mudança é puramente visual no estado do botão.
+
+---
+
+### 18. Botões Exportar e Importar: Ocultos da Barra Principal
+
+**Arquivo:** `index.html` — HTML (barra principal)
+
+**O que foi feito:**
+- O container `<div>` que envolvia os botões "Exportar" e "Importar" teve `style="display:none"` adicionado, ocultando-os completamente da barra principal.
+- Os botões e suas funções (`Logic.exportData()`, `Logic.importData()`) foram preservados no DOM — apenas ocultos visualmente.
+- O espaçamento dos ícones restantes na div `flex items-center gap-1.5` permanece harmonioso, pois o container oculto não ocupa espaço.
+
+**Ícones restantes na barra (ordem):** Pesquisar → Gerar Lista → Nav (Filmes/Séries/Estreias) → Cadastrar → Zoom → Dashboard → Filtro → View Mode → Temas → Notificações → Lembretes → ~~Exportar/Importar~~ (oculto) → Histórico → Configurações → Info.
+
+**Preservação:** As funções de exportação/importação continuam acessíveis via outras partes do sistema (botões dentro de modais de lista e cadastro). Nenhuma funcionalidade foi removida, apenas a acessibilidade visual na barra principal.
+
+---
+
+### Checklist Final (v4.5.1 — Itens 17-18)
+
+| Verificação | Status |
+|---|---|
+| Botão Filtro: toggle azul ao abrir dropdown | OK |
+| Botão Filtro: remove azul ao clicar novamente | OK |
+| Botão Filtro: remove azul ao clicar fora | OK |
+| Botão Filtro: remove azul ao aplicar filtro | OK |
+| Exportar/Importar: ocultos da barra principal | OK |
+| Exportar/Importar: funções preservadas no DOM | OK |
+| Espaçamento dos ícones: harmonioso com gap-1.5 | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
+
+---
+
+### 19. Botões da Barra Principal: Toggle Azul (Ativar/Desativar)
+
+**Arquivo:** `index.html` — HTML (IDs nos botões) + JavaScript (`Logic._clearHeaderBtnActive`, handlers, `closeModal`, `closeNotifications`, `closeReminderPanel`, click-outside)
+
+**O que foi feito:**
+- **IDs adicionados** a todos os 8 botões da barra principal: `btn-theme`, `btn-notifications`, `btn-reminders`, `btn-cadastro-log`, `btn-config`, `btn-info`, `btn-generate-list`, `btn-dashboard`.
+- **Helper `_clearHeaderBtnActive()`** criado no objeto `Logic` — remove a classe `active` de todos os botões do header de uma vez.
+- **Cada handler** foi modificado para:
+  - Chamar `_clearHeaderBtnActive()` antes de ativar o botão atual (garante que apenas um fique azul por vez).
+  - Adicionar/toggle a classe `active` no botão correspondente ao abrir.
+  - Remover a classe `active` no botão ao fechar (toggle).
+
+**Botões e handlers modificados:**
+
+| Botão | ID | Handler | Comportamento |
+|---|---|---|---|
+| Temas | `btn-theme` | `Logic.toggleThemeMenu()` | Toggle `active` + toggle `hidden` no dropdown |
+| Notificações | `btn-notifications` | `UI.toggleNotifications()` | Toggle `active` + toggle overlay |
+| Lembretes | `btn-reminders` | `UI.toggleReminderPanel()` | Toggle `active` + toggle panel |
+| Histórico | `btn-cadastro-log` | `UI.openCadastroLog()` | Ativa ao abrir modal |
+| Configurações | `btn-config` | `UI.openConfig()` | Toggle `active` + toggle modal |
+| Funcionalidades | `btn-info` | `UI.toggleModal('modal-info')` | Toggle `active` + toggle modal |
+| Gerar Lista | `btn-generate-list` | `UI.openGenerateList()` | Ativa ao abrir modal |
+| Dashboard | `btn-dashboard` | `Logic.openDashboard()` | Toggle `active` + toggle modal |
+
+**Fechar e remover azul:**
+- `UI.closeModal()` — mapeia modal→button e remove `active` do botão correspondente.
+- `UI.closeNotifications()` — remove `active` de `btn-notifications`.
+- `UI.closeReminderPanel()` — remove `active` de `btn-reminders`.
+- `Logic.setTheme()` — remove `active` de `btn-theme` ao selecionar um tema.
+- Click-outside no theme-menu — remove `active` de `btn-theme`.
+- Click-outside no reminder-panel — chama `closeReminderPanel()` que remove `active`.
+- Click-outside no notification-overlay — chama `closeNotifications()` que remove `active`.
+
+**CSS existente utilizado:** `.btn-icon.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }` (já existia, nenhuma alteração de CSS necessária).
+
+**Preservação:** Todas as funcionalidades existentes (abrir/fechar modais, dropdowns, painéis, temas, filtros) permanecem intactas. A mudança é puramente visual — adição/remoção da classe `active` nos botões.
+
+---
+
+### Checklist Final (v4.5.1 — Item 19)
+
+| Verificação | Status |
+|---|---|
+| IDs adicionados a todos os 8 botões | OK |
+| Helper `_clearHeaderBtnActive()` criado | OK |
+| Temas: toggle azul ao abrir/fechar dropdown | OK |
+| Temas: remove azul ao selecionar tema | OK |
+| Temas: remove azul ao clicar fora | OK |
+| Notificações: toggle azul ao abrir/fechar | OK |
+| Lembretes: toggle azul ao abrir/fechar | OK |
+| Lembretes: remove azul ao clicar fora | OK |
+| Histórico: ativa azul ao abrir modal | OK |
+| Configurações: toggle azul ao abrir/fechar | OK |
+| Funcionalidades: toggle azul ao abrir/fechar | OK |
+| Gerar Lista: ativa azul ao abrir modal | OK |
+| Dashboard: toggle azul ao abrir/fechar | OK |
+| closeModal: remove azul do botão correspondente | OK |
+| closeNotifications: remove azul de btn-notifications | OK |
+| closeReminderPanel: remove azul de btn-reminders | OK |
+| Apenas um botão azul por vez (exclusão mútua) | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |

@@ -1863,7 +1863,7 @@
         <div class="flex items-center gap-1.5">
             <button onclick="UI.toggleSearchBar()" class="btn-icon" title="Pesquisar"><i class="fas fa-search text-xs"></i></button>
 
-            <button onclick="UI.openGenerateList()" class="btn-icon" title="Gerar Lista"><i class="fas fa-print text-xs"></i></button>
+            <button onclick="UI.openGenerateList()" id="btn-generate-list" class="btn-icon" title="Gerar Lista"><i class="fas fa-print text-xs"></i></button>
 
             <nav class="flex gap-1 theme-bg-input p-1 rounded-full theme-border">
                 <span onclick="Logic.setMainView('filmes')" id="link-filmes" class="nav-link active">Filmes</span>
@@ -1883,7 +1883,7 @@
                     <button onclick="UI.setZoom(4)" id="z4" class="zoom-btn" title="Zoom 4X (8 colunas)">4X</button>
                 </div>
 
-                <button onclick="Logic.openDashboard()" class="btn-icon" title="Dashboard"><i class="fas fa-chart-pie text-xs"></i></button>
+                <button onclick="Logic.openDashboard()" id="btn-dashboard" class="btn-icon" title="Dashboard"><i class="fas fa-chart-pie text-xs"></i></button>
 
                 <div class="relative">
                     <button onclick="UI.toggleFilters()" id="btn-filters" class="btn-icon" title="Filtros"><i class="fas fa-filter text-xs"></i></button>
@@ -1955,17 +1955,17 @@
                     </div>
                 </div>
 
-                <button onclick="UI.toggleNotifications()" class="btn-icon relative" title="Notificações">
+                <button onclick="UI.toggleNotifications()" id="btn-notifications" class="btn-icon relative" title="Notificações">
                     <i class="fas fa-bell text-sm"></i>
                     <span id="notification-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-black rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-0.5" style="display:none">0</span>
                 </button>
 
-                <button onclick="UI.toggleReminderPanel()" class="btn-icon relative" title="Lembretes">
+                <button onclick="UI.toggleReminderPanel()" id="btn-reminders" class="btn-icon relative" title="Lembretes">
                     <i class="fas fa-sticky-note text-sm"></i>
                     <span id="reminder-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-black rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-0.5" style="display:none">0</span>
                 </button>
 
-                <div class="flex items-center gap-0.5 theme-bg-input rounded-full p-1 theme-border">
+                <div class="flex items-center gap-0.5 theme-bg-input rounded-full p-1 theme-border" style="display:none">
                     <button onclick="Logic.exportData()" class="btn-icon" style="width:31px;height:31px;border:none" title="Exportar"><i class="fas fa-download text-[9px]"></i></button>
                     <label class="btn-icon" style="width:31px;height:31px;border:none;cursor:pointer" title="Importar">
                         <i class="fas fa-upload text-[9px]"></i>
@@ -1973,9 +1973,9 @@
                     </label>
                 </div>
 
-                <button onclick="UI.openCadastroLog()" class="btn-icon" title="Histórico de Cadastro"><i class="fas fa-clipboard-list text-xs"></i></button>
-                <button onclick="UI.openConfig()" class="btn-icon" title="Configurações"><i class="fas fa-cog text-xs"></i></button>
-                <button onclick="UI.toggleModal('modal-info')" class="btn-icon" title="Funcionalidades"><i class="fas fa-info-circle text-xs"></i></button>
+                <button onclick="UI.openCadastroLog()" id="btn-cadastro-log" class="btn-icon" title="Histórico de Cadastro"><i class="fas fa-clipboard-list text-xs"></i></button>
+                <button onclick="UI.openConfig()" id="btn-config" class="btn-icon" title="Configurações"><i class="fas fa-cog text-xs"></i></button>
+                <button onclick="UI.toggleModal('modal-info')" id="btn-info" class="btn-icon" title="Funcionalidades"><i class="fas fa-info-circle text-xs"></i></button>
             </div>
         </div>
     </header>
@@ -2734,8 +2734,8 @@
             </div>
             <div class="p-5 overflow-y-auto custom-scroll" style="max-height:80vh">
                 
-                <!-- Logo -->
-                <div class="config-section">
+                <!-- Logo (oculto conforme solicitado) -->
+                <div class="config-section" style="display:none">
                     <div class="config-section-title"><i class="fas fa-image"></i>Logotipo</div>
                     <div class="config-row">
                         <label>URL da Imagem</label>
@@ -2889,42 +2889,42 @@
                     <div class="config-section-title"><i class="fas fa-folder"></i>Caminhos</div>
                     <div class="config-row">
                         <label>Cards</label>
-                        <input type="text" id="cfg-path-cards" class="field-premium" placeholder="C:\Users\...\Cards">
+                        <input type="text" id="cfg-path-cards" class="field-premium" placeholder="C:\Users\...\Cards" oninput="UI._onPathInput('cfg-path-cards','cfg-path-cards-active')">
                         <button onclick="UI.pickFolder('cfg-path-cards')" class="input-icon-btn" title="Selecionar pasta"><i class="fas fa-folder-open"></i></button>
                         <label class="config-switch">
                             <input type="checkbox" id="cfg-path-cards-active">
                             <span class="slider"></span>
-                            <span class="switch-label">Activar</span>
+                            <span class="switch-label">ATIVAR</span>
                         </label>
                     </div>
                     <div class="config-row">
-                        <label>Vídeos</label>
-                        <input type="text" id="cfg-path-videos" class="field-premium" placeholder="C:\Users\...\Videos">
+                        <label>Filmes</label>
+                        <input type="text" id="cfg-path-videos" class="field-premium" placeholder="C:\Users\...\Filmes" oninput="UI._onPathInput('cfg-path-videos','cfg-path-videos-active')">
                         <button onclick="UI.pickFolder('cfg-path-videos')" class="input-icon-btn" title="Selecionar pasta"><i class="fas fa-folder-open"></i></button>
                         <label class="config-switch">
                             <input type="checkbox" id="cfg-path-videos-active">
                             <span class="slider"></span>
-                            <span class="switch-label">Activar</span>
+                            <span class="switch-label">ATIVAR</span>
                         </label>
                     </div>
                     <div class="config-row">
-                        <label>Backups</label>
-                        <input type="text" id="cfg-path-backups" class="field-premium" placeholder="C:\Users\...\Backups">
+                        <label>Séries</label>
+                        <input type="text" id="cfg-path-backups" class="field-premium" placeholder="C:\Users\...\Séries" oninput="UI._onPathInput('cfg-path-backups','cfg-path-backups-active')">
                         <button onclick="UI.pickFolder('cfg-path-backups')" class="input-icon-btn" title="Selecionar pasta"><i class="fas fa-folder-open"></i></button>
                         <label class="config-switch">
                             <input type="checkbox" id="cfg-path-backups-active">
                             <span class="slider"></span>
-                            <span class="switch-label">Activar</span>
+                            <span class="switch-label">ATIVAR</span>
                         </label>
                     </div>
                     <div class="config-row">
                         <label>Acervo Geral</label>
-                        <input type="text" id="cfg-path-acervo" class="field-premium" placeholder="C:\Users\...\Acervo">
+                        <input type="text" id="cfg-path-acervo" class="field-premium" placeholder="C:\Users\...\Acervo Geral" oninput="UI._onPathInput('cfg-path-acervo','cfg-path-acervo-active')">
                         <button onclick="UI.pickFolder('cfg-path-acervo')" class="input-icon-btn" title="Selecionar pasta"><i class="fas fa-folder-open"></i></button>
                         <label class="config-switch">
                             <input type="checkbox" id="cfg-path-acervo-active">
                             <span class="slider"></span>
-                            <span class="switch-label">Activar</span>
+                            <span class="switch-label">ATIVAR</span>
                         </label>
                     </div>
                 </div>
@@ -2933,17 +2933,12 @@
                 <div class="config-section">
                     <div class="config-section-title"><i class="fas fa-save"></i>Auto Salvamento</div>
                     <div class="config-row">
-                        <label>Activar</label>
+                        <label>ATIVAR</label>
                         <label class="config-switch">
                             <input type="checkbox" id="cfg-autosave">
                             <span class="slider"></span>
                             <span class="switch-label">Auto Salvamento</span>
                         </label>
-                    </div>
-                    <div class="config-row">
-                        <label>Pasta</label>
-                        <input type="text" id="cfg-autosave-path" class="field-premium" placeholder="C:\Users\...\AutoSave">
-                        <button onclick="UI.pickFolder('cfg-autosave-path')" class="input-icon-btn" title="Selecionar pasta"><i class="fas fa-folder-open"></i></button>
                     </div>
                 </div>
 
@@ -3084,7 +3079,7 @@
                         </label>
                     </div>
                     <div style="font-size:0.65rem;color:var(--text-secondary);margin-top:0.25rem;padding-left:80px">
-                        <i class="fas fa-info-circle mr-1"></i>Exibe um filme/série aleatório ao abrir o catálogo, baseado nos filtros abaixo.
+                        <i class="fas fa-info-circle mr-1"></i>Exibe um filme/série aleatório ao abrir o catálogo. Se nenhum tiver o status selecionado, qualquer título será sugerido.
                     </div>
                     <div style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid var(--border-color)">
                         <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;color:var(--text-secondary);margin-bottom:0.25rem">Filtrar por status:</div>
@@ -3716,6 +3711,14 @@
             _lastNotifications: [],
             _reminderListRefresh: false,
 
+            _headerBtnIds: ['btn-theme','btn-notifications','btn-reminders','btn-cadastro-log','btn-config','btn-info','btn-generate-list','btn-dashboard','btn-filters'],
+            _clearHeaderBtnActive() {
+                this._headerBtnIds.forEach(function(id) {
+                    var el = document.getElementById(id);
+                    if (el) el.classList.remove('active');
+                });
+            },
+
             deleteMovieCtx() {
                 var self = this;
                 this.closeCtxMenu(function() {
@@ -4141,6 +4144,7 @@
                 }
                 Render.all();
                 document.getElementById('filters-dropdown').classList.add('hidden');
+                document.getElementById('btn-filters')?.classList.remove('active');
                 UI.updateFilterButtonState();
             },
 
@@ -4148,6 +4152,7 @@
                 APP_STATE.filterYear = APP_STATE.filterYear === year ? '' : year;
                 Render.all();
                 document.getElementById('filters-dropdown').classList.add('hidden');
+                document.getElementById('btn-filters')?.classList.remove('active');
                 UI.updateFilterButtonState();
             },
 
@@ -4160,6 +4165,7 @@
                 icon.className = 'fas ' + (icons[name] || 'fa-moon') + ' text-xs';
                 localStorage.setItem('cinecatalog_theme', name);
                 document.getElementById('theme-menu').classList.add('hidden');
+                document.getElementById('btn-theme')?.classList.remove('active');
                 document.querySelectorAll('#theme-menu .theme-option').forEach(function(b) {
                     b.classList.toggle('active', b.dataset.theme === name);
                 });
@@ -4169,7 +4175,10 @@
 
             toggleThemeMenu() {
                 var menu = document.getElementById('theme-menu');
+                var btn = document.getElementById('btn-theme');
+                var opening = menu.classList.contains('hidden');
                 menu.classList.toggle('hidden');
+                if (btn) btn.classList.toggle('active', opening);
             },
 
             openContextMenu(e, id) {
@@ -5094,9 +5103,12 @@
 
             openDashboard() {
                 var el = document.getElementById('modal-dashboard');
+                var btn = document.getElementById('btn-dashboard');
                 if (!el) return;
-                if (el.classList.contains('active')) { el.classList.remove('active'); return; }
+                if (el.classList.contains('active')) { el.classList.remove('active'); if (btn) btn.classList.remove('active'); return; }
+                this._clearHeaderBtnActive();
                 el.classList.add('active');
+                if (btn) btn.classList.add('active');
                 UI.renderDashboard();
             }
         };
@@ -5148,6 +5160,8 @@
                 const el = document.getElementById(id);
                 if (!el) return;
                 el.classList.remove('active');
+                var modalBtnMap = {'modal-dashboard':'btn-dashboard','modal-generate-list':'btn-generate-list','modal-cadastro-log':'btn-cadastro-log','modal-config':'btn-config','modal-info':'btn-info'};
+                if (modalBtnMap[id]) { var b = document.getElementById(modalBtnMap[id]); if (b) b.classList.remove('active'); }
                 document.getElementById('modal-toast')?.classList.add('hidden');
                 if (id === 'modal-cadastro') {
                     var cloneBtn = document.getElementById('btn-clone-data');
@@ -5159,9 +5173,12 @@
                 const el = document.getElementById(id);
                 if (!el) return;
                 var opening = !el.classList.contains('active');
+                if (opening) Logic._clearHeaderBtnActive();
                 el.classList.toggle('active');
-                if (opening && id === 'modal-info') {
-                    Logic.renderInfoFeatures();
+                if (id === 'modal-info') {
+                    var btn = document.getElementById('btn-info');
+                    if (btn) btn.classList.toggle('active', opening);
+                    if (opening) Logic.renderInfoFeatures();
                 }
             },
             toggleSearchBar() {
@@ -5174,8 +5191,10 @@
             },
             toggleFilters() {
                 var dd = document.getElementById('filters-dropdown');
+                var btn = document.getElementById('btn-filters');
                 var opening = dd.classList.contains('hidden');
                 dd.classList.toggle('hidden');
+                if (btn) btn.classList.toggle('active', opening);
                 if (opening) {
                     this._populateFilterLists();
                     this.updateFilterButtonState();
@@ -5234,6 +5253,7 @@
             },
             closeNotifications() {
                 document.getElementById('notification-overlay').classList.remove('active');
+                document.getElementById('btn-notifications')?.classList.remove('active');
                 // Mark as closed for today
                 var todayStr = new Date().toISOString().slice(0,10);
                 var key = 'cinecatalog_notif_' + todayStr;
@@ -5244,19 +5264,26 @@
             },
             toggleNotifications() {
                 var overlay = document.getElementById('notification-overlay');
-                if (overlay.classList.contains('active')) { UI.closeNotifications(); }
+                var btn = document.getElementById('btn-notifications');
+                if (overlay.classList.contains('active')) { UI.closeNotifications(); if (btn) btn.classList.remove('active'); }
                 else if (Logic._lastNotifications && Logic._lastNotifications.length > 0) {
+                    Logic._clearHeaderBtnActive();
+                    if (btn) btn.classList.add('active');
                     Logic.showEstreiaNotifications(Logic._lastNotifications, { count: 1, closed: false, firstShown: false }, '', true);
                 }
             },
             toggleReminderPanel() {
                 var panel = document.getElementById('reminder-panel');
-                if (panel.classList.contains('active')) { UI.closeReminderPanel(); return; }
+                var btn = document.getElementById('btn-reminders');
+                if (panel.classList.contains('active')) { UI.closeReminderPanel(); if (btn) btn.classList.remove('active'); return; }
+                Logic._clearHeaderBtnActive();
+                if (btn) btn.classList.add('active');
                 Logic.renderReminderList();
                 panel.classList.add('active');
             },
             closeReminderPanel() {
                 document.getElementById('reminder-panel').classList.remove('active');
+                document.getElementById('btn-reminders')?.classList.remove('active');
             },
             switchTab(type) {
                 document.querySelectorAll('.tab-premium').forEach(t => t.classList.toggle('active', t.dataset.tab === type));
@@ -5774,8 +5801,11 @@
             },
             openConfig() {
                 var el = document.getElementById('modal-config');
+                var btn = document.getElementById('btn-config');
                 if (!el) return;
-                if (el.classList.contains('active')) { el.classList.remove('active'); return; }
+                if (el.classList.contains('active')) { el.classList.remove('active'); if (btn) btn.classList.remove('active'); return; }
+                Logic._clearHeaderBtnActive();
+                if (btn) btn.classList.add('active');
                 el.classList.add('active');
                 this._populateConfigForm();
             },
@@ -5833,7 +5863,6 @@
                 setVal('cfg-path-videos', cfg.pathVideos);
                 setVal('cfg-path-backups', cfg.pathBackups);
                 setVal('cfg-path-acervo', cfg.pathAcervo);
-                setVal('cfg-autosave-path', cfg.autoSavePath);
                 setChecked('cfg-path-cards-active', cfg.pathCardsActive);
                 setChecked('cfg-path-videos-active', cfg.pathVideosActive);
                 setChecked('cfg-path-backups-active', cfg.pathBackupsActive);
@@ -6044,7 +6073,6 @@
                 cfg.pathVideos = getVal('cfg-path-videos');
                 cfg.pathBackups = getVal('cfg-path-backups');
                 cfg.pathAcervo = getVal('cfg-path-acervo');
-                cfg.autoSavePath = getVal('cfg-autosave-path');
                 cfg.pathCardsActive = document.getElementById('cfg-path-cards-active')?.checked || false;
                 cfg.pathVideosActive = document.getElementById('cfg-path-videos-active')?.checked || false;
                 cfg.pathBackupsActive = document.getElementById('cfg-path-backups-active')?.checked || false;
@@ -6090,20 +6118,7 @@
                 var input = document.getElementById(inputId);
                 if (!input) return;
                 var self = this;
-                var useFsApi = 'showDirectoryPicker' in window;
-                if (useFsApi && !input.value) {
-                    (async function() {
-                        try {
-                            var dirHandle = await window.showDirectoryPicker();
-                            input.value = dirHandle.name;
-                            self._updateConfigPreview();
-                        } catch(e) {
-                            _legacyPick();
-                        }
-                    })();
-                } else {
-                    _legacyPick();
-                }
+                _legacyPick();
                 function _legacyPick() {
                     var fileInput = document.getElementById('folder-picker-helper');
                     if (!fileInput) {
@@ -6124,11 +6139,29 @@
                             } catch(e) {
                                 input.value = path;
                             }
+                            self._autoActivatePath(inputId);
                             self._updateConfigPreview();
                         }
                         this.value = '';
                     };
                     fileInput.click();
+                }
+            },
+            _autoActivatePath(inputId) {
+                var toggleId = inputId + '-active';
+                var toggle = document.getElementById(toggleId);
+                if (toggle && !toggle.checked) {
+                    toggle.checked = true;
+                }
+            },
+            _onPathInput(inputId, toggleId) {
+                var input = document.getElementById(inputId);
+                var toggle = document.getElementById(toggleId);
+                if (!input || !toggle) return;
+                if (input.value && input.value.trim()) {
+                    if (!toggle.checked) toggle.checked = true;
+                } else {
+                    if (toggle.checked) toggle.checked = false;
                 }
             },
             pickIconFile(inputId) {
@@ -6273,17 +6306,18 @@
                 if (cfg.sugestoesNovo !== false) filters.push('new');
                 if (cfg.sugestoesAssistir !== false) filters.push('watch');
                 if (cfg.sugestoesFavoritos !== false) filters.push('favorite');
-                if (filters.length === 0) {
-                    Logic.showStatus('Selecione pelo menos um filtro nas configurações');
-                    return;
-                }
                 var candidates = APP_STATE.movies.filter(function(m) {
                     if (m.type !== 'filmes' && m.type !== 'series') return false;
                     if (!m.statuses) return false;
-                    return filters.some(function(f) { return m.statuses[f] === true; });
+                    return filters.length > 0 && filters.some(function(f) { return m.statuses[f] === true; });
                 });
                 if (candidates.length === 0) {
-                    Logic.showStatus('Nenhum filme/série encontrado com os filtros selecionados');
+                    candidates = APP_STATE.movies.filter(function(m) {
+                        return m.type === 'filmes' || m.type === 'series';
+                    });
+                }
+                if (candidates.length === 0) {
+                    Logic.showStatus('Nenhum filme/série no acervo');
                     return;
                 }
                 var pick = candidates[Math.floor(Math.random() * candidates.length)];
@@ -6366,7 +6400,10 @@
 
             openGenerateList() {
                 var container = document.getElementById('a4-preview');
+                var btn = document.getElementById('btn-generate-list');
                 if (!container) return;
+                Logic._clearHeaderBtnActive();
+                if (btn) btn.classList.add('active');
                 UI._listAllItems = APP_STATE.movies.filter(function(m) {
                     return m.type === APP_STATE.currentView;
                 });
@@ -6490,6 +6527,9 @@
 
             // === Cadastro Log (Histórico A4) ===
             openCadastroLog() {
+                var btn = document.getElementById('btn-cadastro-log');
+                Logic._clearHeaderBtnActive();
+                if (btn) btn.classList.add('active');
                 UI._renderCadastroLog(1);
                 UI.openModal('modal-cadastro-log');
             },
@@ -7158,9 +7198,11 @@
                 if (!e.target.closest('#context-menu')) Logic.closeCtxMenu();
                 if (!e.target.closest('#filters-dropdown') && !e.target.closest('#btn-filters')) {
                     document.getElementById('filters-dropdown')?.classList.add('hidden');
+                    document.getElementById('btn-filters')?.classList.remove('active');
                 }
                 if (!e.target.closest('#theme-menu') && !e.target.closest('#btn-theme')) {
                     document.getElementById('theme-menu')?.classList.add('hidden');
+                    document.getElementById('btn-theme')?.classList.remove('active');
                 }
             });
             // Close cat-manager overlay when clicking backdrop
@@ -7237,7 +7279,7 @@
         
         async function _getAcervoDirHandle() {
             var cfg = window._appConfig;
-            if (!cfg || !cfg.autoSavePath || !('showDirectoryPicker' in window)) return null;
+            if (!cfg || !cfg.pathAcervo || !cfg.pathAcervoActive || !('showDirectoryPicker' in window)) return null;
             try {
                 if (_autoSaveHandle) return _autoSaveHandle;
                 _autoSaveHandle = await window.showDirectoryPicker();
@@ -7250,8 +7292,7 @@
         
         async function _getAcervoDirHandleForSave() {
             var cfg = window._appConfig;
-            // Use pathAcervo (manual save folder) or fall back to autoSavePath
-            var savePath = (cfg && cfg.pathAcervo && cfg.pathAcervoActive) ? cfg.pathAcervo : (cfg && cfg.autoSavePath ? cfg.autoSavePath : '');
+            var savePath = (cfg && cfg.pathAcervo && cfg.pathAcervoActive) ? cfg.pathAcervo : '';
             if (!savePath || !('showDirectoryPicker' in window)) return null;
             try {
                 if (_acervoDirHandle) return _acervoDirHandle;
@@ -7298,7 +7339,9 @@
             _autoSaveTimer = setTimeout(function() {
                 var cfg = window._appConfig;
                 if (cfg && cfg.autoSave) {
-                    _autoSaveToFile();
+                    saveConfig();
+                    var hasPath = (cfg.pathAcervo && cfg.pathAcervoActive);
+                    if (hasPath) _autoSaveToFile();
                 }
             }, 2000);
         }
@@ -7306,6 +7349,7 @@
         function ConfigAutoSave() {
             var cfg = window._appConfig;
             if (cfg && cfg.autoSave) {
+                saveConfig();
                 Logic.showStatus('Auto: Dados sincronizados');
                 _scheduleAutoSave();
             }
