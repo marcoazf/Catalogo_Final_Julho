@@ -158,3 +158,94 @@ Sempre faça uma revisão e checklist antes me entregar as novas implementaçõe
 - A altura do logo usa `clamp(24px, 2.6vw, 56px)` na base, refinada em cada breakpoint
 
 **Preservação:** Nenhuma funcionalidade existente foi alterada. Todos os handlers, classes, variáveis e lógica de negócio mantidos intactos.
+
+---
+
+### 8. Ampliação Geral de 110% em Todos os Elementos da Tela
+
+**Arquivo:** `index.html` — `<style>` (base + 4 media queries + HTML badges)
+
+**Estratégia:** Aumento de 10% (×1.10) em todos os valores de tamanho, tipografia e espaçamento da interface. Escalado tanto no CSS base quanto em cada um dos 4 breakpoints responsivos.
+
+**O que foi feito:**
+
+**CSS Base (valores ×1.10):**
+| Elemento | Antes | Depois |
+|---|---|---|
+| `html` font-size | `clamp(13px, 0.4vw + 8px, 18px)` | `clamp(14px, 0.44vw + 9px, 20px)` |
+| `header` padding | `clamp(0.3rem, 0.4vw, 0.75rem) × clamp(0.8rem, 1.4vw, 2.5rem)` | `clamp(0.33rem, 0.44vw, 0.83rem) × clamp(0.88rem, 1.54vw, 2.75rem)` |
+| `.nav-link` font-size | 9px | 10px |
+| `.btn-cadastrar` font-size | 9px | 10px |
+| `.btn-icon` width/height | 34×34px | 37×37px |
+| `.zoom-btn` / `.view-btn` | 28×28px | 31×31px |
+| `.logo-header` height | `clamp(24px, 2.6vw, 56px)` | `clamp(26px, 2.86vw, 62px)` |
+| Botões export/import | 28×28px | 31×31px |
+| Badges notificação/lembrete | 16×16px, text 8px | 18×18px, text 9px |
+
+**Breakpoints (todos ×1.10):**
+
+| Resolução | html | header | logo | btn-icon | zoom/view | nav-link | +CADASTRAR |
+|---|---|---|---|---|---|---|---|
+| **≤1280px** | 13→14px | 0.35→0.39rem | 26→29px | 30→33px | 24→26px | 8→9px | 8→9px |
+| **1281–1920px** | 15→17px | 0.55→0.61rem | 32→35px | 36→40px | 30→33px | 9.5→10px | 9.5→10px |
+| **1921–2560px** | 16→18px | 0.65→0.72rem | 38→42px | 40→44px | 33→36px | 10.5→12px | 10.5→12px |
+| **≥2561px** | 18→20px | 0.75→0.83rem | 44→48px | 46→51px | 36→40px | 12→13px | 12→13px |
+
+**Elementos que escalam automaticamente via `rem`:**
+Tudo que usa unidades `rem` (padding, margin, gap, border-radius, font-size de Tailwind, etc.) escala proporcionalmente ao `font-size` raiz do `html` — não necessitou ajuste manual.
+
+**Preservação:** Nenhuma funcionalidade, handler, variável ou lógica de negócio foi alterada. A ampliação é puramente visual e proporcional.
+
+---
+
+### 9. Logo Maior e Padding Vertical do Header Reduzido pela Metade
+
+**Arquivo:** `index.html` — `<style>` (base + 4 media queries)
+
+**O que foi feito:**
+- **Logo aumentado proporcionalmente** — altura base ajustada de `clamp(26px, 2.86vw, 62px)` para `clamp(30px, 3.3vw, 72px)`.
+- **Padding vertical do header reduzido pela metade** — o valor vertical do `padding` do `<header>` foi dividido por 2 em todos os breakpoints, aproximando o logotipo das bordas da barra:
+
+| Resolução | Padding vertical antes | Padding vertical depois |
+|---|---|---|
+| Base | `clamp(0.33rem, ...)` | `clamp(0.16rem, ...)` |
+| ≤1280px | 0.39rem | 0.2rem |
+| 1281–1920px | 0.61rem | 0.3rem |
+| 1921–2560px | 0.72rem | 0.36rem |
+| ≥2561px | 0.83rem | 0.42rem |
+
+- **Logo em cada breakpoint também aumentado:**
+
+| Resolução | Logo antes | Logo depois |
+|---|---|---|
+| ≤1280px | 29px | 34px |
+| 1281–1920px | 35–44px | 42–52px |
+| 1921–2560px | 42–51px | 50–60px |
+| ≥2561px | 48–62px | 56–72px |
+
+- O padding horizontal permanece inalterado.
+- O logo ocupa quase toda a altura da barra, com visual mais impactante e harmonioso.
+
+**Preservação:** O layout do header, alinhamento dos botões e todos os elementos mantêm integridade.
+
+---
+
+### 10. CADASTRAR Abre na Aba Correspondente ao Menu Ativo
+
+**Arquivo:** `index.html` — JavaScript (`UI.openModal`)
+
+**O que foi feito:**
+- Modificada a função `UI.openModal('modal-cadastro')` para que, ao abrir o modal, troque automaticamente para a aba que corresponde ao menu de navegação ativo do utilizador.
+- **Antes:** Sempre abria na aba "Filmes" (fixo).
+- **Depois:** Abre na aba compatível com a视图 atual:
+  - Menu "Filmes" ativo → modal abre em **CADASTRO FILME**
+  - Menu "Séries" ativo → modal abre em **CADASTRO SÉRIE**
+  - Menu "Estreias" ativo → modal abre em **CADASTRO ESTRÉIA**
+- O título do modal também é atualizado dinamicamente para refletir o tipo:
+  ```javascript
+  var viewLabel = {filmes:'FILME', series:'SÉRIE', estreias:'ESTRÉIA'};
+  document.getElementById('modal-title').innerHTML = 'CADASTRO <span ...>' + (viewLabel[APP_STATE.currentView] || 'NOVO') + '</span>';
+  ```
+- Fallback para 'filmes' caso `APP_STATE.currentView` não esteja definido.
+
+**Preservação:** O fluxo de edição via context menu (que já chama `switchTab(movie.type)` depois do `openModal`) continua funcionando corretamente. Todas as outras chamadas a `openModal('modal-cadastro')` são compatíveis.
