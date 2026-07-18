@@ -1646,7 +1646,7 @@
         }
         #view-context-menu.show { display: block; }
         .view-ctx-label {
-            font-size: 0.65rem;
+            font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.08em;
@@ -1657,9 +1657,9 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0.35rem 0.6rem;
+            padding: 0.45rem 0.6rem;
             border-radius: 0.5rem;
-            font-size: 0.7rem;
+            font-size: 0.8rem;
             font-weight: 600;
             cursor: pointer;
             transition: 0.15s;
@@ -1671,7 +1671,7 @@
             accent-color: var(--accent-blue);
         }
         .view-ctx-option .val {
-            font-size: 0.6rem;
+            font-size: 0.7rem;
             color: var(--text-secondary);
             min-width: 24px;
             text-align: right;
@@ -1685,9 +1685,9 @@
             border-top: 1px solid var(--border-color);
         }
         .view-ctx-footer button {
-            padding: 0.25rem 0.7rem;
+            padding: 0.3rem 0.8rem;
             border-radius: 2rem;
-            font-size: 0.65rem;
+            font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
             cursor: pointer;
@@ -2023,12 +2023,13 @@
         <div class="text-[0.75rem] text-gray-400 uppercase tracking-widest font-medium">
             ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CRIADO PARA JONAS THEODORO</span>
         </div>
-        <div id="auto-save-indicator" class="flex items-center gap-2" style="display:none">
-            <i id="auto-save-icon" class="fas fa-circle-notch text-[14px]" style="color:#22C55E;animation:spin 1.5s linear infinite"></i>
-            <span id="auto-save-text" class="text-[0.8rem] font-black uppercase tracking-widest" style="color:#22C55E">Auto Salvamento Activado</span>
-        </div>
         <div id="user-action-status" class="text-[0.6rem] text-emerald-500 font-bold uppercase opacity-0 pointer-events-none transition-opacity duration-300"></div>
-        <div id="stats-counter" class="text-orange-400 font-black text-[0.75rem] uppercase" style="text-shadow:0 0 8px rgba(251,146,60,0.5)">0 TÍTULOS NO ACERVO JONAS</div>
+        <div style="display:flex;align-items:center;gap:1rem">
+            <div id="stats-counter" class="text-orange-400 font-black text-[0.75rem] uppercase" style="text-shadow:0 0 8px rgba(251,146,60,0.5)">0 TÍTULOS NO ACERVO JONAS</div>
+            <div id="auto-save-indicator" class="flex items-center gap-2" style="display:none">
+                <i id="auto-save-icon" class="fas fa-save" style="font-size:1.1rem;color:#555"></i>
+            </div>
+        </div>
     </footer>
 
     <!-- [BLOCO 7: MODAIS] -->
@@ -2744,13 +2745,13 @@
                 <button onclick="UI.closeModal('modal-shortcuts')" class="btn-close-premium"><i class="fas fa-times text-xs"></i></button>
             </div>
             <div class="p-5 overflow-y-auto custom-scroll" style="max-height:75vh">
-                <div style="font-size:0.65rem;font-weight:600;color:var(--text-secondary);margin-bottom:1rem;text-transform:uppercase;letter-spacing:0.1em">Clique num atalho para editar — pressione uma tecla para reatribuir</div>
+                <div style="font-size:0.75rem;font-weight:600;color:var(--text-secondary);margin-bottom:1rem;text-transform:uppercase;letter-spacing:0.1em">Clique num atalho para editar — pressione uma tecla para reatribuir</div>
                 <div id="shortcuts-list"></div>
                 <div style="display:flex;justify-content:flex-end;gap:0.75rem;margin-top:1.25rem;padding-top:0.75rem;border-top:1px solid var(--border-color)">
-                    <button onclick="UI.closeModal('modal-shortcuts')" class="bg-gray-600 text-white px-5 py-2.5 rounded-full font-black text-[0.7rem] hover:bg-gray-700 transition uppercase tracking-widest">
+                    <button onclick="UI.closeModal('modal-shortcuts')" class="bg-gray-600 text-white px-5 py-2.5 rounded-full font-black text-[0.8rem] hover:bg-gray-700 transition uppercase tracking-widest">
                         Cancelar
                     </button>
-                    <button onclick="UI.applyShortcuts()" class="bg-blue-600 text-white px-5 py-2.5 rounded-full font-black text-[0.7rem] hover:bg-blue-700 transition uppercase tracking-widest shadow-lg">
+                    <button onclick="UI.applyShortcuts()" class="bg-blue-600 text-white px-5 py-2.5 rounded-full font-black text-[0.8rem] hover:bg-blue-700 transition uppercase tracking-widest shadow-lg">
                         <i class="fas fa-check mr-1.5"></i>Aplicar
                     </button>
                 </div>
@@ -2788,23 +2789,28 @@
                     <div class="config-row">
                         <label>Ícone (FA)</label>
                         <input type="text" id="cfg-empty-icon" class="field-premium" placeholder="fa-clapperboard" oninput="UI._updateConfigPreview()">
-                        <button onclick="UI.pickIconFile('cfg-empty-icon')" class="input-icon-btn" title="Carregar SVG ou PNG"><i class="fas fa-folder-open"></i></button>
+                        <button onclick="UI.pickIconFile('cfg-empty-icon')" class="input-icon-btn" title="Carregar imagem de ícone"><i class="fas fa-folder-open"></i></button>
                     </div>
-                    <div class="config-row">
-                        <label>Tamanho Ícone</label>
-                        <input type="range" id="cfg-empty-icon-size" class="opacity-slider" min="24" max="160" value="56" oninput="document.getElementById('opv-cfg-empty-icon-size').textContent=this.value+'px';UI._updateConfigPreview()">
-                        <span class="opacity-label" id="opv-cfg-empty-icon-size">56px</span>
+                    <div style="font-size:0.65rem;color:var(--text-secondary);margin:0 0 0.5rem;padding-left:80px">Formatos aceites: PNG, ICO, SVG e WEBP</div>
+                    <div id="cfg-icon-preview" style="padding-left:80px;min-height:36px;display:none;align-items:center;gap:0.75rem;margin-bottom:0.5rem">
+                        <img id="cfg-icon-preview-img" style="max-width:36px;max-height:36px;border-radius:0.4rem;border:1px solid var(--border-color);object-fit:contain" alt="">
+                        <span id="cfg-icon-preview-info" style="font-size:0.6rem;color:var(--text-secondary);font-weight:600"></span>
                     </div>
-                    <div class="config-row">
-                        <label>Opacidade Ícone</label>
-                        <input type="range" id="cfg-empty-icon-opacity" class="opacity-slider" min="10" max="100" value="100" oninput="document.getElementById('opv-cfg-empty-icon-opacity').textContent=this.value+'%';UI._updateConfigPreview()">
-                        <span class="opacity-label" id="opv-cfg-empty-icon-opacity">100%</span>
+                    <div style="display:flex;align-items:center;gap:1.5rem;margin:0.75rem 0;padding:0.5rem 0">
+                        <div style="display:flex;align-items:center;gap:0.5rem;flex:1">
+                            <label style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-secondary);min-width:110px;flex-shrink:0">Tamanho Ícone</label>
+                            <input type="range" id="cfg-empty-icon-size" class="opacity-slider" style="flex:1" min="24" max="320" value="56" oninput="document.getElementById('opv-cfg-empty-icon-size').textContent=this.value+'px';UI._updateConfigPreview()">
+                            <span class="opacity-label" id="opv-cfg-empty-icon-size" style="font-size:0.65rem;min-width:42px;text-align:right">56px</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:0.5rem;flex:1">
+                            <label style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-secondary);min-width:110px;flex-shrink:0">Opacidade Ícone</label>
+                            <input type="range" id="cfg-empty-icon-opacity" class="opacity-slider" style="flex:1" min="10" max="100" value="100" oninput="document.getElementById('opv-cfg-empty-icon-opacity').textContent=this.value+'%';UI._updateConfigPreview()">
+                            <span class="opacity-label" id="opv-cfg-empty-icon-opacity" style="font-size:0.65rem;min-width:42px;text-align:right">100%</span>
+                        </div>
                     </div>
                     <div class="config-row">
                         <label>Título</label>
-                        <input type="text" id="cfg-empty-title" class="field-premium" placeholder="ACERVO VAZIO" oninput="UI._updateConfigPreview()">
-                    </div>
-                    <div class="config-row" style="padding-left:80px;gap:0.5rem">
+                        <input type="text" id="cfg-empty-title" class="field-premium" style="max-width:160px" placeholder="ACERVO VAZIO" oninput="UI._updateConfigPreview()">
                         <button onclick="UI._toggleEmptyStyle('title','bold')" id="cfg-empty-title-bold" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Negrito"><i class="fas fa-bold"></i></button>
                         <button onclick="UI._toggleEmptyStyle('title','italic')" id="cfg-empty-title-italic" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Itálico"><i class="fas fa-italic"></i></button>
                         <input type="text" id="cfg-empty-title-size" class="field-premium small" value="14px" placeholder="14px" style="max-width:55px" oninput="UI._updateConfigPreview()">
@@ -2816,9 +2822,7 @@
                     </div>
                     <div class="config-row">
                         <label>Subtítulo 1</label>
-                        <input type="text" id="cfg-empty-sub1" class="field-premium" placeholder="O SEU CINEMA PARTICULAR COMEÇA," oninput="UI._updateConfigPreview()">
-                    </div>
-                    <div class="config-row" style="padding-left:80px;gap:0.5rem">
+                        <input type="text" id="cfg-empty-sub1" class="field-premium" style="max-width:160px" placeholder="O SEU CINEMA PARTICULAR COMEÇA," oninput="UI._updateConfigPreview()">
                         <button onclick="UI._toggleEmptyStyle('sub1','bold')" id="cfg-empty-sub1-bold" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Negrito"><i class="fas fa-bold"></i></button>
                         <button onclick="UI._toggleEmptyStyle('sub1','italic')" id="cfg-empty-sub1-italic" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Itálico"><i class="fas fa-italic"></i></button>
                         <input type="text" id="cfg-empty-sub1-size" class="field-premium small" value="8px" placeholder="8px" style="max-width:55px" oninput="UI._updateConfigPreview()">
@@ -2830,9 +2834,7 @@
                     </div>
                     <div class="config-row">
                         <label>Subtítulo 2</label>
-                        <input type="text" id="cfg-empty-sub2" class="field-premium" placeholder="COM O PRIMEIRO CADASTRO" oninput="UI._updateConfigPreview()">
-                    </div>
-                    <div class="config-row" style="padding-left:80px;gap:0.5rem">
+                        <input type="text" id="cfg-empty-sub2" class="field-premium" style="max-width:160px" placeholder="COM O PRIMEIRO CADASTRO" oninput="UI._updateConfigPreview()">
                         <button onclick="UI._toggleEmptyStyle('sub2','bold')" id="cfg-empty-sub2-bold" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Negrito"><i class="fas fa-bold"></i></button>
                         <button onclick="UI._toggleEmptyStyle('sub2','italic')" id="cfg-empty-sub2-italic" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Itálico"><i class="fas fa-italic"></i></button>
                         <input type="text" id="cfg-empty-sub2-size" class="field-premium small" value="8px" placeholder="8px" style="max-width:55px" oninput="UI._updateConfigPreview()">
@@ -2995,7 +2997,10 @@
                     </div>
                     <div class="config-row">
                         <label>Acervo Geral</label>
-                        <input type="text" id="cfg-path-acervo" class="field-premium" placeholder="C:\Users\...\Acervo Geral" oninput="UI._onPathInput('cfg-path-acervo','cfg-path-acervo-active')">
+                        <div style="display:flex;gap:0.5rem;flex:1;align-items:center">
+                            <input type="text" id="cfg-acervo-backup-name" class="field-premium" placeholder="Nome do backup" style="flex:0 0 35%;font-size:12px" oninput="UI._onPathInput('cfg-path-acervo','cfg-path-acervo-active')">
+                            <input type="text" id="cfg-path-acervo" class="field-premium" placeholder="C:\Users\...\Acervo Geral" style="flex:1;font-size:12px" oninput="UI._onPathInput('cfg-path-acervo','cfg-path-acervo-active')">
+                        </div>
                         <button onclick="UI.pickFolder('cfg-path-acervo')" class="input-icon-btn" title="Selecionar pasta"><i class="fas fa-folder-open"></i></button>
                         <label class="config-switch">
                             <input type="checkbox" id="cfg-path-acervo-active">
@@ -3050,11 +3055,6 @@
                             <span class="switch-label">Notificações</span>
                         </label>
                     </div>
-                    <div class="config-row">
-                        <label>Duração (ms)</label>
-                        <input type="number" id="cfg-notifications-duration" class="field-premium small" value="5000" min="1000" max="30000" step="500" style="max-width:80px">
-                        <span style="font-size:0.6rem;color:var(--text-secondary)">milissegundos</span>
-                    </div>
                     <div style="font-size:0.65rem;color:var(--text-secondary);margin-top:0.25rem;padding-left:80px">
                         <i class="fas fa-info-circle mr-1"></i>Quando desativado, pop-ups de estreias não serão exibidos.
                     </div>
@@ -3070,11 +3070,6 @@
                             <span class="slider"></span>
                             <span class="switch-label">Notificação</span>
                         </label>
-                    </div>
-                    <div class="config-row">
-                        <label>Duração (ms)</label>
-                        <input type="number" id="cfg-cadastro-notify-duration" class="field-premium small" value="6000" min="1000" max="30000" step="500" style="max-width:80px">
-                        <span style="font-size:0.6rem;color:var(--text-secondary)">milissegundos</span>
                     </div>
                     <div style="font-size:0.65rem;color:var(--text-secondary);margin-top:0.25rem;padding-left:80px">
                         <i class="fas fa-info-circle mr-1"></i>6000 ms = 6 segundos. Controla a duração da mensagem "atualizado com sucesso!" após atualizar um cadastro ou salvar um Filme, Série ou Estreia.
@@ -3467,6 +3462,7 @@
                 pathVideos: '',
                 pathBackups: '',
                 pathAcervo: '',
+                acervoBackupName: '',
                 pathCardsActive: false,
                 pathVideosActive: false,
                 pathBackupsActive: false,
@@ -3522,10 +3518,11 @@
                     iconWrapper.style.height = iconSz + 'px';
                     iconWrapper.style.opacity = iconOp;
                     iconWrapper.style.borderRadius = Math.round(iconSz * 0.22) + 'px';
+                    var iconInnerSize = Math.max(Math.round(iconSz * 0.45), 24);
                     if (cfg.emptyCustomIcon) {
-                        iconWrapper.innerHTML = '<img src="' + cfg.emptyCustomIcon.replace(/"/g,'&quot;') + '" class="text-blue-400 text-4xl" style="width:2.5rem;height:2.5rem;object-fit:contain">';
+                        iconWrapper.innerHTML = '<img src="' + cfg.emptyCustomIcon.replace(/"/g,'&quot;') + '" style="width:' + iconInnerSize + 'px;height:' + iconInnerSize + 'px;object-fit:contain">';
                     } else {
-                        iconWrapper.innerHTML = '<i class="fas ' + cfg.emptyIcon + ' text-blue-400 text-4xl"></i>';
+                        iconWrapper.innerHTML = '<i class="fas ' + cfg.emptyIcon + ' text-blue-400" style="font-size:' + iconInnerSize + 'px"></i>';
                     }
                 }
                 var h2 = es.querySelector('h2');
@@ -3567,17 +3564,12 @@
             if (asIndicator) {
                 asIndicator.style.display = 'flex';
                 var icon = document.getElementById('auto-save-icon');
-                var text = document.getElementById('auto-save-text');
                 if (cfg.autoSave) {
-                    icon.style.color = '#22C55E';
-                    icon.style.animation = 'spin 1.5s linear infinite';
-                    text.style.color = '#22C55E';
-                    text.textContent = 'Auto Salvamento Ativado';
+                    icon.style.color = '#00E5FF';
+                    icon.style.fontSize = '1.1rem';
                 } else {
-                    icon.style.color = '#4B5563';
-                    icon.style.animation = 'spin 3s linear infinite';
-                    text.style.color = '#6B7280';
-                    text.textContent = 'Auto Salvamento Desativado';
+                    icon.style.color = '#6B7280';
+                    icon.style.fontSize = '1.1rem';
                 }
             }
             // Footer customization
@@ -3599,14 +3591,6 @@
                     var textNode = devEl.firstChild;
                     if (textNode && textNode.nodeType === 3) {
                         textNode.textContent = cfg.footerDevText;
-                    }
-                }
-                var asIndicator = document.getElementById('auto-save-indicator');
-                if (asIndicator) {
-                    var asText = document.getElementById('auto-save-text');
-                    if (asText) {
-                        asText.style.fontSize = cfg.footerAutoSaveSize;
-                        asText.style.color = cfg.footerAutoSaveColor;
                     }
                 }
                 var statusEl = document.getElementById('stats-counter');
@@ -5451,8 +5435,8 @@
                     var removeBtn = s.locked ? '' : '<button onclick="UI._shortcutsRemove(\'' + s.id + '\')" style="background:rgba(239,68,68,0.15);color:#EF4444;border:1px solid rgba(239,68,68,0.3);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:10px;flex-shrink:0;transition:all 0.2s" onmouseover="this.style.background=\'rgba(239,68,68,0.3)\'" onmouseout="this.style.background=\'rgba(239,68,68,0.15)\'" title="Remover atalho"><i class="fas fa-times"></i></button>';
                     var resetBtn = s.locked ? '' : '<button onclick="UI._shortcutsResetOne(\'' + s.id + '\')" style="background:rgba(245,158,11,0.15);color:#F59E0B;border:1px solid rgba(245,158,11,0.3);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:10px;flex-shrink:0;transition:all 0.2s" onmouseover="this.style.background=\'rgba(245,158,11,0.3)\'" onmouseout="this.style.background=\'rgba(245,158,11,0.15)\'" title="Repor atalho padrão"><i class="fas fa-undo"></i></button>';
                     html += '<div id="shortcut-row-' + s.id + '" style="display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0.85rem;border-radius:0.75rem;border:1px solid var(--border-color);background:var(--input-bg);margin-bottom:0.5rem;transition:all 0.25s;' + locked + '">';
-                    html += '<div style="flex:1;min-width:0"><div style="font-size:0.7rem;font-weight:700;color:var(--text-color);margin-bottom:0.15rem">' + s.label + '</div>';
-                    html += '<div style="font-size:0.55rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em">' + s.action + '</div></div>';
+                    html += '<div style="flex:1;min-width:0"><div style="font-size:0.8rem;font-weight:700;color:var(--text-color);margin-bottom:0.15rem">' + s.label + '</div>';
+                    html += '<div style="font-size:0.65rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em">' + s.action + '</div></div>';
                     html += '<button onclick="UI._shortcutsEdit(\'' + s.id + '\')" style="background:var(--input-bg);border:1px solid var(--border-color);border-radius:0.5rem;padding:0.35rem 0.75rem;cursor:pointer;transition:all 0.2s;min-width:120px;text-align:center;font-size:0.75rem;font-weight:800;color:var(--accent-blue);font-family:monospace;letter-spacing:0.05em" onmouseover="this.style.borderColor=\'var(--accent-blue)\';this.style.boxShadow=\'0 0 0 3px rgba(59,130,246,0.15)\'" onmouseout="this.style.borderColor=\'var(--border-color)\';this.style.boxShadow=\'none\'" title="Clique para alterar">' + s.key + '</button>';
                     html += '<div style="display:flex;gap:0.3rem">' + resetBtn + removeBtn + '</div>';
                     html += '</div>';
@@ -5779,20 +5763,21 @@
                 if (btn && fileInput && urlField) {
                     btn.addEventListener('click', function() {
                         var cfg = window._appConfig || {};
-                        var basePath = cfg.pathVideos || '';
-                        var useFsApi = 'showOpenFilePicker' in window;
-                        // Known directories that support startIn
-                        var knownDirs = ['desktop', 'documents', 'downloads', 'music', 'pictures', 'videos'];
-                        var useStartIn = basePath && knownDirs.some(function(d) { return basePath.toLowerCase().includes(d); });
-                        
-                        if (useFsApi && useStartIn) {
+                        var basePath = '';
+                        if (prefix === 'f' || prefix === 'fs') {
+                            basePath = cfg.pathVideos || '';
+                        }
+                        if (basePath && 'showOpenFilePicker' in window) {
                             (async function() {
                                 try {
-                                    var dirHandle = await window.showDirectoryPicker({ startIn: basePath });
-                                    var fileHandle = await dirHandle.getFileHandle('', { create: false });
-                                    var file = await fileHandle.getFile();
-                                    var url = URL.createObjectURL(file);
-                                    urlField.value = file.name ? (basePath + '\\' + file.name) : url;
+                                    var handles = await window.showOpenFilePicker({ types: [{ description: 'Vídeos', accept: { 'video/*': ['.mp4','.mkv','.avi','.mov','.webm','.flv','.wmv'] } }], multiple: false });
+                                    if (handles && handles[0]) {
+                                        var file = await handles[0].getFile();
+                                        var blobUrl = URL.createObjectURL(file);
+                                        var ref = {blob: blobUrl, name: file.name};
+                                        urlField.value = basePath + '\\' + file.name;
+                                        urlField.dataset.ref = JSON.stringify(ref);
+                                    }
                                 } catch(e) {
                                     fileInput.click();
                                 }
@@ -5804,9 +5789,14 @@
                     fileInput.addEventListener('change', function() {
                         if (this.files && this.files[0]) {
                             var file = this.files[0];
+                            var cfg = window._appConfig || {};
+                            var basePath = '';
+                            if (prefix === 'f' || prefix === 'fs') {
+                                basePath = cfg.pathVideos || '';
+                            }
                             var blobUrl = URL.createObjectURL(file);
                             var ref = {blob: blobUrl, name: file.name};
-                            urlField.value = file.name;
+                            urlField.value = basePath ? (basePath + '\\' + file.name) : file.name;
                             urlField.dataset.ref = JSON.stringify(ref);
                             this.value = '';
                         }
@@ -5820,24 +5810,20 @@
                     area.addEventListener('click', function() {
                         var cfg = window._appConfig || {};
                         var basePath = cfg.pathCards || '';
-                        var useFsApi = 'showOpenFilePicker' in window;
-                        // Known directories that support startIn
-                        var knownDirs = ['desktop', 'documents', 'downloads', 'music', 'pictures', 'videos'];
-                        var useStartIn = basePath && knownDirs.some(function(d) { return basePath.toLowerCase().includes(d); });
-                        
-                        if (useFsApi && useStartIn) {
+                        if (basePath && 'showOpenFilePicker' in window) {
                             (async function() {
                                 try {
-                                    var dirHandle = await window.showDirectoryPicker({ startIn: basePath });
-                                    var fileHandle = await dirHandle.getFileHandle('', { create: false });
-                                    var file = await fileHandle.getFile();
-                                    if (file && file.type.startsWith('image/')) {
-                                        Logic.compressImage(file, 300 * 1024, function(url) {
-                                            UI.setPosterPreview(url, prefix);
-                                        });
+                                    var handles = await window.showOpenFilePicker({ types: [{ description: 'Imagens', accept: { 'image/*': ['.jpg','.jpeg','.png','.webp'] } }], multiple: false });
+                                    if (handles && handles[0]) {
+                                        var file = await handles[0].getFile();
+                                        if (file && file.type.startsWith('image/')) {
+                                            Logic.compressImage(file, 300 * 1024, function(url) {
+                                                UI.setPosterPreview(url, prefix);
+                                            });
+                                        }
+                                        var pu = document.getElementById(prefix + '-poster-url');
+                                        if (pu) pu.value = basePath + '\\' + file.name;
                                     }
-                                    var pu = document.getElementById(prefix + '-poster-url');
-                                    if (pu) pu.value = file.name || '';
                                 } catch(e) {
                                     fileInput.click();
                                 }
@@ -5849,11 +5835,13 @@
                     fileInput.addEventListener('change', function(e) {
                         if (this.files && this.files[0]) {
                             var file = this.files[0];
+                            var cfg = window._appConfig || {};
+                            var basePath = cfg.pathCards || '';
                             Logic.compressImage(file, 300 * 1024, function(url) {
                                 UI.setPosterPreview(url, prefix);
                             });
                             var pu = document.getElementById(prefix + '-poster-url');
-                            if (pu) pu.value = file.name || '';
+                            if (pu) pu.value = basePath ? (basePath + '\\' + file.name) : file.name;
                             this.value = '';
                         }
                     });
@@ -6162,6 +6150,8 @@
                 if (btn) btn.classList.add('active');
                 el.classList.add('active');
                 this._populateConfigForm();
+                var scrollArea = el.querySelector('.overflow-y-auto');
+                if (scrollArea) scrollArea.scrollTop = 0;
             },
             _populateConfigForm() {
                 var cfg = window._appConfig;
@@ -6236,6 +6226,7 @@
                 setVal('cfg-path-videos', cfg.pathVideos);
                 setVal('cfg-path-backups', cfg.pathBackups);
                 setVal('cfg-path-acervo', cfg.pathAcervo);
+                setVal('cfg-acervo-backup-name', cfg.acervoBackupName || '');
                 setChecked('cfg-path-cards-active', cfg.pathCardsActive);
                 setChecked('cfg-path-videos-active', cfg.pathVideosActive);
                 setChecked('cfg-path-backups-active', cfg.pathBackupsActive);
@@ -6245,9 +6236,7 @@
                 setVal('cfg-custom-player-path', cfg.customPlayerPath || '');
                 UI._toggleCustomPlayerRow(cfg.videoPlayer);
                 setChecked('cfg-notifications-active', cfg.notificationsActive !== false);
-                setVal('cfg-notifications-duration', cfg.notificationsDuration || 5000);
                 setChecked('cfg-cadastro-notify-active', cfg.cadastroNotifyActive !== false);
-                setVal('cfg-cadastro-notify-duration', cfg.cadastroNotifyDuration || 6000);
                 setChecked('cfg-sugestoes-active', cfg.sugestoesActive === true);
                 setChecked('cfg-sugestoes-novo', cfg.sugestoesNovo !== false);
                 setChecked('cfg-sugestoes-assistir', cfg.sugestoesAssistir !== false);
@@ -6299,8 +6288,8 @@
                 var preview = document.getElementById('cfg-empty-preview');
                 if (preview) {
                     var iconHtml = customIcon
-                        ? '<img src="' + customIcon.replace(/"/g,'&quot;') + '" style="width:2rem;height:2rem;object-fit:contain">'
-                        : '<i class="fas ' + icon + ' text-blue-400" style="font-size:2rem"></i>';
+                        ? '<img src="' + customIcon.replace(/"/g,'&quot;') + '" style="width:' + Math.max(Math.round(iconSize * 0.45), 20) + 'px;height:' + Math.max(Math.round(iconSize * 0.45), 20) + 'px;object-fit:contain">'
+                        : '<i class="fas ' + icon + ' text-blue-400" style="font-size:' + Math.max(Math.round(iconSize * 0.45), 20) + 'px"></i>';
                     var containerSize = Math.max(iconSize, 40);
                     var fs = titleBold ? '900' : '400';
                     var fst = titleItalic ? 'italic' : 'normal';
@@ -6489,6 +6478,7 @@
                 cfg.pathVideos = getVal('cfg-path-videos');
                 cfg.pathBackups = getVal('cfg-path-backups');
                 cfg.pathAcervo = getVal('cfg-path-acervo');
+                cfg.acervoBackupName = getVal('cfg-acervo-backup-name') || '';
                 cfg.pathCardsActive = document.getElementById('cfg-path-cards-active')?.checked || false;
                 cfg.pathVideosActive = document.getElementById('cfg-path-videos-active')?.checked || false;
                 cfg.pathBackupsActive = document.getElementById('cfg-path-backups-active')?.checked || false;
@@ -6497,9 +6487,7 @@
                 cfg.videoPlayer = getVal('cfg-video-player') || 'system';
                 cfg.customPlayerPath = getVal('cfg-custom-player-path') || '';
                 cfg.notificationsActive = document.getElementById('cfg-notifications-active')?.checked || false;
-                cfg.notificationsDuration = parseInt(document.getElementById('cfg-notifications-duration')?.value) || 5000;
                 cfg.cadastroNotifyActive = document.getElementById('cfg-cadastro-notify-active')?.checked || false;
-                cfg.cadastroNotifyDuration = parseInt(document.getElementById('cfg-cadastro-notify-duration')?.value) || 6000;
                 cfg.sugestoesActive = document.getElementById('cfg-sugestoes-active')?.checked || false;
                 cfg.sugestoesNovo = document.getElementById('cfg-sugestoes-novo')?.checked || false;
                 cfg.sugestoesAssistir = document.getElementById('cfg-sugestoes-assistir')?.checked || false;
@@ -6656,13 +6644,16 @@
                     fileInput = document.createElement('input');
                     fileInput.type = 'file';
                     fileInput.id = 'icon-picker-helper';
-                    fileInput.accept = '.svg,.png,.webp,.jpg,.jpeg';
+                    fileInput.accept = '.png,.ico,.svg,.webp';
                     fileInput.style.display = 'none';
                     document.body.appendChild(fileInput);
+                } else {
+                    fileInput.accept = '.png,.ico,.svg,.webp';
                 }
                 var self = this;
                 fileInput.onchange = function() {
                     if (this.files && this.files[0]) {
+                        var file = this.files[0];
                         var reader = new FileReader();
                         reader.onload = function(e) {
                             var dataUrl = e.target.result;
@@ -6676,8 +6667,17 @@
                             customInput.value = dataUrl;
                             input.value = 'custom';
                             self._updateConfigPreview();
+                            var previewWrap = document.getElementById('cfg-icon-preview');
+                            var previewImg = document.getElementById('cfg-icon-preview-img');
+                            var previewInfo = document.getElementById('cfg-icon-preview-info');
+                            if (previewWrap && previewImg && previewInfo) {
+                                previewImg.src = dataUrl;
+                                var sizeKb = (file.size / 1024).toFixed(1);
+                                previewInfo.textContent = file.name + ' — ' + sizeKb + ' KB';
+                                previewWrap.style.display = 'flex';
+                            }
                         };
-                        reader.readAsDataURL(this.files[0]);
+                        reader.readAsDataURL(file);
                     }
                     this.value = '';
                 };

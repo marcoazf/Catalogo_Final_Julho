@@ -635,3 +635,218 @@ Tudo que usa unidades `rem` (padding, margin, gap, border-radius, font-size de T
 | Nenhuma funcionalidade existente alterada | OK |
 | Paletas, tipografia, layout, espaçamentos preservados | OK |
 | Todos os IDs, classes e handlers mantidos | OK |
+
+---
+
+## Implementações Realizadas — Itens (a) a (m) — Melhorias adicionais
+
+### 22. Configurações: Sempre Abrir com ACERVO VAZIO no Topo
+
+**Arquivo:** `index.html` — JavaScript (`UI.openConfig`)
+
+**O que foi feito:**
+- Modificada a função `openConfig()` para adicionar `scrollTop = 0` no container de scroll do modal `#modal-config`, garantindo que a janela sempre abra posicionada no topo, onde está a seção "Acervo Vazio".
+- O scroll para o topo é executado antes da exibição do modal.
+
+**Preservação:** Todas as funcionalidades do modal Configurações (campos, toggles, preview) permanecem intactas. A alteração é apenas o posicionamento inicial do scroll.
+
+---
+
+### 23. Pick Folder ÍCONE: Formatos Aceitos, Miniatura e Tamanho em Kb
+
+**Arquivo:** `index.html` — HTML + JavaScript (`UI.pickIconFile`)
+
+**O que foi feito:**
+- **Filtro de formato:** O `showOpenFilePicker` foi restrito a aceitar apenas `.png`, `.ico`, `.svg` e `.webp` via o atributo `accept`.
+- **Descrição abaixo do campo:** Adicionada linha descritiva `"Formatos aceites: PNG, ICO, SVG e WEBP"` abaixo do campo de ícone.
+- **Miniatura em tempo real:** Ao selecionar ou colar uma imagem, exibe um preview com `<img>` de até 36×36px, nome do arquivo e tamanho em Kb.
+- O preview é exibido dentro de `#cfg-icon-preview` e atualizado a cada mudança do campo.
+
+**Preservação:** A função `pickIconFile()` mantém compatibilidade com o sistema de configuração de ícone. O campo `cfg-empty-icon` continua aceitando classes FA ou caminhos de arquivo.
+
+---
+
+### 24. ACERVO VAZIO: TAMANHO ÍCONE e OPACIDADE na Mesma Linha + Padding
+
+**Arquivo:** `index.html` — HTML (seção Acervo Vazio)
+
+**O que foi feito:**
+- Os campos TAMANHO ÍCONE e OPACIDADE ÍCONE foram reposicionados para ficar na mesma linha usando `display:flex; gap:1.5rem`.
+- Aumentado o padding acima e abaixo da seção para `0.5rem 0`, dando mais respiro visual.
+- Cada controle ocupa `flex:1` para dividir o espaço igualmente.
+
+**Preservação:** Ambos os sliders continuam funcionando independentemente com seus valores e handlers intactos.
+
+---
+
+### 25. TAMANHO ÍCONE: Escala Proporcional da Div e do Ícone + Fontes Maiores
+
+**Arquivo:** `index.html` — HTML (range slider) + JavaScript (`applyConfig`, `_updateConfigPreview`)
+
+**O que foi feito:**
+- **Range aumentado:** O `max` do slider de tamanho foi ampliado de 160px para 320px, permitindo ícones bem maiores.
+- **Escala proporcional:** Tanto a div container do ícone quanto o ícone interno (`.icon-inner`, `.icon-image`) agora escalam proporcionalmente com o tamanho configurado.
+- **Fórmula:** `iconInnerSize = max(round(iconSize * 0.45), 24)` — o ícone interno fica com 45% do container (mínimo 24px).
+- **Aplicado em:** `applyConfig()` (load inicial) e `_updateConfigPreview()` (preview em tempo real).
+- **Fontes maiores:** Labels de TAMANHO e OPACIDADE aumentados de `0.65rem` para `0.7rem`.
+
+**Preservação:** A variável `iconInnerSize` já existia — apenas a fórmula de cálculo foi ajustada. O slider original mantém todas as suas funcionalidades.
+
+---
+
+### 26. TÍTULO/SUBTÍTULO 1/SUBTÍTULO 2: Campos Menores com Controles na Mesma Linha
+
+**Arquivo:** `index.html` — HTML (seção Acervo Vazio, campos título/subtítulo)
+
+**O que foi feito:**
+- Os campos de texto (TÍTULO, SUBTÍTULO 1, SUBTÍTULO 2) foram reduzidos para `max-width:160px`.
+- Na mesma linha de cada campo, agora ficam: Botão Bold, Botão Italic, Campo de tamanho (ex: "14px"), Caixa de cor (hex + swatch + picker).
+- Layout horizontal compacto usando `display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap`.
+
+**Preservação:** Todos os handlers (`_toggleEmptyStyle`, `_updateConfigPreview`, color pickers) continuam funcionando. Os IDs dos campos foram mantidos.
+
+---
+
+### 27. GÊNEROS (TOPO DO CARD): Default Cor Texto Branco, Fundo Preto
+
+**Arquivo:** `index.html` — JavaScript (`loadConfig` defaults)
+
+**O que foi feito:**
+- Verificado que os defaults já estavam corretos: `cardCategoryColor: '#FFFFFF'` (texto branco) e `cardCategoryBg: '#000000'` (fundo preto).
+- Nenhuma alteração necessária — o comportamento padrão já atende ao solicitado.
+
+---
+
+### 28. CAMINHOS: Caminhos Completos + Correlação com CADASTRO NOVO
+
+**Arquivo:** `index.html` — JavaScript (`initMediaPicker`, `initPosterArea`)
+
+**O que foi feito:**
+- **Media Picker (Filmes/Séries):** A função `initMediaPicker()` foi modificada para exibir o caminho completo (`basePath + '\\' + file.name`) no campo de URL quando um ficheiro é selecionado. O `basePath` vem de `cfg.pathVideos` para prefixos `f` e `fs`.
+- **Poster Picker (Capas):** A função `initPosterArea()` foi modificada da mesma forma, usando `cfg.pathCards` como base.
+- **Correlação:** Ao selecionar uma pasta configurada em Configurações, o picker agora usa `showOpenFilePicker()` com o caminho correto, e o campo exibe o caminho completo do ficheiro.
+
+**Preservação:** As funções `pickFolder()`, `pickFile()` e o fallback para `<input type="file">` continuam funcionando. A API `showDirectoryPicker` (que só retornava nome) foi removida do fluxo principal.
+
+---
+
+### 29. ACERVO GERAL: Campo Nome do Backup (35%) + Caminho (65%)
+
+**Arquivo:** `index.html` — HTML (seção Acervo Geral) + JavaScript (`loadConfig`, `applyConfig`)
+
+**O que foi feito:**
+- Adicionado campo de texto `cfg-acervo-backup-name` com largura `flex:0 0 35%` para o nome do ficheiro de backup.
+- Campo de caminho `cfg-path-acervo` ajustado para `flex:1` (65% do espaço restante).
+- Ambos na mesma linha com `display:flex; gap:0.5rem`.
+- Adicionada chave `acervoBackupName` nos defaults do `loadConfig()` e no fluxo `populateConfigForm()`/`saveConfig()`.
+
+**Preservação:** O switch ATIVAR e o botão de seleção de pasta permanecem funcionando. A chave `pathAcervo` existente não foi alterada.
+
+---
+
+### 30. NOTIFICAÇÕES DE ESTREIAS: Spinner de Duração Removido
+
+**Arquivo:** `index.html` — HTML + JavaScript
+
+**O que foi feito:**
+- O campo "Duração (ms)" com `<input type="number" id="cfg-notifications-duration">` foi removido da seção.
+- As referências `setVal` e `parseInt` correspondentes foram removidas de `_populateConfigForm()` e `saveConfig()`.
+- A notificação agora usa o valor fixo de 5000ms (fallback padrão).
+
+**Preservação:** O toggle "Ativar Notificações" e a descrição da seção permanecem intactos.
+
+---
+
+### 31. NOTIFICAÇÃO DE CADASTRO: Spinner de Duração Removido
+
+**Arquivo:** `index.html` — HTML + JavaScript
+
+**O que foi feito:**
+- O campo "Duração (ms)" com `<input type="number" id="cfg-cadastro-notify-duration">` foi removido da seção.
+- As referências `setVal` e `parseInt` correspondentes foram removidas de `_populateConfigForm()` e `saveConfig()`.
+- A notificação agora usa o valor fixo de 6000ms (fallback padrão).
+
+**Preservação:** O toggle "Ativar" e a descrição da seção permanecem intactos.
+
+---
+
+### 32. Configurar Animação: Fontes Aumentadas
+
+**Arquivo:** `index.html` — CSS (`#view-context-menu`)
+
+**O que foi feito:**
+- `.view-ctx-label`: font-size de `0.65rem` → `0.75rem`
+- `.view-ctx-option`: font-size de `0.7rem` → `0.8rem`, padding de `0.35rem` → `0.45rem`
+- `.view-ctx-option .val`: font-size de `0.6rem` → `0.7rem`
+- `.view-ctx-footer button`: font-size de `0.65rem` → `0.75rem`, padding de `0.25rem 0.7rem` → `0.3rem 0.8rem`
+
+**Preservação:** Todos os handlers de velocidade e efeito, botões Pausar/Retomar/Cancelar permanecem intactos.
+
+---
+
+### 33. GESTÃO DE ATALHOS: Fontes Aumentadas
+
+**Arquivo:** `index.html` — HTML (modal-shortcuts) + JavaScript (`_shortcutsRender`)
+
+**O que foi feito:**
+- Descrição do modal: font-size de `0.65rem` → `0.75rem`
+- Botões Cancelar/Aplicar: font-size de `0.7rem` → `0.8rem`
+- Labels dos atalhos (dinâmicos): font-size de `0.7rem` → `0.8rem`
+- Descrições das ações (dinâmicas): font-size de `0.55rem` → `0.65rem`
+
+**Preservação:** Todas as funcionalidades de edição, remoção e reposição de atalhos permanecem intactos.
+
+---
+
+### 34. Rodapé: Auto-Salvamento Movido para Direita com Ícone de Disquete
+
+**Arquivo:** `index.html` — HTML (footer) + JavaScript (`applyConfig`)
+
+**O que foi feito:**
+- Removido o indicador de auto-salvamento do centro do rodapé (ícone giratório + texto).
+- Adicionado à direita do rodapé, após o contador de status, um ícone de disquete (`fa-save`):
+  - **Desligado:** Cinza (`#6B7280`)
+  - **Ligado:** Azul neon (`#00E5FF`)
+- O ícone tem `font-size: 1.1rem`.
+- O centro do rodapé agora é usado exclusivamente para status de ações do utilizador.
+- Removido o `<span id="auto-save-text">` e suas referências no JS.
+
+**Layout do rodapé (depois):**
+```
+[ELO SISTEMA E TECNOLOGIA | 2026 - CRIADO PARA JONAS THEODORO]   [status de ações]   [0 TÍTULOS NO ACERVO JONAS] [💾]
+```
+
+**Preservação:** O toggle de auto-salvamento nas Configurações continua funcionando. O ícone muda de cor automaticamente.
+
+---
+
+## Checklist Final (Itens a–m)
+
+| Verificação | Status |
+|---|---|
+| (a) Configurações abre sempre no ACERVO VAZIO | OK |
+| (b) Pick ÍCONE: aceita PNG/ICO/SVG/WEBP | OK |
+| (b) Descrição de formatos abaixo do campo | OK |
+| (b) Miniatura + tamanho em Kb em tempo real | OK |
+| (c) TAMANHO e OPACIDADE na mesma linha | OK |
+| (c) Padding aumentado acima/abaixo | OK |
+| (d) Range aumentado para 320px | OK |
+| (d) Div + Ícone escalam proporcionalmente | OK |
+| (d) Fontes de TAMANHO/OPACIDADE maiores | OK |
+| (e) Campos título/subtítulo com max-width 160px | OK |
+| (e) Bold/Italic/size/cor na mesma linha | OK |
+| (f) Gêneros: default branco/preto verificado | OK |
+| (g) CAMINHOS: caminho completo exibido | OK |
+| (g) CADASTRO NOVO: paths correlacionados | OK |
+| (h) ACERVO GERAL: campo nome (35%) + path (65%) | OK |
+| (i) Estreias: spinner duração removido | OK |
+| (j) Cadastro: spinner duração removido | OK |
+| (k) Animação: fontes aumentadas | OK |
+| (l) Atalhos: fontes aumentadas | OK |
+| (m) Rodapé: auto-salvamento movido para direita | OK |
+| (m) Ícone disquete fa-save | OK |
+| (m) Ligado = azul neon, desligado = cinza | OK |
+| (m) Centro do rodapé para status de ações | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
