@@ -547,3 +547,91 @@ Tudo que usa unidades `rem` (padding, margin, gap, border-radius, font-size de T
 | Nenhuma funcionalidade existente alterada | OK |
 | Paletas, tipografia, layout, espaçamentos preservados | OK |
 | Todos os IDs, classes e handlers mantidos | OK |
+
+---
+
+### 21. Botão Atalhos na Barra Principal + Modal Gestão de Atalhos + Atalhos de Teclado + DPAD Smart TV
+
+**Arquivo:** `index.html` — HTML (header + modal + CSS) + JavaScript (UI + Logic + keydown handler)
+
+**O que foi feito:**
+
+**A) Botão "Atalhos" no header:**
+- Novo botão `btn-shortcuts` com ícone `fa-keyboard` (Font Awesome) posicionado entre Dashboard e Filtros.
+- Comportamento toggle azul idêntico aos demais botões da barra principal.
+- Adicionado ao array `_headerBtnIds` e ao `modalBtnMap` para exclusão mútua.
+
+**B) Modal GESTÃO DE ATALHOS:**
+- Modal `modal-shortcuts` com header roxo (`fa-keyboard`), título "GESTÃO DE ATALHOS".
+- Botão X com microanimação (`btn-close-premium`), botão "Cancelar" e botão "Aplicar".
+- Lista renderizada dinamicamente via `_shortcutsRender()` com 13 atalhos fixos.
+- Cada atalho exibe: label, ação, tecla atual (clicável para editar), botão repor (undo), botão remover (X).
+- Atalhos bloqueados (`locked: true`) ficam com opacidade reduzida e sem interação de edição/remoção.
+- Salva/carrega do `localStorage` via chave `cinecatalog_shortcuts`.
+
+**C) Atalhos implementados:**
+
+| Tecla | Ação |
+|---|---|
+| Ctrl+1 | Aba Filmes |
+| Ctrl+2 | Aba Séries |
+| Ctrl+3 | Aba Estreias |
+| Ctrl+F | Pesquisar (abre search bar) |
+| Ctrl+E | Cadastrar novo item |
+| Ctrl+I | Abrir INFO do item selecionado |
+| Ctrl+M | Abrir menu de contexto |
+| Ctrl+T | Alternar modo de visualização |
+| F5 | Desabilitado (prevenção) |
+| F12 | Desabilitado (prevenção) |
+| F11 | Desabilitado (prevenção) |
+| ESC | Fechar pop-ups e modais (todos os modais) |
+| ← → ↑ ↓ | Navegação DPAD entre cards (Smart TV) |
+
+**D) Editar atalhos:**
+- Clicar na tecla atual abre modo de edição: fundo amarelo, texto "...", escuta de teclado.
+- Pressionar qualquer combinação de teclas reatribui o atalho.
+- ESC cancela a edição. Teclas duplicadas removem do atalho anterior.
+- Botão "Repor" (undo) restaura o atalho padrão de fábrica.
+- Botão "Remover" (X) desativa o atalho (define como "—").
+
+**E) DPAD Smart TV:**
+- CSS `.dpad-focused` com outline amarelo (F59E0B), elevação e scale.
+- Navegação calcula colunas automaticamente baseado na posição dos cards.
+- Foco visual segue as setas do teclado, com scroll automático.
+
+**Preservação:** Todos os handlers existentes (`onclick`, `onkeydown`), modalBtnMap, _headerBtnIds, backdrop click handlers e ESC handlers anteriores mantidos intactos. As novas funções foram adicionadas ao objeto `UI` sem sobrescrever nenhuma existente. O handler `keydown` global foi estendido (não substituído) para incluir novas prevenções e funcionalidades.
+
+---
+
+### Checklist Final (v4.5.1 — Item 21)
+
+| Verificação | Status |
+|---|---|
+| Botão Atalhos entre Dashboard e Filtros | OK |
+| Ícone fa-keyboard | OK |
+| Toggle azul ao abrir/fechar modal | OK |
+| Modal com título GESTÃO DE ATALHOS | OK |
+| Ícone roxo no header do modal | OK |
+| Botão X com microanimação | OK |
+| Botão Cancelar | OK |
+| Botão Aplicar | OK |
+| 13 atalhos fixos criados | OK |
+| Ctrl+1/2/3 → Abas | OK |
+| Ctrl+F → Pesquisar | OK |
+| Ctrl+E → Cadastrar | OK |
+| Ctrl+I → INFO do item | OK |
+| Ctrl+M → Menu de contexto | OK |
+| Ctrl+T → Modo visualização | OK |
+| F5/F12/F11 → Prevenção | OK |
+| ESC → Fecha todos os modais | OK |
+| DPAD → Navegação Smart TV | OK |
+| Editar atalho (reatribuir tecla) | OK |
+| Remover atalho (desativar) | OK |
+| Repor atalho (restaurar padrão) | OK |
+| Salvar no localStorage | OK |
+| Carregar do localStorage | OK |
+| Backdrop click fecha modal | OK |
+| ESC fecha modal-shortcuts | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |

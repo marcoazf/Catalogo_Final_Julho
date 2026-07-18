@@ -1331,6 +1331,15 @@
             box-shadow: 0 0 20px rgba(34,197,94,0.6), 0 0 40px rgba(34,197,94,0.2) !important;
         }
 
+        /* === FEATURE: DPAD Smart TV Focus === */
+        .movie-card.dpad-focused, .estreia-list-item.dpad-focused {
+            outline: 3px solid #F59E0B !important;
+            outline-offset: 3px;
+            box-shadow: 0 0 20px rgba(245,158,11,0.4), 0 0 40px rgba(245,158,11,0.15) !important;
+            transform: translateY(-4px) scale(1.02);
+            z-index: 60;
+        }
+
         /* === FEATURE: Search History === */
         /* === FEATURE: Info Modal 28 Icons === */
         .info-grid {
@@ -1884,6 +1893,8 @@
                 </div>
 
                 <button onclick="Logic.openDashboard()" id="btn-dashboard" class="btn-icon" title="Dashboard"><i class="fas fa-chart-pie text-xs"></i></button>
+
+                <button onclick="UI.toggleShortcuts()" id="btn-shortcuts" class="btn-icon" title="Atalhos"><i class="fas fa-keyboard text-xs"></i></button>
 
                 <div class="relative">
                     <button onclick="UI.toggleFilters()" id="btn-filters" class="btn-icon" title="Filtros"><i class="fas fa-filter text-xs"></i></button>
@@ -2717,6 +2728,31 @@
                         </div>
                     </div>
                     <div class="chart-box full-width"><canvas id="chart-ratings"></canvas></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- [BLOCO 7.5.1: MODAL GESTÃO DE ATALHOS] -->
+    <div id="modal-shortcuts" class="modal-premium fixed inset-0 p-4" style="z-index:300">
+        <div class="modal-premium-inner" style="max-width:700px">
+            <div class="modal-premium-header">
+                <div class="flex items-center gap-3">
+                    <i class="fas fa-keyboard text-purple-500 text-2xl"></i>
+                    <span class="text-[1rem] font-black uppercase tracking-widest" style="color:var(--text-color);-webkit-text-fill-color:var(--text-color)">GESTÃO DE ATALHOS</span>
+                </div>
+                <button onclick="UI.closeModal('modal-shortcuts')" class="btn-close-premium"><i class="fas fa-times text-xs"></i></button>
+            </div>
+            <div class="p-5 overflow-y-auto custom-scroll" style="max-height:75vh">
+                <div style="font-size:0.65rem;font-weight:600;color:var(--text-secondary);margin-bottom:1rem;text-transform:uppercase;letter-spacing:0.1em">Clique num atalho para editar — pressione uma tecla para reatribuir</div>
+                <div id="shortcuts-list"></div>
+                <div style="display:flex;justify-content:flex-end;gap:0.75rem;margin-top:1.25rem;padding-top:0.75rem;border-top:1px solid var(--border-color)">
+                    <button onclick="UI.closeModal('modal-shortcuts')" class="bg-gray-600 text-white px-5 py-2.5 rounded-full font-black text-[0.7rem] hover:bg-gray-700 transition uppercase tracking-widest">
+                        Cancelar
+                    </button>
+                    <button onclick="UI.applyShortcuts()" class="bg-blue-600 text-white px-5 py-2.5 rounded-full font-black text-[0.7rem] hover:bg-blue-700 transition uppercase tracking-widest shadow-lg">
+                        <i class="fas fa-check mr-1.5"></i>Aplicar
+                    </button>
                 </div>
             </div>
         </div>
@@ -3717,7 +3753,7 @@
             _lastNotifications: [],
             _reminderListRefresh: false,
 
-            _headerBtnIds: ['btn-theme','btn-notifications','btn-reminders','btn-cadastro-log','btn-config','btn-info','btn-generate-list','btn-dashboard','btn-filters'],
+            _headerBtnIds: ['btn-theme','btn-notifications','btn-reminders','btn-cadastro-log','btn-config','btn-info','btn-generate-list','btn-dashboard','btn-shortcuts','btn-filters'],
             _clearHeaderBtnActive() {
                 this._headerBtnIds.forEach(function(id) {
                     var el = document.getElementById(id);
@@ -5166,7 +5202,7 @@
                 const el = document.getElementById(id);
                 if (!el) return;
                 el.classList.remove('active');
-                var modalBtnMap = {'modal-dashboard':'btn-dashboard','modal-generate-list':'btn-generate-list','modal-cadastro-log':'btn-cadastro-log','modal-config':'btn-config','modal-info':'btn-info'};
+                var modalBtnMap = {'modal-dashboard':'btn-dashboard','modal-generate-list':'btn-generate-list','modal-cadastro-log':'btn-cadastro-log','modal-config':'btn-config','modal-info':'btn-info','modal-shortcuts':'btn-shortcuts'};
                 if (modalBtnMap[id]) { var b = document.getElementById(modalBtnMap[id]); if (b) b.classList.remove('active'); }
                 document.getElementById('modal-toast')?.classList.add('hidden');
                 if (id === 'modal-cadastro') {
@@ -5186,6 +5222,134 @@
                     if (btn) btn.classList.toggle('active', opening);
                     if (opening) Logic.renderInfoFeatures();
                 }
+                if (id === 'modal-shortcuts') {
+                    var bs = document.getElementById('btn-shortcuts');
+                    if (bs) bs.classList.toggle('active', opening);
+                    if (opening) UI._shortcutsRender();
+                }
+            },
+            toggleShortcuts() {
+                this.toggleModal('modal-shortcuts');
+            },
+            _shortcutsEditing: null,
+            _shortcutsDefaults: [
+                { id: 's-filmes', key: 'Ctrl+1', label: 'Aba Filmes', action: 'shortcuts_filmes', locked: false },
+                { id: 's-series', key: 'Ctrl+2', label: 'Aba Séries', action: 'shortcuts_series', locked: false },
+                { id: 's-estreias', key: 'Ctrl+3', label: 'Aba Estreias', action: 'shortcuts_estreias', locked: false },
+                { id: 's-pesquisar', key: 'Ctrl+F', label: 'Pesquisar', action: 'shortcuts_pesquisar', locked: false },
+                { id: 's-cadastrar', key: 'Ctrl+E', label: 'Cadastrar novo item', action: 'shortcuts_cadastrar', locked: false },
+                { id: 's-info', key: 'Ctrl+I', label: 'Abrir INFO do item selecionado', action: 'shortcuts_info', locked: false },
+                { id: 's-ctx', key: 'Ctrl+M', label: 'Abrir menu de contexto', action: 'shortcuts_ctx', locked: false },
+                { id: 's-view', key: 'Ctrl+T', label: 'Alternar modo de visualização', action: 'shortcuts_view', locked: false },
+                { id: 's-f5', key: 'F5', label: 'Desabilitado (prevenção)', action: 'disabled', locked: true },
+                { id: 's-f12', key: 'F12', label: 'Desabilitado (prevenção)', action: 'disabled', locked: true },
+                { id: 's-f11', key: 'F11', label: 'Desabilitado (prevenção)', action: 'disabled', locked: true },
+                { id: 's-esc', key: 'Escape', label: 'Fechar pop-ups e modais', action: 'shortcuts_esc', locked: true },
+                { id: 's-dpad', key: '← → ↑ ↓', label: 'Navegação DPAD entre cards (Smart TV)', action: 'shortcuts_dpad', locked: true }
+            ],
+            _shortcutsLoad: function() {
+                var saved = null;
+                try { saved = JSON.parse(localStorage.getItem('cinecatalog_shortcuts')); } catch(e) {}
+                if (saved && Array.isArray(saved)) return saved;
+                return JSON.parse(JSON.stringify(UI._shortcutsDefaults));
+            },
+            _shortcutsPersist: function(list) {
+                localStorage.setItem('cinecatalog_shortcuts', JSON.stringify(list));
+            },
+            _shortcutsRender: function() {
+                var list = UI._shortcutsLoad();
+                var container = document.getElementById('shortcuts-list');
+                if (!container) return;
+                var html = '';
+                for (var i = 0; i < list.length; i++) {
+                    var s = list[i];
+                    var locked = s.locked ? 'opacity:0.5;pointer-events:none;' : '';
+                    var removeBtn = s.locked ? '' : '<button onclick="UI._shortcutsRemove(\'' + s.id + '\')" style="background:rgba(239,68,68,0.15);color:#EF4444;border:1px solid rgba(239,68,68,0.3);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:10px;flex-shrink:0;transition:all 0.2s" onmouseover="this.style.background=\'rgba(239,68,68,0.3)\'" onmouseout="this.style.background=\'rgba(239,68,68,0.15)\'" title="Remover atalho"><i class="fas fa-times"></i></button>';
+                    var resetBtn = s.locked ? '' : '<button onclick="UI._shortcutsResetOne(\'' + s.id + '\')" style="background:rgba(245,158,11,0.15);color:#F59E0B;border:1px solid rgba(245,158,11,0.3);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:10px;flex-shrink:0;transition:all 0.2s" onmouseover="this.style.background=\'rgba(245,158,11,0.3)\'" onmouseout="this.style.background=\'rgba(245,158,11,0.15)\'" title="Repor atalho padrão"><i class="fas fa-undo"></i></button>';
+                    html += '<div id="shortcut-row-' + s.id + '" style="display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0.85rem;border-radius:0.75rem;border:1px solid var(--border-color);background:var(--input-bg);margin-bottom:0.5rem;transition:all 0.25s;' + locked + '">';
+                    html += '<div style="flex:1;min-width:0"><div style="font-size:0.7rem;font-weight:700;color:var(--text-color);margin-bottom:0.15rem">' + s.label + '</div>';
+                    html += '<div style="font-size:0.55rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em">' + s.action + '</div></div>';
+                    html += '<button onclick="UI._shortcutsEdit(\'' + s.id + '\')" style="background:var(--input-bg);border:1px solid var(--border-color);border-radius:0.5rem;padding:0.35rem 0.75rem;cursor:pointer;transition:all 0.2s;min-width:120px;text-align:center;font-size:0.75rem;font-weight:800;color:var(--accent-blue);font-family:monospace;letter-spacing:0.05em" onmouseover="this.style.borderColor=\'var(--accent-blue)\';this.style.boxShadow=\'0 0 0 3px rgba(59,130,246,0.15)\'" onmouseout="this.style.borderColor=\'var(--border-color)\';this.style.boxShadow=\'none\'" title="Clique para alterar">' + s.key + '</button>';
+                    html += '<div style="display:flex;gap:0.3rem">' + resetBtn + removeBtn + '</div>';
+                    html += '</div>';
+                }
+                container.innerHTML = html;
+            },
+            _shortcutsEdit: function(id) {
+                if (UI._shortcutsEditing) UI._shortcutsCancelEdit();
+                UI._shortcutsEditing = id;
+                var row = document.getElementById('shortcut-row-' + id);
+                if (!row) return;
+                var btn = row.querySelector('button[onclick*="_shortcutsEdit"]');
+                if (btn) {
+                    btn.textContent = '...';
+                    btn.style.borderColor = '#F59E0B';
+                    btn.style.color = '#F59E0B';
+                    btn.style.boxShadow = '0 0 15px rgba(245,158,11,0.25)';
+                }
+                UI._shortcutsKeyHandler = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (e.key === 'Escape') { UI._shortcutsCancelEdit(); return; }
+                    var key = UI._shortcutsBuildKey(e);
+                    if (!key) return;
+                    var list = UI._shortcutsLoad();
+                    for (var i = 0; i < list.length; i++) {
+                        if (list[i].id !== id && list[i].key === key && !list[i].locked) {
+                            list[i].key = '—';
+                        }
+                    }
+                    for (var j = 0; j < list.length; j++) {
+                        if (list[j].id === id) { list[j].key = key; break; }
+                    }
+                    UI._shortcutsPersist(list);
+                    UI._shortcutsEditing = null;
+                    document.removeEventListener('keydown', UI._shortcutsKeyHandler, true);
+                    UI._shortcutsRender();
+                };
+                document.addEventListener('keydown', UI._shortcutsKeyHandler, true);
+            },
+            _shortcutsCancelEdit: function() {
+                UI._shortcutsEditing = null;
+                if (UI._shortcutsKeyHandler) document.removeEventListener('keydown', UI._shortcutsKeyHandler, true);
+                UI._shortcutsRender();
+            },
+            _shortcutsBuildKey: function(e) {
+                var parts = [];
+                if (e.ctrlKey || e.metaKey) parts.push('Ctrl');
+                if (e.altKey) parts.push('Alt');
+                if (e.shiftKey) parts.push('Shift');
+                var k = e.key;
+                if (['Control','Alt','Shift','Meta'].indexOf(k) !== -1) return null;
+                if (k === ' ') k = 'Space';
+                else if (k === 'ArrowUp') k = '↑';
+                else if (k === 'ArrowDown') k = '↓';
+                else if (k === 'ArrowLeft') k = '←';
+                else if (k === 'ArrowRight') k = '→';
+                parts.push(k);
+                return parts.join('+');
+            },
+            _shortcutsRemove: function(id) {
+                var list = UI._shortcutsLoad();
+                for (var i = 0; i < list.length; i++) {
+                    if (list[i].id === id) { list[i].key = '—'; break; }
+                }
+                UI._shortcutsPersist(list);
+                UI._shortcutsRender();
+            },
+            _shortcutsResetOne: function(id) {
+                var list = UI._shortcutsLoad();
+                var def = UI._shortcutsDefaults.find(function(d) { return d.id === id; });
+                if (!def) return;
+                for (var i = 0; i < list.length; i++) {
+                    if (list[i].id === id) { list[i].key = def.key; break; }
+                }
+                UI._shortcutsPersist(list);
+                UI._shortcutsRender();
+            },
+            applyShortcuts: function() {
+                UI.closeModal('modal-shortcuts');
+                Logic.showStatus('Atalhos aplicados com sucesso');
             },
             toggleSearchBar() {
                 var container = document.getElementById('search-bar-container');
@@ -7174,25 +7338,105 @@
         window.onload = () => {
             // Block F5, F12 and reload
             document.addEventListener('keydown', function(e) {
-                if (e.key === 'F12') {
+                /* Prevenções */
+                if (e.key === 'F12' || e.key === 'F5' || e.key === 'F11') {
                     e.preventDefault();
                     e.stopPropagation();
                     return false;
                 }
-                // ESC closes popups and modals
+                /* ESC fecha modais */
                 if (e.key === 'Escape') {
+                    if (UI._shortcutsEditing) { UI._shortcutsCancelEdit(); return; }
                     var rp = document.getElementById('reminder-popup');
                     if (rp) rp.style.display = 'none';
                     var mmi = document.getElementById('modal-movie-info');
-                    if (mmi && mmi.classList.contains('active')) mmi.classList.remove('active');
+                    if (mmi && mmi.classList.contains('active')) { mmi.classList.remove('active'); return; }
                     var msi = document.getElementById('modal-series-info');
-                    if (msi && msi.classList.contains('active')) msi.classList.remove('active');
+                    if (msi && msi.classList.contains('active')) { msi.classList.remove('active'); return; }
+                    var mc = document.getElementById('modal-cadastro');
+                    if (mc && mc.classList.contains('active')) { UI.closeModal('modal-cadastro'); return; }
                     var mi = document.getElementById('modal-info');
-                    if (mi && mi.classList.contains('active')) mi.classList.remove('active');
+                    if (mi && mi.classList.contains('active')) { UI.closeModal('modal-info'); return; }
+                    var msh = document.getElementById('modal-shortcuts');
+                    if (msh && msh.classList.contains('active')) { UI.closeModal('modal-shortcuts'); return; }
                     var mg = document.getElementById('modal-generate-list');
-                    if (mg && mg.classList.contains('active')) mg.classList.remove('active');
+                    if (mg && mg.classList.contains('active')) { UI.closeModal('modal-generate-list'); return; }
                     var ms = document.getElementById('modal-sugestao');
-                    if (ms && ms.classList.contains('active')) ms.classList.remove('active');
+                    if (ms && ms.classList.contains('active')) { UI.closeModal('modal-sugestao'); return; }
+                    var mcfg = document.getElementById('modal-config');
+                    if (mcfg && mcfg.classList.contains('active')) { UI.closeModal('modal-config'); return; }
+                    var mcl = document.getElementById('modal-cadastro-log');
+                    if (mcl && mcl.classList.contains('active')) { UI.closeModal('modal-cadastro-log'); return; }
+                    return;
+                }
+                /* Atalhos customizados */
+                if (UI._shortcutsEditing) return;
+                var sk = UI._shortcutsBuildKey(e);
+                if (!sk) return;
+                var list = UI._shortcutsLoad();
+                for (var i = 0; i < list.length; i++) {
+                    if (list[i].key === sk && list[i].key !== '—') {
+                        var act = list[i].action;
+                        if (act === 'disabled') return;
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (act === 'shortcuts_filmes') Logic.setMainView('filmes');
+                        else if (act === 'shortcuts_series') Logic.setMainView('series');
+                        else if (act === 'shortcuts_estreias') Logic.setMainView('estreias');
+                        else if (act === 'shortcuts_pesquisar') UI.toggleSearchBar();
+                        else if (act === 'shortcuts_cadastrar') UI.openModal('modal-cadastro');
+                        else if (act === 'shortcuts_info') {
+                            var msel = APP_STATE.selectedId;
+                            if (msel) { Logic.viewMovieCtx(); }
+                        }
+                        else if (act === 'shortcuts_ctx') {
+                            var msel2 = APP_STATE.selectedId;
+                            if (msel2) {
+                                var mcard2 = document.querySelector('[data-id="' + msel2 + '"]');
+                                var rect = mcard2 ? mcard2.getBoundingClientRect() : { left: window.innerWidth / 2, top: window.innerHeight / 2 };
+                                var synth = { preventDefault: function(){}, pageX: rect.left + rect.width / 2, pageY: rect.top + rect.height / 2 };
+                                Logic.openContextMenu(synth, msel2);
+                            }
+                        }
+                        else if (act === 'shortcuts_view') {
+                            var modes = ['carrossel','grid','marquee'];
+                            var ci = modes.indexOf(APP_STATE.viewMode);
+                            Logic.setViewMode(modes[(ci + 1) % modes.length]);
+                        }
+                        else if (act === 'shortcuts_esc') {
+                            document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+                        }
+                        return;
+                    }
+                }
+                /* DPAD Smart TV */
+                if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].indexOf(e.key) !== -1) {
+                    var cards = document.querySelectorAll('#movies-container .movie-card, #movies-container .estreia-list-item');
+                    if (cards.length === 0) return;
+                    var cur = null;
+                    for (var j = 0; j < cards.length; j++) {
+                        if (cards[j].classList.contains('dpad-focused')) { cur = j; break; }
+                    }
+                    if (cur === null) {
+                        cards[0].classList.add('dpad-focused');
+                        cards[0].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                    } else {
+                        cards[cur].classList.remove('dpad-focused');
+                        var cols = 1;
+                        var firstTop = cards[0].getBoundingClientRect().top;
+                        for (var c = 1; c < cards.length; c++) {
+                            if (Math.abs(cards[c].getBoundingClientRect().top - firstTop) > 10) { cols = c; break; }
+                        }
+                        if (c === cards.length) cols = cards.length;
+                        var next = cur;
+                        if (e.key === 'ArrowRight') next = Math.min(cur + 1, cards.length - 1);
+                        else if (e.key === 'ArrowLeft') next = Math.max(cur - 1, 0);
+                        else if (e.key === 'ArrowDown') next = Math.min(cur + cols, cards.length - 1);
+                        else if (e.key === 'ArrowUp') next = Math.max(cur - cols, 0);
+                        cards[next].classList.add('dpad-focused');
+                        cards[next].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                    }
+                    e.preventDefault();
                 }
             });
 
@@ -7271,6 +7515,9 @@
             });
             document.getElementById('modal-sugestao')?.addEventListener('click', function(e) {
                 if (e.target === this) UI.closeModal('modal-sugestao');
+            });
+            document.getElementById('modal-shortcuts')?.addEventListener('click', function(e) {
+                if (e.target === this) UI.closeModal('modal-shortcuts');
             });
         };
     </script>
