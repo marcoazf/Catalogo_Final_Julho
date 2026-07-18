@@ -1162,6 +1162,14 @@
             border: none;
             padding: 0;
         }
+        input[type="number"].field-premium::-webkit-inner-spin-button,
+        input[type="number"].field-premium::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"].field-premium {
+            -moz-appearance: textfield;
+        }
         .color-hex-input {
             width: 75px;
             font-size: 11px;
@@ -2023,7 +2031,7 @@
         <div class="text-[0.75rem] text-gray-400 uppercase tracking-widest font-medium">
             ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CRIADO PARA JONAS THEODORO</span>
         </div>
-        <div id="user-action-status" class="text-[0.6rem] text-emerald-500 font-bold uppercase opacity-0 pointer-events-none transition-opacity duration-300"></div>
+        <div id="user-action-status" class="text-[0.75rem] text-emerald-500 font-bold uppercase opacity-0 pointer-events-none transition-opacity duration-300"></div>
         <div style="display:flex;align-items:center;gap:1rem">
             <div id="stats-counter" class="text-orange-400 font-black text-[0.75rem] uppercase" style="text-shadow:0 0 8px rgba(251,146,60,0.5)">0 TÍTULOS NO ACERVO JONAS</div>
             <div id="auto-save-indicator" class="flex items-center gap-2" style="display:none">
@@ -2779,7 +2787,7 @@
                         <input type="text" id="cfg-logo-url" class="field-premium" placeholder="https://exemplo.com/logo.png" oninput="UI._updateConfigPreview()">
                         <button onclick="UI.pickFolder('cfg-logo-url')" class="input-icon-btn" title="Selecionar ficheiro"><i class="fas fa-folder-open"></i></button>
                     </div>
-                    <div style="font-size:0.7rem;color:var(--text-secondary);margin:0.25rem 0 0.5rem;padding-left:80px">Formatos aceites: JPG, PNG, WebP, SVG</div>
+                    <div style="font-size:0.7rem;color:var(--text-secondary);margin:0.25rem 0 0.5rem;padding-left:80px">Formatos aceitos: JPG, PNG, WebP, SVG</div>
                     <div id="cfg-logo-preview" style="padding-left:80px;min-height:30px;display:flex;align-items:center"></div>
                 </div>
 
@@ -2791,7 +2799,7 @@
                         <input type="text" id="cfg-empty-icon" class="field-premium" placeholder="fa-clapperboard" oninput="UI._updateConfigPreview()">
                         <button onclick="UI.pickIconFile('cfg-empty-icon')" class="input-icon-btn" title="Carregar imagem de ícone"><i class="fas fa-folder-open"></i></button>
                     </div>
-                    <div style="font-size:0.65rem;color:var(--text-secondary);margin:0 0 0.5rem;padding-left:80px">Formatos aceites: PNG, ICO, SVG e WEBP</div>
+                    <div style="font-size:0.65rem;color:var(--text-secondary);margin:0 0 0.5rem;padding-left:80px">Formatos aceitos: PNG, ICO, SVG e WEBP</div>
                     <div id="cfg-icon-preview" style="padding-left:80px;min-height:36px;display:none;align-items:center;gap:0.75rem;margin-bottom:0.5rem">
                         <img id="cfg-icon-preview-img" style="max-width:36px;max-height:36px;border-radius:0.4rem;border:1px solid var(--border-color);object-fit:contain" alt="">
                         <span id="cfg-icon-preview-info" style="font-size:0.6rem;color:var(--text-secondary);font-weight:600"></span>
@@ -2810,7 +2818,7 @@
                     </div>
                     <div class="config-row">
                         <label>Título</label>
-                        <input type="text" id="cfg-empty-title" class="field-premium" style="max-width:160px" placeholder="ACERVO VAZIO" oninput="UI._updateConfigPreview()">
+                        <input type="text" id="cfg-empty-title" class="field-premium" placeholder="ACERVO VAZIO" oninput="UI._updateConfigPreview()">
                         <button onclick="UI._toggleEmptyStyle('title','bold')" id="cfg-empty-title-bold" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Negrito"><i class="fas fa-bold"></i></button>
                         <button onclick="UI._toggleEmptyStyle('title','italic')" id="cfg-empty-title-italic" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Itálico"><i class="fas fa-italic"></i></button>
                         <input type="text" id="cfg-empty-title-size" class="field-premium small" value="14px" placeholder="14px" style="max-width:55px" oninput="UI._updateConfigPreview()">
@@ -2822,7 +2830,7 @@
                     </div>
                     <div class="config-row">
                         <label>Subtítulo 1</label>
-                        <input type="text" id="cfg-empty-sub1" class="field-premium" style="max-width:160px" placeholder="O SEU CINEMA PARTICULAR COMEÇA," oninput="UI._updateConfigPreview()">
+                        <input type="text" id="cfg-empty-sub1" class="field-premium" placeholder="O SEU CINEMA PARTICULAR COMEÇA," oninput="UI._updateConfigPreview()">
                         <button onclick="UI._toggleEmptyStyle('sub1','bold')" id="cfg-empty-sub1-bold" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Negrito"><i class="fas fa-bold"></i></button>
                         <button onclick="UI._toggleEmptyStyle('sub1','italic')" id="cfg-empty-sub1-italic" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Itálico"><i class="fas fa-italic"></i></button>
                         <input type="text" id="cfg-empty-sub1-size" class="field-premium small" value="8px" placeholder="8px" style="max-width:55px" oninput="UI._updateConfigPreview()">
@@ -2834,7 +2842,7 @@
                     </div>
                     <div class="config-row">
                         <label>Subtítulo 2</label>
-                        <input type="text" id="cfg-empty-sub2" class="field-premium" style="max-width:160px" placeholder="COM O PRIMEIRO CADASTRO" oninput="UI._updateConfigPreview()">
+                        <input type="text" id="cfg-empty-sub2" class="field-premium" placeholder="COM O PRIMEIRO CADASTRO" oninput="UI._updateConfigPreview()">
                         <button onclick="UI._toggleEmptyStyle('sub2','bold')" id="cfg-empty-sub2-bold" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Negrito"><i class="fas fa-bold"></i></button>
                         <button onclick="UI._toggleEmptyStyle('sub2','italic')" id="cfg-empty-sub2-italic" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Itálico"><i class="fas fa-italic"></i></button>
                         <input type="text" id="cfg-empty-sub2-size" class="field-premium small" value="8px" placeholder="8px" style="max-width:55px" oninput="UI._updateConfigPreview()">
@@ -2845,6 +2853,26 @@
                         </div>
                     </div>
                     <div id="cfg-empty-preview"></div>
+                    <div style="display:flex;align-items:center;gap:1.5rem;margin:0.75rem 0;padding:0.5rem 0">
+                        <div style="display:flex;align-items:center;gap:0.5rem;flex:1">
+                            <label style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-secondary);min-width:110px;flex-shrink:0">Padding Ícone</label>
+                            <input type="range" id="cfg-empty-icon-padding" class="opacity-slider" style="flex:1" min="0" max="50" value="20" oninput="document.getElementById('opv-cfg-empty-icon-padding').textContent=this.value+'px';UI._updateConfigPreview()">
+                            <span class="opacity-label" id="opv-cfg-empty-icon-padding" style="font-size:0.65rem;min-width:42px;text-align:right">20px</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:0.5rem;flex:1">
+                            <label style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-secondary);min-width:110px;flex-shrink:0">Borda Ícone</label>
+                            <label class="config-switch" style="margin:0">
+                                <input type="checkbox" id="cfg-empty-icon-border" checked onchange="UI._updateConfigPreview()">
+                                <span class="slider"></span>
+                                <span class="switch-label">On/Off</span>
+                            </label>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:0.5rem;flex:1">
+                            <label style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-secondary);min-width:110px;flex-shrink:0">Dist. Ícone/Título</label>
+                            <input type="range" id="cfg-empty-title-gap" class="opacity-slider" style="flex:1" min="0" max="60" value="12" oninput="document.getElementById('opv-cfg-empty-title-gap').textContent=this.value+'px';UI._updateConfigPreview()">
+                            <span class="opacity-label" id="opv-cfg-empty-title-gap" style="font-size:0.65rem;min-width:42px;text-align:right">12px</span>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Card Styles -->
@@ -3055,6 +3083,10 @@
                             <span class="switch-label">Notificações</span>
                         </label>
                     </div>
+                    <div class="config-row">
+                        <label>Duração (ms)</label>
+                        <input type="number" id="cfg-notifications-duration" class="field-premium" style="max-width:100px;appearance:textfield;-moz-appearance:textfield;-webkit-appearance:textfield" value="5000" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                    </div>
                     <div style="font-size:0.65rem;color:var(--text-secondary);margin-top:0.25rem;padding-left:80px">
                         <i class="fas fa-info-circle mr-1"></i>Quando desativado, pop-ups de estreias não serão exibidos.
                     </div>
@@ -3071,8 +3103,12 @@
                             <span class="switch-label">Notificação</span>
                         </label>
                     </div>
+                    <div class="config-row">
+                        <label>Duração (ms)</label>
+                        <input type="number" id="cfg-cadastro-notify-duration" class="field-premium" style="max-width:100px;appearance:textfield;-moz-appearance:textfield;-webkit-appearance:textfield" value="6000" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                    </div>
                     <div style="font-size:0.65rem;color:var(--text-secondary);margin-top:0.25rem;padding-left:80px">
-                        <i class="fas fa-info-circle mr-1"></i>6000 ms = 6 segundos. Controla a duração da mensagem "atualizado com sucesso!" após atualizar um cadastro ou salvar um Filme, Série ou Estreia.
+                        <i class="fas fa-info-circle mr-1"></i>Controla a duração da mensagem "atualizado com sucesso!" após atualizar um cadastro ou salvar um Filme, Série ou Estreia.
                     </div>
                 </div>
 
@@ -3447,6 +3483,9 @@
                 emptySub2Italic: false,
                 emptySub2Size: '8px',
                 emptySub2Color: '#FFFFFF',
+                emptyIconPadding: 20,
+                emptyIconBorder: true,
+                emptyTitleGap: 12,
                 cardStarsColor: '#EAB308',
                 cardYearColor: '#60A5FA',
                 cardYearSize: '10px',
@@ -3514,11 +3553,16 @@
                 if (iconWrapper) {
                     var iconSz = cfg.emptyIconSize || 56;
                     var iconOp = cfg.emptyIconOpacity != null ? cfg.emptyIconOpacity / 100 : 1;
+                    var iconPad = cfg.emptyIconPadding != null ? cfg.emptyIconPadding : 20;
+                    var iconBorderOn = cfg.emptyIconBorder !== false;
                     iconWrapper.style.width = iconSz + 'px';
                     iconWrapper.style.height = iconSz + 'px';
                     iconWrapper.style.opacity = iconOp;
                     iconWrapper.style.borderRadius = Math.round(iconSz * 0.22) + 'px';
-                    var iconInnerSize = Math.max(Math.round(iconSz * 0.45), 24);
+                    iconWrapper.style.padding = iconPad + 'px';
+                    iconWrapper.style.border = iconBorderOn ? '1px solid rgba(59,130,246,0.3)' : '1px solid transparent';
+                    var availSpace = Math.max(iconSz - 2 * iconPad, 0);
+                    var iconInnerSize = Math.min(Math.max(Math.round(iconSz * 0.45), 24), availSpace);
                     if (cfg.emptyCustomIcon) {
                         iconWrapper.innerHTML = '<img src="' + cfg.emptyCustomIcon.replace(/"/g,'&quot;') + '" style="width:' + iconInnerSize + 'px;height:' + iconInnerSize + 'px;object-fit:contain">';
                     } else {
@@ -3532,6 +3576,7 @@
                     h2.style.fontStyle = cfg.emptyTitleItalic ? 'italic' : 'normal';
                     h2.style.fontSize = cfg.emptyTitleSize || '14px';
                     if (cfg.emptyTitleColor) h2.style.color = cfg.emptyTitleColor;
+                    h2.style.marginBottom = (cfg.emptyTitleGap != null ? cfg.emptyTitleGap : 12) + 'px';
                 }
                 var ps = es.querySelectorAll('p');
                 if (ps.length >= 2) {
@@ -6179,6 +6224,11 @@
                 setVal('cfg-empty-sub2-color-hex', cfg.emptySub2Color || '#FFFFFF');
                 UI._setToggleBtn('cfg-empty-sub2-bold', cfg.emptySub2Bold === true);
                 UI._setToggleBtn('cfg-empty-sub2-italic', cfg.emptySub2Italic === true);
+                setVal('cfg-empty-icon-padding', cfg.emptyIconPadding != null ? cfg.emptyIconPadding : 20);
+                setVal('opv-cfg-empty-icon-padding', (cfg.emptyIconPadding != null ? cfg.emptyIconPadding : 20) + 'px');
+                setChecked('cfg-empty-icon-border', cfg.emptyIconBorder !== false);
+                setVal('cfg-empty-title-gap', cfg.emptyTitleGap != null ? cfg.emptyTitleGap : 12);
+                setVal('opv-cfg-empty-title-gap', (cfg.emptyTitleGap != null ? cfg.emptyTitleGap : 12) + 'px');
                 var customIconInput = document.getElementById('cfg-empty-custom-icon');
                 if (cfg.emptyCustomIcon) {
                     if (!customIconInput) {
@@ -6236,7 +6286,9 @@
                 setVal('cfg-custom-player-path', cfg.customPlayerPath || '');
                 UI._toggleCustomPlayerRow(cfg.videoPlayer);
                 setChecked('cfg-notifications-active', cfg.notificationsActive !== false);
+                setVal('cfg-notifications-duration', cfg.notificationsDuration || 5000);
                 setChecked('cfg-cadastro-notify-active', cfg.cadastroNotifyActive !== false);
+                setVal('cfg-cadastro-notify-duration', cfg.cadastroNotifyDuration || 6000);
                 setChecked('cfg-sugestoes-active', cfg.sugestoesActive === true);
                 setChecked('cfg-sugestoes-novo', cfg.sugestoesNovo !== false);
                 setChecked('cfg-sugestoes-assistir', cfg.sugestoesAssistir !== false);
@@ -6285,20 +6337,26 @@
                 var sub2Italic = document.getElementById('cfg-empty-sub2-italic')?.classList.contains('active');
                 var sub2Size = getVal('cfg-empty-sub2-size') || '8px';
                 var sub2Color = getVal('cfg-empty-sub2-color') || '#FFFFFF';
+                var iconPadding = parseInt(document.getElementById('cfg-empty-icon-padding')?.value) || 0;
+                var iconBorder = document.getElementById('cfg-empty-icon-border')?.checked !== false;
+                var titleGap = parseInt(document.getElementById('cfg-empty-title-gap')?.value) || 0;
                 var preview = document.getElementById('cfg-empty-preview');
                 if (preview) {
-                    var iconHtml = customIcon
-                        ? '<img src="' + customIcon.replace(/"/g,'&quot;') + '" style="width:' + Math.max(Math.round(iconSize * 0.45), 20) + 'px;height:' + Math.max(Math.round(iconSize * 0.45), 20) + 'px;object-fit:contain">'
-                        : '<i class="fas ' + icon + ' text-blue-400" style="font-size:' + Math.max(Math.round(iconSize * 0.45), 20) + 'px"></i>';
                     var containerSize = Math.max(iconSize, 40);
+                    var availSpace = Math.max(containerSize - 2 * iconPadding, 0);
+                    var iconInnerSz = Math.min(Math.max(Math.round(iconSize * 0.45), 20), availSpace);
+                    var iconHtml = customIcon
+                        ? '<img src="' + customIcon.replace(/"/g,'&quot;') + '" style="width:' + iconInnerSz + 'px;height:' + iconInnerSz + 'px;object-fit:contain">'
+                        : '<i class="fas ' + icon + ' text-blue-400" style="font-size:' + iconInnerSz + 'px"></i>';
                     var fs = titleBold ? '900' : '400';
                     var fst = titleItalic ? 'italic' : 'normal';
                     var s1fs = sub1Bold ? '700' : '400';
                     var s1fst = sub1Italic ? 'italic' : 'normal';
                     var s2fs = sub2Bold ? '700' : '400';
                     var s2fst = sub2Italic ? 'italic' : 'normal';
+                    var borderStyle = iconBorder ? 'border:1px solid rgba(59,130,246,0.3)' : 'border:1px solid transparent';
                     preview.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;text-align:center">' +
-                        '<div style="width:' + containerSize + 'px;height:' + containerSize + 'px;background:linear-gradient(135deg,rgba(59,130,246,0.2),rgba(139,92,246,0.2));border-radius:1.25rem;display:flex;align-items:center;justify-content:center;margin-bottom:0.75rem;border:1px solid rgba(59,130,246,0.3);opacity:' + (iconOpacity / 100) + '">' + iconHtml + '</div>' +
+                        '<div style="width:' + containerSize + 'px;height:' + containerSize + 'px;background:linear-gradient(135deg,rgba(59,130,246,0.2),rgba(139,92,246,0.2));border-radius:1.25rem;display:flex;align-items:center;justify-content:center;padding:' + iconPadding + 'px;margin-bottom:' + titleGap + 'px;' + borderStyle + ';opacity:' + (iconOpacity / 100) + '">' + iconHtml + '</div>' +
                         '<div style="font-size:' + titleSize + ';font-weight:' + fs + ';font-style:' + fst + ';text-transform:uppercase;letter-spacing:-0.02em;color:' + titleColor + '">' + title + '</div>' +
                         '<div style="font-size:' + sub1Size + ';font-weight:' + s1fs + ';font-style:' + s1fst + ';opacity:0.7;text-transform:uppercase;letter-spacing:0.15em;margin-top:2px;color:' + sub1Color + '">' + sub1 + '</div>' +
                         '<div style="font-size:' + sub2Size + ';font-weight:' + s2fs + ';font-style:' + s2fst + ';opacity:0.7;text-transform:uppercase;letter-spacing:0.15em;color:' + sub2Color + '">' + sub2 + '</div>' +
@@ -6371,6 +6429,49 @@
                         '<span style="font-size:' + fStatusSize + ';color:' + fStatusColor + ';font-weight:900;text-transform:uppercase">0 TÍTULOS</span>' +
                         '</div>' +
                         '</div>';
+                }
+                // Live update: apply padding, border, gap and styles to actual empty-state on main page
+                var _es = document.getElementById('empty-state');
+                if (_es) {
+                    var _iw = _es.querySelector('.w-28.h-28, .w-28');
+                    if (_iw) {
+                        _iw.style.padding = iconPadding + 'px';
+                        _iw.style.border = iconBorder ? '1px solid rgba(59,130,246,0.3)' : '1px solid transparent';
+                        _iw.style.opacity = iconOpacity / 100;
+                        var _isz = iconSize;
+                        _iw.style.width = _isz + 'px';
+                        _iw.style.height = _isz + 'px';
+                        _iw.style.borderRadius = Math.round(_isz * 0.22) + 'px';
+                        var _avail = Math.max(_isz - 2 * iconPadding, 0);
+                        var _iis = Math.min(Math.max(Math.round(_isz * 0.45), 24), _avail);
+                        if (customIcon) {
+                            _iw.innerHTML = '<img src="' + customIcon.replace(/"/g,'&quot;') + '" style="width:' + _iis + 'px;height:' + _iis + 'px;object-fit:contain">';
+                        } else {
+                            _iw.innerHTML = '<i class="fas ' + icon + ' text-blue-400" style="font-size:' + _iis + 'px"></i>';
+                        }
+                    }
+                    var _h2 = _es.querySelector('h2');
+                    if (_h2) {
+                        _h2.textContent = title;
+                        _h2.style.fontWeight = titleBold ? '900' : '400';
+                        _h2.style.fontStyle = titleItalic ? 'italic' : 'normal';
+                        _h2.style.fontSize = titleSize;
+                        _h2.style.color = titleColor;
+                        _h2.style.marginBottom = titleGap + 'px';
+                    }
+                    var _ps = _es.querySelectorAll('p');
+                    if (_ps.length >= 2) {
+                        _ps[0].textContent = sub1;
+                        _ps[0].style.fontWeight = sub1Bold ? '700' : '400';
+                        _ps[0].style.fontStyle = sub1Italic ? 'italic' : 'normal';
+                        _ps[0].style.fontSize = sub1Size;
+                        _ps[0].style.color = sub1Color;
+                        _ps[1].textContent = sub2;
+                        _ps[1].style.fontWeight = sub2Bold ? '700' : '400';
+                        _ps[1].style.fontStyle = sub2Italic ? 'italic' : 'normal';
+                        _ps[1].style.fontSize = sub2Size;
+                        _ps[1].style.color = sub2Color;
+                    }
                 }
             },
             _updateColorSwatch(inputId) {
@@ -6463,6 +6564,9 @@
                 cfg.emptySub2Italic = document.getElementById('cfg-empty-sub2-italic')?.classList.contains('active') || false;
                 cfg.emptySub2Size = getVal('cfg-empty-sub2-size') || '8px';
                 cfg.emptySub2Color = getVal('cfg-empty-sub2-color') || '#FFFFFF';
+                cfg.emptyIconPadding = parseInt(document.getElementById('cfg-empty-icon-padding')?.value) || 0;
+                cfg.emptyIconBorder = document.getElementById('cfg-empty-icon-border')?.checked !== false;
+                cfg.emptyTitleGap = parseInt(document.getElementById('cfg-empty-title-gap')?.value) || 0;
                 cfg.cardStarsColor = _combineColor('cfg-star-color', 'op-cfg-star-color');
                 cfg.cardYearColor = _combineColor('cfg-year-color', 'op-cfg-year-color');
                 cfg.cardYearSize = getVal('cfg-year-size');
@@ -6487,7 +6591,9 @@
                 cfg.videoPlayer = getVal('cfg-video-player') || 'system';
                 cfg.customPlayerPath = getVal('cfg-custom-player-path') || '';
                 cfg.notificationsActive = document.getElementById('cfg-notifications-active')?.checked || false;
+                cfg.notificationsDuration = parseInt(document.getElementById('cfg-notifications-duration')?.value) || 5000;
                 cfg.cadastroNotifyActive = document.getElementById('cfg-cadastro-notify-active')?.checked || false;
+                cfg.cadastroNotifyDuration = parseInt(document.getElementById('cfg-cadastro-notify-duration')?.value) || 6000;
                 cfg.sugestoesActive = document.getElementById('cfg-sugestoes-active')?.checked || false;
                 cfg.sugestoesNovo = document.getElementById('cfg-sugestoes-novo')?.checked || false;
                 cfg.sugestoesAssistir = document.getElementById('cfg-sugestoes-assistir')?.checked || false;

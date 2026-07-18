@@ -850,3 +850,254 @@ Tudo que usa unidades `rem` (padding, margin, gap, border-radius, font-size de T
 | Nenhuma funcionalidade existente alterada | OK |
 | Paletas, tipografia, layout preservados | OK |
 | Todos os IDs, classes e handlers mantidos | OK |
+
+---
+
+## Implementações Realizadas — Melhorias 2 (melhorias2.md)
+
+### 35. ACERVO VAZIO: Campos Título/Subtítulo 1/Subtítulo 2 com Largura Expandida
+
+**Arquivo:** `index.html` — HTML (seção Acervo Vazio)
+
+**O que foi feito:**
+- Removido o `style="max-width:160px"` dos 3 campos de texto (TÍTULO, SUBTÍTULO 1 e SUBTÍTULO 2).
+- Os campos agora usam `flex: 1` (herdado de `.config-row .field-premium`) para ocupar todo o espaço disponível na linha, empurrando os botões de Bold, Italic, Size, hex e cor para o final.
+- Os botões de formatação e o color-picker-wrap (`flex: 0 0 auto`) permanecem compactos à direita.
+
+| Campo | Antes | Depois |
+|---|---|---|
+| `cfg-empty-title` | `max-width:160px` | Largura total (flex:1) |
+| `cfg-empty-sub1` | `max-width:160px` | Largura total (flex:1) |
+| `cfg-empty-sub2` | `max-width:160px` | Largura total (flex:1) |
+
+**Preservação:** Todos os handlers (`_toggleEmptyStyle`, `_updateConfigPreview`), IDs, color pickers e funcionalidades de formatação mantidos intactos.
+
+---
+
+### 36. ACERVO VAZIO: Correção "Formatos aceites" → "Formatos aceitos:"
+
+**Arquivo:** `index.html` — HTML (seção Acervo Vazio)
+
+**O que foi feito:**
+- Corrigido o texto "Formatos aceites" para "Formatos aceitos:" em 2 ocorrências:
+  - Linha descritiva do campo de Logotipo: `"Formatos aceitos: JPG, PNG, WebP, SVG"`
+  - Linha descritiva do campo de Ícone: `"Formatos aceitos: PNG, ICO, SVG e WEBP"`
+
+**Preservação:** Apenas correção ortográfica. Nenhuma funcionalidade alterada.
+
+---
+
+### 37. ACERVO VAZIO: 3 Controles Abaixo do Preview (Padding, Borda, Distância)
+
+**Arquivo:** `index.html` — HTML + JavaScript (`loadConfig`, `_updateConfigPreview`, `applyConfig`, `_populateConfigForm`, `saveConfig`)
+
+**O que foi feito:**
+- Adicionados 3 controles na mesma linha abaixo do preview da seção ACERVO VAZIO:
+  - **Padding Ícone:** Slider range (0–50px, default 20px) — controla o padding interno da div do ícone. Quando zerado, o ícone ocupa toda a área do container.
+  - **Borda Ícone:** Toggle On/Off (default: On) — liga/desliga a borda da div do ícone.
+  - **Dist. Ícone/Título:** Slider range (0–60px, default 12px) — controla a distância entre o ícone e o título.
+
+- **Novas chaves de configuração:**
+  - `emptyIconPadding` (number, default: 20)
+  - `emptyIconBorder` (boolean, default: true)
+  - `emptyTitleGap` (number, default: 12)
+
+- **Integração completa:**
+  - Defaults adicionados ao `loadConfig()`
+  - Campos carregados no `_populateConfigForm()`
+  - Valores salvos no `saveConfig()` / `applyConfig()`
+  - Preview em tempo real no `_updateConfigPreview()`
+  - Aplicação ao DOM real no `applyConfig()` (empty-state)
+
+**Preservação:** Todas as funcionalidades existentes da seção Acervo Vazio (tamanho, opacidade, título, subtítulos, cores, estilos) permanecem intactas.
+
+---
+
+### 38. Status de Ações no Rodapé: Fonte Aumentada
+
+**Arquivo:** `index.html` — HTML (footer)
+
+**O que foi feito:**
+- Aumentado o tamanho da fonte do `#user-action-status` de `text-[0.6rem]` para `text-[0.75rem]`.
+- O texto de status de ações agora é mais legível em qualquer resolução.
+- A duração padrão do status já era de 4000ms (4 segundos), conforme solicitado.
+
+**Preservação:** A função `showStatus(msg, duration)` mantém todos os seus parâmetros e comportamento. Apenas o tamanho visual da fonte foi alterado.
+
+---
+
+### 39. NOTIFICAÇÕES DE ESTREIAS: Campo Duração (ms) Restaurado
+
+**Arquivo:** `index.html` — HTML + JavaScript (`loadConfig`, `_populateConfigForm`, `saveConfig`)
+
+**O que foi feito:**
+- **Restaurado** o campo "Duração (ms)" na seção NOTIFICAÇÕES DE ESTREIAS, que havia sido removido no item 30.
+- Campo `type="number"` com valor padrão 5000ms, sem botões spinners (via CSS).
+- O valor afeta diretamente o tempo de exibição dos pop-ups de notificação de estreias (via `cfg.notificationsDuration`).
+- CSS adicionado para ocultar spinners: `input[type="number"].field-premium::-webkit-inner-spin-button` e `-moz-appearance: textfield`.
+- Campo de entrada filtra apenas dígitos: `oninput="this.value=this.value.replace(/[^0-9]/g,'')"`
+
+**Preservação:** O toggle "Ativar Notificações" e toda a lógica de notificações de estreias permanecem intactos. A chave `notificationsDuration` já existia no sistema.
+
+---
+
+### 40. NOTIFICAÇÃO DE CADASTRO: Campo Duração (ms) Restaurado
+
+**Arquivo:** `index.html` — HTML + JavaScript (`loadConfig`, `_populateConfigForm`, `saveConfig`)
+
+**O que foi feito:**
+- **Restaurado** o campo "Duração (ms)" na seção NOTIFICAÇÃO DE CADASTRO, que havia sido removido no item 31.
+- Campo `type="number"` com valor padrão 6000ms, sem botões spinners (via CSS).
+- O valor afeta diretamente o tempo de exibição da mensagem de cadastro (via `cfg.cadastroNotifyDuration`).
+- Usa o mesmo CSS de ocultação de spinners do item anterior.
+- Campo de entrada filtra apenas dígitos: `oninput="this.value=this.value.replace(/[^0-9]/g,'')"`
+
+**Preservação:** O toggle "Ativar" e toda a lógica de notificação de cadastro permanecem intactos. A chave `cadastroNotifyDuration` já existia no sistema.
+
+---
+
+### Checklist Final (melhorias2.md)
+
+| Verificação | Status |
+|---|---|
+| (a) Campos Título/Subtítulo 1/Subtítulo 2 com largura expandida | OK |
+| (a) Botões de formatação empurrados para o final da linha | OK |
+| (b) "Formatos aceites" corrigido para "Formatos aceitos:" (2 ocorrências) | OK |
+| (c) Padding Ícone: slider 0–50px abaixo do preview | OK |
+| (c) Borda Ícone: toggle On/Off abaixo do preview | OK |
+| (c) Distância Ícone/Título: slider 0–60px abaixo do preview | OK |
+| (c) 3 controles na mesma linha, harmoniosamente espaçados | OK |
+| (c) Novas chaves: emptyIconPadding, emptyIconBorder, emptyTitleGap | OK |
+| (c) Preview em tempo real reflete os 3 novos controles | OK |
+| (c) applyConfig aplica padding, borda e gap ao DOM real | OK |
+| (c2) Fonte do status de ações aumentada para 0.75rem | OK |
+| (c2) Duração do status já era 4000ms (4 seg) | OK |
+| (d) Campo Duração (ms) em Notificações de Estreias (default 5000) | OK |
+| (d) Campo Duração (ms) em Notificação de Cadastro (default 6000) | OK |
+| (d) Spinners ocultos via CSS para ambos os campos | OK |
+| (d) Filtra apenas dígitos no input | OK |
+| (d) Valores afetam diretamente o tempo de exibição | OK |
+| CSS spinners adicionado para todos os `input[type="number"].field-premium` | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
+
+---
+
+### 41. PADDING ÍCONE: Atualização em Tempo Real no Empty-State Principal
+
+**Arquivo:** `index.html` — JavaScript (`UI._updateConfigPreview`)
+
+**O que foi feito:**
+- Adicionado bloco de código ao final de `_updateConfigPreview()` que aplica **em tempo real** todas as configurações do ACERVO VAZIO ao `<div id="empty-state">` principal da página.
+- Antes desta alteração, o slider PADDING ÍCONE (e os demais controles) só atualizavam o mini preview dentro do modal de Configurações. O empty-state real só era atualizado ao clicar "Aplicar".
+- Agora, ao mover qualquer slider ou alterar qualquer campo da seção ACERVO VAZIO, o empty-state principal é atualizado instantaneamente com:
+  - **Padding** da div do ícone (`iconPadding`)
+  - **Borda** On/Off (`iconBorder`)
+  - **Tamanho** e **proporção** do ícone e container
+  - **Opacidade** do ícone
+  - **Título** (texto, font-weight, font-style, font-size, cor, margin-bottom/gap)
+  - **Subtítulos 1 e 2** (texto, font-weight, font-style, font-size, cor)
+  - **Ícone customizado** (imagem) ou **classe FA**
+
+**Código adicionado (resumo):**
+```javascript
+// Live update: apply padding, border, gap and styles to actual empty-state on main page
+var _es = document.getElementById('empty-state');
+if (_es) {
+    var _iw = _es.querySelector('.w-28.h-28, .w-28');
+    if (_iw) {
+        _iw.style.padding = iconPadding + 'px';
+        _iw.style.border = iconBorder ? '1px solid rgba(59,130,246,0.3)' : '1px solid transparent';
+        // ... tamanho, opacidade, ícone interno
+    }
+    // ... título, subtítulos
+}
+```
+
+**Preservação:** A função `applyConfig()` continua existindo e funcionando para a aplicação inicial ao carregar a página. A nova alteração em `_updateConfigPreview()` não sobrescreve `applyConfig()` — apenas complementa com atualização em tempo real durante a edição no modal. Nenhuma funcionalidade existente foi alterada.
+
+---
+
+### Checklist Final (melhorias2.md — Item 41)
+
+| Verificação | Status |
+|---|---|
+| PADDING ÍCONE influencia a div real do empty-state | OK |
+| Feedback em tempo real no preview (mini preview) | OK |
+| Feedback em tempo real no empty-state principal | OK |
+| Borda On/Off atualiza em tempo real | OK |
+| Tamanho/Opacidade/Ícone atualizam em tempo real | OK |
+| Título/Subtítulos atualizam em tempo real | OK |
+| applyConfig() preservada para carga inicial | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
+
+---
+
+### 42. PADDING ÍCONE: Atualização em Tempo Real no Empty-State Principal (reforço)
+
+**Arquivo:** `index.html` — JavaScript (`UI._updateConfigPreview`, `applyConfig`)
+
+**O que foi feito:**
+- Reforçado que o slider PADDING ÍCONE controla o padding da div do empty-state na página principal **em tempo real**, sem necessidade de clicar "Aplicar".
+- A cada movimentação do slider, `_updateConfigPreview()` atualiza simultaneamente:
+  - O mini preview dentro do modal de Configurações
+  - O `<div id="empty-state">` real na página principal
+- O padding é aplicado diretamente via `_iw.style.padding = iconPadding + 'px'`
+
+**Preservação:** A função `applyConfig()` continua aplicando o padding na carga inicial. A atualização em tempo real complementa sem sobrescrever.
+
+---
+
+### 43. SIZE ÍCONE: Ícone Limitado ao Espaço Disponível (div - padding)
+
+**Arquivo:** `index.html` — JavaScript (`_updateConfigPreview` preview, `_updateConfigPreview` live update, `applyConfig`)
+
+**O que foi feito:**
+- O cálculo do tamanho do ícone interno (`font-size` para FA ou `width/height` para imagem) agora respeita o **espaço disponível** dentro da div: `containerSize - 2 × padding`.
+- **Fórmula aplicada em 3 pontos do código:**
+  ```javascript
+  var availSpace = Math.max(containerSize - 2 * iconPadding, 0);
+  var iconInnerSize = Math.min(Math.max(Math.round(iconSize * 0.45), 24), availSpace);
+  ```
+- **Antes:** O ícone era calculado como 45% do container, sem considerar o padding. Se o padding era grande, o ícone ultrapassava os limites da div.
+- **Depois:** O ícone é limitado ao espaço restante após o padding. Se o container tem 148px e o padding é 50px, o ícone máximo é 48px (não mais 67px como antes).
+
+**3 pontos atualizados:**
+
+| Local | Variáveis | Linha |
+|---|---|---|
+| Preview (mini preview no modal) | `containerSize`, `iconPadding`, `iconInnerSz` | `~6345` |
+| Live update (empty-state principal) | `_isz`, `iconPadding`, `_iis` | `~6445` |
+| applyConfig (carga inicial) | `iconSz`, `iconPad`, `iconInnerSize` | `~3564` |
+
+**Exemplo prático:**
+
+| Container | Padding | Espaço Disponível | Ícone (45%) | Ícone Final |
+|---|---|---|---|---|
+| 148px | 0px | 148px | 67px | **67px** |
+| 148px | 20px | 108px | 67px | **67px** |
+| 148px | 31px | 86px | 67px | **67px** |
+| 148px | 50px | 48px | 67px | **48px** (limitado) |
+| 100px | 31px | 38px | 45px | **38px** (limitado) |
+
+**Preservação:** Nenhuma funcionalidade existente foi alterada. A mudança é apenas no cálculo do tamanho do ícone, que agora respeita os limites da div. O slider de tamanho continua controlando o container — o ícone interno é derivado proporcionalmente e limitado pelo espaço disponível.
+
+---
+
+### Checklist Final (melhorias2.md — Itens 42–43)
+
+| Verificação | Status |
+|---|---|
+| (a) PADDING ÍCONE controla padding da div real em tempo real | OK |
+| (a) Feedback em tempo real no mini preview do modal | OK |
+| (a) Feedback em tempo real no empty-state principal | OK |
+| (b) SIZE ÍCONE limita o ícone ao espaço disponível (div - 2×padding) | OK |
+| (b) Cálculo atualizado no preview, live update e applyConfig | OK |
+| (b) Ícone nunca ultrapassa os limites da div | OK |
+| (b) Fórmula: min(max(45% do container, 24px), espaço disponível) | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
