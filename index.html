@@ -2791,16 +2791,56 @@
                         <button onclick="UI.pickIconFile('cfg-empty-icon')" class="input-icon-btn" title="Carregar SVG ou PNG"><i class="fas fa-folder-open"></i></button>
                     </div>
                     <div class="config-row">
+                        <label>Tamanho Ícone</label>
+                        <input type="range" id="cfg-empty-icon-size" class="opacity-slider" min="24" max="160" value="56" oninput="document.getElementById('opv-cfg-empty-icon-size').textContent=this.value+'px';UI._updateConfigPreview()">
+                        <span class="opacity-label" id="opv-cfg-empty-icon-size">56px</span>
+                    </div>
+                    <div class="config-row">
+                        <label>Opacidade Ícone</label>
+                        <input type="range" id="cfg-empty-icon-opacity" class="opacity-slider" min="10" max="100" value="100" oninput="document.getElementById('opv-cfg-empty-icon-opacity').textContent=this.value+'%';UI._updateConfigPreview()">
+                        <span class="opacity-label" id="opv-cfg-empty-icon-opacity">100%</span>
+                    </div>
+                    <div class="config-row">
                         <label>Título</label>
                         <input type="text" id="cfg-empty-title" class="field-premium" placeholder="ACERVO VAZIO" oninput="UI._updateConfigPreview()">
+                    </div>
+                    <div class="config-row" style="padding-left:80px;gap:0.5rem">
+                        <button onclick="UI._toggleEmptyStyle('title','bold')" id="cfg-empty-title-bold" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Negrito"><i class="fas fa-bold"></i></button>
+                        <button onclick="UI._toggleEmptyStyle('title','italic')" id="cfg-empty-title-italic" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Itálico"><i class="fas fa-italic"></i></button>
+                        <input type="text" id="cfg-empty-title-size" class="field-premium small" value="14px" placeholder="14px" style="max-width:55px" oninput="UI._updateConfigPreview()">
+                        <div class="color-picker-wrap" style="flex:0 0 auto">
+                            <input type="text" id="cfg-empty-title-color-hex" class="color-hex-input" value="#FFFFFF" oninput="UI._updateColorFromHex('cfg-empty-title-color',this.value)">
+                            <div class="color-swatch" id="sw-cfg-empty-title-color" style="background:#FFFFFF" onclick="UI._openColorPicker('cfg-empty-title-color',this)"></div>
+                            <input type="color" id="cfg-empty-title-color" class="color-input-hidden" value="#FFFFFF" onchange="UI._updateColorSwatch('cfg-empty-title-color');UI._updateConfigPreview()">
+                        </div>
                     </div>
                     <div class="config-row">
                         <label>Subtítulo 1</label>
                         <input type="text" id="cfg-empty-sub1" class="field-premium" placeholder="O SEU CINEMA PARTICULAR COMEÇA," oninput="UI._updateConfigPreview()">
                     </div>
+                    <div class="config-row" style="padding-left:80px;gap:0.5rem">
+                        <button onclick="UI._toggleEmptyStyle('sub1','bold')" id="cfg-empty-sub1-bold" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Negrito"><i class="fas fa-bold"></i></button>
+                        <button onclick="UI._toggleEmptyStyle('sub1','italic')" id="cfg-empty-sub1-italic" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Itálico"><i class="fas fa-italic"></i></button>
+                        <input type="text" id="cfg-empty-sub1-size" class="field-premium small" value="8px" placeholder="8px" style="max-width:55px" oninput="UI._updateConfigPreview()">
+                        <div class="color-picker-wrap" style="flex:0 0 auto">
+                            <input type="text" id="cfg-empty-sub1-color-hex" class="color-hex-input" value="#FFFFFF" oninput="UI._updateColorFromHex('cfg-empty-sub1-color',this.value)">
+                            <div class="color-swatch" id="sw-cfg-empty-sub1-color" style="background:#FFFFFF" onclick="UI._openColorPicker('cfg-empty-sub1-color',this)"></div>
+                            <input type="color" id="cfg-empty-sub1-color" class="color-input-hidden" value="#FFFFFF" onchange="UI._updateColorSwatch('cfg-empty-sub1-color');UI._updateConfigPreview()">
+                        </div>
+                    </div>
                     <div class="config-row">
                         <label>Subtítulo 2</label>
                         <input type="text" id="cfg-empty-sub2" class="field-premium" placeholder="COM O PRIMEIRO CADASTRO" oninput="UI._updateConfigPreview()">
+                    </div>
+                    <div class="config-row" style="padding-left:80px;gap:0.5rem">
+                        <button onclick="UI._toggleEmptyStyle('sub2','bold')" id="cfg-empty-sub2-bold" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Negrito"><i class="fas fa-bold"></i></button>
+                        <button onclick="UI._toggleEmptyStyle('sub2','italic')" id="cfg-empty-sub2-italic" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Itálico"><i class="fas fa-italic"></i></button>
+                        <input type="text" id="cfg-empty-sub2-size" class="field-premium small" value="8px" placeholder="8px" style="max-width:55px" oninput="UI._updateConfigPreview()">
+                        <div class="color-picker-wrap" style="flex:0 0 auto">
+                            <input type="text" id="cfg-empty-sub2-color-hex" class="color-hex-input" value="#FFFFFF" oninput="UI._updateColorFromHex('cfg-empty-sub2-color',this.value)">
+                            <div class="color-swatch" id="sw-cfg-empty-sub2-color" style="background:#FFFFFF" onclick="UI._openColorPicker('cfg-empty-sub2-color',this)"></div>
+                            <input type="color" id="cfg-empty-sub2-color" class="color-input-hidden" value="#FFFFFF" onchange="UI._updateColorSwatch('cfg-empty-sub2-color');UI._updateConfigPreview()">
+                        </div>
                     </div>
                     <div id="cfg-empty-preview"></div>
                 </div>
@@ -2889,9 +2929,9 @@
                             <div class="config-row">
                                 <label>Cor Texto</label>
                                 <div class="color-picker-wrap">
-                                    <input type="text" id="cfg-cat-color-hex" class="color-hex-input" value="#000000" oninput="UI._updateColorFromHex('cfg-cat-color', this.value)">
-                                    <div class="color-swatch" id="sw-cfg-cat-color" style="background:transparent;border-color:var(--text-secondary)" onclick="UI._openColorPicker('cfg-cat-color',this)"></div>
-                                    <input type="color" id="cfg-cat-color" class="color-input-hidden" value="#000000" onchange="UI._updateColorSwatch('cfg-cat-color');UI._updateConfigPreview()">
+                                    <input type="text" id="cfg-cat-color-hex" class="color-hex-input" value="#FFFFFF" oninput="UI._updateColorFromHex('cfg-cat-color', this.value)">
+                                    <div class="color-swatch" id="sw-cfg-cat-color" style="background:#FFFFFF" onclick="UI._openColorPicker('cfg-cat-color',this)"></div>
+                                    <input type="color" id="cfg-cat-color" class="color-input-hidden" value="#FFFFFF" onchange="UI._updateColorSwatch('cfg-cat-color');UI._updateConfigPreview()">
                                     <input type="range" id="op-cfg-cat-color" class="opacity-slider" min="0" max="100" value="100" oninput="UI._updateColorOpacity('cfg-cat-color');UI._updateConfigPreview()">
                                     <span class="opacity-label" id="opv-cfg-cat-color">100%</span>
                                 </div>
@@ -2900,7 +2940,7 @@
                                 <label>Fundo</label>
                                 <div class="color-picker-wrap">
                                     <input type="text" id="cfg-cat-bg-hex" class="color-hex-input" value="#000000" oninput="UI._updateColorFromHex('cfg-cat-bg', this.value)">
-                                    <div class="color-swatch" id="sw-cfg-cat-bg" style="background:transparent;border-color:var(--text-secondary)" onclick="UI._openColorPicker('cfg-cat-bg',this)"></div>
+                                    <div class="color-swatch" id="sw-cfg-cat-bg" style="background:#000000" onclick="UI._openColorPicker('cfg-cat-bg',this)"></div>
                                     <input type="color" id="cfg-cat-bg" class="color-input-hidden" value="#000000" onchange="UI._updateColorSwatch('cfg-cat-bg');UI._updateConfigPreview()">
                                     <input type="range" id="op-cfg-cat-bg" class="opacity-slider" min="0" max="100" value="100" oninput="UI._updateColorOpacity('cfg-cat-bg');UI._updateConfigPreview()">
                                     <span class="opacity-label" id="opv-cfg-cat-bg">100%</span>
@@ -2978,6 +3018,27 @@
                     </div>
                 </div>
 
+                <!-- Gestão de Mídia -->
+                <div class="config-section">
+                    <div class="config-section-title"><i class="fas fa-play"></i>Gestão de Mídia</div>
+                    <div class="config-row">
+                        <label>Player de Vídeo</label>
+                        <select id="cfg-video-player" class="field-premium" style="flex:1;font-size:12px;padding:0.4rem 0.6rem;border-radius:0.5rem;background:var(--input-bg);border:1px solid var(--border-color);color:var(--text-color);outline:none;cursor:pointer" onchange="UI._toggleCustomPlayerRow(this.value)">
+                            <option value="system">Padrão do Sistema</option>
+                            <option value="wmp">Windows Media Player</option>
+                            <option value="custom">Personalizado</option>
+                        </select>
+                    </div>
+                    <div id="cfg-custom-player-row" class="config-row" style="display:none">
+                        <label>Caminho Player</label>
+                        <input type="text" id="cfg-custom-player-path" class="field-premium" placeholder="C:\...\meu_player.exe" oninput="UI._updateConfigPreview()">
+                        <button onclick="UI.pickPlayerFile()" class="input-icon-btn" title="Selecionar arquivo .exe"><i class="fas fa-folder-open"></i></button>
+                    </div>
+                    <div style="font-size:0.65rem;color:var(--text-secondary);margin-top:0.25rem;padding-left:80px">
+                        <i class="fas fa-info-circle mr-1"></i>Os filmes e séries abrirão maximizados no player escolhido. Os trailers deverão abrir no navegador em tela cheia. Ao pressionar ESC, tanto o filme/série no player como o trailer no navegador restaurarão suas janelas para um tamanho menor.
+                    </div>
+                </div>
+
                 <!-- Notificações -->
                 <div class="config-section">
                     <div class="config-section-title"><i class="fas fa-bell"></i>Notificações de Estreias</div>
@@ -2989,8 +3050,34 @@
                             <span class="switch-label">Notificações</span>
                         </label>
                     </div>
+                    <div class="config-row">
+                        <label>Duração (ms)</label>
+                        <input type="number" id="cfg-notifications-duration" class="field-premium small" value="5000" min="1000" max="30000" step="500" style="max-width:80px">
+                        <span style="font-size:0.6rem;color:var(--text-secondary)">milissegundos</span>
+                    </div>
                     <div style="font-size:0.65rem;color:var(--text-secondary);margin-top:0.25rem;padding-left:80px">
                         <i class="fas fa-info-circle mr-1"></i>Quando desativado, pop-ups de estreias não serão exibidos.
+                    </div>
+                </div>
+
+                <!-- Notificação de Cadastro -->
+                <div class="config-section">
+                    <div class="config-section-title"><i class="fas fa-clipboard-check"></i>Notificação de Cadastro</div>
+                    <div class="config-row">
+                        <label>Ativar</label>
+                        <label class="config-switch">
+                            <input type="checkbox" id="cfg-cadastro-notify-active" checked>
+                            <span class="slider"></span>
+                            <span class="switch-label">Notificação</span>
+                        </label>
+                    </div>
+                    <div class="config-row">
+                        <label>Duração (ms)</label>
+                        <input type="number" id="cfg-cadastro-notify-duration" class="field-premium small" value="6000" min="1000" max="30000" step="500" style="max-width:80px">
+                        <span style="font-size:0.6rem;color:var(--text-secondary)">milissegundos</span>
+                    </div>
+                    <div style="font-size:0.65rem;color:var(--text-secondary);margin-top:0.25rem;padding-left:80px">
+                        <i class="fas fa-info-circle mr-1"></i>6000 ms = 6 segundos. Controla a duração da mensagem "atualizado com sucesso!" após atualizar um cadastro ou salvar um Filme, Série ou Estreia.
                     </div>
                 </div>
 
@@ -3351,6 +3438,20 @@
                 emptyTitle: 'ACERVO VAZIO',
                 emptySub1: 'O SEU CINEMA PARTICULAR COMEÇA,',
                 emptySub2: 'COM O PRIMEIRO CADASTRO',
+                emptyIconSize: 56,
+                emptyIconOpacity: 100,
+                emptyTitleBold: true,
+                emptyTitleItalic: false,
+                emptyTitleSize: '14px',
+                emptyTitleColor: '#FFFFFF',
+                emptySub1Bold: false,
+                emptySub1Italic: false,
+                emptySub1Size: '8px',
+                emptySub1Color: '#FFFFFF',
+                emptySub2Bold: false,
+                emptySub2Italic: false,
+                emptySub2Size: '8px',
+                emptySub2Color: '#FFFFFF',
                 cardStarsColor: '#EAB308',
                 cardYearColor: '#60A5FA',
                 cardYearSize: '10px',
@@ -3359,8 +3460,8 @@
                 cardStatusFavBg: '#DC2626',
                 cardStatusTextColor: '#FFFFFF',
                 cardStatusSize: '7px',
-                cardCategoryColor: '',
-                cardCategoryBg: '',
+                cardCategoryColor: '#FFFFFF',
+                cardCategoryBg: '#000000',
                 cardCategorySize: '7px',
                 pathCards: '',
                 pathVideos: '',
@@ -3374,6 +3475,8 @@
                 placeholderOpacity: 100,
                 autoSave: false,
                 autoSavePath: '',
+                videoPlayer: 'system',
+                customPlayerPath: '',
                 footerDevText: 'ELO SISTEMA E TECNOLOGIA | 2026 - ',
                 footerCreatedText: 'CRIADO PARA JONAS THEODORO',
                 footerDevSize: '0.6rem',
@@ -3386,6 +3489,9 @@
                 footerStatusColor: '#FB923C',
                 footerHeight: '2.5rem',
                 notificationsActive: true,
+                notificationsDuration: 5000,
+                cadastroNotifyActive: true,
+                cadastroNotifyDuration: 6000,
                 sugestoesActive: false,
                 sugestoesNovo: true,
                 sugestoesAssistir: true,
@@ -3410,6 +3516,12 @@
             if (es) {
                 var iconWrapper = es.querySelector('.w-28.h-28, .w-28');
                 if (iconWrapper) {
+                    var iconSz = cfg.emptyIconSize || 56;
+                    var iconOp = cfg.emptyIconOpacity != null ? cfg.emptyIconOpacity / 100 : 1;
+                    iconWrapper.style.width = iconSz + 'px';
+                    iconWrapper.style.height = iconSz + 'px';
+                    iconWrapper.style.opacity = iconOp;
+                    iconWrapper.style.borderRadius = Math.round(iconSz * 0.22) + 'px';
                     if (cfg.emptyCustomIcon) {
                         iconWrapper.innerHTML = '<img src="' + cfg.emptyCustomIcon.replace(/"/g,'&quot;') + '" class="text-blue-400 text-4xl" style="width:2.5rem;height:2.5rem;object-fit:contain">';
                     } else {
@@ -3417,11 +3529,25 @@
                     }
                 }
                 var h2 = es.querySelector('h2');
-                if (h2) h2.textContent = cfg.emptyTitle;
+                if (h2) {
+                    h2.textContent = cfg.emptyTitle;
+                    h2.style.fontWeight = cfg.emptyTitleBold !== false ? '900' : '400';
+                    h2.style.fontStyle = cfg.emptyTitleItalic ? 'italic' : 'normal';
+                    h2.style.fontSize = cfg.emptyTitleSize || '14px';
+                    if (cfg.emptyTitleColor) h2.style.color = cfg.emptyTitleColor;
+                }
                 var ps = es.querySelectorAll('p');
                 if (ps.length >= 2) {
                     ps[0].textContent = cfg.emptySub1 || '';
+                    ps[0].style.fontWeight = cfg.emptySub1Bold ? '700' : '400';
+                    ps[0].style.fontStyle = cfg.emptySub1Italic ? 'italic' : 'normal';
+                    if (cfg.emptySub1Size) ps[0].style.fontSize = cfg.emptySub1Size;
+                    if (cfg.emptySub1Color) ps[0].style.color = cfg.emptySub1Color;
                     ps[1].textContent = cfg.emptySub2 || '';
+                    ps[1].style.fontWeight = cfg.emptySub2Bold ? '700' : '400';
+                    ps[1].style.fontStyle = cfg.emptySub2Italic ? 'italic' : 'normal';
+                    if (cfg.emptySub2Size) ps[1].style.fontSize = cfg.emptySub2Size;
+                    if (cfg.emptySub2Color) ps[1].style.color = cfg.emptySub2Color;
                 }
             }
             document.body.style.setProperty('--card-star-color', cfg.cardStarsColor);
@@ -4731,7 +4857,64 @@
                 const el = document.getElementById('user-action-status');
                 el.innerText = `● ${msg}`;
                 el.style.opacity = '1';
-                setTimeout(() => el.style.opacity = '0', duration || 4000);
+                var cfg = window._appConfig;
+                var isCadastroMsg = (msg.indexOf('sucesso') >= 0 || msg.indexOf('cadastro') >= 0 || msg.indexOf('atualizado') >= 0);
+                var dur = duration || 4000;
+                if (isCadastroMsg && cfg && cfg.cadastroNotifyActive !== false) {
+                    dur = cfg.cadastroNotifyDuration || 6000;
+                }
+                setTimeout(() => el.style.opacity = '0', dur);
+            },
+
+            openMediaWithPlayer(url, mediaType) {
+                if (!url || !url.trim()) return;
+                var cfg = window._appConfig;
+                var player = cfg.videoPlayer || 'system';
+                var isTrailer = (url.indexOf('youtube.com') >= 0 || url.indexOf('youtu.be') >= 0 || url.indexOf('trailer') >= 0);
+                if (isTrailer) {
+                    var w = window.open(url, '_blank');
+                    if (w) {
+                        try {
+                            if (w.document && w.document.documentElement) {
+                                w.document.documentElement.requestFullscreen().catch(function() {});
+                            }
+                        } catch(e) {}
+                    }
+                    return;
+                }
+                if (player === 'system') {
+                    window.open(url, '_blank');
+                    return;
+                }
+                var playerPath = '';
+                if (player === 'wmp') {
+                    playerPath = 'wmplayer.exe';
+                } else if (player === 'custom') {
+                    playerPath = cfg.customPlayerPath || '';
+                }
+                if (playerPath) {
+                    var isLocal = /^[A-Za-z]:[\\\/]/.test(url) || url.startsWith('\\\\');
+                    if (isLocal) {
+                        try {
+                            if (typeof require !== 'undefined') {
+                                var cp = require('child_process');
+                                var args = player === 'wmp' ? ['"'+url+'"'] : ['"'+url+'"'];
+                                cp.exec('"' + playerPath + '" ' + args.join(' '), function() {});
+                                return;
+                            }
+                        } catch(e) {}
+                        try {
+                            var link = document.createElement('a');
+                            link.href = 'file:///' + url.replace(/\\/g, '/');
+                            link.target = '_blank';
+                            link.click();
+                            return;
+                        } catch(e) {}
+                    }
+                    window.open(url, '_blank');
+                } else {
+                    window.open(url, '_blank');
+                }
             },
 
             renderInfoFeatures() {
@@ -5134,12 +5317,13 @@
                 localStorage.setItem(key, JSON.stringify(nd));
 
                 if (nd.count > 1) {
+                    var notifDuration = (window._appConfig && window._appConfig.notificationsDuration) || 5000;
                     setTimeout(function() {
                         var overlay2 = document.getElementById('notification-overlay');
                         if (overlay2 && overlay2.classList.contains('active')) {
                             UI.closeNotifications();
                         }
-                    }, 6000);
+                    }, notifDuration);
                 }
             },
 
@@ -5986,6 +6170,25 @@
                 setVal('cfg-empty-title', cfg.emptyTitle);
                 setVal('cfg-empty-sub1', cfg.emptySub1 || '');
                 setVal('cfg-empty-sub2', cfg.emptySub2 || '');
+                setVal('cfg-empty-icon-size', cfg.emptyIconSize || 56);
+                document.getElementById('opv-cfg-empty-icon-size').textContent = (cfg.emptyIconSize || 56) + 'px';
+                setVal('cfg-empty-icon-opacity', cfg.emptyIconOpacity != null ? cfg.emptyIconOpacity : 100);
+                document.getElementById('opv-cfg-empty-icon-opacity').textContent = (cfg.emptyIconOpacity != null ? cfg.emptyIconOpacity : 100) + '%';
+                setVal('cfg-empty-title-size', cfg.emptyTitleSize || '14px');
+                setVal('cfg-empty-title-color', cfg.emptyTitleColor || '#FFFFFF');
+                setVal('cfg-empty-title-color-hex', cfg.emptyTitleColor || '#FFFFFF');
+                UI._setToggleBtn('cfg-empty-title-bold', cfg.emptyTitleBold !== false);
+                UI._setToggleBtn('cfg-empty-title-italic', cfg.emptyTitleItalic === true);
+                setVal('cfg-empty-sub1-size', cfg.emptySub1Size || '8px');
+                setVal('cfg-empty-sub1-color', cfg.emptySub1Color || '#FFFFFF');
+                setVal('cfg-empty-sub1-color-hex', cfg.emptySub1Color || '#FFFFFF');
+                UI._setToggleBtn('cfg-empty-sub1-bold', cfg.emptySub1Bold === true);
+                UI._setToggleBtn('cfg-empty-sub1-italic', cfg.emptySub1Italic === true);
+                setVal('cfg-empty-sub2-size', cfg.emptySub2Size || '8px');
+                setVal('cfg-empty-sub2-color', cfg.emptySub2Color || '#FFFFFF');
+                setVal('cfg-empty-sub2-color-hex', cfg.emptySub2Color || '#FFFFFF');
+                UI._setToggleBtn('cfg-empty-sub2-bold', cfg.emptySub2Bold === true);
+                UI._setToggleBtn('cfg-empty-sub2-italic', cfg.emptySub2Italic === true);
                 var customIconInput = document.getElementById('cfg-empty-custom-icon');
                 if (cfg.emptyCustomIcon) {
                     if (!customIconInput) {
@@ -6038,7 +6241,13 @@
                 setChecked('cfg-path-backups-active', cfg.pathBackupsActive);
                 setChecked('cfg-path-acervo-active', cfg.pathAcervoActive);
                 setChecked('cfg-autosave', cfg.autoSave);
+                setVal('cfg-video-player', cfg.videoPlayer || 'system');
+                setVal('cfg-custom-player-path', cfg.customPlayerPath || '');
+                UI._toggleCustomPlayerRow(cfg.videoPlayer);
                 setChecked('cfg-notifications-active', cfg.notificationsActive !== false);
+                setVal('cfg-notifications-duration', cfg.notificationsDuration || 5000);
+                setChecked('cfg-cadastro-notify-active', cfg.cadastroNotifyActive !== false);
+                setVal('cfg-cadastro-notify-duration', cfg.cadastroNotifyDuration || 6000);
                 setChecked('cfg-sugestoes-active', cfg.sugestoesActive === true);
                 setChecked('cfg-sugestoes-novo', cfg.sugestoesNovo !== false);
                 setChecked('cfg-sugestoes-assistir', cfg.sugestoesAssistir !== false);
@@ -6073,15 +6282,38 @@
                 var title = getVal('cfg-empty-title');
                 var sub1 = getVal('cfg-empty-sub1');
                 var sub2 = getVal('cfg-empty-sub2');
+                var iconSize = parseInt(getVal('cfg-empty-icon-size')) || 56;
+                var iconOpacity = parseInt(document.getElementById('cfg-empty-icon-opacity')?.value) || 100;
+                var titleBold = document.getElementById('cfg-empty-title-bold')?.classList.contains('active');
+                var titleItalic = document.getElementById('cfg-empty-title-italic')?.classList.contains('active');
+                var titleSize = getVal('cfg-empty-title-size') || '14px';
+                var titleColor = getVal('cfg-empty-title-color') || '#FFFFFF';
+                var sub1Bold = document.getElementById('cfg-empty-sub1-bold')?.classList.contains('active');
+                var sub1Italic = document.getElementById('cfg-empty-sub1-italic')?.classList.contains('active');
+                var sub1Size = getVal('cfg-empty-sub1-size') || '8px';
+                var sub1Color = getVal('cfg-empty-sub1-color') || '#FFFFFF';
+                var sub2Bold = document.getElementById('cfg-empty-sub2-bold')?.classList.contains('active');
+                var sub2Italic = document.getElementById('cfg-empty-sub2-italic')?.classList.contains('active');
+                var sub2Size = getVal('cfg-empty-sub2-size') || '8px';
+                var sub2Color = getVal('cfg-empty-sub2-color') || '#FFFFFF';
                 var preview = document.getElementById('cfg-empty-preview');
                 if (preview) {
                     var iconHtml = customIcon
                         ? '<img src="' + customIcon.replace(/"/g,'&quot;') + '" style="width:2rem;height:2rem;object-fit:contain">'
-                        : '<i class="fas ' + icon + ' text-blue-400 text-2xl"></i>';
-                    preview.innerHTML = '<div class="w-16 h-16 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-[1.25rem] flex items-center justify-center mb-3 border border-blue-500/30">' + iconHtml + '</div>' +
-                        '<div style="font-size:14px;font-weight:900;text-transform:uppercase;letter-spacing:-0.02em">' + title + '</div>' +
-                        '<div style="font-size:8px;opacity:0.6;text-transform:uppercase;letter-spacing:0.15em;margin-top:2px">' + sub1 + '</div>' +
-                        '<div style="font-size:8px;opacity:0.6;text-transform:uppercase;letter-spacing:0.15em">' + sub2 + '</div>';
+                        : '<i class="fas ' + icon + ' text-blue-400" style="font-size:2rem"></i>';
+                    var containerSize = Math.max(iconSize, 40);
+                    var fs = titleBold ? '900' : '400';
+                    var fst = titleItalic ? 'italic' : 'normal';
+                    var s1fs = sub1Bold ? '700' : '400';
+                    var s1fst = sub1Italic ? 'italic' : 'normal';
+                    var s2fs = sub2Bold ? '700' : '400';
+                    var s2fst = sub2Italic ? 'italic' : 'normal';
+                    preview.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;text-align:center">' +
+                        '<div style="width:' + containerSize + 'px;height:' + containerSize + 'px;background:linear-gradient(135deg,rgba(59,130,246,0.2),rgba(139,92,246,0.2));border-radius:1.25rem;display:flex;align-items:center;justify-content:center;margin-bottom:0.75rem;border:1px solid rgba(59,130,246,0.3);opacity:' + (iconOpacity / 100) + '">' + iconHtml + '</div>' +
+                        '<div style="font-size:' + titleSize + ';font-weight:' + fs + ';font-style:' + fst + ';text-transform:uppercase;letter-spacing:-0.02em;color:' + titleColor + '">' + title + '</div>' +
+                        '<div style="font-size:' + sub1Size + ';font-weight:' + s1fs + ';font-style:' + s1fst + ';opacity:0.7;text-transform:uppercase;letter-spacing:0.15em;margin-top:2px;color:' + sub1Color + '">' + sub1 + '</div>' +
+                        '<div style="font-size:' + sub2Size + ';font-weight:' + s2fs + ';font-style:' + s2fst + ';opacity:0.7;text-transform:uppercase;letter-spacing:0.15em;color:' + sub2Color + '">' + sub2 + '</div>' +
+                        '</div>';
                 }
                 var logoUrl = getVal('cfg-logo-url');
                 var logoPreview = document.getElementById('cfg-logo-preview');
@@ -6177,7 +6409,7 @@
                 this._updateColorSwatch(inputId);
             },
             _syncColorSwatches() {
-                var ids = ['cfg-star-color','cfg-year-color','cfg-status-text-color','cfg-status-new-bg','cfg-status-watch-bg','cfg-status-fav-bg','cfg-cat-color','cfg-cat-bg','cfg-placeholder-color','cfg-footer-dev-color','cfg-footer-created-color','cfg-footer-autosave-color','cfg-footer-status-color'];
+                var ids = ['cfg-star-color','cfg-year-color','cfg-status-text-color','cfg-status-new-bg','cfg-status-watch-bg','cfg-status-fav-bg','cfg-cat-color','cfg-cat-bg','cfg-placeholder-color','cfg-footer-dev-color','cfg-footer-created-color','cfg-footer-autosave-color','cfg-footer-status-color','cfg-empty-title-color','cfg-empty-sub1-color','cfg-empty-sub2-color'];
                 for (var i = 0; i < ids.length; i++) {
                     this._updateColorSwatch(ids[i]);
                     var hexInput = document.getElementById(ids[i] + '-hex');
@@ -6228,6 +6460,20 @@
                 cfg.emptyTitle = getVal('cfg-empty-title');
                 cfg.emptySub1 = getVal('cfg-empty-sub1');
                 cfg.emptySub2 = getVal('cfg-empty-sub2');
+                cfg.emptyIconSize = parseInt(getVal('cfg-empty-icon-size')) || 56;
+                cfg.emptyIconOpacity = parseInt(document.getElementById('cfg-empty-icon-opacity')?.value) || 100;
+                cfg.emptyTitleBold = document.getElementById('cfg-empty-title-bold')?.classList.contains('active') || false;
+                cfg.emptyTitleItalic = document.getElementById('cfg-empty-title-italic')?.classList.contains('active') || false;
+                cfg.emptyTitleSize = getVal('cfg-empty-title-size') || '14px';
+                cfg.emptyTitleColor = getVal('cfg-empty-title-color') || '#FFFFFF';
+                cfg.emptySub1Bold = document.getElementById('cfg-empty-sub1-bold')?.classList.contains('active') || false;
+                cfg.emptySub1Italic = document.getElementById('cfg-empty-sub1-italic')?.classList.contains('active') || false;
+                cfg.emptySub1Size = getVal('cfg-empty-sub1-size') || '8px';
+                cfg.emptySub1Color = getVal('cfg-empty-sub1-color') || '#FFFFFF';
+                cfg.emptySub2Bold = document.getElementById('cfg-empty-sub2-bold')?.classList.contains('active') || false;
+                cfg.emptySub2Italic = document.getElementById('cfg-empty-sub2-italic')?.classList.contains('active') || false;
+                cfg.emptySub2Size = getVal('cfg-empty-sub2-size') || '8px';
+                cfg.emptySub2Color = getVal('cfg-empty-sub2-color') || '#FFFFFF';
                 cfg.cardStarsColor = _combineColor('cfg-star-color', 'op-cfg-star-color');
                 cfg.cardYearColor = _combineColor('cfg-year-color', 'op-cfg-year-color');
                 cfg.cardYearSize = getVal('cfg-year-size');
@@ -6248,7 +6494,12 @@
                 cfg.pathBackupsActive = document.getElementById('cfg-path-backups-active')?.checked || false;
                 cfg.pathAcervoActive = document.getElementById('cfg-path-acervo-active')?.checked || false;
                 cfg.autoSave = document.getElementById('cfg-autosave')?.checked || false;
+                cfg.videoPlayer = getVal('cfg-video-player') || 'system';
+                cfg.customPlayerPath = getVal('cfg-custom-player-path') || '';
                 cfg.notificationsActive = document.getElementById('cfg-notifications-active')?.checked || false;
+                cfg.notificationsDuration = parseInt(document.getElementById('cfg-notifications-duration')?.value) || 5000;
+                cfg.cadastroNotifyActive = document.getElementById('cfg-cadastro-notify-active')?.checked || false;
+                cfg.cadastroNotifyDuration = parseInt(document.getElementById('cfg-cadastro-notify-duration')?.value) || 6000;
                 cfg.sugestoesActive = document.getElementById('cfg-sugestoes-active')?.checked || false;
                 cfg.sugestoesNovo = document.getElementById('cfg-sugestoes-novo')?.checked || false;
                 cfg.sugestoesAssistir = document.getElementById('cfg-sugestoes-assistir')?.checked || false;
@@ -6334,6 +6585,69 @@
                     if (toggle.checked) toggle.checked = false;
                 }
             },
+            _setToggleBtn(btnId, isActive) {
+                var btn = document.getElementById(btnId);
+                if (!btn) return;
+                if (isActive) {
+                    btn.classList.add('active');
+                    btn.style.background = 'var(--accent-blue)';
+                    btn.style.color = '#fff';
+                    btn.style.borderColor = 'var(--accent-blue)';
+                } else {
+                    btn.classList.remove('active');
+                    btn.style.background = 'var(--input-bg)';
+                    btn.style.color = 'var(--text-secondary)';
+                    btn.style.borderColor = 'var(--border-color)';
+                }
+            },
+            _toggleEmptyStyle(target, prop) {
+                var btnId = 'cfg-empty-' + target + '-' + prop;
+                var btn = document.getElementById(btnId);
+                if (!btn) return;
+                var isActive = btn.classList.contains('active');
+                if (isActive) {
+                    btn.classList.remove('active');
+                    btn.style.background = 'var(--input-bg)';
+                    btn.style.color = 'var(--text-secondary)';
+                    btn.style.borderColor = 'var(--border-color)';
+                } else {
+                    btn.classList.add('active');
+                    btn.style.background = 'var(--accent-blue)';
+                    btn.style.color = '#fff';
+                    btn.style.borderColor = 'var(--accent-blue)';
+                }
+                this._updateConfigPreview();
+            },
+            _toggleCustomPlayerRow(value) {
+                var row = document.getElementById('cfg-custom-player-row');
+                if (row) row.style.display = value === 'custom' ? 'flex' : 'none';
+            },
+            pickPlayerFile() {
+                var input = document.getElementById('cfg-custom-player-path');
+                if (!input) return;
+                var self = this;
+                var fileInput = document.getElementById('player-picker-helper');
+                if (!fileInput) {
+                    fileInput = document.createElement('input');
+                    fileInput.type = 'file';
+                    fileInput.id = 'player-picker-helper';
+                    fileInput.accept = '.exe';
+                    fileInput.style.display = 'none';
+                    document.body.appendChild(fileInput);
+                }
+                fileInput.onchange = function() {
+                    if (this.files && this.files[0]) {
+                        try {
+                            var fullPath = this.files[0].path || this.files[0].name;
+                            input.value = fullPath;
+                        } catch(e) {
+                            input.value = this.files[0].name;
+                        }
+                    }
+                    this.value = '';
+                };
+                fileInput.click();
+            },
             pickIconFile(inputId) {
                 var input = document.getElementById(inputId);
                 if (!input) return;
@@ -6401,8 +6715,8 @@
                     'cfg-status-new-bg': '#2563EB',
                     'cfg-status-watch-bg': '#D97706',
                     'cfg-status-fav-bg': '#DC2626',
-                    'cfg-cat-color': '',
-                    'cfg-cat-bg': '',
+                    'cfg-cat-color': '#FFFFFF',
+                    'cfg-cat-bg': '#000000',
                     'cfg-cat-size': ''
                 };
                 Object.entries(defaults).forEach(function(_ref) {
@@ -6543,11 +6857,16 @@
                 if (playBtn && playLabel) {
                     if (mediaUrl && mediaUrl.trim()) {
                         playBtn.href = mediaUrl;
+                        playBtn.onclick = function(e) {
+                            e.preventDefault();
+                            Logic.openMediaWithPlayer(mediaUrl, item.type);
+                        };
                         playLabel.textContent = item.type === 'series' ? 'EXECUTAR EPISÓDIO' : 'ASSISTIR';
                         playBtn.style.opacity = '1';
                         playBtn.style.pointerEvents = '';
                     } else {
                         playBtn.href = '#';
+                        playBtn.onclick = null;
                         playLabel.textContent = 'SEM MÍDIA';
                         playBtn.style.opacity = '0.4';
                         playBtn.style.pointerEvents = 'none';
