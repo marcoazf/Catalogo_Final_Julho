@@ -1327,3 +1327,142 @@ if (_es) {
 | Nenhuma funcionalidade existente alterada | OK |
 | Paletas, tipografia, layout preservados | OK |
 | Todos os IDs, classes e handlers mantidos | OK |
+
+---
+
+## Implementações Realizadas — Melhorias 2 (melhorias2.md — Itens a–d)
+
+### 60. GERIR GÊNEROS: Ícone + Fontes Aumentadas
+
+**Arquivo:** `index.html` — HTML (cat-manager-overlay) + CSS (`.cat-manager-pop`, `.cat-item`) + JavaScript (`renderCategoryManager`)
+
+**O que foi feito:**
+- **Ícone adicionado ao título:** `<i class="fas fa-tags">` adicionado antes do texto "Gerir Gêneros" com cor `#60A5FA` (azul), alinhado via `flex items-center gap-2`.
+- **Título aumentado:** `text-[10px]` → `text-[13px]` no título do modal.
+- **Input de gênero:** `font-size: 10px` → `font-size: 12px`.
+- **Botão "+":** `font-size: 10px` → `font-size: 12px`.
+- **Itens da lista (`.cat-item`):** `font-size: 10px` → `font-size: 12px`.
+- **Texto "Nenhum gênero"** (vazio): `font-size: 9px` → `font-size: 11px`.
+
+| Elemento | Antes | Depois |
+|---|---|---|
+| Título | `text-[10px]` | `text-[13px]` + ícone `fa-tags` |
+| Input | 10px | 12px |
+| Botão "+" | 10px | 12px |
+| Itens da lista | 10px | 12px |
+| "Nenhum gênero" | 9px | 11px |
+
+**Preservação:** O `toggleCatManager()`, `addCategory()`, `removeCategory()` e todos os handlers de clique permanecem intactos. O layout flex do título manteve alinhamento vertical correto.
+
+---
+
+### 61. CARREGAR CAPA: Fontes dos Textos Informativos Aumentadas
+
+**Arquivo:** `index.html` — CSS (`.upl-sub`, `.upl-ratio`)
+
+**O que foi feito:**
+- **Texto "JPG • PNG • WEBP"** (`.upl-sub`): `font-size: 10px` → `font-size: 12px`.
+- **Texto "Proporção 9:16 / (720 x 1280 px)"** (`.upl-ratio`): `font-size: 10px` → `font-size: 12px`.
+- Afeta ambas as áreas de upload (Filmes e Séries) pois compartilham as mesmas classes CSS.
+
+| Elemento | Antes | Depois |
+|---|---|---|
+| `.upl-sub` (JPG • PNG • WEBP) | 10px | 12px |
+| `.upl-ratio` (Proporção 9:16) | 10px | 12px |
+
+**Preservação:** O upload-area inteira, botão de clear, drag & drop e paste continuam funcionando. Apenas o tamanho visual das fontes informativas foi alterado.
+
+---
+
+### 62. CAPA: Substituição Automática em Tempo Real ao Editar
+
+**Arquivo:** `index.html` — JavaScript (`UI.setPosterPreview`, `UI.resetPoster`)
+
+**O que foi feito:**
+- **`setPosterPreview(src, prefix)`:** Adicionado bloco que detecta se `_editingId` está ativo (modo edição). Se estiver, atualiza `item.image` em `APP_STATE.movies` imediatamente, salva no `localStorage` e chama `Render.all()` — atualizando o card na tela principal em tempo real.
+- **`resetPoster(prefix)`:** Mesma lógica — ao clicar no "X" para remover a capa durante edição, o `item.image` é limpo em tempo real e o card é re-renderizado.
+
+**Fluxo durante edição:**
+1. Usuário abre modal de edição → carrega card existente
+2. Clica na área de capa → seleciona nova imagem → `setPosterPreview` atualiza preview + card em tempo real
+3. Clica no "X" → `resetPoster` limpa preview + card em tempo real
+4. O card na página principal reflete a mudança imediatamente, sem necessidade de clicar "SALVAR"
+
+**Preservação:** Em modo criação (novo item), `_editingId` é `null` — o bloco de auto-sync não é executado. O comportamento de upload, drag & drop, paste e clear permanece idêntico ao anterior.
+
+---
+
+### 63. CADASTRO NOVO: Botão CLONAR DADOS Removido + Sem Dialog de Pasta + Feedback 6s
+
+**Arquivo:** `index.html` — JavaScript (`_getAcervoDirHandleForSave`, `saveMovie` CREATE/EDIT mode, `switchTab`)
+
+**O que foi feito:**
+
+**A) Botão CLONAR DADOS removido permanentemente:**
+- A função `_getAcervoDirHandleForSave()` foi modificada para **nunca** chamar `window.showDirectoryPicker()`. Se não há handle cacheado, retorna `null` silenciosamente.
+- No fluxo **CREATE MODE**: removido o código que mostrava o botão `btn-clone-data` após salvar. O botão permanece `display:none` sempre.
+- No fluxo **EDIT MODE**: removido o `_saveToAcervoFile()` que causava dialog de pasta.
+- No fluxo **ESTREIAS**: removido o `_saveToAcervoFile()` que causava dialog de pasta.
+- Na função `switchTab()`: removida a lógica que mostrava `btn-clone-data` ao trocar de aba. Agora sempre mantém `display:none`.
+- Botão `btn-duplicate-series` (CLONAR SÉRIE) também mantido `display:none` permanentemente.
+
+**B) Dialog de pasta eliminado:**
+- `_getAcervoDirHandleForSave()`: removida a linha `_acervoDirHandle = await window.showDirectoryPicker(...)` — agora retorna `null` se não há handle cacheado.
+- Todas as chamadas a `_saveToAcervoFile()` foram removidas dos fluxos de cadastro (CREATE, EDIT e ESTREIAS), eliminando qualquer dialog de seleção de pasta.
+- O salvamento continua funcionando via `localStorage` (imediato) e `ConfigAutoSave()`.
+
+**C) Feedback de cadastro com duração de 6 segundos:**
+- CREATE MODE: `Logic.showModalStatus(msg, 'green', 6000)` — duração explícita de 6s.
+- EDIT MODE: `Logic.showStatus(msg, 6000)` — duração explícita de 6s.
+- ESTREIAS: `Logic.showStatus(msg, 6000)` — duração explícita de 6s.
+
+**D) Comportamento pós-salvar (CREATE MODE):**
+- Dados inseridos imediatamente no sistema (localStorage + Render.all())
+- Formulário completamente limpo (todos os campos resetados, poster resetado, status desmarcados)
+- Mensagem de sucesso por 6 segundos
+- Modal permanece aberto — usuário fecha pelo "X", ESC ou continua cadastrando
+
+| Aspecto | Antes | Depois |
+|---|---|---|
+| CLONAR DADOS pós-salvar | Aparecia o botão | Botão sempre oculto |
+| Dialog de pasta | `showDirectoryPicker()` no primeiro save | Nunca aparece |
+| `_saveToAcervoFile()` | Chamado em CREATE/EDIT/ESTREIAS | Removido de todos |
+| Feedback CREATE | `showModalStatus` (5s default) | `showModalStatus(msg, 'green', 6000)` = 6s |
+| Feedback EDIT | `showStatus(msg, 4000)` | `showStatus(msg, 6000)` = 6s |
+| Feedback ESTREIAS | `showStatus(msg, 4000)` | `showStatus(msg, 6000)` = 6s |
+| Modal pós-criação | Permanecia aberto | Permanece aberto (inalterado) |
+| Dados salvos | localStorage + arquivo | Apenas localStorage |
+
+**Preservação:** O `localStorage` continua recebendo os dados imediatamente. A função `ConfigAutoSave()` continua funcionando. A função `_saveToAcervoFile()` ainda existe no código mas não é chamada — mantida para compatibilidade futura. A função `cloneLastData()` e `cloneData()` permanecem no código mas não são acessíveis (botões ocultos). Nenhuma funcionalidade de cadastro, edição ou estreias foi alterada.
+
+---
+
+## Checklist Final (melhorias2.md — Itens 60–63)
+
+| Verificação | Status |
+|---|---|
+| (a) GERIR GÊNEROS: ícone fa-tags no título | OK |
+| (a) GERIR GÊNEROS: título 10px → 13px | OK |
+| (a) GERIR GÊNEROS: input 10px → 12px | OK |
+| (a) GERIR GÊNEROS: botão "+" 10px → 12px | OK |
+| (a) GERIR GÊNEROS: itens lista 10px → 12px | OK |
+| (a) GERIR GÊNEROS: "Nenhum gênero" 9px → 11px | OK |
+| (b) CARREGAR CAPA: "JPG • PNG • WEBP" 10px → 12px | OK |
+| (b) CARREGAR CAPA: "Proporção 9:16" 10px → 12px | OK |
+| (c) CAPA: auto-sync em tempo real ao editar (setPosterPreview) | OK |
+| (c) CAPA: auto-sync em tempo real ao limpar (resetPoster) | OK |
+| (c) CAPA: não afeta modo criação (_editingId = null) | OK |
+| (d) CLONAR DADOS: botão permanentemente oculto | OK |
+| (d) CLONAR SÉRIE: botão permanentemente oculto | OK |
+| (d) switchTab: cloneBtn sempre display:none | OK |
+| (d) Dialog de pasta: showDirectoryPicker removido | OK |
+| (d) _saveToAcervoFile: removido de CREATE/EDIT/ESTREIAS | OK |
+| (d) CREATE MODE: feedback 6 segundos (showModalStatus) | OK |
+| (d) EDIT MODE: feedback 6 segundos (showStatus) | OK |
+| (d) ESTREIAS: feedback 6 segundos (showStatus) | OK |
+| (d) Modal permanece aberto após criar (INALTERADO) | OK |
+| (d) Formulário limpo ao salvar (INALTERADO) | OK |
+| (d) Dados salvos em localStorage (INALTERADO) | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |

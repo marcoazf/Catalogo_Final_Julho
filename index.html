@@ -437,13 +437,13 @@
             color: #F97316;
         }
         .poster-upload-area .upl-placeholder .upl-sub {
-            font-size: 10px;
+            font-size: 12px;
             font-weight: 600;
             opacity: 0.7;
             color: #FBBF24;
         }
         .poster-upload-area .upl-placeholder .upl-ratio {
-            font-size: 10px;
+            font-size: 12px;
             font-weight: 500;
             color: #FFFFFF;
             margin-top: 4px;
@@ -503,7 +503,7 @@
             border: 1px solid var(--border-color);
             background: var(--input-bg);
             color: var(--text-color);
-            font-size: 10px;
+            font-size: 12px;
             outline: none;
         }
         .cat-manager-pop .cat-input-group input:focus {
@@ -515,7 +515,7 @@
             border: none;
             background: var(--accent-blue);
             color: white;
-            font-size: 10px;
+            font-size: 12px;
             font-weight: 700;
             cursor: pointer;
             transition: 0.2s;
@@ -529,7 +529,7 @@
             justify-content: space-between;
             padding: 0.3rem 0.5rem;
             border-radius: 0.5rem;
-            font-size: 10px;
+            font-size: 12px;
             font-weight: 600;
             color: var(--text-color);
             transition: 0.2s;
@@ -2550,7 +2550,7 @@
     <div id="cat-manager-overlay" class="cat-manager-overlay">
         <div class="cat-manager-pop">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-[10px] font-black uppercase tracking-widest" style="background:linear-gradient(135deg,#fff,#60A5FA);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Gerir Gêneros</h3>
+                <h3 class="text-[13px] font-black uppercase tracking-widest flex items-center gap-2" style="background:linear-gradient(135deg,#fff,#60A5FA);-webkit-background-clip:text;-webkit-text-fill-color:transparent"><i class="fas fa-tags" style="font-size:13px;-webkit-text-fill-color:#60A5FA"></i> Gerir Gêneros</h3>
                 <div onclick="Logic.toggleCatManager()" class="btn-close-premium" style="width:30px;height:30px"><i class="fas fa-times text-[9px]"></i></div>
             </div>
             <div class="cat-input-group">
@@ -5327,7 +5327,7 @@
                         };
                     });
                 } else {
-                    list.innerHTML = '<div style="font-size:9px;color:var(--text-secondary);padding:0.5rem;text-align:center">Nenhum gênero</div>';
+                    list.innerHTML = '<div style="font-size:11px;color:var(--text-secondary);padding:0.5rem;text-align:center">Nenhum gênero</div>';
                 }
             },
             toggleCatManager() {
@@ -5843,10 +5843,10 @@
                 document.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.id === 'tab-content-' + type));
                 var dupBtnTab = document.getElementById('btn-duplicate-series');
                 if (dupBtnTab) dupBtnTab.style.display = 'none';
-                // Hide CLONAR button in estreias tab
+                // Hide CLONAR button always (removed per melhorias2.md item d)
                 var cloneBtn = document.getElementById('btn-clone-data');
                 if (cloneBtn) {
-                    cloneBtn.style.display = type === 'estreias' ? 'none' : _lastSavedItem ? 'inline-flex' : 'none';
+                    cloneBtn.style.display = 'none';
                 }
                 // Initialize dynamic estreia form when switching to it
                 if (type === 'estreias' && !_editingId) {
@@ -5939,6 +5939,10 @@
                 img.src = src || '';
                 img.classList.toggle('show', !!src);
                 area.classList.toggle('has-image', !!src);
+                if (typeof _editingId !== 'undefined' && _editingId) {
+                    var _item = APP_STATE.movies.find(function(m) { return m.id === _editingId; });
+                    if (_item) { _item.image = src || ''; localStorage.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies)); Render.all(); }
+                }
             },
             resetPoster(prefix) {
                 prefix = prefix || 'f';
@@ -5952,6 +5956,10 @@
                 if (puf) puf.value = '';
                 var wrap = document.getElementById(prefix + '-poster-url-wrap');
                 if (wrap) wrap.classList.remove('hidden');
+                if (typeof _editingId !== 'undefined' && _editingId) {
+                    var _item = APP_STATE.movies.find(function(m) { return m.id === _editingId; });
+                    if (_item) { _item.image = ''; localStorage.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies)); Render.all(); }
+                }
             },
             setZoom(lvl) {
                 const map = { 1: 5, 2: 6, 3: 7, 4: 8 };
@@ -8247,8 +8255,7 @@
             if (!savePath || !('showDirectoryPicker' in window)) return null;
             try {
                 if (_acervoDirHandle) return _acervoDirHandle;
-                _acervoDirHandle = await window.showDirectoryPicker({ startIn: savePath });
-                return _acervoDirHandle;
+                return null;
             } catch(e) {
                 console.warn('Acervo directory access denied:', e);
                 return null;
@@ -8420,19 +8427,16 @@
                         localStorage.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
                         _checkStorageQuota();
                         ConfigAutoSave();
-                        _saveToAcervoFile().then(function(saved) {
-                            if (saved) Logic.showStatus('Salvo na pasta do acervo configurada');
-                        });
                         Render.all();
                         UI.updateCounters();
                         Logic.updateReminderBadge();
                         var bodyScroll = document.querySelector('#modal-cadastro .p-8.overflow-y-auto');
                         if (bodyScroll) bodyScroll.scrollTop = 0;
                         UI.closeModal('modal-cadastro');
-                        Logic.showStatus('Estreia(s) atualizada(s) com sucesso!!!', 4000);
+                        Logic.showStatus('Estreia(s) atualizada(s) com sucesso!!!', 6000);
                     } else {
                         UI.closeModal('modal-cadastro');
-                        Logic.showStatus('Nova(s) estreia(s) adicionada(s)!', 4000);
+                        Logic.showStatus('Nova(s) estreia(s) adicionada(s)!', 6000);
                     }
                     return;
                 }
@@ -8487,12 +8491,6 @@
                     localStorage.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
                     _checkStorageQuota();
                     ConfigAutoSave();
-                    // Save to configured acervo folder (auto-save path)
-                    _saveToAcervoFile().then(function(saved) {
-                        if (saved) {
-                            Logic.showStatus('Salvo na pasta do acervo configurada');
-                        }
-                    });
                     Render.all();
                     UI.updateCounters();
                     Logic.updateReminderBadge();
@@ -8500,7 +8498,7 @@
                     var bodyScroll = document.querySelector('#modal-cadastro .p-8.overflow-y-auto');
                     if (bodyScroll) bodyScroll.scrollTop = 0;
                     UI.closeModal('modal-cadastro');
-                    Logic.showStatus(updatedLabel + ' atualizado com sucesso!!!', 4000);
+                    Logic.showStatus(updatedLabel + ' atualizado com sucesso!!!', 6000);
 
                     if (_reopenInfoAfterSave) {
                         _reopenInfoAfterSave = false;
@@ -8551,12 +8549,6 @@
                     localStorage.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
                     _checkStorageQuota();
                     ConfigAutoSave();
-                    // Save to configured acervo folder (auto-save path)
-                    _saveToAcervoFile().then(function(saved) {
-                        if (saved) {
-                            Logic.showStatus('Salvo na pasta do acervo configurada');
-                        }
-                    });
                     Render.all();
                     UI.updateCounters();
                     Logic.updateReminderBadge();
@@ -8600,27 +8592,15 @@
                     }
 
                     var typeLabel = type === 'filmes' ? 'Filme' : (type === 'series' ? 'Série' : 'Estreia');
-                    Logic.showModalStatus(typeLabel + ' salvo em tempo real! Card criado na tela principal.', 'green');
+                    Logic.showModalStatus(typeLabel + ' salvo em tempo real! Card criado na tela principal.', 'green', 6000);
                     // Auto-scroll to top so user sees the notification
                     var body = document.querySelector('#modal-cadastro .p-8.overflow-y-auto');
                     if (body) body.scrollTop = 0;
 
-                    // Store last saved item for CLONAR function
+                    // Store last saved item (CLONAR button removed)
                     _lastSavedItem = item;
-                    // Show CLONAR button (except for estreias)
                     var cloneBtn = document.getElementById('btn-clone-data');
-                    var activeTab = document.querySelector('.tab-premium.active');
-                    var isEstreiaTab = activeTab && activeTab.dataset.tab === 'estreias';
-                    if (cloneBtn && !isEstreiaTab) {
-                        cloneBtn.style.display = 'inline-flex';
-                        cloneBtn.disabled = false;
-                        cloneBtn.innerHTML = '<i class="fas fa-copy mr-1.5"></i> CLONAR DADOS';
-                        cloneBtn.style.opacity = '';
-                        cloneBtn.style.cursor = '';
-                        cloneBtn.style.background = 'linear-gradient(135deg,#8B5CF6,#7C3AED)';
-                    } else if (cloneBtn) {
-                        cloneBtn.style.display = 'none';
-                    }
+                    if (cloneBtn) cloneBtn.style.display = 'none';
                     var dupBtn = document.getElementById('btn-duplicate-series');
                     if (dupBtn) dupBtn.style.display = 'none';
                     // Modal stays open. User closes with X button.
