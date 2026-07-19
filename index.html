@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineCatalog Elo | v22.1 - Edição Premium</title>
+    <title>CineCatalog Elo | v29.0.1 - Edição Premium</title>
     
     <!-- RECURSOS EXTERNOS -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
@@ -897,26 +897,7 @@
             color: #EF4444;
             background: rgba(239,68,68,0.1);
         }
-        .estreia-delete-link {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--input-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-secondary);
-            transition: all 0.3s;
-            cursor: pointer;
-            font-size: 13px;
-            flex-shrink: 0;
-        }
-        .estreia-delete-link:hover {
-            border-color: #EF4444;
-            color: #EF4444;
-            background: rgba(239,68,68,0.1);
-        }
+
         /* Dashboard */
         .dashboard-cards {
             display: grid;
@@ -1489,7 +1470,6 @@
         }
         .info-item:hover .info-label { color: var(--text-color); }
         .info-item .info-desc { display: none; }
-        .info-item.active .info-desc { display: none; }
 
         /* Bottom description box */
         #info-desc-box {
@@ -1971,7 +1951,7 @@
             <nav class="flex gap-1 theme-bg-input p-1 rounded-full theme-border">
                 <span onclick="Logic.setMainView('filmes')" id="link-filmes" class="nav-link active">Filmes</span>
                 <span onclick="Logic.setMainView('series')" id="link-series" class="nav-link">Séries</span>
-                <span onclick="Logic.setMainView('estreias')" id="link-estreias" class="nav-link">Estréias</span>
+                <span onclick="Logic.setMainView('estreias')" id="link-estreias" class="nav-link">Estreias</span>
             </nav>
 
             <button onclick="UI.openModal('modal-cadastro')" class="btn-cadastrar bg-blue-600 text-white px-4 py-2 rounded-full font-black hover:bg-blue-700 transition uppercase tracking-widest shadow-lg shrink-0">
@@ -2115,15 +2095,14 @@
     <!-- [BLOCO 6: FOOTER FIXO] -->
     <footer class="px-6 py-2 border-t theme-border flex justify-between items-center bg-black/20">
         <div class="flex items-center gap-0" style="flex-wrap:nowrap">
-            <div class="text-[0.75rem] text-gray-400 uppercase tracking-widest font-medium whitespace-nowrap">
-                ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CRIADO PARA JONAS THEODORO</span>
+            <div class="text-[0.75rem] text-gray-400 uppercase tracking-widest font-medium whitespace-nowrap" id="footer-dev-text">
+                ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CRIADO PARA JONAS THEODORO</span> | <span id="app-version-badge" style="background:linear-gradient(135deg,#3B82F6,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 20px rgba(59,130,246,0.3)">v29.0.1</span>
             </div>
-            <div style="width:1px;height:16px;background:var(--border-color);flex-shrink:0;margin:0 0.75rem"></div>
-            <span id="app-version-badge" class="text-[1rem] font-black uppercase tracking-wider" style="background:linear-gradient(135deg,#3B82F6,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 20px rgba(59,130,246,0.3);letter-spacing:0.06em;white-space:nowrap">v29.0.1</span>
         </div>
         <div id="user-action-status" class="text-[0.75rem] text-emerald-500 font-bold uppercase opacity-0 pointer-events-none transition-opacity duration-300"></div>
         <div style="display:flex;align-items:center;gap:1rem">
             <div id="stats-counter" class="text-orange-400 font-black text-[0.75rem] uppercase" style="text-shadow:0 0 8px rgba(251,146,60,0.5)">0 TÍTULOS NO ACERVO JONAS</div>
+            <div style="width:1px;height:16px;background:var(--border-color);flex-shrink:0"></div>
             <div id="auto-save-indicator" class="flex items-center gap-2" style="display:none">
                 <i id="auto-save-icon" class="fas fa-save" style="font-size:1.1rem;color:#555"></i>
             </div>
@@ -2145,7 +2124,7 @@
                 <div class="flex items-center gap-2">
                     <button onclick="UI.switchTab('filmes')" id="tab-filmes" class="tab-premium active" data-tab="filmes">Filmes</button>
                     <button onclick="UI.switchTab('series')" id="tab-series" class="tab-premium" data-tab="series">Séries</button>
-                    <button onclick="UI.switchTab('estreias')" id="tab-estreias" class="tab-premium" data-tab="estreias">Estréias</button>
+                    <button onclick="UI.switchTab('estreias')" id="tab-estreias" class="tab-premium" data-tab="estreias">Estreias</button>
                 </div>
 
                 <button onclick="UI.closeModal('modal-cadastro')" class="btn-close-premium">
@@ -2462,13 +2441,13 @@
                     </div>
                 </div>
 
-                <!-- Aba Estréias -->
+                <!-- Aba Estreias -->
                 <div id="tab-content-estreias" class="tab-content">
                     <!-- Dynamic Estreia Form -->
                     <div id="dynamic-estreia-wrapper" class="space-y-3">
                         <!-- Summary bar -->
                         <div id="dynamic-estreia-summary" style="display:flex;align-items:center;justify-content:space-between;background:rgba(16,185,129,0.06);border-radius:0.75rem;padding:0.6rem 0.85rem;border:1px solid rgba(16,185,129,0.1)">
-                            <span id="estreia-count-display" style="font-size:0.85rem;font-weight:700;color:#34D399">0 ESTRÉIAS</span>
+                            <span id="estreia-count-display" style="font-size:0.85rem;font-weight:700;color:#34D399">0 ESTREIAS</span>
                             <div style="display:flex;gap:0.5rem">
                                 <button onclick="UI._addEstreiaRow()" class="estreia-summary-btn rounded-full flex items-center justify-center font-black transition" style="width:30px;height:30px;background:rgba(16,185,129,0.2);color:#10B981;border:1px solid rgba(16,185,129,0.3);font-size:0.8rem" title="Adicionar"><i class="fas fa-plus"></i></button>
                                 <button onclick="UI._removeLastEstreiaRow()" class="estreia-summary-btn rounded-full flex items-center justify-center font-black transition" style="width:30px;height:30px;background:rgba(239,68,68,0.2);color:#EF4444;border:1px solid rgba(239,68,68,0.3);font-size:0.8rem" title="Remover último"><i class="fas fa-minus"></i></button>
@@ -2478,7 +2457,7 @@
                         <!-- Auto-delete warning -->
                         <div id="estreia-auto-delete-warning" style="display:none;font-size:0.7rem;color:#8B5CF6;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.15);border-radius:0.5rem;padding:0.4rem 0.7rem" class="flex items-center gap-2">
                             <i class="fas fa-info-circle" style="color:#8B5CF6;font-size:0.7rem"></i>
-                            <span>Estréias com data vencida são removidas automaticamente.</span>
+                            <span>Estreias com data vencida são removidas automaticamente.</span>
                         </div>
                         <!-- Rows container with scroll (max 5 visible) -->
                         <div id="dynamic-estreias-container" style="max-height:400px;overflow-y:auto;scroll-behavior:smooth" class="custom-scroll">
@@ -2592,7 +2571,7 @@
                     </div>
                     <div>
                         <h3 class="font-black uppercase tracking-widest" style="font-size:0.9rem;background:linear-gradient(135deg,#FBBF24,#F97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent">
-                            NOTIFICAÇÕES DE ESTRÉIAS
+                            NOTIFICAÇÕES DE ESTREIAS
                         </h3>
                         <span id="notification-count-label" style="font-size:0.6rem;color:var(--text-secondary);font-weight:600;text-transform:uppercase;letter-spacing:0.05em">0 notificações</span>
                     </div>
@@ -2807,7 +2786,7 @@
                     <div class="dashboard-card"><div class="dc-value" id="dc-total">0</div><div class="dc-label">Total Títulos</div></div>
                     <div class="dashboard-card blue"><div class="dc-value" id="dc-filmes">0</div><div class="dc-label">Filmes</div></div>
                     <div class="dashboard-card purple"><div class="dc-value" id="dc-series">0</div><div class="dc-label">Séries</div></div>
-                    <div class="dashboard-card amber"><div class="dc-value" id="dc-estreias">0</div><div class="dc-label">Estréias</div></div>
+                    <div class="dashboard-card amber"><div class="dc-value" id="dc-estreias">0</div><div class="dc-label">Estreias</div></div>
                 </div>
                 <!-- Time Filter Section -->
                 <div class="dash-time-filter" id="dash-time-filter">
@@ -3777,19 +3756,22 @@
                 footer.style.minHeight = cfg.footerHeight;
                 footer.style.paddingTop = '0.5rem';
                 footer.style.paddingBottom = '0.5rem';
-                var devEl = footer.querySelector('div:first-child');
+                var devEl = document.getElementById('footer-dev-text');
                 if (devEl) {
                     devEl.style.fontSize = cfg.footerDevSize;
                     devEl.style.color = cfg.footerDevColor;
-                    var span = devEl.querySelector('span');
+                    var span = devEl.querySelector('span.opacity-50');
                     if (span) {
                         span.textContent = cfg.footerCreatedText;
                         span.style.fontSize = cfg.footerCreatedSize;
                         span.style.color = cfg.footerCreatedColor;
                     }
-                    var textNode = devEl.firstChild;
-                    if (textNode && textNode.nodeType === 3) {
-                        textNode.textContent = cfg.footerDevText;
+                    // Preserve text node (dev text) — update if config differs from default
+                    for (var i = 0; i < devEl.childNodes.length; i++) {
+                        if (devEl.childNodes[i].nodeType === 3) {
+                            devEl.childNodes[i].textContent = cfg.footerDevText;
+                            break;
+                        }
                     }
                 }
                 var statusEl = document.getElementById('stats-counter');
@@ -3882,7 +3864,12 @@
                 if (this._scrollHandler) { window.removeEventListener('scroll', this._scrollHandler); this._scrollHandler = null; }
 
                 if (filtered.length === 0) {
-                    emptyState.style.display = 'flex';
+                    if (q && APP_STATE.movies.length > 0) {
+                        emptyState.style.display = 'none';
+                        container.innerHTML = '<div style="text-align:center;padding:4rem 2rem;color:var(--text-secondary)"><i class="fas fa-search text-3xl mb-4" style="opacity:0.3"></i><div style="font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem">Nenhum resultado para "<span style="color:var(--accent)">' + searchQueryRaw.replace(/</g,'&lt;') + '</span>"</div><div style="font-size:10px;opacity:0.6">Tente outro termo de busca</div></div>';
+                    } else {
+                        emptyState.style.display = 'flex';
+                    }
                 } else {
                     emptyState.style.display = 'none';
                     if (APP_STATE.currentView === 'estreias') {
@@ -4105,7 +4092,7 @@
                     UI.openModal('modal-cadastro');
                     _editingId = movie.id;
                     UI.switchTab(movie.type);
-                    const typeLabel = movie.type === 'filmes' ? 'O FILME' : movie.type === 'series' ? 'A SÉRIE' : 'A ESTRÉIA';
+                    const typeLabel = movie.type === 'filmes' ? 'O FILME' : movie.type === 'series' ? 'A SÉRIE' : 'A ESTREIA';
                     document.getElementById('modal-title').innerHTML = 'EDITAR <span style="-webkit-text-fill-color:#3B82F6">' + typeLabel + '</span>';
                     var btn = document.getElementById('btn-save-v2');
                     if (btn) btn.innerHTML = '<i class="fas fa-check mr-2"></i> ATUALIZAR';
@@ -4928,7 +4915,6 @@
                 if (!text) { Logic.showStatus('Escreva algo para o lembrete'); return; }
                 movie.reminder = text;
                 if (!movie.reminderCreatedAt) movie.reminderCreatedAt = Date.now();
-                else movie.reminderCreatedAt = Date.now();
                 Storage.save();
                 Render.all();
                 Logic.updateReminderBadge();
@@ -5129,8 +5115,8 @@
                     {icon:'fa-print',label:'Gerar Lista A4',desc:'Imprima ou exporte para PDF/JPG uma lista completa dos itens visualizados em formato A4 tabelado.'},
                     {icon:'fa-download',label:'Exportar Dados',desc:'Exporte todo o seu acervo em formato JSON para backup ou transferência.'},
                     {icon:'fa-upload',label:'Importar Dados',desc:'Importe acervo de arquivos JSON. Restaure backups facilmente.'},
-                    {icon:'fa-moon',label:'Modo Noturno',desc:'Alternância de temas com menu flutuante. Escolha entre Dark e Light.'},
-                    {icon:'fa-info-circle',label:'Sobre o Sistema',desc:'CineCatalog Elo v1.2.6 — Edição Premium. Sistema completo de gestão de acervo cinematográfico.'},
+                    {icon:'fa-moon',label:'Modo Noturno',desc:'Alternância de temas com menu flutuante. Escolha entre Dark, Light, Amber e Midnight.'},
+                    {icon:'fa-info-circle',label:'Sobre o Sistema',desc:'CineCatalog Elo v29.0.1 — Edição Premium. Sistema completo de gestão de acervo cinematográfico.'},
                     {icon:'fa-th-large',label:'Modos de Exibição',desc:'Três modos de visualização: Carrossel com setas, Grelha por gêneros, e Cine Marquee com animação. Ajuste velocidade e efeito no menu.'},
                     {icon:'fa-arrows-alt-h',label:'Navegação Carrossel',desc:'Navegue horizontalmente por linha com setas laterais. Duas linhas visíveis com rolagem infinita até o fim dos cards.'},
                     {icon:'fa-tachometer-alt',label:'Desempenho Otimizado',desc:'Renderizaçao lazy com batches de 20 cards. Scroll infinito suave sem travar a interface.'},
@@ -5832,10 +5818,11 @@
                 var overlay = document.getElementById('notification-overlay');
                 var btn = document.getElementById('btn-notifications');
                 if (overlay.classList.contains('active')) { UI.closeNotifications(); if (btn) btn.classList.remove('active'); }
-                else if (Logic._lastNotifications && Logic._lastNotifications.length > 0) {
+                else {
                     Logic._clearHeaderBtnActive();
                     if (btn) btn.classList.add('active');
-                    Logic.showEstreiaNotifications(Logic._lastNotifications, { count: 1, closed: false, firstShown: false }, '', true);
+                    var list = (Logic._lastNotifications && Logic._lastNotifications.length > 0) ? Logic._lastNotifications : [];
+                    Logic.showEstreiaNotifications(list, { count: 1, closed: false, firstShown: false }, '', true);
                 }
             },
             toggleReminderPanel() {
@@ -6178,7 +6165,7 @@
                 createChart('chart-type', {
                     type: 'doughnut',
                     data: {
-                        labels: ['Filmes', 'Séries', 'Estréias'],
+                        labels: ['Filmes', 'Séries', 'Estreias'],
                         datasets: [{ data: [filmes, series, estreias], backgroundColor: ['#3B82F6', '#8B5CF6', '#F59E0B'], borderWidth: 0, hoverOffset: 8 }]
                     },
                     options: { responsive: true, maintainAspectRatio: true, plugins: { legend: legendOpts, title: Object.assign({}, titleOpts, { text: 'POR TIPO' }) }, cutout: '65%' }
@@ -6705,9 +6692,9 @@
                         '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;font-family:Inter,sans-serif;min-height:' + fHeight + '">' +
                         '<div style="font-size:' + fDevSize + ';color:' + fDevColor + ';text-transform:uppercase;letter-spacing:0.05em;font-weight:500">' +
                         fDevText + '<span style="opacity:0.5;font-size:' + fCreatedSize + ';color:' + fCreatedColor + '">' + fCreatedText + '</span>' +
+                        ' | <span style="background:linear-gradient(135deg,#3B82F6,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">v29.0.1</span>' +
                         '</div>' +
                         '<div style="display:flex;align-items:center;gap:0.5rem">' +
-                        '<span style="font-size:' + fAutoSize + ';color:' + fAutoColor + ';font-weight:900;text-transform:uppercase">Auto Save</span>' +
                         '<span style="font-size:' + fStatusSize + ';color:' + fStatusColor + ';font-weight:900;text-transform:uppercase">0 TÍTULOS</span>' +
                         '</div>' +
                         '</div>';
@@ -7206,8 +7193,8 @@
                 var synopsis = item.desc || '—';
                 var director = item.director || '—';
                 var cast = item.cast || '—';
-                var poster = item.posterUrl || '';
-                var mediaUrl = item.mediaUrl || '';
+                var poster = item.image || '';
+                var mediaUrl = item.mediaFile || item.trailUrl || '';
                 var statusText = '';
                 if (item.statuses) {
                     if (item.statuses.favorite) statusText = 'FAVORITO';
@@ -7838,7 +7825,7 @@
                         APP_STATE.movies[idx] = orig;
                         Storage.save();
                         Render.all();
-                        Logic.showStatus('Estréia "' + t + '" atualizada!');
+                        Logic.showStatus('Estreia "' + t + '" atualizada!');
                     }
                 } else {
                     // Create new
@@ -7859,7 +7846,7 @@
                     UI._estreiaSavedIds[newItem.id] = true;
                     Storage.save();
                     Render.all();
-                    Logic.showStatus('Estréia "' + t + '" adicionada!');
+                    Logic.showStatus('Estreia "' + t + '" adicionada!');
                 }
                 // Mark apply button as neon green (applied)
                 var applyBtn = row.querySelector('.estreia-btn-apply');
@@ -7899,7 +7886,7 @@
                     delete UI._estreiaSavedIds[savedId];
                     Storage.save();
                     Render.all();
-                    Logic.showStatus('Estréia removida!');
+                    Logic.showStatus('Estreia removida!');
                 }
                 var fields = document.getElementById('dynamic-estreias-fields');
                 if (fields) fields.removeChild(row);
@@ -7983,11 +7970,11 @@
                 estreiaDate.setHours(0, 0, 0, 0);
                 var diff = Math.round((estreiaDate - today) / (1000 * 60 * 60 * 24));
                 if (diff === 3) {
-                    Logic.showModalStatus('FALTAM 3 DIAS PARA ESTA ESTRÉIA!', 'orange');
+                    Logic.showModalStatus('FALTAM 3 DIAS PARA ESTA ESTREIA!', 'orange');
                 } else if (diff === 2) {
-                    Logic.showModalStatus('FALTAM 2 DIAS PARA ESTA ESTRÉIA!', 'orange');
+                    Logic.showModalStatus('FALTAM 2 DIAS PARA ESTA ESTREIA!', 'orange');
                 } else if (diff === 1) {
-                    Logic.showModalStatus('FALTAM 1 DIA PARA ESTA ESTRÉIA!', 'orange');
+                    Logic.showModalStatus('FALTAM 1 DIA PARA ESTA ESTREIA!', 'orange');
                 }
             },
             _updateEstreiaSummary() {
@@ -7995,7 +7982,7 @@
                 if (!fields) return;
                 var count = fields.querySelectorAll('.dynamic-estreia-row').length;
                 var display = document.getElementById('estreia-count-display');
-                if (display) display.textContent = count + ' ESTRÉIA' + (count !== 1 ? 'S' : '');
+                if (display) display.textContent = count + ' ESTREIA' + (count !== 1 ? 'S' : '');
             },
             saveAllDynamicEstreias() {
                 var fields = document.getElementById('dynamic-estreias-fields');
@@ -8054,6 +8041,10 @@
                 /* ESC fecha modais */
                 if (e.key === 'Escape') {
                     if (UI._shortcutsEditing) { UI._shortcutsCancelEdit(); return; }
+                    var ctxm = document.getElementById('context-menu');
+                    if (ctxm && ctxm.classList.contains('show')) { Logic.closeCtxMenu(); return; }
+                    var sbar = document.getElementById('search-bar-container');
+                    if (sbar && sbar.classList.contains('active')) { UI.toggleSearchBar(); return; }
                     var rp = document.getElementById('reminder-popup');
                     if (rp) rp.style.display = 'none';
                     var mmi = document.getElementById('modal-movie-info');
@@ -8420,7 +8411,7 @@
                     var estreiaType = 'estreias';
                     if (_editingId) {
                         _editingId = null;
-                var viewLabel = {filmes:'FILME', series:'SÉRIE', estreias:'ESTRÉIA'};
+                var viewLabel = {filmes:'FILME', series:'SÉRIE', estreias:'ESTREIA'};
                 document.getElementById('modal-title').innerHTML = 'CADASTRO <span style="-webkit-text-fill-color:#3B82F6">' + (viewLabel[APP_STATE.currentView] || 'NOVO') + '</span>';
                         var cloneBtn = document.getElementById('btn-clone-data');
                         if (cloneBtn) cloneBtn.style.display = 'none';
@@ -8644,7 +8635,7 @@
                 var last = _lastSavedItem;
                 if (!last) { Logic.showModalStatus('Nenhum dado salvo para clonar.', 'red'); return; }
                 var type = last.type || 'filmes';
-                if (type === 'estreias') { Logic.showModalStatus('Função CLONAR não disponível para Estréias.', 'red'); return; }
+                if (type === 'estreias') { Logic.showModalStatus('Função CLONAR não disponível para Estreias.', 'red'); return; }
                 UI.switchTab(type);
                 var sv = function(id, v) { var el = document.getElementById(id); if (el) el.value = v == null ? '' : v; };
                 var sc = function(id, v) { var el = document.getElementById(id); if (el) el.checked = !!v; };

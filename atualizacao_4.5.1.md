@@ -1087,6 +1087,232 @@ if (_es) {
 
 ---
 
+### 44. Título HTML Desatualizado: v22.1 → v29.0.1
+
+**Arquivo:** `index.html` — `<head>`
+
+**O que foi feito:**
+- O elemento `<title>` estava com a versão `v22.1`, desatualizado em relação ao badge do rodapé (`v29.0.1`).
+- Atualizado para `<title>CineCatalog Elo | v29.0.1 - Edição Premium</title>`.
+
+**Preservação:** Apenas o título da aba do navegador foi alterado. Nenhuma funcionalidade afetada.
+
+---
+
+## Implementações Realizadas — Melhorias 3 (análise do index.html)
+
+### 45. CSS Duplicado: Removido Segundo .estreia-delete-link
+
+**Arquivo:** `index.html` — `<style>`
+
+**O que foi feito:**
+- A classe `.estreia-delete-link` estava definida **duas vezes** (linhas ~880 e ~900) com tamanhos diferentes: 44×44px e 40×40px. A segunda definição sobrescrevia a primeira silenciosamente.
+- Removida a segunda definição duplicada (40×40px), mantendo a primeira (44×44px) que era a intencional e coerente com os demais botões de ação da lista de estreias (`.estreia-play-link` = 44px, `.estreia-edit-link` = 44px).
+
+**Preservação:** A aparência dos botões de estreia agora é uniforme (44×44px). Nenhuma funcionalidade alterada.
+
+---
+
+### 46. CSS Duplicado: Corrigido .info-item .info-desc
+
+**Arquivo:** `index.html` — `<style>`
+
+**O que foi feito:**
+- As regras `.info-item .info-desc { display: none; }` e `.info-item.active .info-desc { display: none; }` eram idênticas, impedindo que a descrição fosse exibida ao clicar em um ícone de funcionalidade.
+- A segunda regra (`.info-item.active .info-desc`) foi removida, permitindo que o `#info-desc-box` funcione normalmente via JavaScript (que já manipula o box inferior, não o `.info-desc` inline).
+
+**Preservação:** O sistema de descrições do modal Funcionalidades continua funcionando via `#info-desc-box`.
+
+---
+
+### 47. Barra de Pesquisa: Fechar com Tecla ESC
+
+**Arquivo:** `index.html` — JavaScript (keydown handler)
+
+**O que foi feito:**
+- Adicionada detecção da tecla ESC no handler `keydown` global: quando a barra de pesquisa está aberta (`search-bar-container.active`), pressionar ESC fecha a barra e limpa a pesquisa.
+- O comportamento é consistente com o fecho de outros modais e painéis.
+
+**Preservação:** A barra de pesquisa continua funcionando normalmente via botão X e outras formas de fecho.
+
+---
+
+### 48. Menu Contextual: Fechar com Tecla ESC
+
+**Arquivo:** `index.html` — JavaScript (keydown handler)
+
+**O que foi feito:**
+- Adicionada detecção da tecla ESC no handler `keydown` global: quando o menu contextual (`context-menu`) está visível, pressionar ESC o fecha com a animação de fade-out padrão.
+
+**Preservação:** O menu contextual continua funcionando normalmente via clique fora e seleção de opção.
+
+---
+
+### 49. Pesquisa Sem Resultados: Mensagem Informativa
+
+**Arquivo:** `index.html` — JavaScript (`Render.all`)
+
+**O que foi feito:**
+- Quando a pesquisa retorna 0 resultados (mas o acervo não está vazio), exibe uma mensagem centralizada: "Nenhum resultado para '[termo pesquisado]'" com ícone de pesquisa.
+- A mensagem aparece apenas quando há uma pesquisa ativa e o acervo tem itens — não confunde com o "Acervo Vazio" que aparece quando não há cadastros.
+
+**Preservação:** O empty-state original continua aparecendo quando o acervo está completamente vazio.
+
+---
+
+### 50. Theme Menu: Fechar ao Clicar Fora
+
+**Arquivo:** `index.html` — JavaScript (click-outside handler)
+
+**O que foi feito:**
+- Verificado e confirmado que o handler de click-outside já existia para o `theme-menu` via `Logic.setTheme()` que adiciona `hidden` ao menu. Entretanto, o listener global de click-outside não estava removendo a classe `active` do botão `btn-theme` ao clicar fora do menu sem selecionar um tema.
+- Corrigido: ao clicar fora do `theme-menu` sem selecionar um tema, a classe `active` é removida de `btn-theme`.
+
+**Preservação:** A seleção de tema continua funcionando normalmente. O toggle azul no botão Temas agora é removido corretamente ao clicar fora.
+
+---
+
+### 51. Bug Corrigido: saveReminder — reminderCreatedAt sempre sobrescrito
+
+**Arquivo:** `index.html` — JavaScript (`Logic.saveReminder`)
+
+**O que foi feito:**
+- O código original tinha `if (!movie.reminderCreatedAt) movie.reminderCreatedAt = Date.now(); else movie.reminderCreatedAt = Date.now();` — ambos os ramos faziam a mesma coisa, sobrescrevendo sempre a data de criação.
+- Removido o `else` para que a data de criação original seja preservada ao editar um lembrete existente.
+
+**Preservação:** Lembretes novos ainda recebem a data correta. Edições não sobrescrevem a data original.
+
+---
+
+### 52. Typos Ortográficos Corrigidos: "Estréias" → "Estreias"
+
+**Arquivo:** `index.html` — HTML e JavaScript
+
+**O que foi feito:**
+- Em português, "estreia" (estreia de filme/série) não leva acento. O arquivo continha múltiplas ocorrências de "Estréia/Estréias" e "ESTRÉIA/ESTRÉIAS" com acento incorreto em: navegação, abas, dashboard, mensagens de status, configurações, gráficos e modais.
+- Todas as ocorrências foram corrigidas para "Estreia/Estreias" e "ESTREIA/ESTREIAS" (sem acento).
+
+**Preservação:** Nenhuma funcionalidade alterada. Apenas texto exibido ao usuário.
+
+---
+
+### 53. Versão Desatualizada no "Sobre o Sistema": v1.2.6 → v29.0.1
+
+**Arquivo:** `index.html` — JavaScript (features array)
+
+**O que foi feito:**
+- A feature "Sobre o Sistema" no grid de funcionalidades do modal INFO exibia "CineCatalog Elo v1.2.6", desatualizado em relação à versão real v29.0.1.
+- Atualizado o texto para "CineCatalog Elo v29.0.1 — Edição Premium".
+
+**Preservação:** Apena texto informativo alterado.
+
+---
+
+### 54. Gráfico Dashboard: Label "Estréias" Corrigido
+
+**Arquivo:** `index.html` — JavaScript (renderDashboard)
+
+**O que foi feito:**
+- O label do gráfico de distribuição por tipo (donut) exibia "Estréias" (com acento). Corrigido para "Estreias" (sem acento), consistente com o restante da aplicação.
+
+**Preservação:** Apenas label visual do gráfico alterado.
+
+---
+
+### 55. Modal Sugestão: Poster e Mídia não apareciam
+
+**Arquivo:** `index.html` — JavaScript (`UI._fillSuggestionModal`)
+
+**O que foi feito:**
+- O modal de sugestão tentava usar `item.posterUrl` e `item.mediaUrl` para exibir o pôster e o botão de mídia, mas o modelo de dados do app usa `item.image` para o pôster e `item.mediaFile` / `item.trailUrl` para a mídia.
+- Corrigido para `item.image || ''` e `item.mediaFile || item.trailUrl || ''` respectivamente.
+
+**Preservação:** Agora o modal de sugestão exibe corretamente o pôster e o botão "ASSISTIR" quando há mídia disponível.
+
+---
+
+### 56. Rodapé Unificado — Texto e Versão em Linha Única
+
+**Arquivo:** `index.html` — HTML (footer) e JavaScript (`applyConfig`)
+
+**O que foi feito:**
+- O rodapé exibia o nome do desenvolvedor e a versão em elementos separados, causando aparência de duplicidade visual.
+- Unificados o texto do desenvolvedor, crédito e versão em uma única linha: `ELO SISTEMA E TECNOLOGIA | 2026 - CRIADO PARA JONAS THEODORO | v29.0.1`.
+- Removido o separador vertical entre o texto do dev e a versão (que ficava entre dois blocos separados). O pipe `|` agora serve como separador natural.
+- Atualizado o `applyConfig` para buscar o elemento `#footer-dev-text` por ID em vez de `div:first-child`.
+- Atualizado o preview do footer no modal de configurações para incluir a versão no final.
+
+**Preservação:** O rodapé mantém todas as configurações de cores, tamanhos e textos personalizáveis. O badge de versão continua com gradiente neon.
+
+---
+
+### 57. Separador entre Status e Ícone Disquete no Rodapé
+
+**Arquivo:** `index.html` — HTML (footer)
+
+**O que foi feito:**
+- Adicionado um separador vertical (`<div>` com 1px de largura e `var(--border-color)`) entre o `#stats-counter` (status de títulos) e o `#auto-save-indicator` (ícone de disquete).
+- O separador alinha-se visualmente com o restante do layout do rodapé.
+
+**Preservação:** O indicador de auto-save e o contador de status mantêm suas posições e estilos originais.
+
+---
+
+### 58. Painel NOTIFICAÇÕES Abre Mesmo Vazio
+
+**Arquivo:** `index.html` — JavaScript (`UI.toggleNotifications`)
+
+**O que foi feito:**
+- A função `toggleNotifications` só abria o overlay de notificações se houvesse notificações pendentes (`Logic._lastNotifications.length > 0`). Caso contrário, nada acontecia ao clicar no botão.
+- Agora o painel abre sempre ao clicar no botão, exibindo a lista de notificações (mesmo que vazia). Quando não há notificações, a lista mostra o conteúdo vazio gerado por `showEstreiaNotifications`.
+
+**Preservação:** O botão de notificações continua toggling corretamente. A auto-fecho para popups secundários continua funcionando.
+
+---
+
+### 59. Painel LEMBRETES Abre Mesmo Vazio (Confirmado)
+
+**Arquivo:** `index.html` — JavaScript (`UI.toggleReminderPanel`)
+
+**O que foi feito:**
+- Verificado que a função `toggleReminderPanel` já chamava `Logic.renderReminderList()` e adicionava a classe `active` ao painel independentemente de haver lembretes ou não.
+- A função `renderReminderList` já tratava o caso vazio com "0 Lembretes" e instrução para criar o primeiro lembrete.
+- Nenhuma alteração necessária — o comportamento já estava correto.
+
+**Preservação:** O painel de lembretes funciona normalmente com ou sem dados.
+
+---
+
+## Checklist Final (melhorias3.md — Itens 44–59)
+
+| Verificação | Status |
+|---|---|
+| (44) Título HTML atualizado para v29.0.1 | OK |
+| (45) CSS duplicado .estreia-delete-link removido | OK |
+| (45) Botões de estreia uniformes (44×44px) | OK |
+| (46) CSS .info-item.active .info-desc duplicado removido | OK |
+| (47) Barra de pesquisa fecha com ESC | OK |
+| (48) Menu contextual fecha com ESC | OK |
+| (49) Mensagem "Nenhum resultado" ao pesquisar sem matches | OK |
+| (49) Não confunde com "Acervo Vazio" | OK |
+| (50) Theme menu: active removido ao clicar fora | OK |
+| (51) Bug saveReminder: reminderCreatedAt preservado | OK |
+| (52) Typos "Estréias" corrigidos em todo o arquivo | OK |
+| (53) Versão no "Sobre" atualizada para v29.0.1 | OK |
+| (54) Label gráfico "Estreias" sem acento | OK |
+| (55) Modal sugestão: poster e mídia funcionando | OK |
+| (56) Rodapé unificado: dev + crédito + versão em linha única | OK |
+| (56) applyConfig busca #footer-dev-text por ID | OK |
+| (56) Preview footer inclui versão v29.0.1 | OK |
+| (57) Separador vertical entre status e ícone disquete | OK |
+| (58) Painel notificações abre mesmo vazio | OK |
+| (59) Painel lembretes já abria vazio (confirmado) | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
+
+---
+
 ### Checklist Final (melhorias2.md — Itens 42–43)
 
 | Verificação | Status |
