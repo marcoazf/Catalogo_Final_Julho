@@ -90,7 +90,7 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 </head>
 <body>
 <h1>Manual do Catálogo</h1>
-<p class="subtitle">CineCatalog Elo — Edição Premium | Versão 28.2 <span class="badge badge-blue">ÍCONE DA APP</span></p>
+<p class="subtitle">CineCatalog Elo — Edição Premium | Versão 29.0.1 <span class="badge badge-blue">ÍCONE DA APP</span></p>
 
 <div class="nav">
 <a href="#s1">1. Visão Geral</a>
@@ -115,6 +115,10 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <a href="#s20">20. Ícone da Aplicação</a>
 <a href="#s21">21. Novidades v28.1</a>
 <a href="#s22">22. Novidades v28.2</a>
+<a href="#s23">23. Novidades v29.0.1</a>
+<a href="#s24">24. Estatísticas com Filtros</a>
+<a href="#s25">25. Lembretes</a>
+<a href="#s26">26. Funcionalidades (49)</a>
 </div>
 
 <h2 id="s1">1. Visão Geral</h2>
@@ -335,7 +339,7 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <h2 id="s14">14. Atualizações</h2>
 <p>O sistema verifica atualizações automaticamente através da GitHub API.</p>
 <ul>
-<li>Badge da versão no footer: <span class="badge badge-blue">v28.2</span></li>
+<li>Badge da versão no footer: <span class="badge badge-blue">v29.0.1</span></li>
 <li>Clique no badge para verificar manualmente</li>
 <li>Se atualizado: badge verde <span class="badge badge-green">✓ Atualizado</span></li>
 <li>Se nova versão: badge âmbar com link para download</li>
@@ -414,7 +418,7 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <p>O ficheiro <code>icon.png</code> encontra-se na raiz do projeto e é referenciado no <code>electron/main.js</code>.</p>
 <div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
 
-<p style="margin-top:2rem;text-align:center;color:#475569;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em">CineCatalog Elo v28.2 — Edição Premium — Jonas Theodoro</p>
+<p style="margin-top:2rem;text-align:center;color:#475569;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em">CineCatalog Elo v29.0.1 — Edição Premium — Jonas Theodoro</p>
 
 <h2 id="s21">21. Novidades da Versão 28.1</h2>
 <ul>
@@ -430,7 +434,7 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 </ul>
 <div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
 
-<h2 id="s22">22. Novidades da Versão 28.2</h2>
+<h2 id="s22">22. Novidades da Versão 28.2 <span class="badge badge-purple">ANTERIOR</span></h2>
 <ul>
 <li><strong>Atalhos Personalizáveis:</strong> Novo gestor de atalhos (ícone <i class="fas fa-keyboard"></i> no header) — cada utilizador pode reatribuir os 8 atalhos principais com validação de conflitos</li>
 <li><strong>Auto Salvamento Simplificado:</strong> Indicador no rodapé agora apenas com ícone <i class="fas fa-save"></i> (sem texto), mais compacto e elegante</li>
@@ -442,6 +446,55 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <li><strong>Watch Session Removida:</strong> Funcionalidade "Continuar Assistindo" removida a pedido do utilizador</li>
 <li><strong>Versão 28.2:</strong> Badge atualizado, footer e documentação refletem a nova versão</li>
 </ul>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s23">23. Novidades da Versão 29.0.1</h2>
+<ul>
+<li><strong>Rodapé Atualizado:</strong> Versão v29.0.1 exibida em destaque no rodapé, separada do texto do criador com um separador vertical elegante</li>
+<li><strong>49 Funcionalidades:</strong> A janela Funcionalidades agora lista 49 ícones com scroll vertical suave (28 visíveis + 21 ao rolar). Totalizador colorido exibe "(49)"</li>
+<li><strong>Lembretes Sempre Acessiveis:</strong> Ao clicar em Lembretes, a janela abre mesmo sem nenhum lembrete, exibindo "0 Lembretes"</li>
+<li><strong>Estatísticas com Filtros em Tempo Real:</strong> O dashboard agora permite filtrar cadastros e ações por dia, período de dias, mês, período de meses, ano inteiro ou período de anos</li>
+<li><strong>Manual Atualizado:</strong> Todas as funcionalidades, links e versão do aplicativo atualizados para v29.0.1</li>
+</ul>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s24">24. Estatísticas com Filtros em Tempo Real</h2>
+<p>O dashboard de Estatísticas do Acervo agora inclui um sistema completo de filtros temporais que permite analisar cadastros e ações do utilizador por diferentes períodos:</p>
+<h3>Tipos de Filtro Disponíveis</h3>
+<table>
+<tr><th>Filtro</th><th>Descrição</th></tr>
+<tr><td><span class="badge badge-blue">Dia</span></td><td>Mostra apenas os dados de um dia específico. Use o seletor de data para escolher o dia.</td></tr>
+<tr><td><span class="badge badge-blue">Período de Dias</span></td><td>Selecione um intervalo de dias (data início e data fim) para ver os dados desse período.</td></tr>
+<tr><td><span class="badge badge-purple">Mês</span></td><td>Filtra por um mês específico do ano. Escolha o mês e o ano no seletor.</td></tr>
+<tr><td><span class="badge badge-purple">Período de Meses</span></td><td>Selecione um intervalo de meses (mês início e mês fim) dentro de um ano.</td></tr>
+<tr><td><span class="badge badge-amber">Ano Inteiro</span></td><td>Mostra todos os 12 meses do ano selecionado, com distribuição mensal visível.</td></tr>
+<tr><td><span class="badge badge-amber">Período de Anos</span></td><td>Selecione um intervalo de anos (ano início e ano fim) para visão abrangente.</td></tr>
+</table>
+<p>Os filtros são aplicados em tempo real — ao alterar qualquer critério, os gráficos e cards de estatísticas atualizam instantaneamente sem necessidade de recarregar.</p>
+<p><strong>Dica:</strong> Use os filtros para comparar períodos específicos, identificar tendências de cadastro e acompanhar o crescimento do acervo ao longo do tempo.</p>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s25">25. Lembretes</h2>
+<p>O painel de Lembretes agora é sempre acessível, mesmo quando não existem lembretes criados.</p>
+<ul>
+<li>Clique no ícone <i class="fas fa-sticky-note"></i> no header para abrir o painel</li>
+<li>Se não houver lembretes, o painel mostra <strong>"0 Lembretes"</strong> com mensagem indicativa</li>
+<li>O badge de notificação no ícone mostra a contagem de lembretes ativos</li>
+<li>Crie lembretes via menu de contexto (clique direito num card → Criar Lembrete)</li>
+<li>Edite ou remova lembretes diretamente no painel</li>
+</ul>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s26">26. 49 Funcionalidades</h2>
+<p>A janela Funcionalidades (ícone <i class="fas fa-info-circle"></i> no header) lista agora <strong>49 funcionalidades</strong> organizadas em grid de 7 colunas.</p>
+<ul>
+<li>Os primeiros 28 ícones (4 linhas) ficam visíveis por padrão</li>
+<li>Rolar verticalmente para ver as 21 funcionalidades adicionais (3 linhas extras)</li>
+<li>Não há barra de rolagem visível — a rolagem é suave e oculta</li>
+<li>Clique em qualquer ícone para ver a descrição detalhada da funcionalidade</li>
+<li>O totalizador na parte superior exibe <span style="color:#3B82F6;font-weight:800">(49)</span> ao lado do texto de instrução</li>
+</ul>
+<p>As novas funcionalidades adicionadas incluem: Lembretes Persistentes, Calendário de Estreias, Estatísticas em Tempo Real, Sugestão Inteligente, Agrupamento por Gênero, Zoom Responsivo, Trailer Integrado, Modo Smart TV, Upload de Capas, Backup Automático, 4 Temas Visuais, Tipografia Responsiva e Modais Premium, entre outras.</p>
 <div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
 </body>
 </html>

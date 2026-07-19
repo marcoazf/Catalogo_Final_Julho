@@ -994,6 +994,84 @@
             border-color: rgba(59,130,246,0.4) !important;
             box-shadow: 0 0 15px rgba(59,130,246,0.25);
         }
+        /* Dashboard Time Filters */
+        .dash-time-filter {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 0.75rem 1rem;
+        }
+        .dash-time-filter label {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--text-secondary);
+        }
+        .dash-time-filter select, .dash-time-filter input[type="date"] {
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 0.3rem 0.5rem;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--text-color);
+            outline: none;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .dash-time-filter select:focus, .dash-time-filter input[type="date"]:focus {
+            border-color: var(--accent-blue);
+        }
+        .dash-time-filter .tf-group {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        .dash-time-filter .tf-separator {
+            width: 1px;
+            height: 20px;
+            background: var(--border-color);
+            opacity: 0.5;
+        }
+        .dash-time-filter .tf-btn {
+            padding: 0.3rem 0.65rem;
+            border-radius: 0.5rem;
+            font-size: 0.6rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .dash-time-filter .tf-btn:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+        .dash-time-filter .tf-btn.active {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 12px rgba(59,130,246,0.3);
+        }
+        .dash-time-filter .tf-range {
+            display: none;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        .dash-time-filter .tf-range.show {
+            display: flex;
+        }
         #chart-dynamic-container {
             position: relative;
             min-height: 200px;
@@ -1356,6 +1434,14 @@
             gap: 0.5rem;
             margin-bottom: 0.5rem;
         }
+        .info-grid-scroll {
+            max-height: 320px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            padding-right: 4px;
+        }
+        .info-grid-scroll::-webkit-scrollbar { width: 4px; }
+        .info-grid-scroll::-webkit-scrollbar-thumb { background: var(--accent-blue); border-radius: 10px; }
         .info-item {
             display: flex;
             flex-direction: column;
@@ -2028,8 +2114,12 @@
 
     <!-- [BLOCO 6: FOOTER FIXO] -->
     <footer class="px-6 py-2 border-t theme-border flex justify-between items-center bg-black/20">
-        <div class="text-[0.75rem] text-gray-400 uppercase tracking-widest font-medium">
-            ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CRIADO PARA JONAS THEODORO</span>
+        <div class="flex items-center gap-0" style="flex-wrap:nowrap">
+            <div class="text-[0.75rem] text-gray-400 uppercase tracking-widest font-medium whitespace-nowrap">
+                ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CRIADO PARA JONAS THEODORO</span>
+            </div>
+            <div style="width:1px;height:16px;background:var(--border-color);flex-shrink:0;margin:0 0.75rem"></div>
+            <span id="app-version-badge" class="text-[1rem] font-black uppercase tracking-wider" style="background:linear-gradient(135deg,#3B82F6,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 20px rgba(59,130,246,0.3);letter-spacing:0.06em;white-space:nowrap">v29.0.1</span>
         </div>
         <div id="user-action-status" class="text-[0.75rem] text-emerald-500 font-bold uppercase opacity-0 pointer-events-none transition-opacity duration-300"></div>
         <div style="display:flex;align-items:center;gap:1rem">
@@ -2719,6 +2809,70 @@
                     <div class="dashboard-card purple"><div class="dc-value" id="dc-series">0</div><div class="dc-label">Séries</div></div>
                     <div class="dashboard-card amber"><div class="dc-value" id="dc-estreias">0</div><div class="dc-label">Estréias</div></div>
                 </div>
+                <!-- Time Filter Section -->
+                <div class="dash-time-filter" id="dash-time-filter">
+                    <label><i class="fas fa-clock mr-1 opacity-60"></i>Período:</label>
+                    <div class="tf-group" id="tf-btns">
+                        <button class="tf-btn active" data-filter="todos" onclick="UI.setDashTimeFilter('todos')">Todos</button>
+                        <button class="tf-btn" data-filter="dia" onclick="UI.setDashTimeFilter('dia')">Dia</button>
+                        <button class="tf-btn" data-filter="periodo-dias" onclick="UI.setDashTimeFilter('periodo-dias')">Período Dias</button>
+                        <button class="tf-btn" data-filter="mes" onclick="UI.setDashTimeFilter('mes')">Mês</button>
+                        <button class="tf-btn" data-filter="periodo-meses" onclick="UI.setDashTimeFilter('periodo-meses')">Período Meses</button>
+                        <button class="tf-btn" data-filter="ano" onclick="UI.setDashTimeFilter('ano')">Ano</button>
+                        <button class="tf-btn" data-filter="periodo-anos" onclick="UI.setDashTimeFilter('periodo-anos')">Período Anos</button>
+                    </div>
+                    <div class="tf-separator"></div>
+                    <!-- Filter Inputs by type -->
+                    <div class="tf-range show" id="tf-input-dia">
+                        <label>Data:</label>
+                        <input type="date" id="tf-dia-date" onchange="UI.applyDashTimeFilter()">
+                    </div>
+                    <div class="tf-range" id="tf-input-periodo-dias">
+                        <label>De:</label>
+                        <input type="date" id="tf-dias-start" onchange="UI.applyDashTimeFilter()">
+                        <label>Até:</label>
+                        <input type="date" id="tf-dias-end" onchange="UI.applyDashTimeFilter()">
+                    </div>
+                    <div class="tf-range" id="tf-input-mes">
+                        <label>Mês:</label>
+                        <select id="tf-mes-month" onchange="UI.applyDashTimeFilter()">
+                            <option value="1">Janeiro</option><option value="2">Fevereiro</option><option value="3">Março</option>
+                            <option value="4">Abril</option><option value="5">Maio</option><option value="6">Junho</option>
+                            <option value="7">Julho</option><option value="8">Agosto</option><option value="9">Setembro</option>
+                            <option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option>
+                        </select>
+                        <label>Ano:</label>
+                        <select id="tf-mes-year" onchange="UI.applyDashTimeFilter()"></select>
+                    </div>
+                    <div class="tf-range" id="tf-input-periodo-meses">
+                        <label>Mês Início:</label>
+                        <select id="tf-pm-start-month" onchange="UI.applyDashTimeFilter()">
+                            <option value="1">Jan</option><option value="2">Fev</option><option value="3">Mar</option>
+                            <option value="4">Abr</option><option value="5">Mai</option><option value="6">Jun</option>
+                            <option value="7">Jul</option><option value="8">Ago</option><option value="9">Set</option>
+                            <option value="10">Out</option><option value="11">Nov</option><option value="12">Dez</option>
+                        </select>
+                        <label>Ano:</label>
+                        <select id="tf-pm-year" onchange="UI.applyDashTimeFilter()"></select>
+                        <label>até</label>
+                        <select id="tf-pm-end-month" onchange="UI.applyDashTimeFilter()">
+                            <option value="1">Jan</option><option value="2">Fev</option><option value="3">Mar</option>
+                            <option value="4">Abr</option><option value="5">Mai</option><option value="6">Jun</option>
+                            <option value="7">Jul</option><option value="8">Ago</option><option value="9">Set</option>
+                            <option value="10">Out</option><option value="11">Nov</option><option value="12">Dez</option>
+                        </select>
+                    </div>
+                    <div class="tf-range" id="tf-input-ano">
+                        <label>Ano:</label>
+                        <select id="tf-ano-year" onchange="UI.applyDashTimeFilter()"></select>
+                    </div>
+                    <div class="tf-range" id="tf-input-periodo-anos">
+                        <label>De:</label>
+                        <select id="tf-anos-start" onchange="UI.applyDashTimeFilter()"></select>
+                        <label>Até:</label>
+                        <select id="tf-anos-end" onchange="UI.applyDashTimeFilter()"></select>
+                    </div>
+                </div>
                 <!-- Chart Type Selector -->
                 <div class="dashboard-chart-selector" style="display:flex;align-items:center;gap:0.5rem;justify-content:center;margin-bottom:1rem;flex-wrap:wrap">
                     <span style="font-size:0.75rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.05em">VISUALIZAR:</span>
@@ -3288,8 +3442,8 @@
                 </div>
             </div>
             <div class="p-5 overflow-y-auto custom-scroll" style="max-height:82vh">
-                <div style="font-size:0.7rem;font-weight:600;color:var(--text-secondary);margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.1em">Clique num ícone para saber mais</div>
-                <div id="info-features-grid" class="info-grid"></div>
+                <div style="font-size:0.7rem;font-weight:600;color:var(--text-secondary);margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.1em">Clique num ícone para saber mais <span style="color:var(--accent-blue);font-weight:800">(49)</span></div>
+                <div id="info-features-grid" class="info-grid info-grid-scroll"></div>
                 <!-- Bottom description box -->
                 <div id="info-desc-box" class="hidden-box">
                     <i class="fas fa-info-circle desc-icon"></i>
@@ -4847,7 +5001,7 @@
                     '<span style="font-size:10px;font-weight:700;text-transform:uppercase;color:#F59E0B">' + count + ' lembrete' + (count !== 1 ? 's' : '') + '</span>' +
                     '</div>';
                 if (count === 0) {
-                    container.innerHTML = html + '<div class="text-center text-sm text-gray-500 py-8">Nenhum lembrete criado</div>';
+                    container.innerHTML = html + '<div style="text-align:center;padding:2rem 1rem"><div style="width:64px;height:64px;border-radius:1.5rem;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem"><i class="fas fa-sticky-note" style="font-size:28px;color:#F59E0B;opacity:0.5"></i></div><div style="font-size:0.85rem;font-weight:800;color:#F59E0B;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:0.25rem">0 Lembretes</div><div style="font-size:0.65rem;color:var(--text-secondary);font-weight:500">Clique direito num card para criar o primeiro lembrete</div></div>';
                     return;
                 }
                 allItems.forEach(function(m, idx) {
@@ -4979,7 +5133,27 @@
                     {icon:'fa-info-circle',label:'Sobre o Sistema',desc:'CineCatalog Elo v1.2.6 — Edição Premium. Sistema completo de gestão de acervo cinematográfico.'},
                     {icon:'fa-th-large',label:'Modos de Exibição',desc:'Três modos de visualização: Carrossel com setas, Grelha por gêneros, e Cine Marquee com animação. Ajuste velocidade e efeito no menu.'},
                     {icon:'fa-arrows-alt-h',label:'Navegação Carrossel',desc:'Navegue horizontalmente por linha com setas laterais. Duas linhas visíveis com rolagem infinita até o fim dos cards.'},
-                    {icon:'fa-tachometer-alt',label:'Desempenho Otimizado',desc:'Renderizaçao lazy com batches de 20 cards. Scroll infinito suave sem travar a interface.'}
+                    {icon:'fa-tachometer-alt',label:'Desempenho Otimizado',desc:'Renderizaçao lazy com batches de 20 cards. Scroll infinito suave sem travar a interface.'},
+                    {icon:'fa-clock',label:'Lembretes Persistentes',desc:'Crie lembretes para qualquer filme ou série. O painel de lembretes permanece acessível mesmo vazio, mostrando a contagem zero.'},
+                    {icon:'fa-calendar-alt',label:'Calendário de Estreias',desc:'Visualize as estreias do seu acervo organizadas por data. Notificações automáticas quando a data de estreia se aproxima.'},
+                    {icon:'fa-chart-bar',label:'Estatísticas em Tempo Real',desc:'Filtros dinâmicos no dashboard: visualize cadastros e ações por dia, período de dias, mês, período de meses, ano inteiro ou período de anos.'},
+                    {icon:'fa-random',label:'Sugestão Inteligente',desc:'Sistema de sugestão aleatória que sempre encontra um título, mesmo sem filtros ativos. Prioriza títulos com status Novo, Assistir ou Favorito.'},
+                    {icon:'fa-layer-group',label:'Agrupamento por Gênero',desc:'Modo Grelha organiza automaticamente o acervo por gênero, com contadores e separadores visuais entre seções.'},
+                    {icon:'fa-expand-arrows-alt',label:'Zoom Responsivo',desc:'4 níveis de zoom (1X a 4X) que ajustam o número de colunas visíveis de 5 a 8 cards por linha, adaptando-se à resolução do monitor.'},
+                    {icon:'fa-th',label:'Grelha com Categorias',desc:'Visualização em grelha agrupa os títulos por gênero, facilitando a navegação e descoberta por tipo de conteúdo.'},
+                    {icon:'fa-music',label:'Trailer Integrado',desc:'Links de trailer integrados nos modais de informação. Abre em tela cheia no navegador com parâmetro fullscreen.'},
+                    {icon:'fa-user-secret',label:'Perfil do Diretor',desc:'Informações detalhadas do diretor em cada item, permitindo identificar rapidamente o criador de cada obra.'},
+                    {icon:'fa-globe',label:'Multi-país',desc:'Suporte a múltiplos países de origem em séries. Campo país no cadastro de séries com identificação visual.'},
+                    {icon:'fa-clone',label:'Duplicar Itens',desc:'Clone qualquer registro existente para criar um novo rapidamente. Botão CLONAR aparece automaticamente após cada cadastro.'},
+                    {icon:'fa-clipboard-list',label:'Histórico de Cadastro',desc:'Registo cronológico de todos os cadastros realizados. Visualize data, hora e tipo de cada operação de cadastro.'},
+                    {icon:'fa-sliders-h',label:'Filtros Avançados',desc:'Sistema completo de filtros: por status, ano, gênero, ordenação alfabética e ordenação por data. Múltiplos critérios combináveis.'},
+                    {icon:'fa-closed-captioning',label:'Legendas Customizáveis',desc:'Suporte a legendas em múltiplos formatos. Configure estilo, cor e tamanho das legendas nas configurações de mídia.'},
+                    {icon:'fa-tv',label:'Modo Smart TV',desc:'Interface otimizada para Smart TV com navegação por DPAD (setas direcionais), contorno de foco amarelo e cards focáveis.'},
+                    {icon:'fa-cloud-upload-alt',label:'Upload de Capas',desc:'Área de upload com drag-and-drop para capas. Aceita JPG, PNG e WebP com proporção 9:16 (720x1280px). Preview em tempo real.'},
+                    {icon:'fa-hdd',label:'Backup Automático',desc:'Auto salvamento contínuo para localStorage e exportação automática para ficheiro JSON na pasta configurada do acervo.'},
+                    {icon:'fa-moon',label:'4 Temas Visuais',desc:'Dark, Light, Amber Noir e Midnight. Troca instantânea com persistência no localStorage. Cores adaptam-se automaticamente.'},
+                    {icon:'fa-text-height',label:'Tipografia Responsiva',desc:'Sistema de tipografia fluida que escala proporcionalmente entre HD, FHD, 2K e 4K. Usa clamp() para transição suave.'},
+                    {icon:'fa-window-maximize',label:'Modais Premium',desc:'Janelas de cadastro e informação com design premium: bordas arredondadas, sombras neon, animações de entrada e backdrop blur.'}
                 ];
                 var self = this;
                 grid.innerHTML = features.map(function(f, idx) {
@@ -5364,6 +5538,15 @@
                 this._clearHeaderBtnActive();
                 el.classList.add('active');
                 if (btn) btn.classList.add('active');
+                UI._dashTimeFilter = 'todos';
+                UI._dashTimeFilterRange = null;
+                UI._populateDashTimeSelects();
+                document.querySelectorAll('#tf-btns .tf-btn').forEach(function(b) { b.classList.remove('active'); });
+                var allBtn = document.querySelector('#tf-btns .tf-btn[data-filter="todos"]');
+                if (allBtn) allBtn.classList.add('active');
+                document.querySelectorAll('.tf-range').forEach(function(el) { el.classList.remove('show'); });
+                var allInput = document.getElementById('tf-input-todos');
+                if (allInput) allInput.classList.add('show');
                 UI.renderDashboard();
             }
         };
@@ -5941,7 +6124,17 @@
                 }
             },
             renderDashboard() {
-                var movies = APP_STATE.movies;
+                var allMovies = APP_STATE.movies;
+                var movies = allMovies;
+                var range = this._dashTimeFilterRange;
+                if (range && this._dashTimeFilter !== 'todos') {
+                    movies = allMovies.filter(function(m) {
+                        var ts = m._createdAt || m.id;
+                        if (!ts) return false;
+                        var d = new Date(parseInt(ts));
+                        return !isNaN(d.getTime()) && d >= range.start && d <= range.end;
+                    });
+                }
                 var total = movies.length;
                 var filmes = movies.filter(function(m) { return m.type === 'filmes'; }).length;
                 var series = movies.filter(function(m) { return m.type === 'series'; }).length;
@@ -6185,6 +6378,95 @@
                         self._renderDynamicChart(textColor, textSec2, fontFamily2, titleOpts2, legendOpts2);
                     };
                 });
+            },
+            _dashTimeFilter: 'todos',
+            setDashTimeFilter(type) {
+                this._dashTimeFilter = type;
+                document.querySelectorAll('#tf-btns .tf-btn').forEach(function(b) { b.classList.remove('active'); });
+                var activeBtn = document.querySelector('#tf-btns .tf-btn[data-filter="' + type + '"]');
+                if (activeBtn) activeBtn.classList.add('active');
+                var allInputs = document.querySelectorAll('.tf-range');
+                allInputs.forEach(function(el) { el.classList.remove('show'); });
+                var inputEl = document.getElementById('tf-input-' + type);
+                if (inputEl) inputEl.classList.add('show');
+                this._populateDashTimeSelects();
+                this.applyDashTimeFilter();
+            },
+            _populateDashTimeSelects() {
+                var movies = APP_STATE.movies;
+                var years = {};
+                movies.forEach(function(m) {
+                    if (m.year && m.year.trim()) { var y = parseInt(m.year); if (!isNaN(y)) years[y] = true; }
+                    if (m._createdAt || m.id) {
+                        var ts = m._createdAt || m.id;
+                        var d = new Date(parseInt(ts));
+                        if (!isNaN(d.getTime())) years[d.getFullYear()] = true;
+                    }
+                });
+                var yearList = Object.keys(years).map(Number).sort(function(a,b){return a-b;});
+                if (yearList.length === 0) {
+                    var curYear = new Date().getFullYear();
+                    yearList = [curYear - 2, curYear - 1, curYear];
+                }
+                function fillSelect(id, includeAll) {
+                    var sel = document.getElementById(id);
+                    if (!sel) return;
+                    var cur = sel.value;
+                    sel.innerHTML = '';
+                    yearList.forEach(function(y) {
+                        var opt = document.createElement('option');
+                        opt.value = y; opt.textContent = y;
+                        sel.appendChild(opt);
+                    });
+                    if (cur && yearList.indexOf(parseInt(cur)) >= 0) sel.value = cur;
+                }
+                fillSelect('tf-mes-year');
+                fillSelect('tf-pm-year');
+                fillSelect('tf-ano-year');
+                fillSelect('tf-anos-start');
+                fillSelect('tf-anos-end');
+                if (!document.getElementById('tf-dia-date').value) {
+                    var today = new Date();
+                    var ds = today.getFullYear() + '-' + ('0'+(today.getMonth()+1)).slice(-2) + '-' + ('0'+today.getDate()).slice(-2);
+                    document.getElementById('tf-dia-date').value = ds;
+                    document.getElementById('tf-dias-start').value = ds;
+                    document.getElementById('tf-dias-end').value = ds;
+                }
+            },
+            _dashTimeFilterRange: null,
+            applyDashTimeFilter() {
+                var type = this._dashTimeFilter;
+                var range = null;
+                if (type === 'dia') {
+                    var d = document.getElementById('tf-dia-date').value;
+                    if (d) range = { start: new Date(d + 'T00:00:00'), end: new Date(d + 'T23:59:59') };
+                } else if (type === 'periodo-dias') {
+                    var s = document.getElementById('tf-dias-start').value;
+                    var e = document.getElementById('tf-dias-end').value;
+                    if (s && e) range = { start: new Date(s + 'T00:00:00'), end: new Date(e + 'T23:59:59') };
+                } else if (type === 'mes') {
+                    var m = parseInt(document.getElementById('tf-mes-month').value) - 1;
+                    var y = parseInt(document.getElementById('tf-mes-year').value);
+                    if (!isNaN(y)) {
+                        range = { start: new Date(y, m, 1), end: new Date(y, m + 1, 0, 23, 59, 59) };
+                    }
+                } else if (type === 'periodo-meses') {
+                    var sm = parseInt(document.getElementById('tf-pm-start-month').value) - 1;
+                    var sy = parseInt(document.getElementById('tf-pm-year').value);
+                    var em = parseInt(document.getElementById('tf-pm-end-month').value) - 1;
+                    if (!isNaN(sy)) {
+                        range = { start: new Date(sy, sm, 1), end: new Date(sy, em + 1, 0, 23, 59, 59) };
+                    }
+                } else if (type === 'ano') {
+                    var ay = parseInt(document.getElementById('tf-ano-year').value);
+                    if (!isNaN(ay)) range = { start: new Date(ay, 0, 1), end: new Date(ay, 11, 31, 23, 59, 59) };
+                } else if (type === 'periodo-anos') {
+                    var sny = parseInt(document.getElementById('tf-anos-start').value);
+                    var eny = parseInt(document.getElementById('tf-anos-end').value);
+                    if (!isNaN(sny)) range = { start: new Date(sny, 0, 1), end: new Date(eny, 11, 31, 23, 59, 59) };
+                }
+                this._dashTimeFilterRange = range;
+                this.renderDashboard();
             },
             openConfig() {
                 var el = document.getElementById('modal-config');
