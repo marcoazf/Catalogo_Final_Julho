@@ -1389,6 +1389,11 @@
         }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
+        /* Date picker white icon */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1) brightness(2);
+        }
+
         /* === FEATURE: Search Match Neon === */
         .movie-card.search-match {
             border-color: #22C55E !important;
@@ -2278,9 +2283,14 @@
                         <div class="w-8 h-8 bg-purple-600/20 rounded-xl flex items-center justify-center"><i class="fas fa-layer-group text-purple-400 text-xs"></i></div>
                         <span class="text-[0.75rem] font-bold uppercase tracking-widest" style="color:var(--text-secondary)">Nova Série</span>
                         <div style="flex:1"></div>
-                        <button onclick="UI.openDynamicSeriesModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[0.6rem] font-black uppercase tracking-wider transition" style="background:linear-gradient(135deg,#8B5CF6,#7C3AED);color:white;box-shadow:0 4px 15px rgba(139,92,246,0.3)" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform=''">
-                            <i class="fas fa-dice-d6 text-xs"></i> CADASTRO DINÂMICO
-                        </button>
+                        <div id="dyn-series-buttons" style="display:none;gap:0.5rem" class="flex items-center">
+                            <button onclick="UI.openSeasonModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[0.6rem] font-black uppercase tracking-wider transition" style="background:linear-gradient(135deg,#8B5CF6,#7C3AED);color:white;box-shadow:0 4px 15px rgba(139,92,246,0.3)" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform=''">
+                                <i class="fas fa-layer-group text-xs"></i> CADASTRAR TEMPORADAS
+                            </button>
+                            <button onclick="UI.openEpisodeModal()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[0.6rem] font-black uppercase tracking-wider transition" style="background:linear-gradient(135deg,#7C3AED,#6D28D9);color:white;box-shadow:0 4px 15px rgba(124,58,217,0.3)" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform=''">
+                                <i class="fas fa-film text-xs"></i> CADASTRAR EPISÓDIOS
+                            </button>
+                        </div>
                     </div>
 
                     <div class="modal-form-grid">
@@ -2290,22 +2300,28 @@
                                 <label class="label-premium"><i class="fas fa-font mr-1.5 opacity-60"></i>Título da Série</label>
                                 <input type="text" id="fs-title" class="field-premium" placeholder="Título da série" required>
                             </div>
-                            <div class="flex gap-2">
+                            <div class="flex gap-2" style="align-items:flex-end">
                                 <div style="flex:0 0 90px;">
                                     <label class="label-premium"><i class="fas fa-calendar mr-1.5 opacity-60"></i>Ano</label>
                                     <input type="text" id="fs-year" class="field-premium" placeholder="2026">
                                 </div>
-                                <div style="flex:0 0 120px;">
+                                <div style="flex:1;">
                                     <label class="label-premium"><i class="fas fa-clock mr-1.5 opacity-60"></i>Duração</label>
-                                    <input type="text" id="fs-duration" class="field-premium" placeholder="Ex: 120">
+                                    <input type="text" id="fs-duration" class="field-premium" placeholder="Ex: 120 ou 01:20:00">
                                 </div>
-                                <div style="flex:0 0 90px;">
+                                <div style="flex:0 0 45px;">
                                     <label class="label-premium"><i class="fas fa-list-ol mr-1.5 opacity-60"></i>TEMP</label>
                                     <input type="number" id="fs-season" class="field-premium" placeholder="1">
                                 </div>
-                                <div style="flex:0 0 90px;">
+                                <div style="flex:0 0 45px;">
                                     <label class="label-premium"><i class="fas fa-hashtag mr-1.5 opacity-60"></i>EPIS</label>
                                     <input type="number" id="fs-episode-number" class="field-premium" placeholder="1">
+                                </div>
+                                <div>
+                                    <label class="label-premium">&nbsp;</label>
+                                    <div onclick="UI.toggleDynButtons()" class="btn-icon cursor-pointer" title="Gerar Temporada e Episódio Dinâmico" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:0.5rem;border:1px solid var(--border-color);background:rgba(139,92,246,0.1);cursor:pointer" onmouseover="this.style.background='rgba(139,92,246,0.25)'" onmouseout="this.style.background='rgba(139,92,246,0.1)'">
+                                        <i class="fas fa-cog text-purple-400 text-xs"></i>
+                                    </div>
                                 </div>
                             </div>
                             <div style="display:grid;grid-template-columns:2fr 1.5fr min-content;gap:0.6rem;align-items:end;">
@@ -2381,20 +2397,8 @@
                                 <input type="file" id="fs-poster-file" accept="image/jpeg,image/png,image/webp" class="hidden">
                             </div>
 
-                            <!-- Col B: Media + Status -->
+                            <!-- Col B: Status -->
                             <div class="space-y-3">
-                                <div>
-                                    <label class="label-premium"><i class="fas fa-link mr-1.5 opacity-60"></i>Link da Série</label>
-                                    <div class="input-with-icon">
-                                        <input type="text" id="fs-media-url" class="field-premium" placeholder="https://example.com/serie.mp4" style="font-size:10px">
-                                        <button type="button" class="input-icon-btn" id="fs-media-picker-btn" title="Selecionar ficheiro local"><i class="fas fa-folder-open"></i></button>
-                                        <input type="file" id="fs-media-file" accept="video/*" class="hidden">
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="label-premium"><i class="fas fa-video mr-1.5 opacity-60"></i>Trailer</label>
-                                    <input type="text" id="fs-trailer-url" class="field-premium" placeholder="https://youtube.com/..." style="font-size:10px">
-                                </div>
                                 <div id="fs-poster-url-wrap" class="poster-url-wrap">
                                     <label class="label-premium"><i class="fas fa-image mr-1.5 opacity-60"></i>URL da Capa</label>
                                     <div class="relative">
@@ -2450,8 +2454,6 @@
                             <span id="estreia-count-display" style="font-size:0.85rem;font-weight:700;color:#34D399">0 ESTREIAS</span>
                             <div style="display:flex;gap:0.5rem">
                                 <button onclick="UI._addEstreiaRow()" class="estreia-summary-btn rounded-full flex items-center justify-center font-black transition" style="width:30px;height:30px;background:rgba(16,185,129,0.2);color:#10B981;border:1px solid rgba(16,185,129,0.3);font-size:0.8rem" title="Adicionar"><i class="fas fa-plus"></i></button>
-                                <button onclick="UI._removeLastEstreiaRow()" class="estreia-summary-btn rounded-full flex items-center justify-center font-black transition" style="width:30px;height:30px;background:rgba(239,68,68,0.2);color:#EF4444;border:1px solid rgba(239,68,68,0.3);font-size:0.8rem" title="Remover último"><i class="fas fa-minus"></i></button>
-                                <button onclick="UI.saveAllDynamicEstreias()" class="px-4 py-1.5 rounded-lg text-[0.7rem] font-black uppercase tracking-wider transition" style="background:linear-gradient(135deg,#10B981,#059669);color:white;box-shadow:0 2px 10px rgba(16,185,129,0.3)"><i class="fas fa-save mr-1.5"></i>APLICAR +</button>
                             </div>
                         </div>
                         <!-- Auto-delete warning -->
@@ -2460,7 +2462,8 @@
                             <span>Estreias com data vencida são removidas automaticamente.</span>
                         </div>
                         <!-- Rows container with scroll (max 5 visible) -->
-                        <div id="dynamic-estreias-container" style="max-height:400px;overflow-y:auto;scroll-behavior:smooth" class="custom-scroll">
+                        <div id="dynamic-estreias-container" style="max-height:320px;overflow-y:auto;scroll-behavior:smooth;scrollbar-width:none;-ms-overflow-style:none" class="custom-scroll">
+                            <style>#dynamic-estreias-container::-webkit-scrollbar{display:none}</style>
                             <div id="dynamic-estreias-fields"></div>
                         </div>
                     </div>
@@ -2542,6 +2545,54 @@
                     <i class="fas fa-magic mr-1.5"></i> CRIAR CAMPOS
                 </button>
                 <button onclick="UI.closeDynamicSeriesModal()" class="py-2.5 px-4 bg-gray-700 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-gray-300 hover:bg-gray-600 transition">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Season Modal (overlay) -->
+    <div id="modal-seasons" class="fixed inset-0 z-[260] hidden items-center justify-center bg-black/60 backdrop-blur-sm" style="display:none">
+        <div class="bg-[#0f172a] border border-[#1e293b] rounded-2xl p-5 max-w-2xl w-full mx-4 shadow-2xl" onclick="event.stopPropagation()" style="max-height:80vh;display:flex;flex-direction:column">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-[13px] font-black uppercase tracking-widest flex items-center gap-2" style="background:linear-gradient(135deg,#fff,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">
+                    <i class="fas fa-layer-group" style="font-size:13px;-webkit-text-fill-color:#8B5CF6"></i> CADASTRAR TEMPORADAS
+                </h3>
+                <button onclick="UI.closeSeasonModal()" class="w-8 h-8 rounded-full flex items-center justify-center transition" style="background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4)" onmouseover="this.style.background='rgba(239,68,68,0.5)';this.style.transform='rotate(90deg)'" onmouseout="this.style.background='rgba(239,68,68,0.2)';this.style.transform=''">
+                    <i class="fas fa-times text-white text-xs"></i>
+                </button>
+            </div>
+            <div id="season-blocks-container" style="overflow-y:auto;flex:1;max-height:calc(80vh - 120px);padding-right:4px" class="custom-scroll"></div>
+            <div class="flex gap-2 mt-4 pt-3" style="border-top:1px solid var(--border-color)">
+                <button id="season-footer-btn" onclick="UI.saveSeasons()" class="flex-1 py-2.5 bg-gradient-to-r from-purple-600 to-violet-600 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-white transition hover:scale-[1.02] shadow-lg shadow-purple-600/30">
+                    <i class="fas fa-check mr-1.5"></i> CRIAR TEMPORADAS
+                </button>
+                <button onclick="UI.clearAllSeasons()" class="py-2.5 px-4 rounded-xl text-[0.7rem] font-black uppercase tracking-wider transition" style="background:rgba(239,68,68,0.15);color:#EF4444;border:1px solid rgba(239,68,68,0.3)">
+                    <i class="fas fa-trash mr-1"></i> LIMPAR TUDO
+                </button>
+                <button onclick="UI.closeSeasonModal()" class="py-2.5 px-4 bg-gray-700 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-gray-300 hover:bg-gray-600 transition">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Episode Modal (overlay) -->
+    <div id="modal-episodes" class="fixed inset-0 z-[260] hidden items-center justify-center bg-black/60 backdrop-blur-sm" style="display:none">
+        <div class="bg-[#0f172a] border border-[#1e293b] rounded-2xl p-5 max-w-3xl w-full mx-4 shadow-2xl" onclick="event.stopPropagation()" style="max-height:85vh;display:flex;flex-direction:column">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-[13px] font-black uppercase tracking-widest flex items-center gap-2" style="background:linear-gradient(135deg,#fff,#7C3AED);-webkit-background-clip:text;-webkit-text-fill-color:transparent">
+                    <i class="fas fa-film" style="font-size:13px;-webkit-text-fill-color:#7C3AED"></i> CADASTRAR EPISÓDIOS
+                </h3>
+                <button onclick="UI.closeEpisodeModal()" class="w-8 h-8 rounded-full flex items-center justify-center transition" style="background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4)" onmouseover="this.style.background='rgba(239,68,68,0.5)';this.style.transform='rotate(90deg)'" onmouseout="this.style.background='rgba(239,68,68,0.2)';this.style.transform=''">
+                    <i class="fas fa-times text-white text-xs"></i>
+                </button>
+            </div>
+            <div id="episode-blocks-container" style="overflow-y:auto;flex:1;max-height:calc(85vh - 120px);padding-right:4px" class="custom-scroll"></div>
+            <div class="flex gap-2 mt-4 pt-3" style="border-top:1px solid var(--border-color)">
+                <button id="episode-footer-btn" onclick="UI.saveEpisodes()" class="flex-1 py-2.5 bg-gradient-to-r from-purple-600 to-violet-600 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-white transition hover:scale-[1.02] shadow-lg shadow-purple-600/30">
+                    <i class="fas fa-check mr-1.5"></i> CRIAR EPISÓDIOS
+                </button>
+                <button onclick="UI.clearAllEpisodes()" class="py-2.5 px-4 rounded-xl text-[0.7rem] font-black uppercase tracking-wider transition" style="background:rgba(239,68,68,0.15);color:#EF4444;border:1px solid rgba(239,68,68,0.3)">
+                    <i class="fas fa-trash mr-1"></i> LIMPAR TUDO
+                </button>
+                <button onclick="UI.closeEpisodeModal()" class="py-2.5 px-4 bg-gray-700 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-gray-300 hover:bg-gray-600 transition">Cancelar</button>
             </div>
         </div>
     </div>
@@ -4140,7 +4191,6 @@
                         document.getElementById('fs-director').value = movie.director || movie.creator || '';
                         document.getElementById('fs-cast').value = movie.cast || '';
                         document.getElementById('fs-category').value = movie.genre || '';
-                        document.getElementById('fs-trailer-url').value = movie.trailUrl || '';
                         document.getElementById('fs-other-info').value = movie.otherInfo || '';
                         document.getElementById('fs-stars').value = movie.stars || 0;
                         document.querySelectorAll('#star-input-container-series i').forEach(function(s) { s.classList.toggle('text-yellow-500', s.dataset.v <= (movie.stars || 0)); });
@@ -4148,12 +4198,6 @@
                             UI.setPosterPreview(movie.image, 'fs');
                         } else {
                             UI.resetPoster('fs');
-                        }
-                        if (movie.mediaFile) {
-                            var fsMedia = document.getElementById('fs-media-url');
-                            if (fsMedia) {
-                                try { var r = JSON.parse(movie.mediaFile); fsMedia.value = r.name || ''; if (r.blob) fsMedia.dataset.ref = movie.mediaFile; } catch(e) { fsMedia.value = movie.mediaFile; }
-                            }
                         }
                         var countryEl = document.getElementById('fs-country');
                         if (countryEl) countryEl.value = movie.country || '';
@@ -4201,6 +4245,14 @@
                             var cls = 'active-' + item.dataset.status;
                             item.classList.toggle(cls, inp.checked);
                         });
+                        // Load new season/episode data
+                        UI._seasonData = (movie.dynamicSeasons && movie.dynamicSeasons.length > 0) ? movie.dynamicSeasons.slice() : [];
+                        UI._episodeData = (movie.dynamicEpisodesNew && movie.dynamicEpisodesNew.length > 0) ? movie.dynamicEpisodesNew.slice() : [];
+                        if (UI._seasonData.length > 0 || UI._episodeData.length > 0) {
+                            UI._dynButtonsVisible = true;
+                            var dynBtns = document.getElementById('dyn-series-buttons');
+                            if (dynBtns) dynBtns.style.display = 'flex';
+                        }
                     } else if (movie.type === 'estreias') {
                         // Clear existing dynamic rows and populate from movie
                         var fields = document.getElementById('dynamic-estreias-fields');
@@ -5575,8 +5627,6 @@
                     if (cfg.pathVideosActive && cfg.pathVideos) {
                         var mediaUrl = document.getElementById('f-media-url');
                         if (mediaUrl && !mediaUrl.value) mediaUrl.value = cfg.pathVideos;
-                        var fsMediaUrl = document.getElementById('fs-media-url');
-                        if (fsMediaUrl && !fsMediaUrl.value) fsMediaUrl.value = cfg.pathVideos;
                     }
                 }
             },
@@ -5897,7 +5947,7 @@
                     var el = document.getElementById(id);
                     if (el) el.value = '';
                 });
-                ['fs-title','fs-year','fs-duration','fs-episode-number','fs-season','fs-director','fs-cast','fs-desc','fs-trailer-url','fs-other-info'].forEach(function(id) {
+                ['fs-title','fs-year','fs-duration','fs-episode-number','fs-season','fs-director','fs-cast','fs-desc','fs-other-info'].forEach(function(id) {
                     var el = document.getElementById(id);
                     if (el) el.value = '';
                 });
@@ -5921,8 +5971,6 @@
                 UI.resetPoster('fs');
                 var mu = document.getElementById('f-media-url');
                 if (mu) mu.value = '';
-                var fsu = document.getElementById('fs-media-url');
-                if (fsu) fsu.value = '';
                 var fscat = document.getElementById('fs-category');
                 if (fscat) fscat.value = '';
                 document.querySelectorAll('.status-check-item').forEach(function(item) {
@@ -7517,6 +7565,261 @@
                 document.getElementById('modal-dynamic-series').style.display = 'none';
             },
             _dynSeasonEps: {},
+            _dynButtonsVisible: false,
+            _seasonData: [],
+            _seasonEditMode: false,
+            _episodeData: [],
+            _episodeEditMode: false,
+
+            toggleDynButtons() {
+                UI._dynButtonsVisible = !UI._dynButtonsVisible;
+                var el = document.getElementById('dyn-series-buttons');
+                if (el) el.style.display = UI._dynButtonsVisible ? 'flex' : 'none';
+            },
+
+            openSeasonModal() {
+                UI._seasonEditMode = (UI._seasonData && UI._seasonData.length > 0);
+                UI._generateSeasonBlocks();
+                document.getElementById('modal-seasons').style.display = 'flex';
+                var btn = document.getElementById('season-footer-btn');
+                if (btn) btn.innerHTML = UI._seasonEditMode ? '<i class="fas fa-save mr-1.5"></i> SALVAR' : '<i class="fas fa-check mr-1.5"></i> CRIAR TEMPORADAS';
+            },
+            closeSeasonModal() {
+                document.getElementById('modal-seasons').style.display = 'none';
+            },
+            _generateSeasonBlocks() {
+                var container = document.getElementById('season-blocks-container');
+                if (!container) return;
+                var totalSeasons = parseInt(document.getElementById('fs-season').value) || 1;
+                var seriesOptions = '';
+                document.querySelectorAll('#tab-content-series').length; // ensure on series tab
+                var seriesTitle = (document.getElementById('fs-title') && document.getElementById('fs-title').value.trim()) || 'Série';
+                // Gather all series titles from APP_STATE
+                var seriesList = (APP_STATE.movies || []).filter(function(m) { return m.type === 'series'; });
+                seriesList.forEach(function(s) {
+                    var t = s.titlePt || s.originalTitle || '';
+                    seriesOptions += '<option value="' + t.replace(/"/g, '&quot;') + '">' + t + '</option>';
+                });
+                // Add current (unsaved) series title as first option
+                if (seriesTitle && seriesOptions.indexOf(seriesTitle) === -1) {
+                    seriesOptions = '<option value="' + seriesTitle.replace(/"/g, '&quot;') + '">' + seriesTitle + '</option>' + seriesOptions;
+                }
+                var html = '';
+                for (var i = 0; i < totalSeasons; i++) {
+                    var saved = UI._seasonData[i] || {};
+                    var statusOptions = ['Exibição','Finalizada','Renovada','Assistir','Favorita'];
+                    var statusHtml = '<select data-field="status" class="field-premium" style="font-size:0.6rem;padding:0.25rem 0.3rem;min-width:0">';
+                    statusHtml += '<option value="">Status</option>';
+                    statusOptions.forEach(function(opt) {
+                        statusHtml += '<option value="' + opt + '"' + (saved.status === opt ? ' selected' : '') + '>' + opt + '</option>';
+                    });
+                    statusHtml += '</select>';
+                    html += '<div class="season-block-item" data-index="' + i + '" style="display:grid;grid-template-columns:32px 1fr 60px 60px 90px 28px;gap:0.4rem;align-items:center;margin-bottom:0.5rem;padding:0.5rem;border-radius:0.6rem;background:rgba(139,92,246,0.05);border:1px solid rgba(139,92,246,0.1)">';
+                    html += '<span class="w-7 h-7 rounded-full flex items-center justify-center text-[0.65rem] font-black" style="background:linear-gradient(135deg,#8B5CF6,#7C3AED);color:white">' + (i + 1) + '</span>';
+                    html += '<select data-field="series" class="field-premium" style="font-size:0.6rem;padding:0.25rem 0.3rem;min-width:0">' + seriesOptions.replace('selected', '').replace(new RegExp('value="' + (saved.series || seriesTitle).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '"'), 'value="' + (saved.series || seriesTitle).replace(/"/g, '&quot;') + '" selected') + '</select>';
+                    html += '<input type="text" data-field="totalSeasons" class="field-premium" value="' + totalSeasons + '" readonly style="font-size:0.6rem;padding:0.25rem 0.3rem;text-align:center;background:rgba(139,92,246,0.1);color:#C4B5FD">';
+                    html += '<input type="text" data-field="year" class="field-premium" value="' + (saved.year || '') + '" placeholder="Ano" style="font-size:0.6rem;padding:0.25rem 0.3rem">';
+                    html += statusHtml;
+                    html += '<div onclick="UI._clearSeasonBlock(' + i + ')" class="cursor-pointer flex items-center justify-center" style="width:24px;height:24px;border-radius:0.4rem;background:rgba(239,68,68,0.15);color:#EF4444;font-size:0.5rem" title="Limpar"><i class="fas fa-times"></i></div>';
+                    html += '</div>';
+                }
+                container.innerHTML = html;
+                // Pre-fill saved values
+                UI._seasonData.forEach(function(d, i) {
+                    var block = container.querySelector('.season-block-item[data-index="' + i + '"]');
+                    if (!block) return;
+                    var seriesSel = block.querySelector('[data-field="series"]');
+                    if (seriesSel && d.series) seriesSel.value = d.series;
+                    var yearInp = block.querySelector('[data-field="year"]');
+                    if (yearInp && d.year) yearInp.value = d.year;
+                    var statusSel = block.querySelector('[data-field="status"]');
+                    if (statusSel && d.status) statusSel.value = d.status;
+                });
+            },
+            _clearSeasonBlock(index) {
+                UI._seasonData[index] = {};
+                var block = document.querySelector('.season-block-item[data-index="' + index + '"]');
+                if (!block) return;
+                block.querySelectorAll('input, select').forEach(function(el) {
+                    if (el.dataset.field === 'totalSeasons') return;
+                    el.value = '';
+                });
+            },
+            clearAllSeasons() {
+                if (!confirm('Limpar todos os dados de temporadas?')) return;
+                UI._seasonData = [];
+                UI._generateSeasonBlocks();
+            },
+            saveSeasons() {
+                var blocks = document.querySelectorAll('.season-block-item');
+                UI._seasonData = [];
+                blocks.forEach(function(block, i) {
+                    var d = {};
+                    d.series = (block.querySelector('[data-field="series"]') || {}).value || '';
+                    d.seasonNumber = i + 1;
+                    d.totalSeasons = (block.querySelector('[data-field="totalSeasons"]') || {}).value || '';
+                    d.year = (block.querySelector('[data-field="year"]') || {}).value || '';
+                    d.status = (block.querySelector('[data-field="status"]') || {}).value || '';
+                    UI._seasonData.push(d);
+                });
+                UI.closeSeasonModal();
+                Logic.showStatus(UI._seasonData.length + ' temporada(s) salva(s)!');
+            },
+
+            openEpisodeModal() {
+                UI._episodeEditMode = (UI._episodeData && UI._episodeData.length > 0);
+                UI._generateEpisodeBlocks();
+                document.getElementById('modal-episodes').style.display = 'flex';
+                var btn = document.getElementById('episode-footer-btn');
+                if (btn) btn.innerHTML = UI._episodeEditMode ? '<i class="fas fa-save mr-1.5"></i> SALVAR' : '<i class="fas fa-check mr-1.5"></i> CRIAR EPISÓDIOS';
+            },
+            closeEpisodeModal() {
+                document.getElementById('modal-episodes').style.display = 'none';
+            },
+            _generateEpisodeBlocks() {
+                var container = document.getElementById('episode-blocks-container');
+                if (!container) return;
+                var totalEpisodes = parseInt(document.getElementById('fs-episode-number').value) || 1;
+                var totalSeasons = parseInt(document.getElementById('fs-season').value) || 1;
+                var seriesTitle = (document.getElementById('fs-title') && document.getElementById('fs-title').value.trim()) || 'Série';
+                // Series options
+                var seriesList = (APP_STATE.movies || []).filter(function(m) { return m.type === 'series'; });
+                var seriesOpts = '';
+                seriesList.forEach(function(s) {
+                    var t = s.titlePt || s.originalTitle || '';
+                    seriesOpts += '<option value="' + t.replace(/"/g, '&quot;') + '">' + t + '</option>';
+                });
+                if (seriesTitle && seriesOpts.indexOf(seriesTitle) === -1) {
+                    seriesOpts = '<option value="' + seriesTitle.replace(/"/g, '&quot;') + '">' + seriesTitle + '</option>' + seriesOpts;
+                }
+                // Season options
+                var seasonOpts = '';
+                for (var s = 1; s <= totalSeasons; s++) {
+                    seasonOpts += '<option value="' + s + '">Temporada ' + s + '</option>';
+                }
+                var statusOpts = ['Exibição','Finalizada','Renovada','Assistir','Favorita'];
+                var html = '';
+                for (var e = 0; e < totalEpisodes; e++) {
+                    var saved = UI._episodeData[e] || {};
+                    var statusHtml = '<select data-field="status" class="field-premium" style="font-size:0.55rem;padding:0.2rem 0.25rem;min-width:0">';
+                    statusHtml += '<option value="">Status</option>';
+                    statusOpts.forEach(function(opt) {
+                        statusHtml += '<option value="' + opt + '"' + (saved.status === opt ? ' selected' : '') + '>' + opt + '</option>';
+                    });
+                    statusHtml += '</select>';
+                    var starsHtml = '<select data-field="stars" class="field-premium" style="font-size:0.55rem;padding:0.2rem 0.25rem;min-width:0">';
+                    starsHtml += '<option value="0">☆☆☆☆☆</option>';
+                    for (var st = 1; st <= 5; st++) {
+                        var starStr = '★'.repeat(st) + '☆'.repeat(5 - st);
+                        starsHtml += '<option value="' + st + '"' + (saved.stars == st ? ' selected' : '') + '>' + starStr + '</option>';
+                    }
+                    starsHtml += '</select>';
+                    html += '<div class="episode-block-item" data-index="' + e + '" style="margin-bottom:0.6rem;padding:0.5rem;border-radius:0.6rem;background:rgba(124,58,217,0.05);border:1px solid rgba(124,58,217,0.1)">';
+                    // Row 1: Header with Series dropdown, Season dropdown, EP#, Total EP, Status
+                    html += '<div style="display:flex;align-items:center;gap:0.4rem;margin-bottom:0.3rem">';
+                    html += '<span class="w-6 h-6 rounded-full flex items-center justify-center text-[0.6rem] font-black" style="background:linear-gradient(135deg,#7C3AED,#6D28D9);color:white;min-width:24px">' + (e + 1) + '</span>';
+                    html += '<select data-field="series" class="field-premium" style="font-size:0.55rem;padding:0.2rem 0.25rem;flex:1;min-width:0">' + seriesOpts + '</select>';
+                    html += '<select data-field="season" class="field-premium" style="font-size:0.55rem;padding:0.2rem 0.25rem;min-width:0">' + seasonOpts + '</select>';
+                    html += '<span style="font-size:0.5rem;font-weight:700;color:var(--text-secondary);padding:0 0.2rem;white-space:nowrap">EP ' + (e + 1) + '/' + totalEpisodes + '</span>';
+                    html += statusHtml;
+                    html += '<div onclick="UI._clearEpisodeBlock(' + e + ')" class="cursor-pointer flex items-center justify-center" style="width:22px;height:22px;border-radius:0.4rem;background:rgba(239,68,68,0.15);color:#EF4444;font-size:0.5rem;min-width:22px" title="Limpar"><i class="fas fa-times"></i></div>';
+                    html += '</div>';
+                    // Row 2: Title + Synopsis + Duration
+                    html += '<div style="display:grid;grid-template-columns:1fr 1.5fr 60px;gap:0.3rem;margin-bottom:0.3rem">';
+                    html += '<input type="text" data-field="title" class="field-premium" value="' + (saved.title || '').replace(/"/g, '&quot;') + '" placeholder="Título EP" style="font-size:0.55rem;padding:0.2rem 0.3rem">';
+                    html += '<input type="text" data-field="synopsis" class="field-premium" value="' + (saved.synopsis || '').replace(/"/g, '&quot;') + '" placeholder="Sinopse" style="font-size:0.55rem;padding:0.2rem 0.3rem">';
+                    html += '<input type="text" data-field="duration" class="field-premium" value="' + (saved.duration || '').replace(/"/g, '&quot;') + '" placeholder="Duração" style="font-size:0.55rem;padding:0.2rem 0.3rem">';
+                    html += '</div>';
+                    // Row 3: Date + Direction + Stars
+                    html += '<div style="display:grid;grid-template-columns:70px 1fr 90px;gap:0.3rem">';
+                    html += '<input type="text" data-field="date" class="field-premium" value="' + (saved.date || '').replace(/"/g, '&quot;') + '" placeholder="Data" style="font-size:0.55rem;padding:0.2rem 0.3rem">';
+                    html += '<input type="text" data-field="direction" class="field-premium" value="' + (saved.direction || '').replace(/"/g, '&quot;') + '" placeholder="Direção" style="font-size:0.55rem;padding:0.2rem 0.3rem">';
+                    html += starsHtml;
+                    html += '</div>';
+                    // Row 4: Link da Serie (with folder picker) + Trailer URL
+                    html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.3rem;margin-top:0.3rem">';
+                    html += '<div>';
+                    html += '<label style="font-size:0.5rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);margin-bottom:0.15rem;display:block"><i class="fas fa-link mr-1 opacity-60"></i>Link da Série</label>';
+                    html += '<div class="input-with-icon" style="border-radius:0.4rem">';
+                    html += '<input type="text" data-field="mediaUrl" class="field-premium" value="' + (saved.mediaUrl || '').replace(/"/g, '&quot;') + '" placeholder="https://example.com/serie.mp4" style="font-size:0.5rem;padding:0.15rem 0.25rem">';
+                    html += '<button type="button" class="input-icon-btn" style="width:22px;height:22px;font-size:0.5rem" title="Selecionar ficheiro local"><i class="fas fa-folder-open"></i></button>';
+                    html += '</div></div>';
+                    html += '<div>';
+                    html += '<label style="font-size:0.5rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);margin-bottom:0.15rem;display:block"><i class="fas fa-video mr-1 opacity-60"></i>Trailer</label>';
+                    html += '<input type="text" data-field="trailerUrl" class="field-premium" value="' + (saved.trailerUrl || '').replace(/"/g, '&quot;') + '" placeholder="https://youtube.com/..." style="font-size:0.5rem;padding:0.2rem 0.3rem">';
+                    html += '</div></div>';
+                    html += '</div>';
+                }
+                container.innerHTML = html;
+                // Pre-fill saved values
+                UI._episodeData.forEach(function(d, i) {
+                    var block = container.querySelector('.episode-block-item[data-index="' + i + '"]');
+                    if (!block) return;
+                    ['title','synopsis','duration','date','direction','mediaUrl','trailerUrl'].forEach(function(f) {
+                        var el = block.querySelector('[data-field="' + f + '"]');
+                        if (el && d[f]) el.value = d[f];
+                    });
+                    var seriesSel = block.querySelector('[data-field="series"]');
+                    if (seriesSel && d.series) seriesSel.value = d.series;
+                    var seasonSel = block.querySelector('[data-field="season"]');
+                    if (seasonSel && d.season) seasonSel.value = d.season;
+                    var statusSel = block.querySelector('[data-field="status"]');
+                    if (statusSel && d.status) statusSel.value = d.status;
+                    var starsSel = block.querySelector('[data-field="stars"]');
+                    if (starsSel && d.stars) starsSel.value = d.stars;
+                });
+            },
+            _clearEpisodeBlock(index) {
+                UI._episodeData[index] = {};
+                var block = document.querySelector('.episode-block-item[data-index="' + index + '"]');
+                if (!block) return;
+                block.querySelectorAll('input, select').forEach(function(el) {
+                    el.value = el.tagName === 'SELECT' ? '' : '';
+                });
+            },
+            clearAllEpisodes() {
+                if (!UI._episodeData || UI._episodeData.length === 0) return;
+                // Save current data for undo
+                UI._episodeDataBackup = UI._episodeData.slice();
+                UI._episodeData = [];
+                UI._generateEpisodeBlocks();
+                Logic.showStatus('Dados limpos! Clique "Desfazer" para restaurar.', 5000);
+                // Show undo button temporarily
+                var btn = document.getElementById('episode-footer-btn');
+                if (btn && !document.getElementById('episode-undo-btn')) {
+                    var undoBtn = document.createElement('button');
+                    undoBtn.id = 'episode-undo-btn';
+                    undoBtn.onclick = function() {
+                        UI._episodeData = UI._episodeDataBackup ? UI._episodeDataBackup.slice() : [];
+                        UI._generateEpisodeBlocks();
+                        undoBtn.remove();
+                    };
+                    undoBtn.className = 'py-2.5 px-4 rounded-xl text-[0.7rem] font-black uppercase tracking-wider transition';
+                    undoBtn.style.cssText = 'background:rgba(245,158,11,0.15);color:#F59E0B;border:1px solid rgba(245,158,11,0.3)';
+                    undoBtn.innerHTML = '<i class="fas fa-undo mr-1"></i> DESFAZER';
+                    btn.parentNode.insertBefore(undoBtn, btn);
+                    setTimeout(function() { if (undoBtn.parentNode) undoBtn.remove(); }, 10000);
+                }
+            },
+            saveEpisodes() {
+                var blocks = document.querySelectorAll('.episode-block-item');
+                UI._episodeData = [];
+                blocks.forEach(function(block, i) {
+                    var d = {};
+                    ['title','synopsis','duration','date','direction','mediaUrl','trailerUrl'].forEach(function(f) {
+                        var el = block.querySelector('[data-field="' + f + '"]');
+                        d[f] = el ? el.value : '';
+                    });
+                    d.series = (block.querySelector('[data-field="series"]') || {}).value || '';
+                    d.season = (block.querySelector('[data-field="season"]') || {}).value || '';
+                    d.epNumber = i + 1;
+                    d.status = (block.querySelector('[data-field="status"]') || {}).value || '';
+                    d.stars = (block.querySelector('[data-field="stars"]') || {}).value || '0';
+                    UI._episodeData.push(d);
+                });
+                UI.closeEpisodeModal();
+                Logic.showStatus(UI._episodeData.length + ' episódio(s) salvo(s)!');
+            },
             generateDynamicSeriesFields() {
                 var numSeasons = parseInt(document.getElementById('ds-seasons').value) || 1;
                 var container = document.getElementById('dynamic-series-container');
@@ -7722,13 +8025,10 @@
                 var trailerVal = (data.trailUrl || '').replace(/"/g,'&quot;');
                 return '<div class="dynamic-estreia-row" data-index="' + index + '" data-saved-id="' + (data.id || '') + '" style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.6rem;padding:0.6rem 0.6rem;border-radius:0.75rem;background:rgba(0,0,0,0.12);border:1px solid var(--border-color);flex-wrap:nowrap">' +
                     '<span class="font-black shrink-0" style="color:#34D399;min-width:28px;text-align:center;font-size:0.9rem">' + (index + 1) + '</span>' +
+                    '<input type="date" id="de-date-' + index + '" class="field-premium" style="flex:0 0 150px;font-size:0.85rem;padding:0.4rem 0.5rem;min-height:38px;color-scheme:dark" value="' + dateVal + '" onchange="UI._checkEstreiaDateNotification(this.value)">' +
                     '<input type="text" id="de-title-' + index + '" class="field-premium" placeholder="Título" style="flex:2;font-size:0.85rem;padding:0.45rem 0.6rem;min-width:0" value="' + titleVal + '">' +
-                    '<input type="date" id="de-date-' + index + '" class="field-premium" style="flex:0 0 150px;font-size:0.85rem;padding:0.4rem 0.5rem;min-height:38px" value="' + dateVal + '" onchange="UI._checkEstreiaDateNotification(this.value)">' +
                     '<select id="de-category-' + index + '" class="field-premium" style="flex:0 0 140px;font-size:0.8rem;padding:0.45rem 0.6rem;min-width:0">' + opts + '</select>' +
                     '<input type="text" id="de-trailer-' + index + '" class="field-premium" placeholder="Trailer URL" style="flex:1;font-size:0.8rem;padding:0.45rem 0.6rem;min-width:0" value="' + trailerVal + '">' +
-                    '<button onclick="UI._applyEstreia(' + index + ')" class="estreia-btn estreia-btn-apply px-2 py-1 rounded font-black uppercase tracking-wider shrink-0 transition" title="Aplicar"><i class="fas fa-check"></i></button>' +
-                    '<button onclick="UI._editEstreiaRow(' + index + ')" class="estreia-btn estreia-btn-edit px-2 py-1 rounded font-black uppercase tracking-wider shrink-0 transition" title="Editar"><i class="fas fa-edit"></i></button>' +
-                    '<button onclick="UI._removeEstreiaRow(' + index + ')" class="estreia-btn estreia-btn-remove px-2 py-1 rounded font-black uppercase tracking-wider shrink-0 transition" title="Remover"><i class="fas fa-times"></i></button>' +
                     '</div>';
             },
             _initDynamicEstreias(savedData) {
@@ -7751,11 +8051,17 @@
                 var index = UI._estreiaCounter++;
                 var wrapper = document.createElement('div');
                 wrapper.innerHTML = UI._buildEstreiaRow(index, data || {});
-                fields.appendChild(wrapper.firstElementChild);
+                var newRow = wrapper.firstElementChild;
+                // Always add new row at the TOP (above the first existing row)
+                if (fields.firstChild) {
+                    fields.insertBefore(newRow, fields.firstChild);
+                } else {
+                    fields.appendChild(newRow);
+                }
                 // Re-index all rows
                 UI._reindexEstreiaRows();
                 UI._updateEstreiaSummary();
-                // Scroll to bottom
+                // Scroll to show last registered (bottom)
                 var container = document.getElementById('dynamic-estreias-container');
                 if (container) container.scrollTop = container.scrollHeight;
             },
@@ -7786,13 +8092,6 @@
                     row.setAttribute('data-index', idx);
                     var numSpan = row.querySelector('span:first-child');
                     if (numSpan) numSpan.textContent = idx + 1;
-                    // Update onclick attributes for buttons
-                    var applyBtn = row.querySelector('[onclick*="_applyEstreia"]');
-                    if (applyBtn) applyBtn.setAttribute('onclick', 'UI._applyEstreia(' + idx + ')');
-                    var editBtn = row.querySelector('[onclick*="_editEstreiaRow"]');
-                    if (editBtn) editBtn.setAttribute('onclick', 'UI._editEstreiaRow(' + idx + ')');
-                    var removeBtn = row.querySelector('[onclick*="_removeEstreiaRow"]');
-                    if (removeBtn) removeBtn.setAttribute('onclick', 'UI._removeEstreiaRow(' + idx + ')');
                     // Update input ids
                     var titleInput = row.querySelector('input[placeholder="Título"]');
                     if (titleInput) titleInput.id = 'de-title-' + idx;
@@ -7997,16 +8296,62 @@
                 if (!fields) return;
                 var rows = fields.querySelectorAll('.dynamic-estreia-row');
                 var saved = 0;
-                var self = this;
                 rows.forEach(function(row) {
                     var index = parseInt(row.getAttribute('data-index'));
                     var title = document.getElementById('de-title-' + index);
                     if (!title || !title.value.trim()) return;
-                    self._applyEstreia(index);
-                    saved++;
+                    var date = document.getElementById('de-date-' + index);
+                    var category = document.getElementById('de-category-' + index);
+                    var trailer = document.getElementById('de-trailer-' + index);
+                    var t = title.value.trim();
+                    var savedId = row.getAttribute('data-saved-id');
+                    if (savedId) {
+                        var idx = APP_STATE.movies.findIndex(function(m) { return m.id === savedId; });
+                        if (idx >= 0) {
+                            var orig = APP_STATE.movies[idx];
+                            orig.titlePt = t;
+                            orig.originalTitle = t;
+                            orig.date = date ? UI._dateToStorage(date.value.trim()) : '';
+                            orig.genre = category ? category.value : (orig.genre || '');
+                            orig.trailUrl = trailer ? trailer.value.trim() : '';
+                            APP_STATE.movies[idx] = orig;
+                            saved++;
+                        }
+                    } else {
+                        var newItem = {
+                            id: Date.now().toString() + '_' + Math.random().toString(36).substr(2, 5),
+                            _createdAt: Date.now().toString(),
+                            type: 'estreias',
+                            estreiaType: 'filmes',
+                            originalTitle: t,
+                            titlePt: t,
+                            date: date ? UI._dateToStorage(date.value.trim()) : '',
+                            genre: category ? category.value : '',
+                            trailUrl: trailer ? trailer.value.trim() : '',
+                            image: 'https://via.placeholder.com/300x450'
+                        };
+                        APP_STATE.movies.push(newItem);
+                        row.setAttribute('data-saved-id', newItem.id);
+                        UI._estreiaSavedIds[newItem.id] = true;
+                        saved++;
+                    }
                 });
                 if (saved > 0) {
+                    Storage.save();
+                    Render.all();
+                    Logic.checkEstreiaNotifications();
+                    UI._updateEstreiaAutoDeleteWarning();
                     Logic.showStatus(saved + ' estreia' + (saved !== 1 ? 's' : '') + ' salva' + (saved !== 1 ? 's' : '') + ' com sucesso!');
+                }
+                // After save, set focus on the last registered estreia
+                var container = document.getElementById('dynamic-estreias-container');
+                if (container) {
+                    var allRows = container.querySelectorAll('.dynamic-estreia-row');
+                    if (allRows.length > 0) {
+                        var lastRow = allRows[0]; // newest is at top after reverse
+                        var lastTitle = lastRow.querySelector('input[placeholder="Título"]');
+                        if (lastTitle) lastTitle.focus();
+                    }
                 }
             },
             exportCadastroLogImage(format) {
@@ -8397,9 +8742,9 @@
                         cast: document.getElementById('fs-cast').value,
                         genre: document.getElementById('fs-category').value,
                         image: posterSrc || urlSrc || 'https://via.placeholder.com/300x450',
-                        trailUrl: document.getElementById('fs-trailer-url').value,
+                        trailUrl: '',
                         otherInfo: document.getElementById('fs-other-info').value,
-                        mediaFile: (function(){ var el=document.getElementById('fs-media-url'); if (!el) return ''; if (el.dataset.ref) return el.dataset.ref; if (el.dataset.path) return el.dataset.path; return el.value; })(),
+                        mediaFile: '',
                         statuses: {
                             new: document.getElementById('fs-status-new').checked,
                             watch: document.getElementById('fs-status-watch').checked,
@@ -8407,7 +8752,9 @@
                         },
                         stars: document.getElementById('fs-stars').value || 0,
                         country: document.getElementById('fs-country').value || '',
-                        dynamicEpisodes: dynEpisodes
+                        dynamicEpisodes: dynEpisodes,
+                        dynamicSeasons: (UI._seasonData && UI._seasonData.length > 0) ? UI._seasonData.slice() : [],
+                        dynamicEpisodesNew: (UI._episodeData && UI._episodeData.length > 0) ? UI._episodeData.slice() : []
                     };
                     // Clean up temp storage
                     delete savedEps[epKey];
@@ -8567,7 +8914,7 @@
                             item.querySelector('input').checked = false;
                         });
                     } else if (type === 'series') {
-                        ['fs-title','fs-year','fs-duration','fs-episode-number','fs-episode-title','fs-season','fs-director','fs-cast','fs-desc','fs-trailer-url','fs-other-info','fs-media-url'].forEach(function(id) {
+                        ['fs-title','fs-year','fs-duration','fs-episode-number','fs-episode-title','fs-season','fs-director','fs-cast','fs-desc','fs-other-info'].forEach(function(id) {
                             var el = document.getElementById(id);
                             if (el) el.value = '';
                         });
@@ -8579,6 +8926,14 @@
                             item.classList.remove('active-new', 'active-watch', 'active-fav');
                             item.querySelector('input').checked = false;
                         });
+                        UI._seasonData = [];
+                        UI._episodeData = [];
+                        UI._dynButtonsVisible = false;
+                        var dynBtns = document.getElementById('dyn-series-buttons');
+                        if (dynBtns) dynBtns.style.display = 'none';
+                        document.getElementById('dynamic-series-container').style.display = 'none';
+                        var dynFields = document.getElementById('dynamic-series-fields');
+                        if (dynFields) dynFields.innerHTML = '';
                     } else if (type === 'estreias') {
                         // Dynamic estreia form clone not supported; reset to blank
                         var deFields = document.getElementById('dynamic-estreias-fields');
@@ -8649,9 +9004,7 @@
                     sv('fs-episode-title', last.episodeTitle || '');
                     sv('fs-director', last.director || '');
                     sv('fs-cast', last.cast || '');
-                    sv('fs-trailer-url', last.trailUrl || '');
                     sv('fs-other-info', last.otherInfo || '');
-                    (function(){ var v = last.mediaFile || '', el = document.getElementById('fs-media-url'); if (el) { try { var r = JSON.parse(v); el.value = r.name || ''; if (r.blob) el.dataset.ref = v; } catch(e) { el.value = v; } } })();
                     sv('fs-category', last.genre || '');
                     sv('fs-stars', last.stars || 0);
                     sc('fs-status-new', last.statuses && last.statuses.new);

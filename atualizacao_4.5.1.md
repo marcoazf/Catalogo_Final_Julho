@@ -1466,3 +1466,254 @@ if (_es) {
 | Nenhuma funcionalidade existente alterada | OK |
 | Paletas, tipografia, layout, espaçamentos preservados | OK |
 | Todos os IDs, classes e handlers mantidos | OK |
+
+---
+
+## Implementações Realizadas — Melhorias Séries (melhorias2.md — Cadastro Temporadas/Episódios)
+
+### 65. Campos DURAÇÃO/TEMP/EPIS Reduzidos + Ícone Engrenagem + Botões Dinâmicos
+
+**Arquivo:** `index.html` — HTML (Séries tab) + JavaScript (UI object)
+
+**O que foi feito:**
+
+**A) Campos reduzidos:**
+
+| Campo | Antes | Depois |
+|---|---|---|
+| Duração | `flex:0 0 120px` | `flex:0 0 60px` (50%) |
+| TEMP | `flex:0 0 90px` | `flex:0 0 45px` (50%) |
+| EPIS | `flex:0 0 90px` | `flex:0 0 45px` (50%) |
+
+- Adicionado `align-items:flex-end` no container flex para alinhar os campos menores à base.
+
+**B) Ícone engrenagem (fa-cog) após campo EPIS:**
+- Ícone `fa-cog` com tooltip "Gerar Temporada e Episódio Dinâmico".
+- Visual: fundo roxo semi-transparente, borda `var(--border-color)`, hover mais intenso.
+- Ao clicar: `UI.toggleDynButtons()` — alterna visibilidade dos 2 botões.
+
+**C) Botões dinâmicos substituem "CADASTRO DINÂMICO":**
+- Botão original "CADASTRO DINÂMICO" (`fa-dice-d6`) removido.
+- Novo container `#dyn-series-buttons` (hidden por padrão):
+  - Botão 1: **CADASTRAR TEMPORADAS** → `UI.openSeasonModal()` (gradiente roxo)
+  - Botão 2: **CADASTRAR EPISÓDIOS** → `UI.openEpisodeModal()` (gradiente roxo escuro)
+
+**D) Modal de Temporadas (`#modal-seasons`):**
+- Overlay z-index 260, fecha sem fechar CADASTRO NOVO.
+- Cada temporada = bloco com: badge numérico, dropdown Séries, #Temporada (auto-numerado), Total Temporadas (readonly), Ano, Status (dropdown: Exibição/Finalizada/Renovada/Assistir/Favorita), botão limpar individual.
+- Rodapé: "CRIAR TEMPORADAS" (ou "SALVAR" em modo edição) + "LIMPAR TUDO" + "Cancelar".
+- Funções: `openSeasonModal`, `closeSeasonModal`, `_generateSeasonBlocks`, `_clearSeasonBlock`, `clearAllSeasons`, `saveSeasons`.
+
+**E) Modal de Episódios (`#modal-episodes`):**
+- Overlay z-index 260, fecha sem fechar CADASTRO NOVO.
+- Cada episódio = bloco compacto com: badge numérico, dropdown Séries, dropdown Temporada, Título, Sinopse, Duração, Data, Direção, Classificação (5 estrelas via select), Status (dropdown), botão limpar individual.
+- Rodapé: "CRIAR EPISÓDIOS" (ou "SALVAR" em modo edição) + "LIMPAR TUDO" + "Cancelar".
+- Funções: `openEpisodeModal`, `closeEpisodeModal`, `_generateEpisodeBlocks`, `_clearEpisodeBlock`, `clearAllEpisodes`, `saveEpisodes`.
+
+**F) Integração saveMovie():**
+- Objeto `item` da série agora inclui `dynamicSeasons` e `dynamicEpisodesNew` (arrays copiados de `UI._seasonData` e `UI._episodeData`).
+
+**G) Integração editMovieCtx():**
+- Ao editar série: carrega `movie.dynamicSeasons` e `movie.dynamicEpisodesNew` nos arrays `UI._seasonData` e `UI._episodeData`.
+- Se houver dados, mostra os botões dinâmicos automaticamente.
+
+**H) Reset pós-salvar:**
+- Após salvar, `_seasonData` e `_episodeData` são resetados para `[]`.
+- Botões dinâmicos ocultados (`display:none`).
+- Container de séries dinâmicas limpo.
+
+**Preservação:** Botão "CADASTRO DINÂMICO" original removido, mas a função `generateDynamicSeriesFields()` e toda a lógica legada de `dynamicEpisodes` (salvamento em localStorage) foram mantidas intactas para retrocompatibilidade. Nenhuma funcionalidade existente de cadastro de filmes ou estreias foi alterada. Paletas, tipografia, layout e espaçamentos preservados.
+
+---
+
+## Checklist Final (melhorias2.md — Item 65)
+
+| Verificação | Status |
+|---|---|
+| Duração: 120px → 60px (50%) | OK |
+| TEMP: 90px → 45px (50%) | OK |
+| EPIS: 90px → 45px (50%) | OK |
+| Align-items: flex-end no container | OK |
+| Ícone fa-cog com tooltip correto | OK |
+| toggleDynButtons alterna display dos botões | OK |
+| Botão "CADASTRO DINÂMICO" removido | OK |
+| Botão "CADASTRAR TEMPORADAS" criado | OK |
+| Botão "CADASTRAR EPISÓDIOS" criado | OK |
+| Modal temporadas: overlay z-260 | OK |
+| Modal temporadas: dropdown Séries | OK |
+| Modal temporadas: auto-numerado | OK |
+| Modal temporadas: total (readonly) | OK |
+| Modal temporadas: Ano | OK |
+| Modal temporadas: Status (5 opções) | OK |
+| Modal temporadas: limpar individual | OK |
+| Modal temporadas: limpar tudo | OK |
+| Modal temporadas: footer "CRIAR TEMPORADAS" | OK |
+| Modal temporadas: modo edição "SALVAR" | OK |
+| Modal episódios: overlay z-260 | OK |
+| Modal episódios: dropdown Séries | OK |
+| Modal episódios: dropdown Temporada | OK |
+| Modal episódios: auto-numerado EP# | OK |
+| Modal episódios: Título + Sinopse | OK |
+| Modal episódios: Duração + Data | OK |
+| Modal episódios: Direção | OK |
+| Modal episódios: 5 estrelas (select) | OK |
+| Modal episódios: Status (5 opções) | OK |
+| Modal episódios: limpar individual | OK |
+| Modal episódios: limpar tudo | OK |
+| Modal episódios: footer "CRIAR EPISÓDIOS" | OK |
+| Modal episódios: modo edição "SALVAR" | OK |
+| saveMovie(): dynamicSeasons incluído | OK |
+| saveMovie(): dynamicEpisodesNew incluído | OK |
+| editMovieCtx(): carrega dynamicSeasons | OK |
+| editMovieCtx(): carrega dynamicEpisodesNew | OK |
+| editMovieCtx(): mostra botões se houver dados | OK |
+| Reset pós-salvar: _seasonData = [] | OK |
+| Reset pós-salvar: _episodeData = [] | OK |
+| Reset pós-salvar: botões ocultados | OK |
+| Retrocompatibilidade: generateDynamicSeriesFields preservada | OK |
+| Retrocompatibilidade: dynamicEpisodes (localStorage) preservado | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
+
+---
+
+## melhorias2.md - Implementações (Séries, Episódios e Estreias)
+
+### 20. Campos LINK DA SÉRIE e TRAILER movidos da aba Séries para blocos de episódios
+
+**Arquivo:** `index.html` - `<style>` e `<script>`
+
+**O que foi feito:**
+- **Removidos** os campos `LINK DA SÉRIE` (ícone pasta + input) e `TRAILER` (input) da aba Séries (Col B do formulário de cadastro de séries).
+- **Adicionados** esses mesmos campos em cada bloco de episódio no modal de episódios:
+  - **LINK DA SÉRIE:** Input `mediaUrl` com ícone de pasta para selecionar arquivo local, `placeholder="Ex: Link ou caminho do episódio"`, `flex:1`
+  - **TRAILER:** Input `trailerUrl` com ícone de play, `placeholder="Link do trailer deste episódio"`, `flex:1`
+- Layout na Row 4: `[Link EP (flex:1)] [Trailer EP (flex:1)]`
+- `saveEpisodes()` salva `mediaUrl` e `trailerUrl` por episódio no array `dynamicEpisodesNew`
+- Pré-preenchimento no modo edição carrega `mediaUrl` e `trailerUrl` de cada episódio salvo
+
+### 21. Campo DURAÇÃO expandido na aba Séries
+
+**Arquivo:** `index.html` - estilo inline e placeholders
+
+**O que foi feito:**
+- Campo `DURAÇÃO` no formulário de séries alterado de `flex:0 0 60px` para `flex:1` (expandido para ocupar espaço disponível)
+- Placeholder atualizado para `"Ex: 120 ou 01:20:00"` (mais descritivo)
+- Campos TEMP e EPIS e botão "Cadastrar Temporadas" mantidos com `flex:0 0 45px` (empurrados para o final)
+
+### 22. Aba Estreias: botões removidos e layout redesenhado
+
+**Arquivo:** `index.html` - HTML e JS
+
+**O que foi feito:**
+- **Removido** botão `APLICAR +` (ícone fa-plus) da barra de resumo de estreias
+- **Removidos** botões de APLICAR, EDITAR e REMOVER de cada linha individual de estreia
+- **Removido** botão de remover última estreia (ícone fa-minus) da barra de resumo
+- Campo `TRAILER` em cada estreia expandido para `flex:1` (ocupava `flex:1` antes, mantido)
+
+### 23. Estreias: novas linhas adicionadas no TOPO
+
+**Arquivo:** `index.html` - `_addEstreiaRow()`
+
+**O que foi feito:**
+- `_addEstreiaRow()` agora insere novas linhas **no topo** do container `dynamic-estreias-fields` usando `insertBefore(newRow, firstRow)` em vez de `appendChild`
+- Se o container estiver vazio, usa `appendChild` normalmente
+- Garante que a estreia mais recente apareça acima das anteriores
+
+### 24. Estreias: scroll oculto com máx. 5 visíveis
+
+**Arquivo:** `index.html` - `<style>`
+
+**O que foi feito:**
+- Container `#dynamic-estreias-container` configurado com `max-height: 320px` e `overflow-y: auto`
+- Scrollbar webkit ocultada: `display: none` em `::-webkit-scrollbar`
+- Scrollbar Firefox ocultada: `scrollbar-width: none`
+- Efeito visual: container mostra aproximadamente 5 estreias, scroll interno para ver mais
+
+### 25. Estreias: Date antes do Título + ícone branco
+
+**Arquivo:** `index.html` - `_buildEstreiaRow()`
+
+**O que foi feito:**
+- Layout de cada linha de estreia alterado: **DATA** agora aparece **antes** do TÍTULO
+- Novo layout: `[DATA (flex:0 0 125px)] [TÍTULO (flex:1)] [ANIM (flex:0 0 88px)] [TRAILER (flex:1)]`
+- Adicionado `color-scheme: dark` ao input de data para visual consistente com tema escuro
+- CSS customizado: `input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1) brightness(2) }` — ícone seletor de data branco para tema escuro
+
+### 26. saveAllDynamicEstreias(): foca no último título após salvar
+
+**Arquivo:** `index.html` - `saveAllDynamicEstreias()`
+
+**O que foi feito:**
+- Após salvar todas as estreias dinamicamente, o método foca no campo título da **última estreia registrada** (último ID no array `_estreiaSavedIds`)
+- Comportamento mais intuitivo: após salvar, cursor já está na próxima estreia pronta para digitar
+
+### 27. Episódios: campos Link e Trailer removidos da aba Séries (refs JS limpas)
+
+**Arquivo:** `index.html` - `saveMovie()`, `editMovieCtx()`, `switchTab()`, `resetCadastro()`
+
+**O que foi feito:**
+- `saveMovie()` branch séries: `trailUrl` e `mediaFile` agora retornam valores vazios (campos não existem mais na aba Séries)
+- `editMovieCtx()`: removida lógica que preenchia `fs-trailer-url` e `fs-media-url` ao editar série
+- `switchTab()`: removida inicialização automática de `fs-media-url` com pathVideos
+- `resetCadastro()`: removidos `fs-trailer-url` e `fs-media-url` dos arrays de reset
+- Todos os `document.getElementById('fs-trailer-url')` e `document.getElementById('fs-media-url')` removidos do `index.html` principal (mantidos apenas no backup `projeto_catalogo/index.html`)
+
+### 28. Limpar tudo episódios: funcionalidade UNDO (Desfazer)
+
+**Arquivo:** `index.html` - `clearAllEpisodes()`
+
+**O que foi feito:**
+- `clearAllEpisodes()` agora salva backup dos dados atuais antes de limpar (em `UI._episodeDataBackup`)
+- Substitui diálogo `confirm()` por botão temporário **DESFAZER**
+- Botão DESFAZER: aparece à direita do botão "LIMPAR TUDO", estilo vermelho, com ícone fa-undo
+- Ao clicar DESFAZER: restaura dados do backup, re-renderiza campos, fecha modal
+- Botão auto-remove após 10 segundos (`setTimeout`)
+- Remove listener anterior ao recriar (evita duplo clique)
+
+### 29. Total de episódios por temporada (EP X/Y)
+
+**Arquivo:** `index.html` - `_generateEpisodeBlocks()`
+
+**O que foi feito:**
+- Cada bloco de episódio agora exibe o total de episódios da temporada
+- Formato: **EP X/Y** (ex: `EP 1/12`) no canto superior direito de cada bloco, antes do ícone de limpar
+- Total é calculado dinamicamente a partir de `UI._dynSeasonEps[season]`
+
+### 30. Remoção de botões individuais das estreias (reindex)
+
+**Arquivo:** `index.html` - `_reindexEstreiaRows()`
+
+**O que foi feito:**
+- `_reindexEstreiaRows()` removida a atualização de `onclick` dos botões APLICAR, EDITAR e REMOVER (que não existem mais)
+- Função agora apenas reindexa labels e campos, sem manipular botões deletados
+
+---
+
+### Checklist Final - melhorias2.md
+
+| Item | Status |
+|------|--------|
+| LINK DA SÉRIE removido da aba Séries | OK |
+| LINK DA SÉRIE adicionado em cada bloco de episódio | OK |
+| TRAILER removido da aba Séries | OK |
+| TRAILER adicionado em cada bloco de episódio | OK |
+| DURAÇÃO expandida (flex:1) | OK |
+| Botão APLICAR+ removido da barra resumo | OK |
+| Botões individuais removidos das linhas estreia | OK |
+| Botão remover última estreia removido | OK |
+| Novas estreias inseridas no topo | OK |
+| Container estreias: scroll oculto, máx 5 visíveis | OK |
+| Date picker antes do título | OK |
+| Ícone date picker branco (invert) | OK |
+| saveAllDynamicEstreias foca último título | OK |
+| refs fs-media-url e fs-trailer-url limpas do JS principal | OK |
+| clearAllEpisodes com UNDO (Desfazer) | OK |
+| Total EP X/Y exibido por bloco | OK |
+| _reindexEstreiaRows limpa de refs a botões removidos | OK |
+| saveMovie() grava trailUrl/mediaFile vazio para séries | OK |
+| editMovieCtx() não preenche campos removidos | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
