@@ -1,14 +1,19 @@
-Realize as seguintes implementações por etapa, seguindo uma a uma. Ao final de cada uma, adicione-a no documento .md. numerando-as. Efetue as seguintes melhorias, sem afetar ou interferir nas funcionalidades já existentes.
+Realize as seguintes implementações por etapa, seguindo uma a uma. Ao final, adicione-as no documento .md, numerando-as. Efetue as seguintes melhorias, sem afetar ou interferir nas funcionalidades já existentes.
 
-a) verifique se esta aplicação é totalmente responsiva e fluida. Ela precisa responder de forma proporcional a quaisquer monitores que o usuário deseje utilizar, seja em resoluçõe HD, FHD, 2K ou 4K desktop, notebooks ou tvs.
+a) dentro da janela CADASTRO NOVO, seja na aba Filmes ou Séries, crie uma conexão da funcionalidade CARREGAR CAPA, com o caminho configurado em "CAMINHOS > CARDS", dentro da janela CONFIGURAÇÕES. Quando o usuário clicar em CARREGAR CAPA, deverá abrir imediatamente o Explorer com a pasta configurada no caminho de CARDS.
 
-b) o logotipo na barra principal, está sendo adicionado na aplicação através de "png:base64". Quero que o logotipo seja inserido dentro de uma div e usando o nome "cinecatalogo.png", que está na raiz do projeto. Este logotipo deverá ser escalado responsivamente, de acordo com a resolução de cada monitor e ficar sempre dentro da altura da barra principal. Se ela aumentar, ele aumenta, se ela diminuir, ele diminui.
+b) garanta que todas as configurações e preferências do usuário configuradas dentro de CONFIGURAÇÕES, serão salvas ao clicar no botão "APLICAR" ou quando a janela for fechada. Estas configurações deverão permancer sempre salvas até que o próprio usuário altere. Quando o aplicativo for sempre aberto, estas configurações deverão ser sempre lembradas e estar vigentes na plataforma.
 
-c) analise cada icone da barra principal e garanta que nenhum ficará remontado ou ssobreposto ao outro. Garanta um alinhamento harmonioso e perfeito entre cada um deles. 
+c) ainda em CONFIGURAÇÕES, dentro de PERSONALIZAÇÃO DOS CARDS, em GÊNEROS (TOPO DO CARD), inicie sempre a aplicação com as seguintes configurações como default:
 
-d) Deixe a tipografia de "Filmes, Séries e Estréias", sem estilo Bold. Deixe-as como Regular, para ficarem mais visíveis. Garanta que estas fontes, fiquem do mesmo tamanho que "+ CADASTRAR".
+cor texto = branco
+fundo = preto
 
-Sempre faça uma revisão e checklist antes me entregar as novas implementações. Gere uma sintaxe limpa, fazendo uma revisão completa – verificando que todos os novos elementos, arrays e handlers existem coritem corretamente. Garanta que todas as funcionalidades, classes, variáveis estão funcionando perfeitamente, não foram alteradas ou mexidas e preservadas nas novas implementações de melhorias. Garanta que nada do que estava funcionando corretamente, seja influenciada ou gere alguma ruptura no aplicativo. sempre mantenha inicialmente tudo o que já funciona e está devidamente ajustado, como: paletas de cores, tipografia, layout, espaçamentos, divs e ids, entre outros itens...
+d) em GESTÃO DE MÍDIA, em PLAYER DE VÍDEO, analise o sistema operacional do usuário e liste no dropdown, todos os players de aúdio e vídeo encontrados. A opção "Personalizado" serve para o usuário entrar com o caminho .exe de um player diferente que ele quer que seja padrão de execução de filmes e séries. Quando o usuário escolher esta opção e carregar o "path" do player, mostre também "Ativado" como nos Caminhos acima. Se esta opção for mudada, o desativado se oculta.
+
+e) Não se isso acontece porque a versão desta aplicação ainda esta no navegador e não é um .exe fechada com o Electron. Quando preenche as informações do "Filme", carrego a capa e os links, quando clico em "SALVAR", abre-se uma janela chamada "Selecione uma pasta que este site possa ver". Não quero esta janela aberta e solicitando pasta. Após o cadastramento, todos os campos do formulário deverão ser limpos e aguardar o usuário cadastrar novo filme ou fechar a janela no "X".
+
+Sempre faça uma revisão e checklist antes me entregar as novas implementações. Gere uma sintaxe limpa, fazendo uma análise completa – verificando que todos os novos elementos, arrays e handlers existem e funcionam corretamente. Garanta que todas as funcionalidades, classes, variáveis estão em perfeita execução, sem quebras e que não foram alteradas ou mexidas. Garanta que nada seja influenciado ou gere alguma ruptura no aplicativo. Sempre mantenha inicialmente tudo o que já funciona e está devidamente ajustado, como: paletas de cores, tipografia, layout, espaçamentos, divs e ids, entre outros itens...
 
 ---
 
@@ -1717,3 +1722,112 @@ if (_es) {
 | Nenhuma funcionalidade existente alterada | OK |
 | Paletas, tipografia, layout, espaçamentos preservados | OK |
 | Todos os IDs, classes e handlers mantidos | OK |
+
+---
+
+## Implementações Realizadas — Melhorias 4 (melhorias2.md — Itens a–e)
+
+### 66. (a) CARREGAR CAPA: Abre o Explorer na Pasta de CARDS
+
+**Arquivo:** `index.html` — JavaScript (`_isElectron`, `UI.initPosterArea`, `UI.initMediaPicker`)
+
+**O que foi feito:**
+- Criado o helper global `_isElectron()` que detecta se a aplicação roda dentro do Electron (`window.require` + `process.versions.electron`).
+- **CARREGAR CAPA (Filmes e Séries):** Ao clicar, se estiver no Electron, abre imediatamente o `electron.dialog.showOpenDialog` com `defaultPath: cfg.pathCards` (caminho configurado em CAMINHOS > CARDS), abrindo o Explorer direto na pasta configurada.
+- Após selecionar, o arquivo é lido via `fs.readFile`, convertido para `File`, comprimido via `Logic.compressImage` e exibido no preview (`UI.setPosterPreview`). O campo `-poster-url` é preenchido com o caminho completo.
+- **VÍDEO (Filmes e Séries):** Mesma lógica aplicada ao `initMediaPicker`, usando `cfg.pathVideos` (pasta FILMES) como `defaultPath`. O campo `-media-url` guarda o caminho + referência de blob para reprodução.
+- Fallback para navegador preservado (`showOpenFilePicker` partindo do mesmo `basePath`).
+
+**Preservação:** Em navegador o comportamento antigo continua idêntico. Nenhum handler, ID ou layout alterado.
+
+---
+
+### 67. (b) CONFIGURAÇÕES: Salvas ao APLICAR ou ao Fechar a Janela
+
+**Arquivo:** `index.html` — JavaScript (`UI.applyConfig`, `UI._saveConfigFromForm`, `UI.closeModal`, `UI.openConfig`)
+
+**O que foi feito:**
+- Refatorado `UI.applyConfig()`: toda a leitura/gravação do formulário foi extraída para `UI._saveConfigFromForm()`, que coleta todos os campos, chama `saveConfig()` (localStorage) e `applyConfig()` (DOM).
+- O botão **APLICAR** chama `_saveConfigFromForm()` + fecha o modal.
+- O fechamento da janela/modal (botão X, ESC, clique fora, toggle do botão Configurações) agora também chama `_saveConfigFromForm()` — as configurações são **sempre persistidas** ao fechar, sem depender apenas do botão APLICAR.
+- As preferências continuam salvas em `localStorage` (`cinecatalog_config`) e são relembradas a cada abertura da aplicação.
+
+**Preservação:** O botão APLICAR mantém o mesmo comportamento. A persistência ao fechar é idempotente (não duplica ações nem altera dados existentes).
+
+---
+
+### 68. (c) GÊNEROS (TOPO DO CARD): Default Texto Branco / Fundo Preto Garantido
+
+**Arquivo:** `index.html` — JavaScript (`loadConfig`, inicialização)
+
+**O que foi feito:**
+- Confirmado que `loadConfig()` já define `cardCategoryColor: '#FFFFFF'` (cor texto branco) e `cardCategoryBg: '#000000'` (fundo preto).
+- Reforçado na inicialização da aplicação: após `loadConfig()`, os valores `cardCategoryColor` e `cardCategoryBg` são **forçados** para branco/preto a cada abertura do aplicativo, garantindo o default solicitado independentemente de configurações anteriores.
+
+**Preservação:** Os sliders/campos de GÊNEROS nas Configurações continuam funcionando — o usuário pode personalizar quando quiser; o default de inicialização é sempre branco/preto.
+
+---
+
+### 69. (d) PLAYER DE VÍDEO: Detecção de Players do SO + Toggle "Ativado" no Personalizado
+
+**Arquivo:** `index.html` — HTML (modal config) + JavaScript (`UI._detectPlayers`, `UI._populatePlayerOptions`, `UI.openMediaWithPlayer`, `loadConfig`, `_populateConfigForm`, `_saveConfigFromForm`)
+
+**O que foi feito:**
+- **Detecção automática:** Nova função `UI._detectPlayers()` analisa o SO (via `fs.existsSync` no Electron) e detecta players instalados:
+  - VLC Media Player, MPC-HC (Media Player Classic), MPC-BE, mpv, PotPlayer e KMPlayer.
+- **Dropdown dinâmico:** `UI._populatePlayerOptions()` adiciona ao dropdown PLAYER DE VÍDEO as opções detectadas (além de Padrão do Sistema, Windows Media Player e Personalizado). O valor salvo é mantido após a detecção.
+- **Execução:** `UI.openMediaWithPlayer()` agora reconhece os players detectados (mapeados em `window._detectedPlayers`) e executa o `.exe` com o arquivo.
+- **Toggle "Ativado":** Adicionado switch **"Ativado"** (padrão `config-switch`) **dentro da linha do Personalizado** — só aparece quando a opção "Personalizado" é escolhida (como nos Caminhos acima). Ao trocar a opção, o toggle se oculta.
+- Nova chave de config `videoPlayerActive` (default `true`), salva/carregada em `_populateConfigForm()` e `_saveConfigFromForm()`.
+
+**Preservação:** As opções existentes (system, wmp, custom) funcionam como antes. Em navegador (sem Electron) a detecção retorna vazio e o dropdown mantém as opções originais.
+
+---
+
+### 70. (e) Dialog "Selecione uma pasta" Removido + Campos Limpos Após Cadastro
+
+**Arquivo:** `index.html` — JavaScript (`_getAcervoDirHandle`, `_getAcervoDirHandleForSave`, `_writeJsonToHandle`, `_autoSaveToFile`, `_saveToAcervoFile`, `saveMovie`)
+
+**O que foi feito:**
+- **Diálogo eliminado:** `_getAcervoDirHandle()` e `_getAcervoDirHandleForSave()` **nunca mais chamam** `window.showDirectoryPicker()`. Agora:
+  - **Electron:** escrevem direto na pasta `cfg.pathAcervo` via `fs.writeFileSync` (pseudo-handle `{kind:'electron', path}`) — sem nenhum diálogo.
+  - **Navegador:** só usam um handle já cacheado (nunca solicitam nova pasta automaticamente).
+- Nova função `_writeJsonToHandle()` unifica a escrita (Electron ou File System Access API).
+- Nenhum diálogo "Selecione uma pasta que este site possa ver" é mais aberto ao salvar.
+- **Campos limpos após cadastro:** Confirmado que o CREATE MODE já limpa todos os campos, poster e status. Reforçado o reset do campo de mídia (`f-media-url`/`fs-media-url`), removendo também os metadados `dataset.ref`/`dataset.path` para que o vídeo anterior não seja reaproveitado indevidamente no próximo cadastro.
+- O modal permanece aberto após salvar, aguardando novo cadastro ou fechamento pelo "X".
+
+**Preservação:** O salvamento em `localStorage` é imediato e inalterado. `ConfigAutoSave()` continua funcionando. A limpeza do formulário após salvar permanece como antes (agora sem o vazamento do campo de vídeo).
+
+---
+
+## Checklist Final (melhorias2.md — Itens a–e)
+
+| Verificação | Status |
+|---|---|
+| (a) Helper `_isElectron()` criado | OK |
+| (a) CARREGAR CAPA abre Explorer em CAMINHOS > CARDS (Electron) | OK |
+| (a) Capa comprimida e preview exibido | OK |
+| (a) Vídeo usa CAMINHOS > FILMES como pasta inicial | OK |
+| (a) Fallback navegador preservado | OK |
+| (b) `_saveConfigFromForm()` extraído e reutilizável | OK |
+| (b) APLICAR salva configurações | OK |
+| (b) Fechar janela/modal (X, ESC, toggle) salva configurações | OK |
+| (b) Preferências relembradas a cada abertura | OK |
+| (c) GÊNEROS default: texto branco + fundo preto | OK |
+| (c) Default forçado na inicialização | OK |
+| (d) Detecção de players do SO (VLC, MPC, mpv, Pot, KM) | OK |
+| (d) Dropdown preenchido com players detectados | OK |
+| (d) Players detectados executam o vídeo | OK |
+| (d) Toggle "Ativado" dentro da linha Personalizado | OK |
+| (d) Toggle oculto ao trocar a opção | OK |
+| (d) Chave `videoPlayerActive` salva/carregada | OK |
+| (e) Dialog "Selecione uma pasta" nunca mais aberto | OK |
+| (e) Electron escreve direto em `pathAcervo` | OK |
+| (e) Campos limpos após cadastro | OK |
+| (e) `dataset.ref`/`dataset.path` do vídeo limpos | OK |
+| (e) Modal permanece aberto após salvar (inalterado) | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
+

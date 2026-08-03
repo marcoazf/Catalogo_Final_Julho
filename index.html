@@ -3250,6 +3250,11 @@
                         <label>Caminho Player</label>
                         <input type="text" id="cfg-custom-player-path" class="field-premium" placeholder="C:\...\meu_player.exe" oninput="UI._updateConfigPreview()">
                         <button onclick="UI.pickPlayerFile()" class="input-icon-btn" title="Selecionar arquivo .exe"><i class="fas fa-folder-open"></i></button>
+                        <label class="config-switch" style="margin-left:0.5rem;flex:0 0 auto">
+                            <input type="checkbox" id="cfg-video-player-active">
+                            <span class="slider"></span>
+                            <span class="switch-label">Ativado</span>
+                        </label>
                     </div>
                     <div style="font-size:0.65rem;color:var(--text-secondary);margin-top:0.25rem;padding-left:80px">
                         <i class="fas fa-info-circle mr-1"></i>Os filmes e séries abrirão maximizados no player escolhido. Os trailers deverão abrir no navegador em tela cheia. Ao pressionar ESC, tanto o filme/série no player como o trailer no navegador restaurarão suas janelas para um tamanho menor.
@@ -3696,6 +3701,7 @@
                 autoSavePath: '',
                 videoPlayer: 'system',
                 customPlayerPath: '',
+                videoPlayerActive: true,
                 footerDevText: 'ELO SISTEMA E TECNOLOGIA | 2026 - ',
                 footerCreatedText: 'CRIADO PARA JONAS THEODORO',
                 footerDevSize: '0.6rem',
@@ -3835,6 +3841,9 @@
         }
 
         window._appConfig = loadConfig();
+        // Gêneros (topo do card): inicia sempre com cor texto = branco e fundo = preto
+        window._appConfig.cardCategoryColor = '#FFFFFF';
+        window._appConfig.cardCategoryBg = '#000000';
         applyConfig();
 
         const Render = {
@@ -5112,6 +5121,8 @@
                     playerPath = 'wmplayer.exe';
                 } else if (player === 'custom') {
                     playerPath = cfg.customPlayerPath || '';
+                } else if (window._detectedPlayers && window._detectedPlayers[player]) {
+                    playerPath = window._detectedPlayers[player];
                 }
                 if (playerPath) {
                     var isLocal = /^[A-Za-z]:[\\\/]/.test(url) || url.startsWith('\\\\');
@@ -5593,6 +5604,12 @@
         function setVal(id, v) { var el = document.getElementById(id); if (el) el.value = v || ''; }
         function setChecked(id, v) { var el = document.getElementById(id); if (el) el.checked = !!v; }
 
+        function _isElectron() {
+            try {
+                return typeof window !== 'undefined' && typeof window.require === 'function' && window.process && window.process.versions && window.process.versions.electron;
+            } catch(e) { return false; }
+        }
+
         const UI = {
             openModal(id) {
                 const el = document.getElementById(id);
@@ -5637,6 +5654,9 @@
                 var modalBtnMap = {'modal-dashboard':'btn-dashboard','modal-generate-list':'btn-generate-list','modal-cadastro-log':'btn-cadastro-log','modal-config':'btn-config','modal-info':'btn-info','modal-shortcuts':'btn-shortcuts'};
                 if (modalBtnMap[id]) { var b = document.getElementById(modalBtnMap[id]); if (b) b.classList.remove('active'); }
                 document.getElementById('modal-toast')?.classList.add('hidden');
+                if (id === 'modal-config' && typeof UI._saveConfigFromForm === 'function') {
+                    UI._saveConfigFromForm();
+                }
                 if (id === 'modal-cadastro') {
                     var cloneBtn = document.getElementById('btn-clone-data');
                     if (cloneBtn) cloneBtn.style.display = 'none';
@@ -6038,6 +6058,37 @@
                         if (prefix === 'f' || prefix === 'fs') {
                             basePath = cfg.pathVideos || '';
                         }
+                        if (_isElectron() && window.require) {
+                            try {
+                                var electron = window.require('electron');
+                                if (electron && electron.dialog) {
+                                    electron.dialog.showOpenDialog({
+                                        title: 'Selecionar vídeo',
+                                        defaultPath: basePath || undefined,
+                                        properties: ['openFile'],
+                                        filters: [{ name: 'Vídeos', extensions: ['mp4', 'mkv', 'avi', 'mov', 'webm', 'flv', 'wmv'] }]
+                                    }).then(function(res) {
+                                        if (res && !res.canceled && res.filePaths && res.filePaths[0]) {
+                                            var selPath = res.filePaths[0];
+                                            urlField.value = selPath;
+                                            delete urlField.dataset.ref;
+                                            urlField.dataset.path = selPath;
+                                            try {
+                                                var fs = window.require('fs');
+                                                var buf = fs.readFileSync(selPath);
+                                                var fName = selPath.split(/[\\\/]/).pop() || 'video';
+                                                var file = new File([buf], fName, { type: 'video/*' });
+                                                var blobUrl = URL.createObjectURL(file);
+                                                var ref = {blob: blobUrl, name: fName};
+                                                urlField.value = selPath;
+                                                urlField.dataset.ref = JSON.stringify(ref);
+                                            } catch(e2) {}
+                                        }
+                                    }).catch(function() {});
+                                    return;
+                                }
+                            } catch(e) {}
+                        }
                         if (basePath && 'showOpenFilePicker' in window) {
                             (async function() {
                                 try {
@@ -6081,6 +6132,36 @@
                     area.addEventListener('click', function() {
                         var cfg = window._appConfig || {};
                         var basePath = cfg.pathCards || '';
+                        if (_isElectron() && window.require) {
+                            try {
+                                var electron = window.require('electron');
+                                if (electron && electron.dialog) {
+                                    var fs = window.require('fs');
+                                    electron.dialog.showOpenDialog({
+                                        title: 'Selecionar capa',
+                                        defaultPath: basePath || undefined,
+                                        properties: ['openFile'],
+                                        filters: [{ name: 'Imagens', extensions: ['jpg', 'jpeg', 'png', 'webp'] }]
+                                    }).then(function(res) {
+                                        if (res && !res.canceled && res.filePaths && res.filePaths[0]) {
+                                            var selPath = res.filePaths[0];
+                                            var pu = document.getElementById(prefix + '-poster-url');
+                                            if (pu) pu.value = selPath;
+                                            fs.readFile(selPath, function(err, buf) {
+                                                if (!err && buf) {
+                                                    var fName = selPath.split(/[\\\/]/).pop() || 'capa';
+                                                    var file = new File([buf], fName, { type: 'image/*' });
+                                                    Logic.compressImage(file, 300 * 1024, function(url) {
+                                                        UI.setPosterPreview(url, prefix);
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    }).catch(function() {});
+                                    return;
+                                }
+                            } catch(e) {}
+                        }
                         if (basePath && 'showOpenFilePicker' in window) {
                             (async function() {
                                 try {
@@ -6515,7 +6596,10 @@
                 var el = document.getElementById('modal-config');
                 var btn = document.getElementById('btn-config');
                 if (!el) return;
-                if (el.classList.contains('active')) { el.classList.remove('active'); if (btn) btn.classList.remove('active'); return; }
+                if (el.classList.contains('active')) { 
+                    UI._saveConfigFromForm();
+                    el.classList.remove('active'); if (btn) btn.classList.remove('active'); return; 
+                }
                 Logic._clearHeaderBtnActive();
                 if (btn) btn.classList.add('active');
                 el.classList.add('active');
@@ -6608,8 +6692,11 @@
                 setChecked('cfg-path-acervo-active', cfg.pathAcervoActive);
                 setChecked('cfg-autosave', cfg.autoSave);
                 setVal('cfg-video-player', cfg.videoPlayer || 'system');
+                UI._populatePlayerOptions();
+                setVal('cfg-video-player', cfg.videoPlayer || 'system');
                 setVal('cfg-custom-player-path', cfg.customPlayerPath || '');
                 UI._toggleCustomPlayerRow(cfg.videoPlayer);
+                setChecked('cfg-video-player-active', cfg.videoPlayerActive !== false);
                 setChecked('cfg-notifications-active', cfg.notificationsActive !== false);
                 setVal('cfg-notifications-duration', cfg.notificationsDuration || 5000);
                 setChecked('cfg-cadastro-notify-active', cfg.cadastroNotifyActive !== false);
@@ -6858,6 +6945,11 @@
                 setTimeout(function() { temp.click(); }, 10);
             },
             applyConfig() {
+                UI._saveConfigFromForm();
+                Logic.showStatus('Configuracoes aplicadas!');
+                UI.closeModal('modal-config');
+            },
+            _saveConfigFromForm() {
                 var cfg = window._appConfig;
 
                 function _combineColor(inputId, opacityId) {
@@ -6915,6 +7007,7 @@
                 cfg.autoSave = document.getElementById('cfg-autosave')?.checked || false;
                 cfg.videoPlayer = getVal('cfg-video-player') || 'system';
                 cfg.customPlayerPath = getVal('cfg-custom-player-path') || '';
+                cfg.videoPlayerActive = document.getElementById('cfg-video-player-active')?.checked || false;
                 cfg.notificationsActive = document.getElementById('cfg-notifications-active')?.checked || false;
                 cfg.notificationsDuration = parseInt(document.getElementById('cfg-notifications-duration')?.value) || 5000;
                 cfg.cadastroNotifyActive = document.getElementById('cfg-cadastro-notify-active')?.checked || false;
@@ -6938,8 +7031,6 @@
                 cfg.placeholderOpacity = parseInt(document.getElementById('op-cfg-placeholder-color')?.value) || 100;
                 saveConfig();
                 applyConfig();
-                Logic.showStatus('Configuracoes aplicadas!');
-                UI.closeModal('modal-config');
             },
             resetAllData() {
                 var total = APP_STATE.movies.length;
@@ -7040,6 +7131,53 @@
             _toggleCustomPlayerRow(value) {
                 var row = document.getElementById('cfg-custom-player-row');
                 if (row) row.style.display = value === 'custom' ? 'flex' : 'none';
+            },
+            _detectPlayers() {
+                var list = [];
+                var fs = null;
+                try {
+                    if (_isElectron() && window.require) fs = window.require('fs');
+                } catch(e) {}
+                if (!fs) return list;
+                var cands = [
+                    { key: 'vlc', label: 'VLC Media Player', paths: ['C:\\Program Files\\VideoLAN\\VLC\\vlc.exe', 'C:\\Program Files (x86)\\VideoLAN\\VLC\\vlc.exe'] },
+                    { key: 'mpc', label: 'Media Player Classic (MPC-HC)', paths: ['C:\\Program Files\\MPC-HC\\mpc-hc64.exe', 'C:\\Program Files (x86)\\MPC-HC\\mpc-hc.exe', 'C:\\Program Files\\MPC-HC\\mpc-hc.exe'] },
+                    { key: 'mpcbe', label: 'Media Player Classic BE', paths: ['C:\\Program Files\\MPC-BE\\mpc-be64.exe', 'C:\\Program Files (x86)\\MPC-BE\\mpc-be.exe'] },
+                    { key: 'mpv', label: 'mpv', paths: ['C:\\Program Files\\mpv\\mpv.exe', 'C:\\Program Files (x86)\\mpv\\mpv.exe'] },
+                    { key: 'pot', label: 'PotPlayer', paths: ['C:\\Program Files\\DAUM\\PotPlayer\\PotPlayerMini64.exe', 'C:\\Program Files (x86)\\DAUM\\PotPlayer\\PotPlayerMini.exe'] },
+                    { key: 'km', label: 'KMPlayer', paths: ['C:\\Program Files\\KMPlayer\\KMPlayer64.exe', 'C:\\Program Files (x86)\\KMPlayer\\KMPlayer.exe'] }
+                ];
+                cands.forEach(function(c) {
+                    for (var i = 0; i < c.paths.length; i++) {
+                        try {
+                            if (fs.existsSync(c.paths[i])) {
+                                list.push({ key: c.key, label: c.label, path: c.paths[i] });
+                                break;
+                            }
+                        } catch(e) {}
+                    }
+                });
+                return list;
+            },
+            _populatePlayerOptions() {
+                var sel = document.getElementById('cfg-video-player');
+                if (!sel) return;
+                var current = sel.value || 'system';
+                var detected = UI._detectPlayers();
+                window._detectedPlayers = {};
+                var existing = [];
+                for (var i = 0; i < sel.options.length; i++) existing.push(sel.options[i].value);
+                detected.forEach(function(p) {
+                    window._detectedPlayers[p.key] = p.path;
+                    if (existing.indexOf(p.key) < 0) {
+                        var opt = document.createElement('option');
+                        opt.value = p.key;
+                        opt.textContent = p.label;
+                        sel.appendChild(opt);
+                    }
+                });
+                sel.value = current;
+                if (!sel.value) sel.value = 'system';
             },
             pickPlayerFile() {
                 var input = document.getElementById('cfg-custom-player-path');
@@ -8541,6 +8679,12 @@
             UI.initMediaPicker('f');
             UI.initMediaPicker('fs');
 
+            // --- Detect OS players (dropdown PLAYER DE VÍDEO) ---
+            try {
+                window._detectedPlayers = {};
+                UI._detectPlayers().forEach(function(p) { window._detectedPlayers[p.key] = p.path; });
+            } catch(e) {}
+
             // --- Check estreia notifications ---
             Logic.checkEstreiaNotifications();
             // Check again every 60 seconds
@@ -8583,58 +8727,72 @@
         
         async function _getAcervoDirHandle() {
             var cfg = window._appConfig;
-            if (!cfg || !cfg.pathAcervo || !cfg.pathAcervoActive || !('showDirectoryPicker' in window)) return null;
-            try {
-                if (_autoSaveHandle) return _autoSaveHandle;
-                _autoSaveHandle = await window.showDirectoryPicker();
-                return _autoSaveHandle;
-            } catch(e) {
-                console.warn('Auto-save directory access denied:', e);
-                return null;
+            if (!cfg || !cfg.pathAcervo || !cfg.pathAcervoActive) return null;
+            if (_isElectron() && window.require) {
+                try {
+                    var fs = window.require('fs');
+                    if (fs && fs.existsSync(cfg.pathAcervo)) {
+                        return { kind: 'electron', path: cfg.pathAcervo };
+                    }
+                } catch(e) {}
             }
+            if (_autoSaveHandle) return _autoSaveHandle;
+            return null;
         }
         
         async function _getAcervoDirHandleForSave() {
             var cfg = window._appConfig;
             var savePath = (cfg && cfg.pathAcervo && cfg.pathAcervoActive) ? cfg.pathAcervo : '';
-            if (!savePath || !('showDirectoryPicker' in window)) return null;
+            if (!savePath) return null;
+            if (_isElectron() && window.require) {
+                try {
+                    var fs = window.require('fs');
+                    if (fs && fs.existsSync(savePath)) {
+                        return { kind: 'electron', path: savePath };
+                    }
+                } catch(e) {}
+            }
+            if (_acervoDirHandle) return _acervoDirHandle;
+            return null;
+        }
+
+        async function _writeJsonToHandle(handle, fileName) {
+            if (handle && handle.kind === 'electron') {
+                try {
+                    var fs = window.require('fs');
+                    var path = window.require('path');
+                    var data = JSON.stringify(APP_STATE.movies, null, 2);
+                    fs.writeFileSync(path.join(handle.path, fileName), data, 'utf-8');
+                    return true;
+                } catch(e) {
+                    console.warn('Electron save failed:', e);
+                    return false;
+                }
+            }
+            if (!handle) return false;
             try {
-                if (_acervoDirHandle) return _acervoDirHandle;
-                return null;
+                var data = JSON.stringify(APP_STATE.movies, null, 2);
+                var fileHandle = await handle.getFileHandle(fileName, { create: true });
+                var writable = await fileHandle.createWritable();
+                await writable.write(data);
+                await writable.close();
+                return true;
             } catch(e) {
-                console.warn('Acervo directory access denied:', e);
-                return null;
+                console.warn('Save to file failed:', e);
+                return false;
             }
         }
 
         async function _autoSaveToFile() {
             var handle = await _getAcervoDirHandle();
             if (!handle) return;
-            try {
-                var data = JSON.stringify(APP_STATE.movies, null, 2);
-                var fileHandle = await handle.getFileHandle('cinecatalog_autosave.json', { create: true });
-                var writable = await fileHandle.createWritable();
-                await writable.write(data);
-                await writable.close();
-            } catch(e) {
-                console.warn('Auto-save to file failed:', e);
-            }
+            await _writeJsonToHandle(handle, 'cinecatalog_autosave.json');
         }
 
         async function _saveToAcervoFile() {
             var handle = await _getAcervoDirHandleForSave();
             if (!handle) return false;
-            try {
-                var data = JSON.stringify(APP_STATE.movies, null, 2);
-                var fileHandle = await handle.getFileHandle('cinecatalog_data.json', { create: true });
-                var writable = await fileHandle.createWritable();
-                await writable.write(data);
-                await writable.close();
-                return true;
-            } catch(e) {
-                console.warn('Save to acervo file failed:', e);
-                return false;
-            }
+            return await _writeJsonToHandle(handle, 'cinecatalog_data.json');
         }
 
         function _scheduleAutoSave() {
@@ -8901,10 +9059,12 @@
                     Logic.updateReminderBadge();
 
                     if (type === 'filmes') {
-                        ['f-title','f-year','f-duration','f-director','f-cast','f-desc','f-trailer-url','f-other-info','f-media-url'].forEach(function(id) {
+                        ['f-title','f-year','f-duration','f-director','f-cast','f-desc','f-trailer-url','f-other-info'].forEach(function(id) {
                             var el = document.getElementById(id);
                             if (el) el.value = '';
                         });
+                        var mediaEl = document.getElementById('f-media-url');
+                        if (mediaEl) { mediaEl.value = ''; delete mediaEl.dataset.ref; delete mediaEl.dataset.path; }
                         document.getElementById('f-category').value = '';
                         document.getElementById('f-stars').value = 0;
                         document.querySelectorAll('#star-input-container i').forEach(function(s) { s.classList.remove('text-yellow-500'); });
@@ -8918,6 +9078,8 @@
                             var el = document.getElementById(id);
                             if (el) el.value = '';
                         });
+                        var mediaEls = document.getElementById('fs-media-url');
+                        if (mediaEls) { mediaEls.value = ''; delete mediaEls.dataset.ref; delete mediaEls.dataset.path; }
                         document.getElementById('fs-category').value = '';
                         document.getElementById('fs-stars').value = 0;
                         document.querySelectorAll('#star-input-container-series i').forEach(function(s) { s.classList.remove('text-yellow-500'); });
