@@ -1831,3 +1831,67 @@ if (_es) {
 | Paletas, tipografia, layout, espaçamentos preservados | OK |
 | Todos os IDs, classes e handlers mantidos | OK |
 
+---
+
+## Implementações Realizadas — Melhorias 5 (melhorias2.md — Itens a–b)
+
+### 71. (a) ÍCONE DE CORAÇÃO FAVORITO nos Cards (Filmes e Séries)
+
+**Arquivo:** `index.html` — CSS (`.card-heart`, `@keyframes heartPulse`) + JavaScript (`Render.createCard`, `Logic.toggleCardFav`)
+
+**O que foi feito:**
+- **Coração sempre visível** no lado direito do card (oposto ao Gênero, que fica à esquerda via `.card-category`), posicionado no **topo da camada** (`z-index: 7`, acima do overlay de play) e atrelado ao card.
+- **Estado neutro:** fundo vazado com contorno branco (`border: 1.5px solid rgba(255,255,255,0.85)`, fundo `rgba(0,0,0,0.4)`) e ícone `fa-regular fa-heart` (outline) — tamanho médio (28px).
+- **Estado ativo (favorito):** ícone `fas fa-heart` preenchido de vermelho (`#EF4444`) com borda/fundo vermelhos e **efeito pulsante suave** (animação `heartPulse` + glow).
+- **Clique (mouse ou touch):** `onclick` no coração chama `Logic.toggleCardFav(id, this)` com `stopPropagation()` — não abre o modal INFO nem o menu de contexto.
+- **`Logic.toggleCardFav()`:** alterna `movie.statuses.favorite`, salva em `Storage.save()`, atualiza visualmente o card em tempo real (classe ativa do coração, borda vermelha no card e badge "Fav" — via nova classe `card-badges` na linha de badges), atualiza contadores e lembrete, e re-renderiza apenas se o filtro ativo for "favoritados".
+- Ícone de lembrete no card reposicionado de `right-7` para `right-12` para não sobrepor o novo coração.
+
+**Preservação:** A faixa de status "Fav" já existente no card continua funcionando. O menu de contexto (clique direito) com "Favoritar" permanece intacto. A funcionalidade de favoritos via filtro não foi alterada.
+
+---
+
+### 72. (b) ATALHOS movidos para CONFIGURAÇÕES + Ícones e Logotipo Aumentados
+
+**Arquivo:** `index.html` — HTML (header, `modal-config`, remoção de `modal-shortcuts`) + CSS (`.btn-icon`, `.logo-header` em 5 escalas) + JavaScript (`Logic._headerBtnIds`, `UI.closeModal`, `UI.toggleModal`, `UI.applyShortcuts`, `UI._populateConfigForm`, handlers ESC e clique-fora)
+
+**O que foi feito:**
+- **Botão "Atalhos" removido** da barra principal (ficava entre Dashboard e Filtros).
+- **Modal `modal-shortcuts` removido** e a funcionalidade **GESTÃO DE ATALHOS** movida para **dentro de CONFIGURAÇÕES**, como nova `config-section` (com ícone `fa-keyboard`, instruções e `#shortcuts-list`) antes do rodapé APLICAR/Cancelar, dentro da área de rolagem do modal.
+- A lista de atalhos renderiza ao abrir as configurações (`_populateConfigForm` chama `UI._shortcutsRender()`). Edição, remoção, reset e persistência de atalhos permanecem idênticos.
+- `UI.applyShortcuts()` mantém o feedback de sucesso (sem fechar modal).
+- Limpezas: `modal-shortcuts` removido do `_headerBtnIds`, do `modalBtnMap`, do `toggleModal`, do handler de ESC e do handler de clique-fora (elemento não existe mais).
+- **Ícones aumentados (+~10%)** em todas as escalas (base/HD/FHD/2K/4K): `.btn-icon` (37→41, 33→36, 40→44, 44→48, 51→56 px) com `font-size` proporcional.
+- **Logotipo aumentado em 10%** em todas as escalas: `.logo-header` (clamp base `30/3.3vw/72` → `33/3.63vw/79`; HD 34→37px; FHD `42/3.4vw/52` → `46/3.74vw/57`; 2K `50/3.2vw/60` → `55/3.52vw/66`; 4K `56/3vw/72` → `62/3.3vw/79`).
+
+**Preservação:** `_shortcutsDefaults`, `_shortcutsLoad/Persist`, `_shortcutsEdit/Remove/Reset` e os atalhos configurados continuam funcionando dentro de CONFIGURAÇÕES. Breakpoints de responsividade e demais botões da barra intactos. Nenhuma distorção (proporções preservadas via `object-fit: contain` e `border-radius: 50%`).
+
+---
+
+## Checklist Final (melhorias2.md — Itens a–b)
+
+| Verificação | Status |
+|---|---|
+| (a) Coração aparece em todos os cards de Filmes/Séries | OK |
+| (a) Posicionado à direita, oposto ao Gênero | OK |
+| (a) Fundo vazado + contorno branco, tamanho médio | OK |
+| (a) No topo da camada do card (z-index acima do play overlay) | OK |
+| (a) Clique ativa: vermelho preenchido + efeito pulsante | OK |
+| (a) Segundo clique desfavorita | OK |
+| (a) Funciona com mouse e touch | OK |
+| (a) `stopPropagation`: não abre INFO nem menu de contexto | OK |
+| (a) Badge "Fav" e borda vermelha atualizados em tempo real | OK |
+| (a) Filtro "favoritados" atualizado | OK |
+| (a) Lembrete reposicionado (sem sobrepor o coração) | OK |
+| (b) Botão Atalhos removido da barra principal | OK |
+| (b) GESTÃO DE ATALHOS dentro de CONFIGURAÇÕES | OK |
+| (b) Lista renderiza ao abrir configurações | OK |
+| (b) Editar/remover/resetar atalhos funcionando | OK |
+| (b) ESC e clique-fora limpos da referência antiga | OK |
+| (b) Ícones `.btn-icon` aumentados (~10%) nas 5 escalas | OK |
+| (b) Logotipo `.logo-header` aumentado 10% nas 5 escalas | OK |
+| (b) Sem distorções (proporções preservadas) | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
+

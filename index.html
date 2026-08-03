@@ -124,8 +124,11 @@
         .movie-card img.error + .card-fallback { display: flex; }
         .movie-card img.error { display: none; }
 
-        .card-heart { position: absolute; top: 0.5rem; right: 0.5rem; font-size: 14px; color: #EF4444; z-index: 5; display: none; filter: drop-shadow(0 0 6px rgba(239,68,68,0.5)); }
-        .card-heart.show { display: block; animation: heartPulse 1.5s ease-in-out infinite; }
+        .card-heart { position: absolute; top: 0.5rem; right: 0.5rem; z-index: 7; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; background: rgba(0,0,0,0.4); border: 1.5px solid rgba(255,255,255,0.85); transition: all 0.25s; }
+        .card-heart i { font-size: 15px; color: #fff; transition: all 0.25s; }
+        .card-heart:hover { transform: scale(1.12); border-color: #fff; }
+        .card-heart.active { border-color: #EF4444; background: rgba(239,68,68,0.25); }
+        .card-heart.active i { color: #EF4444; filter: drop-shadow(0 0 6px rgba(239,68,68,0.7)); animation: heartPulse 1.5s ease-in-out infinite; }
         @keyframes heartPulse {
             0%, 100% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.15); opacity: 0.85; }
@@ -155,7 +158,7 @@
 
         .btn-cadastrar { font-size: 10px; letter-spacing: 0.1em; }
 
-        .btn-icon { width: 37px; height: 37px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--input-bg); border: 1px solid var(--border-color); transition: 0.2s; flex-shrink: 0; }
+        .btn-icon { width: 41px; height: 41px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--input-bg); border: 1px solid var(--border-color); transition: 0.2s; flex-shrink: 0; font-size: 0.72rem; }
         .btn-icon:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
         .btn-icon.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
         .btn-icon.active:hover { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
@@ -175,7 +178,7 @@
         #context-menu.show { display: block; opacity: 1; }
         #context-menu.fade-out { opacity: 0; }
 
-        .logo-header { height: clamp(30px, 3.3vw, 72px); width: auto; max-height: 100%; object-fit: contain; }
+        .logo-header { height: clamp(33px, 3.63vw, 79px); width: auto; max-height: 100%; object-fit: contain; }
 
         /* MODAL PREMIUM */
         .modal-premium {
@@ -1871,8 +1874,8 @@
         @media (max-width: 1280px) {
             html { font-size: 14px; }
             header { padding: 0.2rem 0.94rem; }
-            .logo-header { height: 34px; }
-            .btn-icon { width: 33px; height: 33px; font-size: 0.72rem; }
+            .logo-header { height: 37px; }
+            .btn-icon { width: 36px; height: 36px; font-size: 0.79rem; }
             .zoom-btn, .view-btn { width: 26px; height: 26px; font-size: 0.6rem; }
             .nav-link { font-size: 9px; padding: 0.44rem 1rem; }
             .btn-cadastrar { font-size: 9px; padding: 0.5rem 1rem; }
@@ -1888,8 +1891,8 @@
         @media (min-width: 1281px) and (max-width: 1920px) {
             html { font-size: 17px; }
             header { padding: 0.3rem 1.43rem; }
-            .logo-header { height: clamp(42px, 3.4vw, 52px); }
-            .btn-icon { width: 40px; height: 40px; font-size: 0.83rem; }
+            .logo-header { height: clamp(46px, 3.74vw, 57px); }
+            .btn-icon { width: 44px; height: 44px; font-size: 0.91rem; }
             .zoom-btn, .view-btn { width: 33px; height: 33px; font-size: 0.66rem; }
             .nav-link { font-size: 10px; padding: 0.55rem 1.43rem; }
             .btn-cadastrar { font-size: 10px; padding: 0.61rem 1.32rem; }
@@ -1905,8 +1908,8 @@
         @media (min-width: 1921px) and (max-width: 2560px) {
             html { font-size: 18px; }
             header { padding: 0.36rem 1.93rem; }
-            .logo-header { height: clamp(50px, 3.2vw, 60px); }
-            .btn-icon { width: 44px; height: 44px; font-size: 0.88rem; }
+            .logo-header { height: clamp(55px, 3.52vw, 66px); }
+            .btn-icon { width: 48px; height: 48px; font-size: 0.97rem; }
             .zoom-btn, .view-btn { width: 36px; height: 36px; font-size: 0.72rem; }
             .nav-link { font-size: 12px; padding: 0.61rem 1.65rem; }
             .btn-cadastrar { font-size: 12px; padding: 0.66rem 1.54rem; }
@@ -1923,8 +1926,8 @@
         @media (min-width: 2561px) {
             html { font-size: 20px; }
             header { padding: 0.42rem 2.75rem; }
-            .logo-header { height: clamp(56px, 3vw, 72px); }
-            .btn-icon { width: 51px; height: 51px; font-size: 1rem; }
+            .logo-header { height: clamp(62px, 3.3vw, 79px); }
+            .btn-icon { width: 56px; height: 56px; font-size: 1.1rem; }
             .zoom-btn, .view-btn { width: 40px; height: 40px; font-size: 0.77rem; }
             .nav-link { font-size: 13px; padding: 0.66rem 1.76rem; }
             .btn-cadastrar { font-size: 13px; padding: 0.72rem 1.76rem; }
@@ -1972,8 +1975,6 @@
                 </div>
 
                 <button onclick="Logic.openDashboard()" id="btn-dashboard" class="btn-icon" title="Dashboard"><i class="fas fa-chart-pie text-xs"></i></button>
-
-                <button onclick="UI.toggleShortcuts()" id="btn-shortcuts" class="btn-icon" title="Atalhos"><i class="fas fa-keyboard text-xs"></i></button>
 
                 <div class="relative">
                     <button onclick="UI.toggleFilters()" id="btn-filters" class="btn-icon" title="Filtros"><i class="fas fa-filter text-xs"></i></button>
@@ -2926,31 +2927,6 @@
         </div>
     </div>
 
-    <!-- [BLOCO 7.5.1: MODAL GESTÃO DE ATALHOS] -->
-    <div id="modal-shortcuts" class="modal-premium fixed inset-0 p-4" style="z-index:300">
-        <div class="modal-premium-inner" style="max-width:700px">
-            <div class="modal-premium-header">
-                <div class="flex items-center gap-3">
-                    <i class="fas fa-keyboard text-purple-500 text-2xl"></i>
-                    <span class="text-[1rem] font-black uppercase tracking-widest" style="color:var(--text-color);-webkit-text-fill-color:var(--text-color)">GESTÃO DE ATALHOS</span>
-                </div>
-                <button onclick="UI.closeModal('modal-shortcuts')" class="btn-close-premium"><i class="fas fa-times text-xs"></i></button>
-            </div>
-            <div class="p-5 overflow-y-auto custom-scroll" style="max-height:75vh">
-                <div style="font-size:0.75rem;font-weight:600;color:var(--text-secondary);margin-bottom:1rem;text-transform:uppercase;letter-spacing:0.1em">Clique num atalho para editar — pressione uma tecla para reatribuir</div>
-                <div id="shortcuts-list"></div>
-                <div style="display:flex;justify-content:flex-end;gap:0.75rem;margin-top:1.25rem;padding-top:0.75rem;border-top:1px solid var(--border-color)">
-                    <button onclick="UI.closeModal('modal-shortcuts')" class="bg-gray-600 text-white px-5 py-2.5 rounded-full font-black text-[0.8rem] hover:bg-gray-700 transition uppercase tracking-widest">
-                        Cancelar
-                    </button>
-                    <button onclick="UI.applyShortcuts()" class="bg-blue-600 text-white px-5 py-2.5 rounded-full font-black text-[0.8rem] hover:bg-blue-700 transition uppercase tracking-widest shadow-lg">
-                        <i class="fas fa-check mr-1.5"></i>Aplicar
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- [BLOCO 7.6: CONFIG MODAL] -->
     <div id="modal-config" class="modal-premium fixed inset-0 p-4" style="z-index:300">
         <div class="modal-premium-inner" style="max-width:800px">
@@ -3444,6 +3420,15 @@
                             </label>
                         </div>
                     </div>
+                </div>
+
+                <!-- Config Section: GESTÃO DE ATALHOS -->
+                <div class="config-section" style="margin-top:1.25rem;padding-top:0.75rem;border-top:1px solid var(--border-color)">
+                    <div class="config-section-label" style="display:flex;align-items:center;gap:0.6rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;font-size:0.72rem;color:var(--text-color);margin-bottom:0.9rem">
+                        <i class="fas fa-keyboard text-purple-500"></i> Gestão de Atalhos
+                    </div>
+                    <div style="font-size:0.7rem;font-weight:600;color:var(--text-secondary);margin-bottom:0.85rem;text-transform:uppercase;letter-spacing:0.1em">Clique num atalho para editar — pressione uma tecla para reatribuir</div>
+                    <div id="shortcuts-list"></div>
                 </div>
 
                 <!-- Apply -->
@@ -4089,15 +4074,15 @@
                     '<img src="' + data.image + '" onerror="this.onerror=null;this.classList.add(\'error\');this.nextElementSibling.style.display=\'flex\'">' +
                     '<div class="card-fallback"><i class="fas fa-film"></i><span>S/ Poster</span></div>' +
                     '<div class="card-category" title="' + topLabel + '" style="color:var(--card-category-color);background:var(--card-category-bg);font-size:var(--card-category-size)">' + topLabel + '</div>' +
-                    (isFav ? '<div class="card-heart show"><i class="fas fa-heart"></i></div>' : '') +
-                    (hasReminder ? '<div class="absolute top-0.5 right-7 z-5 text-amber-400 text-[0.6rem]" title="' + reminderTitle + '"><i class="fas fa-sticky-note"></i></div>' : '') +
+                    '<div class="card-heart' + (isFav ? ' active' : '') + '" onclick="event.stopPropagation();Logic.toggleCardFav(\'' + data.id + '\', this)" title="' + (isFav ? 'Desfavoritar' : 'Favoritar') + '"><i class="' + (isFav ? 'fas' : 'fa-regular') + ' fa-heart"></i></div>' +
+                    (hasReminder ? '<div class="absolute top-0.5 right-12 z-5 text-amber-400 text-[0.6rem]" title="' + reminderTitle + '"><i class="fas fa-sticky-note"></i></div>' : '') +
                     (hasMedia ? '<div class="card-play-overlay"><div class="card-play-btn" onclick="event.stopPropagation();Logic.playMedia(\'' + data.id + '\')"><i class="fas fa-play"></i></div></div>' : '') +
                     '<div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3" style="z-index:3">' +
                     '<div class="flex items-center gap-2">' +
                     '<span class="font-bold" style="font-size:var(--card-year-size,10px);color:var(--card-year-color,#60A5FA)">' + (data.year || '') + '</span>' +
                     (starCount > 0 ? '<div class="text-[11px]" style="color:var(--card-star-color,#EAB308)">' + '&#9733;'.repeat(starCount) + '</div>' : '') +
                     '</div>' +
-                    (badges.length ? '<div class="flex gap-1.5 mt-2">' + badges.join('') + '</div>' : '') +
+                    (badges.length ? '<div class="flex gap-1.5 mt-2 card-badges">' + badges.join('') + '</div>' : '') +
                     '</div>';
                 div.oncontextmenu = (e) => Logic.openContextMenu(e, data.id);
                 return div;
@@ -4109,7 +4094,7 @@
             _lastNotifications: [],
             _reminderListRefresh: false,
 
-            _headerBtnIds: ['btn-theme','btn-notifications','btn-reminders','btn-cadastro-log','btn-config','btn-info','btn-generate-list','btn-dashboard','btn-shortcuts','btn-filters'],
+            _headerBtnIds: ['btn-theme','btn-notifications','btn-reminders','btn-cadastro-log','btn-config','btn-info','btn-generate-list','btn-dashboard','btn-filters'],
             _clearHeaderBtnActive() {
                 this._headerBtnIds.forEach(function(id) {
                     var el = document.getElementById(id);
@@ -4916,6 +4901,53 @@
                 });
             },
 
+            toggleCardFav(id, el) {
+                const movie = APP_STATE.movies.find(m => m.id === id);
+                if (!movie) return;
+                if (!movie.statuses) movie.statuses = {};
+                var isFav = !(movie.statuses.favorite || false);
+                movie.statuses.favorite = isFav;
+                Storage.save();
+                var card = el ? el.closest('.movie-card') : null;
+                if (card) {
+                    if (isFav) {
+                        card.classList.add('border-red-500/50');
+                        card.classList.add('shadow-[0_0_15px_rgba(239,68,68,0.2)]');
+                    } else {
+                        card.classList.remove('border-red-500/50');
+                        card.classList.remove('shadow-[0_0_15px_rgba(239,68,68,0.2)]');
+                    }
+                    var heart = card.querySelector('.card-heart');
+                    if (heart) {
+                        heart.classList.toggle('active', isFav);
+                        heart.title = isFav ? 'Desfavoritar' : 'Favoritar';
+                        var ic = heart.querySelector('i');
+                        if (ic) ic.className = (isFav ? 'fas' : 'fa-regular') + ' fa-heart';
+                    }
+                    var badgesRow = card.querySelector('.card-badges');
+                    if (badgesRow) {
+                        var favBadge = badgesRow.querySelector('.card-badge-fav');
+                        if (isFav && !favBadge) {
+                            var span = document.createElement('span');
+                            span.className = 'card-badge-fav px-2 py-0.5 rounded-full uppercase';
+                            span.style.background = 'var(--card-status-fav-bg,#DC2626)';
+                            span.style.color = 'var(--card-status-text-color,#FFF)';
+                            span.style.fontSize = 'var(--card-status-size,9px)';
+                            span.style.fontWeight = '400';
+                            span.textContent = 'Fav';
+                            badgesRow.appendChild(span);
+                        } else if (!isFav && favBadge) {
+                            favBadge.remove();
+                        }
+                    }
+                }
+                UI.updateCounters();
+                Logic.updateReminderBadge();
+                var af = APP_STATE.activeFilter;
+                if (af === 'fav' || af === 'favoritados') Render.all();
+                Logic.showStatus(isFav ? 'Adicionado aos favoritos!' : 'Removido dos favoritos!');
+            },
+
             editReminderCtx() {
                 var self = this;
                 this.closeCtxMenu(function() {
@@ -5651,7 +5683,7 @@
                 const el = document.getElementById(id);
                 if (!el) return;
                 el.classList.remove('active');
-                var modalBtnMap = {'modal-dashboard':'btn-dashboard','modal-generate-list':'btn-generate-list','modal-cadastro-log':'btn-cadastro-log','modal-config':'btn-config','modal-info':'btn-info','modal-shortcuts':'btn-shortcuts'};
+                var modalBtnMap = {'modal-dashboard':'btn-dashboard','modal-generate-list':'btn-generate-list','modal-cadastro-log':'btn-cadastro-log','modal-config':'btn-config','modal-info':'btn-info'};
                 if (modalBtnMap[id]) { var b = document.getElementById(modalBtnMap[id]); if (b) b.classList.remove('active'); }
                 document.getElementById('modal-toast')?.classList.add('hidden');
                 if (id === 'modal-config' && typeof UI._saveConfigFromForm === 'function') {
@@ -5674,14 +5706,6 @@
                     if (btn) btn.classList.toggle('active', opening);
                     if (opening) Logic.renderInfoFeatures();
                 }
-                if (id === 'modal-shortcuts') {
-                    var bs = document.getElementById('btn-shortcuts');
-                    if (bs) bs.classList.toggle('active', opening);
-                    if (opening) UI._shortcutsRender();
-                }
-            },
-            toggleShortcuts() {
-                this.toggleModal('modal-shortcuts');
             },
             _shortcutsEditing: null,
             _shortcutsDefaults: [
@@ -5800,7 +5824,6 @@
                 UI._shortcutsRender();
             },
             applyShortcuts: function() {
-                UI.closeModal('modal-shortcuts');
                 Logic.showStatus('Atalhos aplicados com sucesso');
             },
             toggleSearchBar() {
@@ -6723,6 +6746,7 @@
                 this._updateConfigPreview();
                 this._syncColorSwatches();
                 this._placeholderPreview();
+                if (typeof UI._shortcutsRender === 'function') UI._shortcutsRender();
                 var total = APP_STATE.movies.length;
                 var filmes = APP_STATE.movies.filter(function(m) { return m.type === 'filmes'; }).length;
                 var series = APP_STATE.movies.filter(function(m) { return m.type === 'series'; }).length;
@@ -8546,8 +8570,6 @@
                     if (mc && mc.classList.contains('active')) { UI.closeModal('modal-cadastro'); return; }
                     var mi = document.getElementById('modal-info');
                     if (mi && mi.classList.contains('active')) { UI.closeModal('modal-info'); return; }
-                    var msh = document.getElementById('modal-shortcuts');
-                    if (msh && msh.classList.contains('active')) { UI.closeModal('modal-shortcuts'); return; }
                     var mg = document.getElementById('modal-generate-list');
                     if (mg && mg.classList.contains('active')) { UI.closeModal('modal-generate-list'); return; }
                     var ms = document.getElementById('modal-sugestao');
@@ -8710,9 +8732,6 @@
             });
             document.getElementById('modal-sugestao')?.addEventListener('click', function(e) {
                 if (e.target === this) UI.closeModal('modal-sugestao');
-            });
-            document.getElementById('modal-shortcuts')?.addEventListener('click', function(e) {
-                if (e.target === this) UI.closeModal('modal-shortcuts');
             });
         };
     </script>
