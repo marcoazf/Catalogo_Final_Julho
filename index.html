@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineCatalog Elo | v29.0.1 - Edição Premium</title>
+    <title>CineCatalog Elo | v31.0.1 - Edição Premium</title>
     
     <!-- RECURSOS EXTERNOS -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
@@ -145,7 +145,7 @@
         .card-year { font-size: 9px; font-weight: 900; color: rgba(255,255,255,0.85); letter-spacing: 0.06em; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
         .card-stars { display: flex; align-items: center; gap: 2px; font-size: 13px; color: #F59E0B; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
 
-        .card-category { position: absolute; top: 0.5rem; left: 0.5rem; font-size: var(--card-category-size, 8px); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--card-category-color, rgba(255,255,255,1)); background: var(--card-category-bg, rgba(0,0,0,0.75)); padding: 0.2rem 0.5rem; border-radius: 0.5rem; z-index: 4; white-space: nowrap; max-width: 60%; overflow: hidden; text-overflow: ellipsis; }
+        .card-category { position: absolute; top: 0.5rem; left: 0.5rem; font-size: var(--card-category-size, 11px); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--card-category-color, rgba(255,255,255,1)); background: var(--card-category-bg, rgba(0,0,0,0.75)); padding: 0.2rem 0.5rem; border-radius: 0.5rem; z-index: 4; white-space: nowrap; max-width: 60%; overflow: hidden; text-overflow: ellipsis; }
         .movie-card:hover .card-category { color: var(--card-category-color, rgba(255,255,255,0.7)); background: var(--card-category-bg, rgba(0,0,0,0.6)); }
         
         .dynamic-grid { display: grid; row-gap: 1.5rem; column-gap: 1.5rem; grid-template-columns: repeat(var(--cards-per-row), minmax(0, 1fr)); width: 100%; }
@@ -1397,6 +1397,12 @@
             filter: invert(1) brightness(2);
         }
 
+        /* Date picker icon - light green (Estreias cadastro) */
+        .dynamic-estreia-row input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(75%) sepia(30%) saturate(1100%) hue-rotate(95deg) brightness(92%) contrast(88%);
+            cursor: pointer;
+        }
+
         /* === FEATURE: Search Match Neon === */
         .movie-card.search-match {
             border-color: #22C55E !important;
@@ -2102,7 +2108,7 @@
     <footer class="px-6 py-2 border-t theme-border flex justify-between items-center bg-black/20">
         <div class="flex items-center gap-0" style="flex-wrap:nowrap">
             <div class="text-[0.75rem] text-gray-400 uppercase tracking-widest font-medium whitespace-nowrap" id="footer-dev-text">
-                ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CRIADO PARA JONAS THEODORO</span> | <span id="app-version-badge" style="background:linear-gradient(135deg,#3B82F6,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 20px rgba(59,130,246,0.3)">v29.0.1</span>
+                ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CRIADO PARA JONAS THEODORO</span> | <span id="app-version-badge" style="background:linear-gradient(135deg,#3B82F6,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 20px rgba(59,130,246,0.3)">v31.0.1</span>
             </div>
         </div>
         <div id="user-action-status" class="text-[0.75rem] text-emerald-500 font-bold uppercase opacity-0 pointer-events-none transition-opacity duration-300"></div>
@@ -2455,6 +2461,7 @@
                             <span id="estreia-count-display" style="font-size:0.85rem;font-weight:700;color:#34D399">0 ESTREIAS</span>
                             <div style="display:flex;gap:0.5rem">
                                 <button onclick="UI._addEstreiaRow()" class="estreia-summary-btn rounded-full flex items-center justify-center font-black transition" style="width:30px;height:30px;background:rgba(16,185,129,0.2);color:#10B981;border:1px solid rgba(16,185,129,0.3);font-size:0.8rem" title="Adicionar"><i class="fas fa-plus"></i></button>
+                                <button onclick="UI._removeAllEstreias()" class="estreia-summary-btn rounded-full flex items-center justify-center font-black transition" style="width:30px;height:30px;background:rgba(239,68,68,0.2);color:#EF4444;border:1px solid rgba(239,68,68,0.3);font-size:0.8rem" title="Remover todas as estreias"><i class="fas fa-trash"></i></button>
                             </div>
                         </div>
                         <!-- Auto-delete warning -->
@@ -3061,7 +3068,7 @@
                         </div>
                         <div class="config-row">
                             <label>Tamanho Ano</label>
-                            <input type="text" id="cfg-year-size" class="field-premium small" value="9px" oninput="UI._updateConfigPreview()">
+                            <input type="text" id="cfg-year-size" class="field-premium small" value="13px" oninput="UI._updateConfigPreview()">
                         </div>
                         <div class="config-row">
                             <label>Cor Texto Status</label>
@@ -3138,7 +3145,7 @@
                             </div>
                             <div class="config-row">
                                 <label>Tamanho</label>
-                                <input type="text" id="cfg-cat-size" class="field-premium small" placeholder="ex: 7px" oninput="UI._updateConfigPreview()">
+                                <input type="text" id="cfg-cat-size" class="field-premium small" value="11px" placeholder="ex: 11px" oninput="UI._updateConfigPreview()">
                             </div>
                         </div>
                     </div>
@@ -3462,7 +3469,7 @@
                 </div>
             </div>
             <div class="p-5 overflow-y-auto custom-scroll" style="max-height:82vh">
-                <div style="font-size:0.7rem;font-weight:600;color:var(--text-secondary);margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.1em">Clique num ícone para saber mais <span style="color:var(--accent-blue);font-weight:800">(49)</span></div>
+                <div style="font-size:0.7rem;font-weight:600;color:var(--text-secondary);margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.1em">Clique num ícone para saber mais <span style="color:var(--accent-blue);font-weight:800">(50)</span></div>
                 <div id="info-features-grid" class="info-grid info-grid-scroll"></div>
                 <!-- Bottom description box -->
                 <div id="info-desc-box" class="hidden-box">
@@ -3662,7 +3669,7 @@
                 emptyTitleGap: 12,
                 cardStarsColor: '#EAB308',
                 cardYearColor: '#60A5FA',
-                cardYearSize: '10px',
+                cardYearSize: '13px',
                 cardStatusNewBg: '#2563EB',
                 cardStatusWatchBg: '#D97706',
                 cardStatusFavBg: '#DC2626',
@@ -3670,7 +3677,7 @@
                 cardStatusSize: '7px',
                 cardCategoryColor: '#FFFFFF',
                 cardCategoryBg: '#000000',
-                cardCategorySize: '7px',
+                cardCategorySize: '11px',
                 pathCards: '',
                 pathVideos: '',
                 pathBackups: '',
@@ -3829,6 +3836,13 @@
         // Gêneros (topo do card): inicia sempre com cor texto = branco e fundo = preto
         window._appConfig.cardCategoryColor = '#FFFFFF';
         window._appConfig.cardCategoryBg = '#000000';
+        // Fontes dos cards aumentadas: Gêneros, Ano e Estrelas mais visíveis
+        if (!window._appConfig.cardCategorySize || window._appConfig.cardCategorySize === '7px' || window._appConfig.cardCategorySize === '8px') {
+            window._appConfig.cardCategorySize = '11px';
+        }
+        if (!window._appConfig.cardYearSize || window._appConfig.cardYearSize === '9px' || window._appConfig.cardYearSize === '10px') {
+            window._appConfig.cardYearSize = '13px';
+        }
         applyConfig();
 
         const Render = {
@@ -4079,8 +4093,8 @@
                     (hasMedia ? '<div class="card-play-overlay"><div class="card-play-btn" onclick="event.stopPropagation();Logic.playMedia(\'' + data.id + '\')"><i class="fas fa-play"></i></div></div>' : '') +
                     '<div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3" style="z-index:3">' +
                     '<div class="flex items-center gap-2">' +
-                    '<span class="font-bold" style="font-size:var(--card-year-size,10px);color:var(--card-year-color,#60A5FA)">' + (data.year || '') + '</span>' +
-                    (starCount > 0 ? '<div class="text-[11px]" style="color:var(--card-star-color,#EAB308)">' + '&#9733;'.repeat(starCount) + '</div>' : '') +
+                    '<span class="font-bold" style="font-size:var(--card-year-size,13px);color:var(--card-year-color,#60A5FA)">' + (data.year || '') + '</span>' +
+                    (starCount > 0 ? '<div class="text-[13px]" style="color:var(--card-star-color,#EAB308)">' + '&#9733;'.repeat(starCount) + '</div>' : '') +
                     '</div>' +
                     (badges.length ? '<div class="flex gap-1.5 mt-2 card-badges">' + badges.join('') + '</div>' : '') +
                     '</div>';
@@ -5189,7 +5203,7 @@
                 var features = [
                     {icon:'fa-film',label:'Cadastro Filmes',desc:'Registre filmes com título original, português, ano, duração, diretor, elenco, sinopse, gênero, póster, trailer, media e muito mais.'},
                     {icon:'fa-tv',label:'Cadastro Séries',desc:'Cadastre séries com temporadas, episódios, numeração e dados completos de produção.'},
-                    {icon:'fa-star',label:'Cadastro Estreias',desc:'Registre estreias de filmes e séries com data, estúdio, idioma e informações de lançamento.'},
+                    {icon:'fa-star',label:'Cadastro Estreias',desc:'Registre estreias de filmes e séries com data, estúdio, idioma e informações de lançamento. Adição com "+", remoção individual com "-" em cada linha e Lixeira para remover todas, com contador em tempo real.'},
                     {icon:'fa-search',label:'Pesquisa Avançada',desc:'Busque por título, diretor, elenco, gênero e sinopse. Suporta busca booleana usando o operador + entre termos.'},
                     {icon:'fa-history',label:'Histórico Pesquisas',desc:'As últimas 5 pesquisas são salvas automaticamente para acesso rápido.'},
                     {icon:'fa-filter',label:'Filtros Inteligentes',desc:'Filtre por status (Novo, Assistir, Favorito), ano, gênero e ordenação A-Z.'},
@@ -5201,7 +5215,7 @@
                     {icon:'fa-sticky-note',label:'Lembretes',desc:'Crie lembretes personalizados para filmes. Painel dedicado com data e descrição.'},
                     {icon:'fa-edit',label:'Edição Rápida',desc:'Edite qualquer item diretamente pela visualização de info ou pelo menu de contexto.'},
                     {icon:'fa-copy',label:'Clonar Dados',desc:'Duplique registros existentes para criar novos rapidamente, alterando apenas os campos desejados.'},
-                    {icon:'fa-trash',label:'Remover Itens',desc:'Remova filmes, séries ou estreias com confirmação. Menu de contexto rápido.'},
+                    {icon:'fa-trash',label:'Remover Itens',desc:'Remova filmes, séries ou estreias com confirmação. Menu de contexto rápido. Estreias: botão "-" por linha e Lixeira para remover todas de uma vez.'},
                     {icon:'fa-palette',label:'Temas Visuais',desc:'4 temas exclusivos: Dark, Light, Amber Noir e Midnight. Troca instantânea com um clique.'},
                     {icon:'fa-cog',label:'Configurações',desc:'Personalize logotipo, cores, ícones, caminhos de pasta e muito mais.'},
                     {icon:'fa-folder',label:'Gestão Pastas',desc:'Configure caminhos para cards, vídeos, backups e acervo. Selecione pastas visualmente.'},
@@ -5211,7 +5225,7 @@
                     {icon:'fa-download',label:'Exportar Dados',desc:'Exporte todo o seu acervo em formato JSON para backup ou transferência.'},
                     {icon:'fa-upload',label:'Importar Dados',desc:'Importe acervo de arquivos JSON. Restaure backups facilmente.'},
                     {icon:'fa-moon',label:'Modo Noturno',desc:'Alternância de temas com menu flutuante. Escolha entre Dark, Light, Amber e Midnight.'},
-                    {icon:'fa-info-circle',label:'Sobre o Sistema',desc:'CineCatalog Elo v29.0.1 — Edição Premium. Sistema completo de gestão de acervo cinematográfico.'},
+                    {icon:'fa-info-circle',label:'Sobre o Sistema',desc:'CineCatalog Elo v31.0.1 — Edição Premium. Sistema completo de gestão de acervo cinematográfico.'},
                     {icon:'fa-th-large',label:'Modos de Exibição',desc:'Três modos de visualização: Carrossel com setas, Grelha por gêneros, e Cine Marquee com animação. Ajuste velocidade e efeito no menu.'},
                     {icon:'fa-arrows-alt-h',label:'Navegação Carrossel',desc:'Navegue horizontalmente por linha com setas laterais. Duas linhas visíveis com rolagem infinita até o fim dos cards.'},
                     {icon:'fa-tachometer-alt',label:'Desempenho Otimizado',desc:'Renderizaçao lazy com batches de 20 cards. Scroll infinito suave sem travar a interface.'},
@@ -5234,7 +5248,9 @@
                     {icon:'fa-hdd',label:'Backup Automático',desc:'Auto salvamento contínuo para localStorage e exportação automática para ficheiro JSON na pasta configurada do acervo.'},
                     {icon:'fa-moon',label:'4 Temas Visuais',desc:'Dark, Light, Amber Noir e Midnight. Troca instantânea com persistência no localStorage. Cores adaptam-se automaticamente.'},
                     {icon:'fa-text-height',label:'Tipografia Responsiva',desc:'Sistema de tipografia fluida que escala proporcionalmente entre HD, FHD, 2K e 4K. Usa clamp() para transição suave.'},
-                    {icon:'fa-window-maximize',label:'Modais Premium',desc:'Janelas de cadastro e informação com design premium: bordas arredondadas, sombras neon, animações de entrada e backdrop blur.'}
+                    {icon:'fa-window-maximize',label:'Modais Premium',desc:'Janelas de cadastro e informação com design premium: bordas arredondadas, sombras neon, animações de entrada e backdrop blur.'},
+                    {icon:'fa-minus-circle',label:'Estreias: Remoção Individual',desc:'Cada linha de estreia possui seu próprio botão "-" para remover apenas aquela estreia da lista, com confirmação e atualização em tempo real.'},
+                    {icon:'fa-text-height',label:'Fontes dos Cards',desc:'Gêneros, Ano e Classificação (estrelas) exibidos com fontes maiores e mais destacadas em cada card de filme e série.'}
                 ];
                 var self = this;
                 grid.innerHTML = features.map(function(f, idx) {
@@ -5944,6 +5960,10 @@
                 // Initialize dynamic estreia form when switching to it
                 if (type === 'estreias' && !_editingId) {
                     UI.resetAllForms();
+                }
+                // On other tabs, footer counters show the real saved totals
+                if (type !== 'estreias') {
+                    UI.updateCounters();
                 }
             },
             updatePreview(url, previewId) {
@@ -6859,7 +6879,7 @@
                         '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;font-family:Inter,sans-serif;min-height:' + fHeight + '">' +
                         '<div style="font-size:' + fDevSize + ';color:' + fDevColor + ';text-transform:uppercase;letter-spacing:0.05em;font-weight:500">' +
                         fDevText + '<span style="opacity:0.5;font-size:' + fCreatedSize + ';color:' + fCreatedColor + '">' + fCreatedText + '</span>' +
-                        ' | <span style="background:linear-gradient(135deg,#3B82F6,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">v29.0.1</span>' +
+                        ' | <span style="background:linear-gradient(135deg,#3B82F6,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">v31.0.1</span>' +
                         '</div>' +
                         '<div style="display:flex;align-items:center;gap:0.5rem">' +
                         '<span style="font-size:' + fStatusSize + ';color:' + fStatusColor + ';font-weight:900;text-transform:uppercase">0 TÍTULOS</span>' +
@@ -8191,6 +8211,7 @@
                     '<input type="text" id="de-title-' + index + '" class="field-premium" placeholder="Título" style="flex:2;font-size:0.85rem;padding:0.45rem 0.6rem;min-width:0" value="' + titleVal + '">' +
                     '<select id="de-category-' + index + '" class="field-premium" style="flex:0 0 140px;font-size:0.8rem;padding:0.45rem 0.6rem;min-width:0">' + opts + '</select>' +
                     '<input type="text" id="de-trailer-' + index + '" class="field-premium" placeholder="Trailer URL" style="flex:1;font-size:0.8rem;padding:0.45rem 0.6rem;min-width:0" value="' + trailerVal + '">' +
+                    '<button type="button" class="estreia-btn estreia-btn-remove" onclick="UI._removeEstreiaRow(' + index + ')" title="Remover esta estreia" style="flex:0 0 30px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;padding:0"><i class="fas fa-minus"></i></button>' +
                     '</div>';
             },
             _initDynamicEstreias(savedData) {
@@ -8268,6 +8289,8 @@
                             break;
                         }
                     }
+                    var removeBtn = row.querySelector('.estreia-btn-remove');
+                    if (removeBtn) removeBtn.setAttribute('onclick', 'UI._removeEstreiaRow(' + idx + ')');
                 });
             },
             _applyEstreia(index) {
@@ -8294,6 +8317,7 @@
                         APP_STATE.movies[idx] = orig;
                         Storage.save();
                         Render.all();
+                        UI.updateCounters();
                         Logic.showStatus('Estreia "' + t + '" atualizada!');
                     }
                 } else {
@@ -8315,6 +8339,7 @@
                     UI._estreiaSavedIds[newItem.id] = true;
                     Storage.save();
                     Render.all();
+                    UI.updateCounters();
                     Logic.showStatus('Estreia "' + t + '" adicionada!');
                 }
                 // Mark apply button as neon green (applied)
@@ -8366,6 +8391,33 @@
                 }
                 Logic.checkEstreiaNotifications();
                 UI._updateEstreiaAutoDeleteWarning();
+            },
+            _removeAllEstreias() {
+                var fields = document.getElementById('dynamic-estreias-fields');
+                if (!fields) return;
+                var rows = fields.querySelectorAll('.dynamic-estreia-row');
+                if (rows.length === 0) { Logic.showStatus('Não há estreias para remover.'); return; }
+                var total = APP_STATE.movies.filter(function(m) { return m.type === 'estreias'; }).length;
+                if (!confirm('Remover TODAS as estreias (' + total + ')? Esta ação não pode ser desfeita.')) return;
+                rows.forEach(function(row) {
+                    var savedId = row.getAttribute('data-saved-id');
+                    if (savedId) {
+                        APP_STATE.movies = APP_STATE.movies.filter(function(m) { return m.id !== savedId; });
+                        delete UI._estreiaSavedIds[savedId];
+                    }
+                });
+                fields.innerHTML = '';
+                UI._estreiaSavedIds = {};
+                UI._estreiaCounter = 0;
+                Storage.save();
+                Render.all();
+                UI.updateCounters();
+                Logic.updateReminderBadge();
+                Logic.checkEstreiaNotifications();
+                UI._addEstreiaRow();
+                UI._updateEstreiaSummary();
+                UI._updateEstreiaAutoDeleteWarning();
+                Logic.showStatus('Todas as estreias foram removidas!');
             },
             _isDateExpired(dateStr) {
                 if (!dateStr) return false;
@@ -8452,6 +8504,8 @@
                 var count = fields.querySelectorAll('.dynamic-estreia-row').length;
                 var display = document.getElementById('estreia-count-display');
                 if (display) display.textContent = count + ' ESTREIA' + (count !== 1 ? 'S' : '');
+                var footerCounter = document.getElementById('counter-estreias');
+                if (footerCounter) footerCounter.innerText = count;
             },
             saveAllDynamicEstreias() {
                 var fields = document.getElementById('dynamic-estreias-fields');
@@ -8501,6 +8555,7 @@
                 if (saved > 0) {
                     Storage.save();
                     Render.all();
+                    UI.updateCounters();
                     Logic.checkEstreiaNotifications();
                     UI._updateEstreiaAutoDeleteWarning();
                     Logic.showStatus(saved + ' estreia' + (saved !== 1 ? 's' : '') + ' salva' + (saved !== 1 ? 's' : '') + ' com sucesso!');

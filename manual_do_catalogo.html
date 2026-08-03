@@ -90,7 +90,7 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 </head>
 <body>
 <h1>Manual do Catálogo</h1>
-<p class="subtitle">CineCatalog Elo — Edição Premium | Versão 29.0.1 <span class="badge badge-blue">ÍCONE DA APP</span></p>
+<p class="subtitle">CineCatalog Elo — Edição Premium | Versão 31.0.1 <span class="badge badge-blue">ÍCONE DA APP</span></p>
 
 <div class="nav">
 <a href="#s1">1. Visão Geral</a>
@@ -115,10 +115,10 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <a href="#s20">20. Ícone da Aplicação</a>
 <a href="#s21">21. Novidades v28.1</a>
 <a href="#s22">22. Novidades v28.2</a>
-<a href="#s23">23. Novidades v29.0.1</a>
+<a href="#s23">23. Novidades v31.0.1</a>
 <a href="#s24">24. Estatísticas com Filtros</a>
 <a href="#s25">25. Lembretes</a>
-<a href="#s26">26. Funcionalidades (49)</a>
+<a href="#s26">26. Funcionalidades (50)</a>
 </div>
 
 <h2 id="s1">1. Visão Geral</h2>
@@ -147,7 +147,7 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <ul>
 <li><strong>Filmes:</strong> Título, Ano, Duração, Diretor, Elenco, Género, Sinopse, Capa, Trailer, Media, Classificação (estrelas), Status (Novo/Assistir/Favorito)</li>
 <li><strong>Séries:</strong> Título, Ano, Duração, Temporada, Episódio, Diretor, Elenco, Género, Sinopse, Capa, Trailer, Media, Classificação, Status</li>
-<li><strong>Estreias:</strong> Data, Título, Tipo (Filme/Série), Trailer URL. Suporta múltiplas estreias dinâmicas com adição/remoção em tempo real</li>
+<li><strong>Estreias:</strong> Data, Título, Tipo (Filme/Série), Trailer URL. Suporta múltiplas estreias dinâmicas com adição em tempo real, botão "-" individual por linha para remover apenas aquela estreia, e ícone Lixeira para remover todas com confirmação</li>
 <li>Preenchimento automático dos campos de caminho (Cards, Vídeos) conforme configurado</li>
 </ul>
 <div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
@@ -295,7 +295,8 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <li>Cor e opacidade das estrelas, ano, texto de status</li>
 <li>Cores de fundo para status: Novo, Assistir, Favorito</li>
 <li>Cor do texto e fundo do género no topo do card</li>
-<li>Tamanho do texto do género</li>
+<li>Tamanho do texto do género (default maior: 11px)</li>
+<li>Tamanho do texto do ano (default maior: 13px)</li>
 <li>Cor e opacidade do placeholder</li>
 <li>Pré-visualização em tempo real do card e do rodapé</li>
 </ul>
@@ -339,7 +340,7 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <h2 id="s14">14. Atualizações</h2>
 <p>O sistema verifica atualizações automaticamente através da GitHub API.</p>
 <ul>
-<li>Badge da versão no footer: <span class="badge badge-blue">v29.0.1</span></li>
+<li>Badge da versão no footer: <span class="badge badge-blue">v31.0.1</span></li>
 <li>Clique no badge para verificar manualmente</li>
 <li>Se atualizado: badge verde <span class="badge badge-green">✓ Atualizado</span></li>
 <li>Se nova versão: badge âmbar com link para download</li>
@@ -418,7 +419,7 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <p>O ficheiro <code>icon.png</code> encontra-se na raiz do projeto e é referenciado no <code>electron/main.js</code>.</p>
 <div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
 
-<p style="margin-top:2rem;text-align:center;color:#475569;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em">CineCatalog Elo v29.0.1 — Edição Premium — Jonas Theodoro</p>
+<p style="margin-top:2rem;text-align:center;color:#475569;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em">CineCatalog Elo v31.0.1 — Edição Premium — Jonas Theodoro</p>
 
 <h2 id="s21">21. Novidades da Versão 28.1</h2>
 <ul>
@@ -448,13 +449,17 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 </ul>
 <div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
 
-<h2 id="s23">23. Novidades da Versão 29.0.1</h2>
+<h2 id="s23">23. Novidades da Versão 31.0.1</h2>
 <ul>
-<li><strong>Rodapé Atualizado:</strong> Versão v29.0.1 exibida em destaque no rodapé, separada do texto do criador com um separador vertical elegante</li>
-<li><strong>49 Funcionalidades:</strong> A janela Funcionalidades agora lista 49 ícones com scroll vertical suave (28 visíveis + 21 ao rolar). Totalizador colorido exibe "(49)"</li>
-<li><strong>Lembretes Sempre Acessiveis:</strong> Ao clicar em Lembretes, a janela abre mesmo sem nenhum lembrete, exibindo "0 Lembretes"</li>
-<li><strong>Estatísticas com Filtros em Tempo Real:</strong> O dashboard agora permite filtrar cadastros e ações por dia, período de dias, mês, período de meses, ano inteiro ou período de anos</li>
-<li><strong>Manual Atualizado:</strong> Todas as funcionalidades, links e versão do aplicativo atualizados para v29.0.1</li>
+<li><strong>Estreias — Remoção Individual:</strong> Cada linha de estreia no CADASTRO NOVO agora tem o seu próprio botão "-" para remover apenas aquela estreia da lista, com confirmação</li>
+<li><strong>Estreias — Ícone Data Verde:</strong> O ícone do seletor de data das estreias agora usa o verde claro (#34D399) já presente na janela</li>
+<li><strong>Estreias — Contador em Tempo Real:</strong> O status "X ESTREIAS" do topo da janela e o contador do rodapé comunicam-se em tempo real, atualizando ao adicionar ou remover linhas</li>
+<li><strong>Estreias — Lixeira (Remover Todas):</strong> Ao lado do botão "+", o ícone Lixeira remove todas as estreias de uma vez, com confirmação antes de apagar</li>
+<li><strong>Estreias na Tela Principal:</strong> Cada estreia cadastrada aparece automaticamente na aba ESTREIAS da tela principal, em tempo real, com data, tipo (Filme/Série) e botões de editar/remover</li>
+<li><strong>Fontes dos Cards Aumentadas:</strong> Gêneros, Ano e Classificação (estrelas) agora usam fontes maiores e mais visíveis em cada card de filme e série, com tamanhos configuráveis em Personalização dos Cards</li>
+<li><strong>Rodapé Atualizado:</strong> Versão v31.0.1 exibida em destaque no rodapé, separada do texto do criador com um separador vertical elegante</li>
+<li><strong>50 Funcionalidades:</strong> A janela Funcionalidades agora lista 50 ícones com scroll vertical suave (28 visíveis + 22 ao rolar). Totalizador colorido exibe "(50)"</li>
+<li><strong>Manual Atualizado:</strong> Todas as funcionalidades, links e versão do aplicativo atualizados para v31.0.1</li>
 </ul>
 <div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
 
@@ -485,16 +490,16 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 </ul>
 <div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
 
-<h2 id="s26">26. 49 Funcionalidades</h2>
-<p>A janela Funcionalidades (ícone <i class="fas fa-info-circle"></i> no header) lista agora <strong>49 funcionalidades</strong> organizadas em grid de 7 colunas.</p>
+<h2 id="s26">26. 50 Funcionalidades</h2>
+<p>A janela Funcionalidades (ícone <i class="fas fa-info-circle"></i> no header) lista agora <strong>50 funcionalidades</strong> organizadas em grid de 7 colunas.</p>
 <ul>
 <li>Os primeiros 28 ícones (4 linhas) ficam visíveis por padrão</li>
-<li>Rolar verticalmente para ver as 21 funcionalidades adicionais (3 linhas extras)</li>
+<li>Rolar verticalmente para ver as 22 funcionalidades adicionais (3 linhas extras)</li>
 <li>Não há barra de rolagem visível — a rolagem é suave e oculta</li>
 <li>Clique em qualquer ícone para ver a descrição detalhada da funcionalidade</li>
-<li>O totalizador na parte superior exibe <span style="color:#3B82F6;font-weight:800">(49)</span> ao lado do texto de instrução</li>
+<li>O totalizador na parte superior exibe <span style="color:#3B82F6;font-weight:800">(50)</span> ao lado do texto de instrução</li>
 </ul>
-<p>As novas funcionalidades adicionadas incluem: Lembretes Persistentes, Calendário de Estreias, Estatísticas em Tempo Real, Sugestão Inteligente, Agrupamento por Gênero, Zoom Responsivo, Trailer Integrado, Modo Smart TV, Upload de Capas, Backup Automático, 4 Temas Visuais, Tipografia Responsiva e Modais Premium, entre outras.</p>
+<p>As novas funcionalidades adicionadas incluem: Lembretes Persistentes, Calendário de Estreias, Estatísticas em Tempo Real, Sugestão Inteligente, Agrupamento por Gênero, Zoom Responsivo, Trailer Integrado, Modo Smart TV, Upload de Capas, Backup Automático, 4 Temas Visuais, Tipografia Responsiva, Modais Premium, Remoção Individual de Estreias e Fontes dos Cards, entre outras.</p>
 <div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
 </body>
 </html>

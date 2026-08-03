@@ -1895,3 +1895,129 @@ if (_es) {
 | Paletas, tipografia, layout, espaçamentos preservados | OK |
 | Todos os IDs, classes e handlers mantidos | OK |
 
+---
+
+## Implementações Realizadas — Melhorias 6 (melhorias2.md — Itens a–F)
+
+### 73. (a) ESTREIAS: Botão "-" de Remoção Individual em Cada Linha
+
+**Arquivo:** `index.html` — JavaScript (`UI._buildEstreiaRow`, `UI._reindexEstreiaRows`, `UI._removeEstreiaRow`)
+
+**O que foi feito:**
+- Cada linha de estreia (`dynamic-estreia-row`) agora possui o seu próprio botão **"-"** (30×30, ícone `fa-minus`) para remover apenas aquela estreia da lista.
+- Ao clicar, se a linha já tiver sido salva (`data-saved-id`), o app pede confirmação, remove o filme de `APP_STATE.movies`, persiste via `Storage.save()`, re-renderiza e mostra a mensagem "Estreia removida!".
+- Se a linha for apenas um rascunho (ainda não salva), o botão remove somente a linha do formulário, sem tocar no acervo.
+- `_reindexEstreiaRows()` foi atualizado para re-vincular o `onclick` do botão ao novo índice após qualquer remoção.
+- Após remover a última linha, uma linha vazia é adicionada automaticamente (comportamento padrão já existente).
+
+**Preservação:** O botão "+" e o `data-saved-id` (usado para detectar linhas salvas) permanecem intactos. Nenhum outro handler alterado.
+
+---
+
+### 74. (b) DATE PICKER: Ícone Verde Claro nas Estreias
+
+**Arquivo:** `index.html` — CSS (`.dynamic-estreia-row input[type="date"]::-webkit-calendar-picker-indicator`)
+
+**O que foi feito:**
+- Adicionada regra CSS específica para o seletor de data **das linhas de estreia**: o ícone do calendário agora usa o **verde claro (#34D399)** da janela, via `filter` com `hue-rotate(95deg)` e ajustes de `sepia`/`saturate`/`brightness` para o tom exato.
+- Regra posicionada logo após a regra global que deixa o ícone de data branco (`invert(1) brightness(2)`), garantindo que apenas as estreias recebem o verde.
+
+**Preservação:** Os demais campos de data da aplicação (cadastro de filmes/séries, filtros, etc.) continuam com o ícone branco padrão.
+
+---
+
+### 75. (c) ESTREIAS: Contador em Tempo Real (Topo ↔ Rodapé)
+
+**Arquivo:** `index.html` — JavaScript (`UI._updateEstreiaSummary`, `UI.updateCounters`, `UI.saveAllDynamicEstreias`, `UI.switchTab`, `UI._removeEstreiaRow`, `UI._removeAllEstreias`)
+
+**O que foi feito:**
+- `UI._updateEstreiaSummary()` agora também grava o total de linhas no contador do **rodapé** (`counter-estreias`), além do texto "X ESTREIAS" do topo da janela.
+- Chamadas `UI.updateCounters()` adicionadas após salvar, atualizar, remover ou apagar todas as estreias, para que o rodapé reflita o acervo persistido.
+- Ao trocar de aba (`switchTab`), os contadores são atualizados — saindo da aba ESTREIAS, o valor é recalculado antes da renderização.
+- Resultado: o "X ESTREIAS" do topo e o contador de estreias do rodapé comunicam-se em tempo real, sempre iguais.
+
+**Preservação:** Contadores de filmes e séries do rodapé inalterados.
+
+---
+
+### 76. (d) ESTREIAS: Lixeira "Remover Todas" com Confirmação
+
+**Arquivo:** `index.html` — HTML (`.dynamic-estreia-summary`) + JavaScript (`UI._removeAllEstreias`)
+
+**O que foi feito:**
+- Adicionado ícone **Lixeira** (30×30, `fa-trash`, vermelho) ao lado do botão "+" na barra de resumo das estreias.
+- Nova função `UI._removeAllEstreias()`: se não há linhas, informa "Não há estreias para remover."; caso contrário pede confirmação ("Remover TODAS as estreias (N)? Esta ação não pode ser desfeita.") e, confirmado:
+  - Remove todas as estreias salvas de `APP_STATE.movies`, limpa os ids rastreados e o contador interno.
+  - Persiste (`Storage.save()`), re-renderiza a tela principal, atualiza contadores/lembrete/badge, adiciona uma linha vazia e mostra "Todas as estreias foram removidas!".
+- As estreias removidas somem também da **aba ESTREIAS da tela principal**, em tempo real.
+
+**Preservação:** Apenas estreias são afetadas; filmes e séries intactos. Mesmo padrão de `confirm()` já usado no restante da aplicação.
+
+---
+
+### 77. (e) CARDS: Fontes Maiores (Gêneros, Ano, Estrelas) + Configuráveis
+
+**Arquivo:** `index.html` — CSS (`.card-category`, `--card-year-size`, estrelas) + JavaScript (`loadConfig`, `_populateConfigForm`, `_saveConfigFromForm`, inicialização, `Render.createCard`) + Configurações (HTML)
+
+**O que foi feito:**
+- **Gêneros (`.card-category`):** fallback de `8px` → **11px** (aumentado).
+- **Ano:** fallback `--card-year-size` de `10px` → **13px** (aumentado).
+- **Classificação (estrelas):** de `11px` → **13px** (aumentado).
+- Defaults de configuração atualizados: `cardYearSize: '13px'` e `cardCategorySize: '11px'`.
+- Os inputs de PERSONALIZAÇÃO DOS CARDS nas Configurações agora iniciam com os novos valores (13px e 11px).
+- **Migração automática:** na inicialização, se o usuário tiver valores antigos salvos (7/8/9/10px), são forçados para os novos padrões; valores personalizados diferentes permanecem intactos.
+
+**Preservação:** Os sliders de tamanho continuam funcionando e prevalecem sobre o padrão. Somente texto aumentado; posicionamento/layout do card inalterado.
+
+---
+
+### 78. (F) VERSÃO v31.0.1 + FUNCIONALIDADES (50) + MANUAL ATUALIZADO
+
+**Arquivo:** `index.html` (título, rodapé, Sobre o Sistema, `renderInfoFeatures`) + `manual_do_catalogo.html`
+
+**O que foi feito:**
+- **Versão v31.0.1** aplicada em todos os pontos: `<title>`, badge do rodapé (`app-version-badge`), "Sobre o Sistema" e string de preview do rodapé.
+- **FUNCIONALIDADES:** totalizador de `(49)` → **(50)** e 2 novos ícones adicionados à grade ("Estreias: Remoção Individual" e "Fontes dos Cards"); descrições de "Cadastro Estreias" e "Remover Itens" atualizadas; vírgula final do último item corrigida (sintaxe).
+- **Manual (`manual_do_catalogo.html`):**
+  - Subtítulo e rodapé atualizados para v31.0.1.
+  - Sumário: item 23 (Novidades) → v31.0.1 e item 26 → 50 Funcionalidades.
+  - Bullet de Estreias reescrito (botão "-" individual + Lixeira remover todas).
+  - Seção 23 reescrita com todas as novidades da v31.0.1 (remoção individual, ícone verde, contador em tempo real, lixeira, fontes dos cards, estreias na tela principal, 50 funcionalidades).
+  - Seção 26 reescrita para 50 funcionalidades com scroll vertical.
+  - Seção de Personalização ganhou bullets sobre tamanho do texto de gênero/ano.
+
+**Preservação:** Estrutura visual e lista de funcionalidades existentes mantidas; apenas adições e atualizações de texto/descrição.
+
+---
+
+## Checklist Final (melhorias2.md — Itens a–F)
+
+| Verificação | Status |
+|---|---|
+| (a) Botão "-" individual em cada linha de estreia | OK |
+| (a) Remoção de linha salva: confirmação + `Storage.save()` | OK |
+| (a) Remoção de rascunho: só remove a linha do formulário | OK |
+| (a) `_reindexEstreiaRows` re-vincula botões após remoção | OK |
+| (a) Última linha vazia re-adicionada automaticamente | OK |
+| (b) Ícone do date picker das estreias em verde claro (#34D399) | OK |
+| (b) Demais date pickers continuam brancos | OK |
+| (c) Topo "X ESTREIAS" sincronizado com rodapé (`counter-estreias`) | OK |
+| (c) `UI.updateCounters()` após salvar/remover/limpar estreias | OK |
+| (c) Contadores atualizados ao trocar de aba | OK |
+| (d) Ícone Lixeira ao lado do "+" na barra resumo | OK |
+| (d) Confirmação antes de remover todas | OK |
+| (d) "Não há estreias para remover" quando vazio | OK |
+| (d) Estreias removidas somem da tela principal em tempo real | OK |
+| (e) Gêneros do card: 8px → 11px | OK |
+| (e) Ano do card: 10px → 13px | OK |
+| (e) Estrelas do card: 11px → 13px | OK |
+| (e) Defaults de config (13px/11px) e inputs atualizados | OK |
+| (e) Migração automática de valores antigos (7–10px) | OK |
+| (F) Versão v31.0.1 em título, rodapé, Sobre e preview | OK |
+| (F) Funcionalidades: (49) → (50) com 2 novos ícones | OK |
+| (F) Manual: subtítulo, sumário, rodapé e seções 23/26 atualizados | OK |
+| (F) Sintaxe JS validada (node --check: 2 blocos OK) | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
+
