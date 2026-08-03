@@ -113,7 +113,7 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
         .movie-card:hover {
-            transform: translateY(-2px); z-index: 50;
+            z-index: 50;
             border-color: rgba(59,130,246,0.7);
             box-shadow: 0 0 30px rgba(59,130,246,0.45), 0 0 70px rgba(59,130,246,0.2);
         }
@@ -142,10 +142,10 @@
 
         .card-info-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 4; pointer-events: none; text-align: center; }
         .card-info-row { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; }
-        .card-year { font-size: 9px; font-weight: 900; color: rgba(255,255,255,0.85); letter-spacing: 0.06em; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
+        .card-year { font-size: 15px; font-weight: 900; color: rgba(255,255,255,0.85); letter-spacing: 0.06em; text-shadow: 0 2px 8px rgba(0,0,0,0.6); }
         .card-stars { display: flex; align-items: center; gap: 2px; font-size: 13px; color: #F59E0B; text-shadow: 0 2px 8px rgba(0,0,0,0.5); }
 
-        .card-category { position: absolute; top: 0.5rem; left: 0.5rem; font-size: var(--card-category-size, 11px); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--card-category-color, rgba(255,255,255,1)); background: var(--card-category-bg, rgba(0,0,0,0.75)); padding: 0.2rem 0.5rem; border-radius: 0.5rem; z-index: 4; white-space: nowrap; max-width: 60%; overflow: hidden; text-overflow: ellipsis; }
+        .card-category { position: absolute; top: 0.5rem; left: 0.5rem; font-size: var(--card-category-size, 13px); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--card-category-color, rgba(255,255,255,1)); background: var(--card-category-bg, rgba(0,0,0,0.75)); padding: 0.2rem 0.5rem; border-radius: 0.5rem; z-index: 4; white-space: nowrap; max-width: 60%; overflow: hidden; text-overflow: ellipsis; }
         .movie-card:hover .card-category { color: var(--card-category-color, rgba(255,255,255,0.7)); background: var(--card-category-bg, rgba(0,0,0,0.6)); }
         
         .dynamic-grid { display: grid; row-gap: 1.5rem; column-gap: 1.5rem; grid-template-columns: repeat(var(--cards-per-row), minmax(0, 1fr)); width: 100%; }
@@ -3068,7 +3068,7 @@
                         </div>
                         <div class="config-row">
                             <label>Tamanho Ano</label>
-                            <input type="text" id="cfg-year-size" class="field-premium small" value="13px" oninput="UI._updateConfigPreview()">
+                            <input type="text" id="cfg-year-size" class="field-premium small" value="15px" oninput="UI._updateConfigPreview()">
                         </div>
                         <div class="config-row">
                             <label>Cor Texto Status</label>
@@ -3082,7 +3082,7 @@
                         </div>
                         <div class="config-row">
                             <label>Tamanho Status</label>
-                            <input type="text" id="cfg-status-size" class="field-premium small" value="6px" oninput="UI._updateConfigPreview()">
+                            <input type="text" id="cfg-status-size" class="field-premium small" value="11px" oninput="UI._updateConfigPreview()">
                         </div>
                     </div>
                     <div style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid var(--border-color)">
@@ -3145,7 +3145,7 @@
                             </div>
                             <div class="config-row">
                                 <label>Tamanho</label>
-                                <input type="text" id="cfg-cat-size" class="field-premium small" value="11px" placeholder="ex: 11px" oninput="UI._updateConfigPreview()">
+                                <input type="text" id="cfg-cat-size" class="field-premium small" value="13px" placeholder="ex: 13px" oninput="UI._updateConfigPreview()">
                             </div>
                         </div>
                     </div>
@@ -3469,7 +3469,7 @@
                 </div>
             </div>
             <div class="p-5 overflow-y-auto custom-scroll" style="max-height:82vh">
-                <div style="font-size:0.7rem;font-weight:600;color:var(--text-secondary);margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.1em">Clique num ícone para saber mais <span style="color:var(--accent-blue);font-weight:800">(50)</span></div>
+                <div style="font-size:0.7rem;font-weight:600;color:var(--text-secondary);margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.1em">Clique num ícone para saber mais <span style="color:var(--accent-blue);font-weight:800">(51)</span></div>
                 <div id="info-features-grid" class="info-grid info-grid-scroll"></div>
                 <!-- Bottom description box -->
                 <div id="info-desc-box" class="hidden-box">
@@ -3669,15 +3669,15 @@
                 emptyTitleGap: 12,
                 cardStarsColor: '#EAB308',
                 cardYearColor: '#60A5FA',
-                cardYearSize: '13px',
+                cardYearSize: '15px',
                 cardStatusNewBg: '#2563EB',
                 cardStatusWatchBg: '#D97706',
                 cardStatusFavBg: '#DC2626',
                 cardStatusTextColor: '#FFFFFF',
-                cardStatusSize: '7px',
+                cardStatusSize: '11px',
                 cardCategoryColor: '#FFFFFF',
                 cardCategoryBg: '#000000',
-                cardCategorySize: '11px',
+                cardCategorySize: '13px',
                 pathCards: '',
                 pathVideos: '',
                 pathBackups: '',
@@ -3836,12 +3836,15 @@
         // Gêneros (topo do card): inicia sempre com cor texto = branco e fundo = preto
         window._appConfig.cardCategoryColor = '#FFFFFF';
         window._appConfig.cardCategoryBg = '#000000';
-        // Fontes dos cards aumentadas: Gêneros, Ano e Estrelas mais visíveis
-        if (!window._appConfig.cardCategorySize || window._appConfig.cardCategorySize === '7px' || window._appConfig.cardCategorySize === '8px') {
-            window._appConfig.cardCategorySize = '11px';
+        // Fontes dos cards aumentadas: Status, Gêneros e Ano mais visíveis
+        if (!window._appConfig.cardCategorySize || window._appConfig.cardCategorySize === '7px' || window._appConfig.cardCategorySize === '8px' || window._appConfig.cardCategorySize === '11px') {
+            window._appConfig.cardCategorySize = '13px';
         }
-        if (!window._appConfig.cardYearSize || window._appConfig.cardYearSize === '9px' || window._appConfig.cardYearSize === '10px') {
-            window._appConfig.cardYearSize = '13px';
+        if (!window._appConfig.cardYearSize || window._appConfig.cardYearSize === '9px' || window._appConfig.cardYearSize === '10px' || window._appConfig.cardYearSize === '13px') {
+            window._appConfig.cardYearSize = '15px';
+        }
+        if (!window._appConfig.cardStatusSize || window._appConfig.cardStatusSize === '6px' || window._appConfig.cardStatusSize === '7px' || window._appConfig.cardStatusSize === '9px') {
+            window._appConfig.cardStatusSize = '11px';
         }
         applyConfig();
 
@@ -4065,9 +4068,9 @@
                 if (data._searchMatch) cn += ' search-match';
                 div.className = cn;
                 const badges = [];
-                if (s.new) badges.push('<span style="background:var(--card-status-new-bg,#2563EB);color:var(--card-status-text-color,#FFF);font-size:var(--card-status-size,9px);font-weight:400" class="px-2 py-0.5 rounded-full uppercase">Novo</span>');
-                if (s.watch) badges.push('<span style="background:var(--card-status-watch-bg,#D97706);color:var(--card-status-text-color,#FFF);font-size:var(--card-status-size,9px);font-weight:400" class="px-2 py-0.5 rounded-full uppercase">Assistir</span>');
-                if (isFav) badges.push('<span style="background:var(--card-status-fav-bg,#DC2626);color:var(--card-status-text-color,#FFF);font-size:var(--card-status-size,9px);font-weight:400" class="px-2 py-0.5 rounded-full uppercase">Fav</span>');
+                if (s.new) badges.push('<span style="background:var(--card-status-new-bg,#2563EB);color:var(--card-status-text-color,#FFF);font-size:var(--card-status-size,11px);font-weight:400" class="px-2 py-0.5 rounded-full uppercase">Novo</span>');
+                if (s.watch) badges.push('<span style="background:var(--card-status-watch-bg,#D97706);color:var(--card-status-text-color,#FFF);font-size:var(--card-status-size,11px);font-weight:400" class="px-2 py-0.5 rounded-full uppercase">Assistir</span>');
+                if (isFav) badges.push('<span style="background:var(--card-status-fav-bg,#DC2626);color:var(--card-status-text-color,#FFF);font-size:var(--card-status-size,11px);font-weight:400" class="px-2 py-0.5 rounded-full uppercase">Fav</span>');
                 const hasMedia = (data.mediaFile && data.mediaFile.trim()) || (data.trailUrl && data.trailUrl.trim());
                 const hasReminder = data.reminder && data.reminder.trim();
                 const starCount = Math.min(data.stars || 0, 5);
@@ -4093,7 +4096,7 @@
                     (hasMedia ? '<div class="card-play-overlay"><div class="card-play-btn" onclick="event.stopPropagation();Logic.playMedia(\'' + data.id + '\')"><i class="fas fa-play"></i></div></div>' : '') +
                     '<div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3" style="z-index:3">' +
                     '<div class="flex items-center gap-2">' +
-                    '<span class="font-bold" style="font-size:var(--card-year-size,13px);color:var(--card-year-color,#60A5FA)">' + (data.year || '') + '</span>' +
+                    '<span class="font-bold" style="font-size:var(--card-year-size,15px);color:var(--card-year-color,#60A5FA)">' + (data.year || '') + '</span>' +
                     (starCount > 0 ? '<div class="text-[13px]" style="color:var(--card-star-color,#EAB308)">' + '&#9733;'.repeat(starCount) + '</div>' : '') +
                     '</div>' +
                     (badges.length ? '<div class="flex gap-1.5 mt-2 card-badges">' + badges.join('') + '</div>' : '') +
@@ -4946,7 +4949,7 @@
                             span.className = 'card-badge-fav px-2 py-0.5 rounded-full uppercase';
                             span.style.background = 'var(--card-status-fav-bg,#DC2626)';
                             span.style.color = 'var(--card-status-text-color,#FFF)';
-                            span.style.fontSize = 'var(--card-status-size,9px)';
+                            span.style.fontSize = 'var(--card-status-size,11px)';
                             span.style.fontWeight = '400';
                             span.textContent = 'Fav';
                             badgesRow.appendChild(span);
@@ -5250,7 +5253,8 @@
                     {icon:'fa-text-height',label:'Tipografia Responsiva',desc:'Sistema de tipografia fluida que escala proporcionalmente entre HD, FHD, 2K e 4K. Usa clamp() para transição suave.'},
                     {icon:'fa-window-maximize',label:'Modais Premium',desc:'Janelas de cadastro e informação com design premium: bordas arredondadas, sombras neon, animações de entrada e backdrop blur.'},
                     {icon:'fa-minus-circle',label:'Estreias: Remoção Individual',desc:'Cada linha de estreia possui seu próprio botão "-" para remover apenas aquela estreia da lista, com confirmação e atualização em tempo real.'},
-                    {icon:'fa-text-height',label:'Fontes dos Cards',desc:'Gêneros, Ano e Classificação (estrelas) exibidos com fontes maiores e mais destacadas em cada card de filme e série.'}
+                    {icon:'fa-text-height',label:'Fontes dos Cards',desc:'Status (Novo, Assistir, Fav), Gênero e Ano exibidos com fontes maiores e mais destacadas em cada card de filme e série, com tamanhos configuráveis.'},
+                    {icon:'fa-bolt',label:'Neon no Hover',desc:'Ao passar o mouse sobre um card, apenas o brilho neon azul é exibido — sem zoom nem movimentação do card. Visual mais elegante e estável, preservando o efeito surreal do neon.'}
                 ];
                 var self = this;
                 grid.innerHTML = features.map(function(f, idx) {
@@ -6832,15 +6836,15 @@
                 if (cardPreview) {
                     var starColor = getVal('cfg-star-color') || '#EAB308';
                     var yearColor = getVal('cfg-year-color') || '#60A5FA';
-                    var yearSize = getVal('cfg-year-size') || '9px';
+                    var yearSize = getVal('cfg-year-size') || '15px';
                     var statusTextColor = getVal('cfg-status-text-color') || '#FFFFFF';
-                    var statusSize = getVal('cfg-status-size') || '6px';
+                    var statusSize = getVal('cfg-status-size') || '11px';
                     var statusNewBg = getVal('cfg-status-new-bg') || '#2563EB';
                     var statusWatchBg = getVal('cfg-status-watch-bg') || '#D97706';
                     var statusFavBg = getVal('cfg-status-fav-bg') || '#DC2626';
                     var catColor = getVal('cfg-cat-color') || '';
                     var catBg = getVal('cfg-cat-bg') || '';
-                    var catSize = getVal('cfg-cat-size') || '';
+                    var catSize = getVal('cfg-cat-size') || '13px';
                     cardPreview.innerHTML = '<div style="width:180px;border-radius:0.85rem;overflow:hidden;background:var(--card-bg);border:1px solid var(--border-color);box-shadow:0 4px 15px rgba(0,0,0,0.2)">' +
                         '<div style="position:relative;aspect-ratio:2/3;background:linear-gradient(135deg,#1e293b,#0f172a);display:flex;align-items:center;justify-content:center">' +
                         '<div style="position:absolute;top:0;left:0;right:0;padding:0.35rem 0.5rem;display:flex;justify-content:space-between;align-items:flex-start;z-index:2">' +
@@ -7322,15 +7326,15 @@
                 var defaults = {
                     'cfg-star-color': '#EAB308',
                     'cfg-year-color': '#60A5FA',
-                    'cfg-year-size': '9px',
+                    'cfg-year-size': '15px',
                     'cfg-status-text-color': '#FFFFFF',
-                    'cfg-status-size': '6px',
+                    'cfg-status-size': '11px',
                     'cfg-status-new-bg': '#2563EB',
                     'cfg-status-watch-bg': '#D97706',
                     'cfg-status-fav-bg': '#DC2626',
                     'cfg-cat-color': '#FFFFFF',
                     'cfg-cat-bg': '#000000',
-                    'cfg-cat-size': ''
+                    'cfg-cat-size': '13px'
                 };
                 Object.entries(defaults).forEach(function(_ref) {
                     var id = _ref[0], val = _ref[1];

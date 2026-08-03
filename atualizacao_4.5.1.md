@@ -2021,3 +2021,122 @@ if (_es) {
 | Paletas, tipografia, layout, espaçamentos preservados | OK |
 | Todos os IDs, classes e handlers mantidos | OK |
 
+---
+
+## Implementações Realizadas — Melhorias 7 (melhorias2.md — Itens a–c)
+
+### 79. (a) CARDS: Efeito Hover de Zoom/Movimento Removido (Neon Preservado)
+
+**Arquivo:** `index.html` — `<style>` (classe `.movie-card:hover`)
+
+**O que foi feito:**
+- Removido o efeito de **zoom/movimentação** dos cards: `transform: translateY(-2px)` foi eliminado da regra `.movie-card:hover`.
+- **Mantido o neon** (que estava excelente): `border-color`, `box-shadow` azul neon e `z-index: 50` permanecem intactos.
+- O card agora apenas acende o brilho neon ao passar o mouse, sem se movimentar nem escalar.
+
+**Antes:**
+```css
+.movie-card:hover {
+    transform: translateY(-2px); z-index: 50;
+    border-color: rgba(59,130,246,0.7);
+    box-shadow: 0 0 30px rgba(59,130,246,0.45), 0 0 70px rgba(59,130,246,0.2);
+}
+```
+
+**Depois:**
+```css
+.movie-card:hover {
+    z-index: 50;
+    border-color: rgba(59,130,246,0.7);
+    box-shadow: 0 0 30px rgba(59,130,246,0.45), 0 0 70px rgba(59,130,246,0.2);
+}
+```
+
+**Preservação:** O `card-play-overlay` (botão play no hover), o `card-category`, o coração de favoritos, o foco DPAD da Smart TV e todos os demais efeitos permanecem exatamente como estavam. Nenhum handler, ID ou classe foi alterado.
+
+---
+
+### 80. (b) CARDS: Fontes Aumentadas — Status, Gênero e Ano
+
+**Arquivo:** `index.html` — CSS (`.card-year`, `.card-category`, fallbacks) + JavaScript (`loadConfig`, migração, `_populateConfigForm`, `_updateConfigPreview`, `_saveConfigFromForm`, `resetCardsToDefault`, `Render.createCard`, `Logic.toggleCardFav`)
+
+**O que foi feito:**
+- **Status (Novo/Assistir/Fav):** de `7px` (default) / `9px` (fallback) para **11px**.
+- **Gênero (`.card-category`):** de `11px` para **13px**.
+- **Ano (`.card-year`):** de `13px` para **15px**.
+
+| Elemento | Antes | Depois |
+|---|---|---|
+| Status (badges) | 9px fallback / 7px default | **11px** |
+| Gênero (topo do card) | 11px | **13px** |
+| Ano (rodapé do card) | 13px | **15px** |
+
+**Pontos atualizados (integração completa):**
+1. **CSS:** `.card-year { font-size: 15px }` e fallback de `.card-category` → `13px`.
+2. **Fallbacks de renderização:** badges de status `var(--card-status-size,11px)`, ano `var(--card-year-size,15px)` e badge "Fav" dinâmico `var(--card-status-size,11px)`.
+3. **Defaults do `loadConfig()`:** `cardYearSize: '15px'`, `cardStatusSize: '11px'`, `cardCategorySize: '13px'`.
+4. **Migração automática:** valores antigos (Status 6/7/9px, Gênero 7/8/11px, Ano 9/10/13px) são forçados para os novos padrões; valores personalizados diferentes são preservados.
+5. **Inputs das Configurações:** `cfg-year-size` (15px), `cfg-status-size` (11px), `cfg-cat-size` (13px).
+6. **Pré-visualização em tempo real (`_updateConfigPreview`):** fallbacks atualizados (15px/11px/13px).
+7. **Reset para padrão (`resetCardsToDefault`):** valores atualizados (15px/11px/13px).
+
+**Preservação:** Os sliders/campos de Personalização dos Cards continuam funcionando e prevalecem sobre o padrão. Posicionamento e layout do card inalterados. Apenas tamanhos de texto aumentados.
+
+---
+
+### 81. (c) MANUAL e FUNCIONALIDADES Atualizados + Favicon Azul "bm" no Manual
+
+**Arquivos:** `index.html` (FUNCIONALIDADES) + `manual_do_catalogo.html` + `favicon_catalogo.svg` (novo)
+
+**O que foi feito:**
+
+**A) FUNCIONALIDADES (`index.html`):**
+- Nova funcionalidade **"Neon no Hover"** adicionada à grade (ícone `fa-bolt`) — descreve o hover com apenas o brilho neon, sem zoom.
+- Funcionalidade **"Fontes dos Cards"** atualizada para incluir Status, Gênero e Ano.
+- Totalizador atualizado de **(50)** para **(51)**.
+
+**B) Manual (`manual_do_catalogo.html`):**
+- **Seção 11 (Personalização dos Cards):** novos defaults documentados — Gênero 13px, Ano 15px, Status 11px — e nota sobre o efeito hover com apenas neon (sem zoom/movimento).
+- **Seção 23 (Novidades v31.0.1):** 2 novos bullets — "Cards — Neon sem Zoom" e "Fontes Ainda Maiores (Status, Gênero e Ano)".
+- **Seção 26 (Funcionalidades):** atualizada de 50 para **51** funcionalidades (nav, título, totalizador e texto).
+- Bullet "50 Funcionalidades" da seção 23 corrigido para "51 Funcionalidades".
+
+**C) Favicon (novo arquivo `favicon_catalogo.svg`):**
+- Criado favicon SVG idêntico ao estilo do aplicativo, porém em **cor azul** com o monograma **"bm" destacado** em gradiente azul neon (`#3B82F6` → `#00E5FF`), sobre fundo escuro arredondado (mesma identidade da app) com borda azul neon e glow.
+- Referenciado no `<head>` do `manual_do_catalogo.html` via `<link rel="icon" type="image/svg+xml" href="favicon_catalogo.svg">`.
+
+**Preservação:** O grid de funcionalidades existente, o modal INFO, os handlers de clique (`_toggleInfoItem`) e toda a estrutura do manual permanecem intactos. Apenas adições/atualizações de conteúdo.
+
+---
+
+## Checklist Final (melhorias2.md — Itens 79–81)
+
+| Verificação | Status |
+|---|---|
+| (a) Zoom/movimento removido do `.movie-card:hover` | OK |
+| (a) Neon (border-color + box-shadow) preservado | OK |
+| (a) `z-index: 50` mantido no hover | OK |
+| (a) card-play-overlay e demais efeitos intactos | OK |
+| (a) DPAD focus da Smart TV preservado | OK |
+| (b) Status do card: 9px/7px → 11px | OK |
+| (b) Gênero do card: 11px → 13px | OK |
+| (b) Ano do card: 13px → 15px | OK |
+| (b) Fallbacks de render (badges, ano, Fav) atualizados | OK |
+| (b) Defaults do loadConfig atualizados | OK |
+| (b) Migração automática de valores antigos | OK |
+| (b) Inputs de Configurações atualizados (15/11/13px) | OK |
+| (b) Pré-visualização em tempo real atualizada | OK |
+| (b) Reset para padrão atualizado | OK |
+| (c) FUNCIONALIDADES: novo item "Neon no Hover" | OK |
+| (c) FUNCIONALIDADES: "Fontes dos Cards" inclui Status | OK |
+| (c) FUNCIONALIDADES: totalizador (50) → (51) | OK |
+| (c) Manual seção 11: defaults 13px/15px/11px + hover | OK |
+| (c) Manual seção 23: bullets "Neon sem Zoom" e "Fontes Ainda Maiores" | OK |
+| (c) Manual seção 26: 51 funcionalidades | OK |
+| (c) Favicon SVG azul "bm" criado e validado | OK |
+| (c) Favicon referenciado no head do manual | OK |
+| Sintaxe JS validada (node --check: 2 blocos OK) | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
+
