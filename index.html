@@ -162,6 +162,7 @@
         .btn-icon:hover { border-color: var(--accent-blue); color: var(--accent-blue); }
         .btn-icon.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
         .btn-icon.active:hover { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
+        .btn-icon:focus, .btn-icon:focus-visible { outline: none !important; }
 
         .zoom-btn { width: 31px; height: 31px; border-radius: 50%; font-size: 0.6rem; font-weight: 900; transition: 0.2s; flex-shrink: 0; }
         .zoom-btn.active { background: var(--accent-blue); color: white; }
@@ -207,6 +208,12 @@
         @keyframes modalIn {
             from { opacity: 0; transform: scale(0.95) translateY(10px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* CADASTRO NOVO: modal mais largo para comportar o campo Tipo das Estreias
+           (altura e tipografia preservadas) */
+        #modal-cadastro .modal-premium-inner {
+            max-width: 68rem;
         }
 
         .modal-premium-header {
@@ -900,6 +907,22 @@
             color: #EF4444;
             background: rgba(239,68,68,0.1);
         }
+        .estreias-menu-title {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--text-secondary);
+            background: rgba(245,158,11,0.06);
+            border: 1px solid rgba(245,158,11,0.15);
+            border-radius: 0.75rem;
+            padding: 0.55rem 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.85;
+        }
 
         /* Dashboard */
         .dashboard-cards {
@@ -1403,13 +1426,22 @@
             cursor: pointer;
         }
 
-        /* === FEATURE: Search Match Neon === */
+        /* === FEATURE: Search Match Neon Green === */
         .movie-card.search-match {
-            border-color: #22C55E !important;
-            box-shadow: 0 0 10px rgba(34,197,94,0.4), 0 0 25px rgba(34,197,94,0.15) !important;
+            border-color: #4ADE80 !important;
+            box-shadow: 0 0 10px #4ADE80, 0 0 28px rgba(74,222,128,0.65), 0 0 60px rgba(74,222,128,0.35), 0 0 100px rgba(74,222,128,0.15) !important;
         }
         .movie-card.search-match:hover {
-            box-shadow: 0 0 20px rgba(34,197,94,0.6), 0 0 40px rgba(34,197,94,0.2) !important;
+            border-color: #4ADE80 !important;
+            box-shadow: 0 0 14px #4ADE80, 0 0 40px rgba(74,222,128,0.8), 0 0 80px rgba(74,222,128,0.45), 0 0 130px rgba(74,222,128,0.2) !important;
+        }
+        .estreia-list-item.search-match {
+            border-color: #4ADE80 !important;
+            box-shadow: 0 0 10px #4ADE80, 0 0 28px rgba(74,222,128,0.65), 0 0 60px rgba(74,222,128,0.35), 0 0 100px rgba(74,222,128,0.15) !important;
+        }
+        .estreia-list-item.search-match:hover {
+            border-color: #4ADE80 !important;
+            box-shadow: 0 0 14px #4ADE80, 0 0 40px rgba(74,222,128,0.8), 0 0 80px rgba(74,222,128,0.45), 0 0 130px rgba(74,222,128,0.2) !important;
         }
 
         /* === FEATURE: DPAD Smart TV Focus === */
@@ -4018,7 +4050,7 @@
                     if (aPast !== bPast) return aPast ? 1 : -1; // future first, past last
                     return na - nb; // ascending within each group
                 });
-                var html = '';
+                var html = '<div class="estreias-menu-title"><i class="fas fa-calendar-alt mr-2" style="color:#F59E0B"></i>Estreias exibidas por ordem de prioridade de data</div>';
                 for (var i = 0; i < sorted.length; i++) {
                     var m = sorted[i];
                     var num = (i + 1).toString().padStart(2, '0');
@@ -4040,7 +4072,7 @@
                     var hasTrailer = m.trailUrl && m.trailUrl.trim();
                     var safeId = m.id.replace(/"/g, '&quot;');
                     var expired = m.date ? UI._isDateExpired(m.date) : false;
-                    html += '<div class="estreia-list-item' + (expired ? ' estreia-expired' : '') + '">' +
+                    html += '<div class="estreia-list-item' + (expired ? ' estreia-expired' : '') + (m._searchMatch ? ' search-match' : '') + '">' +
                         '<div class="estreia-list-header">' +
                         '<div class="estreia-number">' + num + '</div>' +
                         '<div class="estreia-date"><i class="fas fa-calendar-alt mr-1"></i>' + dateStr + '</div>' +
@@ -4154,6 +4186,7 @@
                     UI.openModal('modal-cadastro');
                     _editingId = movie.id;
                     UI.switchTab(movie.type);
+                    UI._lockCadastroTabs(movie.type === 'estreias');
                     const typeLabel = movie.type === 'filmes' ? 'O FILME' : movie.type === 'series' ? 'A SÉRIE' : 'A ESTREIA';
                     document.getElementById('modal-title').innerHTML = 'EDITAR <span style="-webkit-text-fill-color:#3B82F6">' + typeLabel + '</span>';
                     var btn = document.getElementById('btn-save-v2');
@@ -4544,16 +4577,12 @@
                     APP_STATE.sortBy = 'default';
                 }
                 Render.all();
-                document.getElementById('filters-dropdown').classList.add('hidden');
-                document.getElementById('btn-filters')?.classList.remove('active');
                 UI.updateFilterButtonState();
             },
 
             setYearFilter(year) {
                 APP_STATE.filterYear = APP_STATE.filterYear === year ? '' : year;
                 Render.all();
-                document.getElementById('filters-dropdown').classList.add('hidden');
-                document.getElementById('btn-filters')?.classList.remove('active');
                 UI.updateFilterButtonState();
             },
 
@@ -4580,6 +4609,7 @@
                 var opening = menu.classList.contains('hidden');
                 menu.classList.toggle('hidden');
                 if (btn) btn.classList.toggle('active', opening);
+                if (btn && btn.blur) btn.blur();
             },
 
             openContextMenu(e, id) {
@@ -5070,6 +5100,35 @@
                 Render.all();
                 Logic.checkEstreiaNotifications();
                 Logic.showStatus('Estreia removida!');
+            },
+
+            // Listagem completa: todas as estreias (com ou sem data) ordenadas por data (item e)
+            _buildAllEstreiaNotifications() {
+                var today = new Date();
+                today.setHours(0, 0, 0, 0);
+                var list = [];
+                var rp = function(n) { return n < 10 ? '0' + n : n; };
+                APP_STATE.movies.forEach(function(m) {
+                    if (m.type !== 'estreias') return;
+                    var title = m.titlePt || m.originalTitle || 'Sem título';
+                    var rawDate = m.date || '';
+                    var parts = rawDate.indexOf('/') >= 0 ? rawDate.split('/') : rawDate.split('-');
+                    if (parts.length !== 3) {
+                        list.push({ title: title, msg: 'DATA NÃO DEFINIDA', type: 'nodate', id: m.id, sort: 9e15 });
+                        return;
+                    }
+                    var estreiaDate = new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+                    estreiaDate.setHours(0, 0, 0, 0);
+                    var diff = Math.round((estreiaDate - today) / (1000 * 60 * 60 * 24));
+                    var dateStr = rp(estreiaDate.getDate()) + '/' + rp(estreiaDate.getMonth() + 1) + '/' + estreiaDate.getFullYear();
+                    var nType, nMsg;
+                    if (diff === 0) { nType = 'today'; nMsg = 'ESTREIA HOJE!'; }
+                    else if (diff > 0) { nType = 'soon'; nMsg = 'Faltam ' + diff + ' dia' + (diff > 1 ? 's' : ''); }
+                    else { nType = 'passed'; nMsg = 'ESTREIA PASSOU'; }
+                    list.push({ title: title, msg: nMsg, type: nType, id: m.id, date: dateStr, sort: estreiaDate.getTime() });
+                });
+                list.sort(function(a, b) { return a.sort - b.sort; });
+                return list;
             },
 
             updateReminderBadge() {
@@ -5592,8 +5651,10 @@
                     if (n.type === 'today') { icon = 'fa-calendar-check'; color = '#22C55E'; badgeIcon = 'fa-star'; badgeColor = '#22C55E'; }
                     else if (n.type === 'soon') { icon = 'fa-clock'; color = '#F97316'; badgeIcon = 'fa-hourglass-half'; badgeColor = '#F97316'; }
                     else if (n.type === 'auto') { icon = 'fa-trash'; color = '#8B5CF6'; badgeIcon = 'fa-robot'; badgeColor = '#8B5CF6'; }
+                    else if (n.type === 'nodate') { icon = 'fa-calendar'; color = '#94A3B8'; badgeIcon = 'fa-calendar'; badgeColor = '#94A3B8'; }
                     else { icon = 'fa-calendar-times'; color = '#EF4444'; badgeIcon = 'fa-times-circle'; badgeColor = '#EF4444'; }
-                    var delBtn = (n.type === 'passed') ? '<button onclick="Logic.removeEstreiaNotif(\'' + n.id + '\')" class="text-red-500 hover:text-red-400 text-[0.9rem] ml-auto flex-shrink-0" title="Remover"><i class="fas fa-trash"></i></button>' : '';
+                    // Sem possibilidade de edição/remoção: listagem apenas informativa
+                    var delBtn = '';
                     return '<div style="padding:1rem;border-radius:1.25rem;border:1px solid var(--border-color);margin-bottom:0.6rem;background:rgba(255,255,255,0.03);transition:all 0.2s" onmouseover="this.style.borderColor=\'' + color + '40\';this.style.background=\'rgba(255,255,255,0.06)\'" onmouseout="this.style.borderColor=\'\';this.style.background=\'\'">' +
                         '<div style="display:flex;align-items:center;gap:0.85rem">' +
                         '<div style="width:36px;height:36px;border-radius:10px;background:' + color + '18;display:flex;align-items:center;justify-content:center;flex-shrink:0">' +
@@ -5602,6 +5663,7 @@
                         '<div style="flex:1;min-width:0">' +
                         '<div style="font-size:0.8rem;font-weight:900;text-transform:uppercase;color:' + color + ';letter-spacing:0.03em">' + n.msg + '</div>' +
                         '<div style="font-size:0.95rem;color:var(--text-color);font-weight:700;margin-top:1px">' + n.title + '</div>' +
+                        (n.date ? '<div style="font-size:0.7rem;color:var(--text-secondary);font-weight:600;margin-top:3px"><i class="fas fa-calendar-alt mr-1"></i>' + n.date + '</div>' : '') +
                         '</div>' + delBtn +
                         '</div></div>';
                 }).join('');
@@ -5678,6 +5740,7 @@
                 _editingId = null;
                 _lastSavedItem = null;
                 _reopenInfoAfterSave = false;
+                if (typeof this._lockCadastroTabs === 'function') this._lockCadastroTabs(false);
                 var body = el.querySelector('.p-8.overflow-y-auto');
                 if (body) body.scrollTop = 0;
                 UI.resetAllForms();
@@ -5705,6 +5768,11 @@
                 el.classList.remove('active');
                 var modalBtnMap = {'modal-dashboard':'btn-dashboard','modal-generate-list':'btn-generate-list','modal-cadastro-log':'btn-cadastro-log','modal-config':'btn-config','modal-info':'btn-info'};
                 if (modalBtnMap[id]) { var b = document.getElementById(modalBtnMap[id]); if (b) b.classList.remove('active'); }
+                if (typeof this._lockCadastroTabs === 'function' && id === 'modal-cadastro') {
+                    this._lockCadastroTabs(false);
+                }
+                var ae = document.activeElement;
+                if (ae && ae !== document.body && ae.blur) ae.blur();
                 document.getElementById('modal-toast')?.classList.add('hidden');
                 if (id === 'modal-config' && typeof UI._saveConfigFromForm === 'function') {
                     UI._saveConfigFromForm();
@@ -5726,6 +5794,24 @@
                     if (btn) btn.classList.toggle('active', opening);
                     if (opening) Logic.renderInfoFeatures();
                 }
+            },
+            _lockCadastroTabs(lock) {
+                ['tab-filmes', 'tab-series'].forEach(function(id) {
+                    var t = document.getElementById(id);
+                    if (!t) return;
+                    if (lock) {
+                        t.setAttribute('disabled', 'disabled');
+                        t.style.pointerEvents = 'none';
+                        t.style.opacity = '0.4';
+                        t.style.cursor = 'not-allowed';
+                        t.classList.remove('active');
+                    } else {
+                        t.removeAttribute('disabled');
+                        t.style.pointerEvents = '';
+                        t.style.opacity = '';
+                        t.style.cursor = '';
+                    }
+                });
             },
             _shortcutsEditing: null,
             _shortcutsDefaults: [
@@ -5860,6 +5946,7 @@
                 var opening = dd.classList.contains('hidden');
                 dd.classList.toggle('hidden');
                 if (btn) btn.classList.toggle('active', opening);
+                if (btn && btn.blur) btn.blur();
                 if (opening) {
                     this._populateFilterLists();
                     this.updateFilterButtonState();
@@ -5934,7 +6021,8 @@
                 else {
                     Logic._clearHeaderBtnActive();
                     if (btn) btn.classList.add('active');
-                    var list = (Logic._lastNotifications && Logic._lastNotifications.length > 0) ? Logic._lastNotifications : [];
+                    // Listagem completa: todas as estreias ordenadas por data (item e)
+                    var list = Logic._buildAllEstreiaNotifications();
                     Logic.showEstreiaNotifications(list, { count: 1, closed: false, firstShown: false }, '', true);
                 }
             },
@@ -7510,6 +7598,7 @@
                 if (!container) return;
                 Logic._clearHeaderBtnActive();
                 if (btn) btn.classList.add('active');
+                if (btn && btn.blur) btn.blur();
                 UI._listAllItems = APP_STATE.movies.filter(function(m) {
                     return m.type === APP_STATE.currentView;
                 });
@@ -7554,7 +7643,13 @@
                 html += '<div class="sub">CineCatalog Elo — Acervo ' + APP_STATE.movies.length + ' títulos</div>';
                 html += '<div class="datetime">Gerado em ' + dateStr + ' | Página ' + page + ' de ' + totalPages + '</div>';
                 html += '</div>';
-                html += '<table><thead><tr><th>#</th><th>Título</th><th>Original</th><th>Ano</th><th>Diretor</th><th>Gêneros</th><th>Status</th></tr></thead><tbody>';
+                var isEstreiaList = APP_STATE.currentView === 'estreias';
+                var listHeaders = isEstreiaList
+                    ? ['#', 'Estreia', 'Data', 'Tipo', 'Gênero', 'Status']
+                    : ['#', APP_STATE.currentView === 'series' ? 'Série' : 'Título', 'Original', 'Ano', 'Diretor', 'Gêneros', 'Status'];
+                html += '<table><thead><tr>';
+                listHeaders.forEach(function(h) { html += '<th>' + h + '</th>'; });
+                html += '</tr></thead><tbody>';
                 pageItems.forEach(function(m, i) {
                     var num = start + i + 1;
                     var s = m.statuses || {};
@@ -7562,7 +7657,15 @@
                     if (s.new) statuses.push('Novo');
                     if (s.watch) statuses.push('Assistir');
                     if (s.favorite) statuses.push('Fav');
-                    html += '<tr><td>' + num + '</td><td>' + (m.titlePt || '—') + '</td><td>' + (m.originalTitle || '—') + '</td><td>' + (m.year || '—') + '</td><td>' + (m.director || '—') + '</td><td>' + (m.genre || '—') + '</td><td>' + (statuses.join(', ') || '—') + '</td></tr>';
+                    var cells;
+                    if (isEstreiaList) {
+                        cells = [num, (m.titlePt || '—'), (m.date || '—'), (m.estreiaType === 'series' ? 'SÉRIE' : 'FILME'), (m.genre || '—'), (statuses.join(', ') || '—')];
+                    } else {
+                        cells = [num, (m.titlePt || '—'), (m.originalTitle || '—'), (m.year || '—'), (m.director || '—'), (m.genre || '—'), (statuses.join(', ') || '—')];
+                    }
+                    html += '<tr>';
+                    cells.forEach(function(c) { html += '<td>' + c + '</td>'; });
+                    html += '</tr>';
                 });
                 html += '</tbody></table>';
                 if (pageItems.length === 0) {
@@ -8204,6 +8307,10 @@
                     var sel = (data.genre || '') === c ? ' selected' : '';
                     return '<option value="' + c + '"' + sel + '>' + c + '</option>';
                 }).join('');
+                var typeVal = data.estreiaType || '';
+                var typeOpts = '<option value="">Tipo</option>' +
+                    '<option value="filmes"' + (typeVal === 'filmes' ? ' selected' : '') + '>Filmes</option>' +
+                    '<option value="series"' + (typeVal === 'series' ? ' selected' : '') + '>Séries</option>';
                 var titleVal = (data.titlePt || data.originalTitle || '').replace(/"/g,'&quot;');
                 // Convert DD/MM/AAAA to YYYY-MM-DD for date input
                 var dateRaw = data.date || '';
@@ -8213,6 +8320,7 @@
                     '<span class="font-black shrink-0" style="color:#34D399;min-width:28px;text-align:center;font-size:0.9rem">' + (index + 1) + '</span>' +
                     '<input type="date" id="de-date-' + index + '" class="field-premium" style="flex:0 0 150px;font-size:0.85rem;padding:0.4rem 0.5rem;min-height:38px;color-scheme:dark" value="' + dateVal + '" onchange="UI._checkEstreiaDateNotification(this.value)">' +
                     '<input type="text" id="de-title-' + index + '" class="field-premium" placeholder="Título" style="flex:2;font-size:0.85rem;padding:0.45rem 0.6rem;min-width:0" value="' + titleVal + '">' +
+                    '<select id="de-type-' + index + '" class="field-premium" title="Tipo" style="flex:0 0 110px;font-size:0.8rem;padding:0.45rem 0.6rem;min-width:0">' + typeOpts + '</select>' +
                     '<select id="de-category-' + index + '" class="field-premium" style="flex:0 0 140px;font-size:0.8rem;padding:0.45rem 0.6rem;min-width:0">' + opts + '</select>' +
                     '<input type="text" id="de-trailer-' + index + '" class="field-premium" placeholder="Trailer URL" style="flex:1;font-size:0.8rem;padding:0.45rem 0.6rem;min-width:0" value="' + trailerVal + '">' +
                     '<button type="button" class="estreia-btn estreia-btn-remove" onclick="UI._removeEstreiaRow(' + index + ')" title="Remover esta estreia" style="flex:0 0 30px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;padding:0"><i class="fas fa-minus"></i></button>' +
@@ -8275,16 +8383,20 @@
                 var fields = document.getElementById('dynamic-estreias-fields');
                 if (!fields) return;
                 var rows = fields.querySelectorAll('.dynamic-estreia-row');
+                var total = rows.length;
                 rows.forEach(function(row, idx) {
                     row.setAttribute('data-index', idx);
                     var numSpan = row.querySelector('span:first-child');
-                    if (numSpan) numSpan.textContent = idx + 1;
+                    // Numeração invertida: a mais recente (topo) recebe o maior número
+                    if (numSpan) numSpan.textContent = total - idx;
                     // Update input ids
                     var titleInput = row.querySelector('input[placeholder="Título"]');
                     if (titleInput) titleInput.id = 'de-title-' + idx;
                     var dateInput = row.querySelector('input[type="date"]');
                     if (dateInput) { dateInput.id = 'de-date-' + idx; dateInput.setAttribute('onchange', 'UI._checkEstreiaDateNotification(this.value)'); }
-                    var catSelect = row.querySelector('select');
+                    var typeSelect = row.querySelector('select[id^="de-type-"]');
+                    if (typeSelect) typeSelect.id = 'de-type-' + idx;
+                    var catSelect = row.querySelector('select[id^="de-category-"]');
                     if (catSelect) catSelect.id = 'de-category-' + idx;
                     var trailerInput = row.querySelectorAll('input[type="text"]');
                     for (var t = 0; t < trailerInput.length; t++) {
@@ -8303,10 +8415,12 @@
                 var title = document.getElementById('de-title-' + index);
                 var date = document.getElementById('de-date-' + index);
                 var category = document.getElementById('de-category-' + index);
+                var type = document.getElementById('de-type-' + index);
                 var trailer = document.getElementById('de-trailer-' + index);
                 if (!title) return;
                 var t = title.value.trim();
                 if (!t) { Logic.showStatus('Preencha o título da estreia'); return; }
+                var typeVal = (type && type.value) ? type.value : 'filmes';
                 var savedId = row.getAttribute('data-saved-id');
                 if (savedId) {
                     // Update existing
@@ -8317,6 +8431,7 @@
                         orig.originalTitle = t;
                         orig.date = date ? UI._dateToStorage(date.value.trim()) : '';
                         orig.genre = category ? category.value : (orig.genre || '');
+                        orig.estreiaType = typeVal;
                         orig.trailUrl = trailer ? trailer.value.trim() : '';
                         APP_STATE.movies[idx] = orig;
                         Storage.save();
@@ -8330,7 +8445,7 @@
                         id: Date.now().toString() + '_' + Math.random().toString(36).substr(2, 5),
                         _createdAt: Date.now().toString(),
                         type: 'estreias',
-                        estreiaType: 'filmes',
+                        estreiaType: typeVal,
                         originalTitle: t,
                         titlePt: t,
                         date: date ? UI._dateToStorage(date.value.trim()) : '',
@@ -8358,10 +8473,12 @@
                 var title = document.getElementById('de-title-' + index);
                 var date = document.getElementById('de-date-' + index);
                 var category = document.getElementById('de-category-' + index);
+                var type = document.getElementById('de-type-' + index);
                 var trailer = document.getElementById('de-trailer-' + index);
                 if (title) title.value = saved.titlePt || saved.originalTitle || '';
                 if (date) date.value = UI._dateToInput(saved.date || '');
                 if (category) category.value = saved.genre || '';
+                if (type) type.value = saved.estreiaType || '';
                 if (trailer) trailer.value = saved.trailUrl || '';
                 Logic.showStatus('Dados carregados para edição');
             },
@@ -8522,8 +8639,10 @@
                     if (!title || !title.value.trim()) return;
                     var date = document.getElementById('de-date-' + index);
                     var category = document.getElementById('de-category-' + index);
+                    var type = document.getElementById('de-type-' + index);
                     var trailer = document.getElementById('de-trailer-' + index);
                     var t = title.value.trim();
+                    var typeVal = (type && type.value) ? type.value : 'filmes';
                     var savedId = row.getAttribute('data-saved-id');
                     if (savedId) {
                         var idx = APP_STATE.movies.findIndex(function(m) { return m.id === savedId; });
@@ -8533,6 +8652,7 @@
                             orig.originalTitle = t;
                             orig.date = date ? UI._dateToStorage(date.value.trim()) : '';
                             orig.genre = category ? category.value : (orig.genre || '');
+                            orig.estreiaType = typeVal;
                             orig.trailUrl = trailer ? trailer.value.trim() : '';
                             APP_STATE.movies[idx] = orig;
                             saved++;
@@ -8542,7 +8662,7 @@
                             id: Date.now().toString() + '_' + Math.random().toString(36).substr(2, 5),
                             _createdAt: Date.now().toString(),
                             type: 'estreias',
-                            estreiaType: 'filmes',
+                            estreiaType: typeVal,
                             originalTitle: t,
                             titlePt: t,
                             date: date ? UI._dateToStorage(date.value.trim()) : '',

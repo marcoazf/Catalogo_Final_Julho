@@ -2140,3 +2140,102 @@ if (_es) {
 | Paletas, tipografia, layout, espaçamentos preservados | OK |
 | Todos os IDs, classes e handlers mantidos | OK |
 
+---
+
+## Implementações Realizadas — Melhorias 5 (melhorias2.md — Itens a–e, nova rodada)
+
+### 82. (a) PESQUISA: Borda Neon Verde nos Cards Correspondentes
+
+**Arquivo:** `index.html` — CSS (`.movie-card.search-match`, `.estreia-list-item.search-match`)
+
+**O que foi feito:**
+- O efeito de "match" da busca saiu do verde simples (`#22C55E`, 2 camadas de sombra) para um **neon verde intenso** (`#4ADE80`) com **4 camadas de glow** (10px sólido + 28/60/100px com opacidade decrescente) — visual verdadeiramente "neon".
+- Hover dos cards com match agora intensifica o glow (14/40/80/130px).
+- O mesmo efeito foi aplicado às **linhas da lista de Estreias** (`.estreia-list-item.search-match`), com hover equivalente.
+- A classe `search-match` já é aplicada às linhas de estreia via `m._searchMatch` em `Render._renderEstreias`.
+
+**Preservação:** Demais estados dos cards (Fav, bordas de status) inalterados.
+
+---
+
+### 83. (b) GERAR LISTA: Tabela com Labels Dinâmicos por Tipo (Estreias)
+
+**Arquivo:** `index.html` — JavaScript (`UI._renderListContent`)
+
+**O que foi feito:**
+- A tabela do modal **GERAR LISTA** agora tem cabeçalhos dinâmicos conforme o acervo atual:
+  - **Estreias:** `# | Estreia | Data | Tipo | Gênero | Status`
+  - **Filmes:** `# | Título | Original | Ano | Diretor | Gêneros | Status`
+  - **Séries:** `# | Série | Original | Ano | Diretor | Gêneros | Status`
+- A coluna **Tipo** das estreias é preenchida em tempo real com `SÉRIE` ou `FILME` (lendo `m.estreiaType`).
+
+---
+
+### 84. (c/d) Botões PESQUISAR, FILTROS e TEMAS: Círculo Branco de Foco Eliminado
+
+**Arquivo:** `index.html` — JavaScript (`UI.openGenerateList`, `UI.toggleFilters`, `Logic.toggleThemeMenu`, `UI.closeModal`) + CSS (`.btn-icon:focus`)
+
+**O que foi feito:**
+- Adicionado `btn.blur()` nos botões **Gerar Lista**, **Filtros** e **Temas** logo após o toggle de estado ativo — elimina o círculo branco de foco residual.
+- `UI.closeModal()` também executa `blur()` no elemento ativo do documento e o CSS `outline: none !important` foi reforçado para `.btn-icon:focus`.
+
+---
+
+### 85. (c) FILTROS: Janela Permanece Aberta com Filtragem em Tempo Real
+
+**Arquivo:** `index.html` — JavaScript (`Logic.applyFilter`, `Logic.setYearFilter`)
+
+**O que foi feito:**
+- Removidas as linhas que escondiam o dropdown (`filters-dropdown`) e removiam o `.active` do botão **Filtros** ao escolher um filtro ou ano.
+- Agora, ao marcar um filtro, a janela **permanece aberta** e a lista é filtrada **em tempo real**.
+- Fechamento: apenas clicando fora ou no botão **Filtros** (e via ESC, comportamento global já existente).
+
+---
+
+### 86. (e) ESTREIAS: Abas Bloqueadas, Campo TIPO + Numeração Invertida + Notificações Completas
+
+**Arquivos:** `index.html` — HTML/CSS/JavaScript (múltiplas funções) + `atualizacao_4.5.1.md`
+
+**O que foi feito:**
+
+**A) Edição de Estreias — Abas FILMES e SÉRIES bloqueadas:**
+- Nova função `UI._lockCadastroTabs(lock)` desabilita as abas FILMES e SÉRIES (disabled, pointer-events none, opacidade 0.4) ao editar uma estreia.
+- Chamada em `editMovieCtx` (quando o item é estreia), `openModal` e `closeModal` (sempre desbloqueia ao abrir/fechar o cadastro).
+
+**B) Novo campo TIPO na janela de Estreias:**
+- Cada linha de estreia ganhou um **select "Tipo"** (Filmes/Séries) entre o Título e o Gênero (`flex:0 0 110px`).
+- Persistência completa: criação e atualização gravam `estreiaType` em `APP_STATE.movies` (`saveAllDynamicEstreias`, `_applyEstreia`, `_editEstreiaRow`).
+- Modal de cadastro mais largo (`#modal-cadastro .modal-premium-inner { max-width: 68rem }`) para acomodar o novo campo **sem reduzir altura nem tipografia**.
+
+**C) Numeração invertida:**
+- As linhas de estreia agora são numeradas de cima para baixo (a mais recente, no topo, recebe o maior número), via `_reindexEstreiaRows`.
+
+**D) Notificações de estreias — listagem completa:**
+- O painel de notificações agora lista **todas** as estreias ordenadas por data (futuras → hoje → passadas; sem data ao final), com rótulo "DATA NÃO DEFINIDA" quando aplicável.
+- Botões de edição/remoção **removidos** das notificações — listagem apenas informativa (título discreto adicionado no menu ESTREIAS).
+
+**Preservação:** `checkEstreiaNotifications` (badge 5/3/1 dias, hoje e passadas) e popups automáticos inalterados.
+
+---
+
+## Checklist Final (melhorias2.md — Itens 82–86)
+
+| Verificação | Status |
+|---|---|
+| (a) Neon verde #4ADE80 com 4 camadas nos cards de match | OK |
+| (a) Efeito equivalente nas linhas de estreia | OK |
+| (b) Tabela GERAR LISTA com headers dinâmicos (Estreias/Filmes/Séries) | OK |
+| (b) Coluna Tipo preenchida com SÉRIE/FILME | OK |
+| (c/d) Círculo branco de foco removido (Gerar Lista, Filtros, Temas, closeModal) | OK |
+| (c) Dropdown de filtros permanece aberto com filtragem em tempo real | OK |
+| (e) Abas FILMES/SÉRIES bloqueadas na edição de estreias | OK |
+| (e) Campo TIPO (Filmes/Séries) salvo e carregado | OK |
+| (e) Numeração invertida das linhas de estreia | OK |
+| (e) Notificações listam todas as estreias por data, sem edição | OK |
+| (e) Modal mais largo sem reduzir campos/altura/tipografia | OK |
+| Título discreto no menu ESTREIAS | OK |
+| Sintaxe JS validada (node --check: 2 blocos OK) | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
+
