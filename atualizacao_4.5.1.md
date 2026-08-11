@@ -2494,4 +2494,153 @@ if (_es) {
 | Paletas, tipografia, layout, espaçamentos preservados | OK |
 | Todos os IDs, classes e handlers mantidos | OK |
 
+---
+
+## Implementações Realizadas — Melhorias 4 (melhorias2.md — Itens a–f)
+
+### 101. (a) INFO: Hover Vermelho + Tooltip no Ícone de Trailer (Filmes e Séries)
+
+**Arquivo:** `index.html` — CSS + HTML (`.mmi-trailer-link`, `#msi-trailer-link`)
+
+**O que foi feito:**
+- **Hover vermelho:** ao passar o mouse sobre o ícone de play/trailer ativo (filme `#mmi-trailer-link` e série `#msi-trailer-link`), o ícone escala 1.3× com `drop-shadow` vermelho neon (`rgba(239,68,68,0.9)`) e transição suave de 0.2s.
+- **Tooltip:** novo `data-tooltip="Clique para assistir ao trailer em uma nova janela"` exibido ao apontar o mouse — aparece **esteja o trailer ativo ou não** (apenas o efeito vermelho é restrito ao estado ativo via `:not(.disabled)`).
+- Estado `.disabled` mantém opacidade reduzida e cursor padrão, sem o glow vermelho.
+
+**Preservação:** Atributos originais (`href`, `target`, ícones) e a lógica de abertura de trailer em nova janela intactos.
+
+---
+
+### 102. (b) INFO: Fontes Aumentadas (Status, SINOPSE, DIRETOR, ELENCO)
+
+**Arquivo:** `index.html` — CSS
+
+**O que foi feito:**
+- `.label-premium` (rótulo "STATUS") → `11px`.
+- `#mmi-synopsis`, `#mmi-director`, `#mmi-cast` (filmes) e `#msi-synopsis`, `#msi-director`, `#msi-cast` (séries) → `0.9375rem` (15px).
+- Pill de status (`#mmi-status-pill`) → `10px`.
+
+**Preservação:** Estrutura HTML, cores e hierarquia tipográfica dos modais INFO intactas.
+
+---
+
+### 103. (c) INFO: Navegação Restrita ao Tipo do Item Clicado
+
+**Arquivo:** `index.html` — JavaScript (`Logic.navigateMovieInfo`, `Logic.navigateSeriesInfo`, `_reopenInfoAfterSave`)
+
+**O que foi feito:**
+- A lista de navegação (`_infoMovieList`) é construída filtrando **apenas itens do mesmo tipo** do card clicado:
+  - Clique direito em **FILME** → navega somente entre FILMES cadastrados.
+  - Clique direito em **SÉRIE** → navega somente entre SÉRIES cadastradas.
+- Uso do tipo real do item (`movie.type` no build inicial e `item.type` após salvamento/reabertura) em vez de `APP_STATE.currentView`, evitando divergências.
+
+**Preservação:** Setas de navegação, `_infoMovieIndex`, atalhos de teclado (←/→) e abertura do modal intactos.
+
+---
+
+### 104. (d) INFO: EXECUTAR FILME em Nova Janela Full Size + Gestão de Temporadas/Episódios nas Séries
+
+**Arquivo:** `index.html` — HTML + JavaScript (`Logic.playInfoMedia`, `Logic.openMediaWithPlayer`, `Logic.renderSeriesSeasons`, `Logic._normalizeSeriesSeasons`, `Logic.playInfoSeason`, `Logic.playInfoEpisode`)
+
+**O que foi feito:**
+- **`#mmi-play-btn`** convertido de `<a>` para `<button onclick="Logic.playInfoMedia('filmes')">`, exibido **somente para FILMES**, com o texto "EXECUTAR FILME".
+- **`Logic.playInfoMedia(type)`**: resolve a mídia (referência JSON `{blob,name,path}` ou link) e chama `Logic.openMediaWithPlayer(url, type)` — mantendo a ligação com o **player definido em CONFIGURAÇÕES** (`cfg.videoPlayer`, `cfg.customPlayerPath`).
+- **Player `'system'`:** abre em nova janela maximizada (`screen.availWidth/availHeight`, `top=0,left=0`) e solicita `requestFullscreen()`. Caminhos locais convertidos para `file:///`. Players externos (Personalizado/streaming) mantêm o fluxo `data-mediaUrl` existente.
+- **Séries — gestão na INFO:** `#msi-seasons` renderiza cards por Temporada (badge Nº, título, ano, elenco, botão **"EXECUTAR TEMPORADA"**) e linhas por Episódio (EP., título, data, duração, elenco convidado, botão **"EXECUTAR EPISÓDIO"**), todos conectados aos caminhos cadastrados em CADASTRAR SÉRIES/TEMPORADAS/EPISÓDIOS.
+- **`_normalizeSeriesSeasons(m)`**: normaliza os novos arrays (`dynamicSeasons` + `dynamicEpisodesNew`), o formato legado (`seasons[]`) e a série simples (`mediaFile`).
+- Obsoletos removidos: `msi-season-select`, `msi-episodes-list`, `msi-play-btn`, `selectSeriesSeason`, `selectSeriesEpisode`, `updateSeriesPlayBtn`.
+
+**Preservação:** Player `system` continua abrindo mídias externas; player configurado segue vigente; ordem de exibição das temporadas do maior para o menor (mais recente no topo).
+
+---
+
+### 105. (e) VERSÃO v31.0.3: Rodapé, Manual e Onde a Informação Aparece
+
+**Arquivos:** `index.html` + `manual_do_catalogo.html`
+
+**O que foi feito:**
+- `index.html`:
+  - `<title>` → **v31.0.3**.
+  - Badge do rodapé (`#app-version-badge`) → `v31.0.3`.
+  - Descrição "Sobre o Sistema" (modal Info) → `v31.0.3`.
+  - Preview do rodapé em `applyConfig()` → `v31.0.3`.
+- `manual_do_catalogo.html`:
+  - Versão **31.0.3** no subtítulo, badge do footer, rodapé da página e nova seção `s25` "Novidades v31.0.3".
+  - Seção 24 marcada como `ANTERIOR`; ids renumerados `s25→s26` (Estatísticas com Filtros), `s26→s27` (Lembretes), `s27→s28` (Funcionalidades 51).
+
+**Preservação:** Referências `v31.0.1`/`v31.0.2` restantes no manual pertencem às seções históricas e foram mantidas.
+
+---
+
+### 106. (f) CADASTRO SÉRIES: Novo Layout em 3 Seções com Temporadas e Episódios Integrados
+
+**Arquivo:** `index.html` — HTML (aba Séries) + CSS + JavaScript (`UI.autoGenerateSeasons`, `UI.seriesAddSeason`, `UI.seriesRemoveSeason`, `UI.clearAllSeasonFields`, `UI._removeSeasonBlock`, `UI.autoGenerateEpisodes`, `UI.seriesAddEpisode`, `UI.seriesRemoveEpisode`, `UI.clearAllEpisodeFields`, `UI._removeEpisodeBlock`, `UI._syncSeasonDataFromDom`, `UI._syncEpisodeDataFromDom`, `UI._renderSeasonBlocks`, `UI._renderEpisodeBlocks`, `UI._pickEpisodeFile`, `Logic.editMovieCtx`, `UI.resetAllForms`, `UI.switchTab`, `Logic.saveMovie`)
+
+**O que foi feito:**
+
+**Seção 1 — "CADASTRE AQUI O NOME DA SÉRIE:"**
+- Campos à esquerda (Título, Ano/País/Duração, Diretor, Elenco, Gêneros+Trailer+Gerir, Total de Temporadas, Total de Episódios), **Capa à direita** (upload + URL da Capa + classificação + outras informações + status), Sinopse full-width no rodapé da seção.
+- **Total de Temporadas / Total de Episódios**: botão **⚡** gera/atualiza/remove os campos individuais em tempo real (repetir clique com novo valor atualiza) e botão **🗑** remove todos os campos.
+- Novos inputs: `fs-country`, `fs-trailer-url`, `fs-status-new`, `fs-status-watch`, `fs-status-fav` (substituem o antigo bloco de status).
+
+**Seção 2 — "CADASTRE AS TEMPORADAS DA SÉRIE"**
+- Bloco por temporada com Nº, Título, Ano, Elenco e Trailer. Numeração de cadastro a partir de 1 e **exibição do maior para o menor** (mais recente no topo).
+- Botões globais **"+"** / **"−"** no cabeçalho e botão de remover em cada temporada.
+
+**Seção 3 — "CADASTRE OS EPISÓDIOS DE CADA TEMPORADA DA SERIE"**
+- Bloco por episódio com Nº, **dropdown de Temporada** (preenchido em tempo real, mesmo sem salvar), Título, Data, Duração, Elenco Convidado e **Link da Série** com botão de **seleção de ficheiro local** (`UI._pickEpisodeFile`).
+- Botões globais **"+"** / **"−"** e remoção individual. Numeração a partir de 1 com exibição do maior para o menor.
+- A SÉRIE comanda as Temporadas; cada Temporada pode ter quantidade de Episódios igual ou diferente.
+
+**Integração e persistência:**
+- Estados `UI._seasonData` / `UI._episodeData` com sincronização DOM ↔ array (`_syncSeasonDataFromDom`/`_syncEpisodeDataFromDom`).
+- `Logic.editMovieCtx` (série) pré-preenche os campos e renderiza as Seções 2/3 ao editar.
+- `UI.resetAllForms` e `UI.cloneLastData` atualizados para os novos campos/estados.
+- `Logic.saveMovie` (série) grava `trailUrl`/`trailerUrl`, `dynamicSeasons` e `dynamicEpisodesNew` a partir dos arrays (com sync antes do save).
+- `UI.switchTab('series')` renderiza as Seções 2/3.
+- CSS novo: `.series-section`, `.series-section-head`, `.series-total-btn(.red)`, `.series-ghost-btn(.red)`, `.series-dyn-block(.episode)`, `.series-dyn-num`, `.series-dyn-remove`, `.series-field`, `.series-empty-hint`, `.msi-season-card`, `.msi-season-head`, `.msi-season-badge`, `.msi-season-title`, `.msi-season-meta`, `.msi-play-btn(.green/.disabled)`, `.msi-ep-row`, `.msi-ep-title`, `.msi-ep-meta`.
+- Compatibilidade preservada: `dynamic-series-container`, `dyn-series-buttons`, `toggleDynButtons`, `openSeasonModal`/`openEpisodeModal` mantidos no DOM/código (guardados com `if (el)`), sem interferência.
+
+**Preservação:** Paleta, tipografia, botão fechar, rodapé com status + SALVAR, rolagem do modal e todas as funcionalidades existentes intactas.
+
+---
+
+## Checklist Final (melhorias2.md — Itens 101–106)
+
+| Verificação | Status |
+|---|---|
+| (a) Hover vermelho (scale + drop-shadow) no ícone de trailer de FILMES | OK |
+| (a) Hover vermelho no ícone de trailer de SÉRIES | OK |
+| (a) Tooltip aparece ativo e desativado (estando ativo ou não) | OK |
+| (a) Glow vermelho apenas no estado ativo (`:not(.disabled)`) | OK |
+| (b) `.label-premium` → 11px | OK |
+| (b) SINOPSE/DIRETOR/ELENCO → 0.9375rem (filmes e séries) | OK |
+| (b) Pill de status → 10px | OK |
+| (c) Clique em FILME → navegação apenas entre filmes | OK |
+| (c) Clique em SÉRIE → navegação apenas entre séries | OK |
+| (c) Reabertura pós-save mantém o tipo (`item.type`) | OK |
+| (d) `#mmi-play-btn` vira botão "EXECUTAR FILME" (só filmes) | OK |
+| (d) Abre nova janela maximizada + fullscreen no player `'system'` | OK |
+| (d) Conexão com o player definido em CONFIGURAÇÕES | OK |
+| (d) INFO séries: cards de Temporadas com EXECUTAR TEMPORADA | OK |
+| (d) INFO séries: linhas de Episódios com EXECUTAR EPISÓDIO | OK |
+| (d) Caminhos locais convertidos para `file:///` | OK |
+| (d) Referências JSON `{blob,name,path}` resolvidas no play | OK |
+| (d) Obsoletos removidos sem referências órfãs | OK |
+| (e) Versão v31.0.3 em título, rodapé, Sobre o Sistema e preview | OK |
+| (e) Manual atualizado para 31.0.3 (subtítulo, nav, rodapé, seção 25) | OK |
+| (f) Seção 1: campos à esquerda + Capa à direita + Sinopse full-width | OK |
+| (f) Totais com ⚡ (gerar em tempo real) e 🗑 (remover tudo) | OK |
+| (f) Seção 2: Nº/Título/Ano/Elenco/Trailer por temporada + /− global + remover individual | OK |
+| (f) Seção 3: Nº/dropdown de temporada/Título/Data/Duração/Elenco convidado/Link + pick folder | OK |
+| (f) Ordem de exibição do maior para o menor (temporadas e episódios) | OK |
+| (f) Temporadas interligadas à SÉRIE e Episódios às suas Temporadas | OK |
+| (f) `saveMovie` grava `dynamicSeasons`/`dynamicEpisodesNew` (com sync pré-save) | OK |
+| (f) `editMovieCtx`, `resetAllForms`, `cloneLastData` e `switchTab` integrados | OK |
+| (f) Compatibilidade legado preservada (containers ocultos, handlers guardados) | OK |
+| Sintaxe JS validada (node --check: 2 blocos OK) | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
+
 
