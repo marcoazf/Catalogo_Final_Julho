@@ -1462,7 +1462,7 @@
             margin-bottom: 0.5rem;
         }
         .info-grid-scroll {
-            max-height: 320px;
+            max-height: 430px;
             overflow-y: auto;
             scroll-behavior: smooth;
             padding-right: 4px;
@@ -1732,7 +1732,7 @@
             will-change: transform;
         }
         .marquee-row .movie-card {
-            flex: 0 0 180px;
+            flex: 0 0 var(--marquee-card-width, 180px);
         }
         .marquee-row-left {
             animation: marqueeLeft var(--marquee-speed, 30s) linear infinite;
@@ -2140,7 +2140,7 @@
     <footer class="px-6 py-2 border-t theme-border flex justify-between items-center bg-black/20">
         <div class="flex items-center gap-0" style="flex-wrap:nowrap">
             <div class="text-[0.75rem] text-gray-400 uppercase tracking-widest font-medium whitespace-nowrap" id="footer-dev-text">
-                ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CRIADO PARA JONAS THEODORO</span> | <span id="app-version-badge" style="color:#C7D2FE;font-size:0.9rem;font-weight:800;text-shadow:0 0 16px rgba(165,180,252,0.5)">v31.0.2</span>
+                ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CRIADO PARA JONAS THEODORO</span> | <span id="app-version-badge" style="color:#C7D2FE;font-size:0.8rem;font-weight:600;text-shadow:0 0 16px rgba(165,180,252,0.5)">v31.0.2</span>
             </div>
         </div>
         <div id="user-action-status" class="text-[0.75rem] text-emerald-500 font-bold uppercase opacity-0 pointer-events-none transition-opacity duration-300"></div>
@@ -2530,11 +2530,10 @@
     <!-- Menu Contextual -->
     <div id="context-menu">
         <div class="p-2 space-y-1">
-            <button onclick="Logic.viewMovieCtx()" class="w-full text-left px-4 py-2 hover:bg-blue-600 hover:text-white rounded-lg flex items-center gap-3 text-[0.7rem] font-normal uppercase transition"><i class="fas fa-info-circle"></i> Info</button>
-            <button onclick="Logic.editMovieCtx()" class="w-full text-left px-4 py-2 hover:bg-blue-600 hover:text-white rounded-lg flex items-center gap-3 text-[0.7rem] font-normal uppercase transition"><i class="fas fa-edit"></i> Editar</button>
-            <button onclick="Logic.toggleFavCtx()" id="ctx-fav-btn" class="w-full text-left px-4 py-2 hover:bg-red-600 hover:text-white rounded-lg flex items-center gap-3 text-[0.7rem] font-normal uppercase transition"><i class="fas fa-heart"></i> Favoritar</button>
-            <button onclick="Logic.editReminderCtx()" class="w-full text-left px-4 py-2 hover:bg-amber-600 hover:text-white rounded-lg flex items-center gap-3 text-[0.7rem] font-normal uppercase transition"><i class="fas fa-bell"></i> <span id="ctx-reminder-label">Criar Lembrete</span></button>
-            <button onclick="Logic.deleteMovieCtx()" class="w-full text-left px-4 py-2 hover:bg-red-600 hover:text-white rounded-lg flex items-center gap-3 text-[0.7rem] font-normal uppercase text-red-500 transition"><i class="fas fa-trash"></i> Remover</button>
+            <button onclick="Logic.viewMovieCtx()" class="w-full text-left px-4 py-2 hover:bg-blue-600 hover:text-white rounded-lg flex items-center gap-3 text-[0.85rem] font-normal uppercase transition"><i class="fas fa-info-circle"></i> Info</button>
+            <button onclick="Logic.editMovieCtx()" class="w-full text-left px-4 py-2 hover:bg-blue-600 hover:text-white rounded-lg flex items-center gap-3 text-[0.85rem] font-normal uppercase transition"><i class="fas fa-edit"></i> Editar</button>
+            <button onclick="Logic.editReminderCtx()" class="w-full text-left px-4 py-2 hover:bg-amber-600 hover:text-white rounded-lg flex items-center gap-3 text-[0.85rem] font-normal uppercase transition"><i class="fas fa-bell"></i> <span id="ctx-reminder-label">Criar Lembrete</span></button>
+            <button onclick="Logic.deleteMovieCtx()" class="w-full text-left px-4 py-2 hover:bg-red-600 hover:text-white rounded-lg flex items-center gap-3 text-[0.85rem] font-normal uppercase text-red-500 transition"><i class="fas fa-trash"></i> Remover</button>
         </div>
     </div>
 
@@ -3512,7 +3511,7 @@
                     <button onclick="UI.closeModal('modal-info')" class="btn-close-premium" ><i class="fas fa-times text-xs"></i></button>
                 </div>
             </div>
-            <div class="p-5 overflow-y-auto custom-scroll" style="max-height:82vh">
+            <div class="p-5 overflow-y-auto custom-scroll" style="max-height:86vh">
                 <div style="font-size:0.7rem;font-weight:600;color:var(--text-secondary);margin-bottom:0.75rem;text-transform:uppercase;letter-spacing:0.1em">Clique num ícone para saber mais <span style="color:var(--accent-blue);font-weight:800">(51)</span></div>
                 <div id="info-features-grid" class="info-grid info-grid-scroll"></div>
                 <!-- Bottom description box -->
@@ -4135,7 +4134,7 @@
                     '<img src="' + data.image + '" onerror="this.onerror=null;this.classList.add(\'error\');this.nextElementSibling.style.display=\'flex\'">' +
                     '<div class="card-fallback"><i class="fas fa-film"></i><span>S/ Poster</span></div>' +
                     '<div class="card-category" title="' + topLabel + '" style="color:var(--card-category-color);background:var(--card-category-bg);font-size:var(--card-category-size)">' + topLabel + '</div>' +
-                    '<div class="card-heart' + (isFav ? ' active' : '') + '" onclick="event.stopPropagation();Logic.toggleCardFav(\'' + data.id + '\', this)" title="' + (isFav ? 'Desfavoritar' : 'Favoritar') + '"><i class="' + (isFav ? 'fas' : 'fa-regular') + ' fa-heart"></i></div>' +
+                    '<div class="card-heart' + (isFav ? ' active' : '') + '" onclick="event.stopPropagation();Logic.toggleCardFav(\'' + data.id + '\', this)"><i class="' + (isFav ? 'fas' : 'fa-regular') + ' fa-heart"></i></div>' +
                     (hasReminder ? '<div class="absolute top-0.5 right-12 z-5 text-amber-400 text-[0.6rem]" title="' + reminderTitle + '"><i class="fas fa-sticky-note"></i></div>' : '') +
                     (hasMedia ? '<div class="card-play-overlay"><div class="card-play-btn" onclick="event.stopPropagation();Logic.playMedia(\'' + data.id + '\')"><i class="fas fa-play"></i></div></div>' : '') +
                     '<div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3" style="z-index:3">' +
@@ -4198,7 +4197,7 @@
                     UI.openModal('modal-cadastro');
                     _editingId = movie.id;
                     UI.switchTab(movie.type);
-                    UI._lockCadastroTabs(movie.type === 'estreias');
+                    UI._lockCadastroTabs(movie.type);
                     const typeLabel = movie.type === 'filmes' ? 'O FILME' : movie.type === 'series' ? 'A SÉRIE' : 'A ESTREIA';
                     document.getElementById('modal-title').innerHTML = 'EDITAR <span style="-webkit-text-fill-color:#3B82F6">' + typeLabel + '</span>';
                     var btn = document.getElementById('btn-save-v2');
@@ -4565,6 +4564,21 @@
                     wrapper.appendChild(row);
                     container.appendChild(wrapper);
                 });
+                this._applyMarqueeZoom();
+            },
+
+            _applyMarqueeZoom() {
+                var map = { 1: 5, 2: 6, 3: 7, 4: 8 };
+                var val = map[APP_STATE.zoom] || 5;
+                var gapTotal = (val - 1) * 1.5;
+                document.querySelectorAll('.marquee-row').forEach(function(row) {
+                    var cont = row.closest('.marquee-container');
+                    var avail = cont ? cont.clientWidth : 0;
+                    if (avail > 0) {
+                        var w = (avail - gapTotal * 16) / val;
+                        row.style.setProperty('--marquee-card-width', Math.floor(w) + 'px');
+                    }
+                });
             },
 
             applyFilter(f) {
@@ -4635,13 +4649,9 @@
                 menu.classList.add('show');
                 menu.style.left = `${e.pageX}px`;
                 menu.style.top = `${e.pageY}px`;
-                // Update Favoritar button label
+                // Update reminder button label
                 const movie = APP_STATE.movies.find(m => m.id === id);
-                const favBtn = document.getElementById('ctx-fav-btn');
                 if (movie) {
-                    const s = movie.statuses || {};
-                    const isFav = s.favorite;
-                    favBtn.innerHTML = isFav ? '<i class="fas fa-heart-broken"></i> Desfavoritar' : '<i class="fas fa-heart"></i> Favoritar';
                     // Hide reminder for estreias
                     const estBtn = menu.querySelector('[onclick*="editReminderCtx"]');
                     if (estBtn) {
@@ -4946,20 +4956,6 @@
                 Logic.showStatus('Modo clonagem — altere os campos e clique em CLONAR');
             },
 
-            toggleFavCtx() {
-                var self = this;
-                this.closeCtxMenu(function() {
-                    const movie = APP_STATE.movies.find(m => m.id === APP_STATE.selectedId);
-                    if (!movie) return;
-                    if (!movie.statuses) movie.statuses = {};
-                    var cur = movie.statuses.favorite || false;
-                    movie.statuses.favorite = !cur;
-                    Storage.save();
-                    Render.all();
-                    Logic.showStatus(movie.statuses.favorite ? 'Adicionado aos favoritos!' : 'Removido dos favoritos!');
-                });
-            },
-
             toggleCardFav(id, el) {
                 const movie = APP_STATE.movies.find(m => m.id === id);
                 if (!movie) return;
@@ -5216,7 +5212,7 @@
                 el.style.opacity = '1';
                 var cfg = window._appConfig;
                 var isCadastroMsg = (msg.indexOf('sucesso') >= 0 || msg.indexOf('cadastro') >= 0 || msg.indexOf('atualizado') >= 0);
-                var dur = duration || 4000;
+                var dur = duration || 6000;
                 if (isCadastroMsg && cfg && cfg.cadastroNotifyActive !== false) {
                     dur = cfg.cadastroNotifyDuration || 6000;
                 }
@@ -5591,7 +5587,7 @@
             },
 
             // --- Unified Notifications (estreias only) ---
-            checkEstreiaNotifications() {
+            checkEstreiaNotifications(silent) {
                 var today = new Date();
                 today.setHours(0, 0, 0, 0);
                 var notifications = [];
@@ -5655,7 +5651,7 @@
                     }
                 });
 
-                if (notifications.length > 0 && hasNewPopup && window._appConfig && window._appConfig.notificationsActive !== false) {
+                if (!silent && notifications.length > 0 && hasNewPopup && window._appConfig && window._appConfig.notificationsActive !== false) {
                     this.showEstreiaNotifications(notifications, null, null, false);
                 }
             },
@@ -5816,11 +5812,12 @@
                     if (opening) Logic.renderInfoFeatures();
                 }
             },
-            _lockCadastroTabs(lock) {
-                ['tab-filmes', 'tab-series'].forEach(function(id) {
+            _lockCadastroTabs(activeType) {
+                ['tab-filmes', 'tab-series', 'tab-estreias'].forEach(function(id) {
                     var t = document.getElementById(id);
                     if (!t) return;
-                    if (lock) {
+                    var isActiveTab = (id === 'tab-' + activeType);
+                    if (activeType && !isActiveTab) {
                         t.setAttribute('disabled', 'disabled');
                         t.style.pointerEvents = 'none';
                         t.style.opacity = '0.4';
@@ -6200,6 +6197,7 @@
                 document.querySelectorAll('.carrossel-container').forEach(function(c) {
                     c.style.setProperty('--carrossel-gap', gapTotal + 'rem');
                 });
+                if (typeof Logic._applyMarqueeZoom === 'function') Logic._applyMarqueeZoom();
                 document.querySelectorAll('.zoom-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === lvl));
                 APP_STATE.zoom = lvl;
             },
@@ -7087,10 +7085,9 @@
                     var catSize = getVal('cfg-cat-size') || '13px';
                     cardPreview.innerHTML = '<div style="width:180px;border-radius:0.85rem;overflow:hidden;background:var(--card-bg);border:1px solid var(--border-color);box-shadow:0 4px 15px rgba(0,0,0,0.2)">' +
                         '<div style="position:relative;aspect-ratio:2/3;background:linear-gradient(135deg,#1e293b,#0f172a);display:flex;align-items:center;justify-content:center">' +
-                        '<div style="position:absolute;top:0;left:0;right:0;padding:0.35rem 0.5rem;display:flex;justify-content:space-between;align-items:flex-start;z-index:2">' +
-                        '<span style="font-size:' + catSize + ';font-weight:700;text-transform:uppercase;color:' + catColor + ';background:' + catBg + ';padding:0.1rem 0.4rem;border-radius:0.3rem">Ação</span>' +
-                        '<i class="fas fa-heart" style="font-size:12px;color:' + (statusFavBg || '#DC2626') + ';text-shadow:0 0 6px rgba(220,38,38,0.5)"></i>' +
-                        '</div>' +
+                        '<span style="position:absolute;top:8px;left:8px;z-index:6;font-size:' + catSize + ';font-weight:700;text-transform:uppercase;color:' + catColor + ';background:' + catBg + ';padding:0.1rem 0.4rem;border-radius:0.3rem">Ação</span>' +
+                        '<div style="position:absolute;top:8px;right:48px;z-index:5;font-size:0.6rem;color:#FBBF24;text-shadow:0 0 6px rgba(251,191,36,0.5)" title="Lembrete"><i class="fas fa-sticky-note"></i></div>' +
+                        '<div style="position:absolute;top:8px;right:8px;z-index:7;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.4);border:1.5px solid rgba(255,255,255,0.85)"><i class="fas fa-heart" style="font-size:12px;color:' + (statusFavBg || '#DC2626') + ';text-shadow:0 0 6px rgba(220,38,38,0.5)"></i></div>' +
                         '<i class="fas fa-film" style="font-size:2rem;color:#475569"></i>' +
                         '</div>' +
                         '<div style="padding:0.4rem 0.5rem">' +
@@ -7123,7 +7120,7 @@
                         '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;font-family:Inter,sans-serif;min-height:' + fHeight + '">' +
                         '<div style="font-size:' + fDevSize + ';color:' + fDevColor + ';text-transform:uppercase;letter-spacing:0.05em;font-weight:500">' +
                         fDevText + '<span style="opacity:0.5;font-size:' + fCreatedSize + ';color:' + fCreatedColor + '">' + fCreatedText + '</span>' +
-                        ' | <span style="color:#C7D2FE;font-weight:800">v31.0.2</span>' +
+                         ' | <span style="color:#C7D2FE;font-weight:600">v31.0.2</span>' +
                         '</div>' +
                         '<div style="display:flex;align-items:center;gap:0.5rem">' +
                         '<span style="font-size:' + fStatusSize + ';color:' + fStatusColor + ';font-weight:900;text-transform:uppercase">0 TÍTULOS</span>' +
@@ -9009,6 +9006,10 @@
             Logic.setTheme(savedTheme);
             window.addEventListener('click', (e) => {
                 if (!e.target.closest('#context-menu')) Logic.closeCtxMenu();
+                if (!e.target.closest('#search-bar-container') && !e.target.closest('button[onclick*="toggleSearchBar"]')) {
+                    var sbarClick = document.getElementById('search-bar-container');
+                    if (sbarClick && sbarClick.classList.contains('active')) UI.toggleSearchBar();
+                }
                 if (!e.target.closest('#filters-dropdown') && !e.target.closest('#btn-filters')) {
                     document.getElementById('filters-dropdown')?.classList.add('hidden');
                     document.getElementById('btn-filters')?.classList.remove('active');
@@ -9059,8 +9060,8 @@
                 UI._detectPlayers().forEach(function(p) { window._detectedPlayers[p.key] = p.path; });
             } catch(e) {}
 
-            // --- Check estreia notifications ---
-            Logic.checkEstreiaNotifications();
+            // --- Check estreia notifications (silent on load: badge only, no popup) ---
+            Logic.checkEstreiaNotifications(true);
             // Check again every 60 seconds
             setInterval(function() { Logic.checkEstreiaNotifications(); }, 60000);
             // --- Auto-delete expired estreias ---

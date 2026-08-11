@@ -2339,4 +2339,159 @@ if (_es) {
 | Paletas, tipografia, layout, espaçamentos preservados | OK |
 | Todos os IDs, classes e handlers mantidos | OK |
 
+---
+
+## Implementações Realizadas — Melhorias 3 (melhorias2.md — Itens 92–100)
+
+### 92. (a) CINE MARQUEE: Zoom Funciona como Carrossel/Grid
+
+**Arquivo:** `index.html` — CSS + JavaScript (`UI.setZoom`, `Logic._applyMarqueeZoom`, `Logic._renderMarquee`)
+
+**O que foi feito:**
+- `.marquee-row .movie-card` passou de largura fixa (`flex: 0 0 180px`) para `flex: 0 0 var(--marquee-card-width, 180px)`.
+- Nova função `Logic._applyMarqueeZoom()` calcula a largura do card do Marquee a partir do `--cards-per-row` (5/6/7/8) e do espaço disponível do container, aplicando `--marquee-card-width` em cada `.marquee-row`.
+- `UI.setZoom()` agora chama `Logic._applyMarqueeZoom()` após ajustar as demais visualizações.
+- `Logic._renderMarquee()` chama `_applyMarqueeZoom()` ao final, garantindo que o zoom seja aplicado também no carregamento inicial.
+
+**Preservação:** Velocidade, animação, pausa e duplicação do loop do Marquee intactas.
+
+---
+
+### 93. (b) MODAL FUNCIONALIDADES: Altura Ajustada para 5 Linhas Completas
+
+**Arquivo:** `index.html` — CSS (`#modal-info`, `.info-grid-scroll`)
+
+**O que foi feito:**
+- `.info-grid-scroll` com `max-height` aumentada de `320px` para `430px`, cabendo **05 linhas** de seções com altura completa e os devidos paddings superior e inferior (sem cortar itens).
+- Altura do corpo do `#modal-info` aumentada de `max-height:82vh` para `max-height:86vh`, deixando a janela Modal mais alta.
+
+**Preservação:** Grid de 7 colunas, 51 ícones, descrições, clique por item e scroll suave mantidos.
+
+---
+
+### 94. (c) STATUS DE AÇÕES NO RODAPÉ: Duração de 6 Segundos
+
+**Arquivo:** `index.html` — JavaScript (`Logic.showStatus`)
+
+**O que foi feito:**
+- Duração padrão do `showStatus()` alterada de `4000ms` para `6000ms` (`var dur = duration || 6000;`), garantindo que cada status de ação do usuário no Rodapé dure 6 segundos.
+- Duração configurada para mensagens de cadastro permanece em `cfg.cadastroNotifyDuration || 6000`.
+
+**Preservação:** Chamadas com duração explícita (ex.: 5000ms de "Dados limpos", 6000ms de "atualizado") mantidas.
+
+---
+
+### 95. (d) VERSÃO NO RODAPÉ: Fonte Menor e Semi-Bold
+
+**Arquivo:** `index.html` — HTML (footer) + JavaScript (preview do rodapé em `_updateConfigPreview`)
+
+**O que foi feito:**
+- `#app-version-badge` no rodapé: `font-size` reduzido de `0.9rem` para `0.8rem` e `font-weight` alterado de `800` para `600` (semi-bold).
+- Preview do rodapé em `_updateConfigPreview()` sincronizado: `font-weight:800` → `font-weight:600`.
+
+**Preservação:** Cor `#C7D2FE`, text-shadow e demais elementos do rodapé intactos.
+
+---
+
+### 96. (e) CARD: Textos FAVORITAR/DESFAVORITAR Removidos + Fonte das 4 Opções do Menu
+
+**Arquivo:** `index.html` — HTML (menu de contexto) + JavaScript (`Render.createCard`, `Logic.openContextMenu`)
+
+**O que foi feito:**
+- Removido o `title` ("Favoritar"/"Desfavoritar") do ícone de coração do Card — a ação agora é feita por clique direto no Card.
+- Removido o botão **Favoritar** do menu de contexto (a funcionalidade já é realizada pelo clique no coração do Card), restando 4 opções: Info, Editar, Criar/Editar Lembrete e Remover.
+- Fonte das 4 opções do menu direito aumentada de `text-[0.7rem]` para `text-[0.85rem]`.
+- Removida a atualização do label de favoritar em `openContextMenu()` e a função órfã `Logic.toggleFavCtx()`.
+
+**Preservação:** `toggleCardFav()`, coração neon do card, labels de Lembrete e Remover intactos.
+
+---
+
+### 97. (f) EDITAR: Abas Desativadas Conforme o Tipo (Filmes/Séries/Estreias)
+
+**Arquivo:** `index.html` — JavaScript (`Logic.editMovieCtx`, `UI._lockCadastroTabs`)
+
+**O que foi feito:**
+- `UI._lockCadastroTabs(activeType)` reescrita para bloquear as **duas abas que não correspondem** ao tipo do item em edição:
+  - FILMES → Séries e Estreias sem link e desativadas.
+  - SÉRIES → Filmes e Estreias sem link e desativadas.
+  - ESTREIAS → Filmes e Séries sem link e desativadas.
+- `editMovieCtx()` agora chama `UI._lockCadastroTabs(movie.type)` (antes só travava para estreias).
+- Bloqueio inclui `disabled`, `pointer-events:none`, opacidade 0.4, cursor not-allowed e remoção da classe `active`.
+- Garantida a carga completa dos dados em edição (links, caminhos, capa, seleções, status, episódios/temporadas, estreias) — fluxo existente preservado.
+
+**Preservação:** `_lockCadastroTabs(false)` nos handlers de abertura/fecho do modal continua destravando as 3 abas. Atalhos de abas e demais handlers intactos.
+
+---
+
+### 98. (g) BARRA DE PESQUISA: Fecha ao Clicar em Outra Ferramenta/Botão
+
+**Arquivo:** `index.html` — JavaScript (handler global `window.addEventListener('click')`)
+
+**O que foi feito:**
+- No handler global de clique, se a barra de Pesquisa estiver aberta e o clique ocorrer fora do container da barra (`#search-bar-container`) e fora do botão de alternância, ela é fechada imediatamente — comportamento equivalente à tecla ESC.
+
+**Preservação:** Abertura via botão, foco automático no campo e a lógica de busca intactos.
+
+---
+
+### 99. (h) PREVIEW DO CARD: Ícone de Lembretes com Posição/Tamanho Reais
+
+**Arquivo:** `index.html` — JavaScript (`UI._updateConfigPreview`, preview do card `#cfg-card-preview`)
+
+**O que foi feito:**
+- O preview do Card em CONFIGURAÇÕES > Pré-visualização do Card agora exibe também o ícone de **Lembretes** (`fa-sticky-note`, âmbar `#FBBF24`) com a posição e tamanho reais usados pelo sistema: `top:8px; right:48px; font-size:0.6rem` e text-shadow âmbar.
+- O coração do preview foi reposicionado para o local real do card (círculo de 28px em `top:8px; right:8px`) e a categoria permanece no canto superior esquerdo.
+
+**Preservação:** Cores, tamanhos de categoria/ano/status e estrutura do preview mantidos.
+
+---
+
+### 100. (i) CARREGAMENTO: NOTIFICAÇÕES Não Abrem; SUGESTÕES Conforme Configuração
+
+**Arquivo:** `index.html` — JavaScript (`Logic.checkEstreiaNotifications`, inicialização `window.onload`)
+
+**O que foi feito:**
+- `Logic.checkEstreiaNotifications(silent)` ganhou o parâmetro `silent`: quando verdadeiro, atualiza apenas o badge do sino (contador) e marca as notificações como já exibidas — **sem abrir a janela NOTIFICAÇÕES**.
+- No carregamento do aplicativo (`window.onload`) a chamada agora é `Logic.checkEstreiaNotifications(true)` — a janela NOTIFICAÇÕES não aparece mais na abertura.
+- A janela de **SUGESTÃO de Filmes/Séries** continua interligada à configuração: `_showSuggestionOnLoad()` só a exibe se `sugestoesActive === true` (ON); com OFF não aparece.
+- Notificações geradas por ações do usuário (criar/editar/remover estreia) continuam abrindo normalmente (chamadas não-silenciosas preservadas).
+
+**Preservação:** Badge de notificações, auto-remoção de estreias vencidas e o intervalo de 60s intactos.
+
+---
+
+## Checklist Final (melhorias2.md — Itens 92–100)
+
+| Verificação | Status |
+|---|---|
+| (a) Zoom do Cine Marquee segue o `--cards-per-row` (5–8) | OK |
+| (a) `_applyMarqueeZoom()` aplicado no clique de zoom e no render | OK |
+| (a) Animação, velocidade e loop do Marquee preservados | OK |
+| (b) Modal FUNCIONALIDADES mais alto (86vh) | OK |
+| (b) `.info-grid-scroll` com 430px — 5 linhas completas com paddings | OK |
+| (b) Grid 7 colunas / 51 ícones e descrições intactos | OK |
+| (c) Duração padrão do `showStatus()` = 6000ms | OK |
+| (c) Chamadas com duração explícita preservadas | OK |
+| (d) Versão no rodapé: 0.8rem / font-weight 600 (semi-bold) | OK |
+| (d) Preview do rodapé em Config sincronizado | OK |
+| (e) `title` Favoritar/Desfavoritar removido do coração do Card | OK |
+| (e) Menu de contexto com 4 opções (Info, Editar, Lembrete, Remover) | OK |
+| (e) Fonte das 4 opções: `text-[0.85rem]` | OK |
+| (e) `toggleFavCtx` e `ctx-fav-btn` removidos sem referências órfãs | OK |
+| (f) Editar FILMES → Séries/Estreias desativadas | OK |
+| (f) Editar SÉRIES → Filmes/Estreias desativadas | OK |
+| (f) Editar ESTREIAS → Filmes/Séries desativadas | OK |
+| (f) Dados completos preservados na edição (links, caminhos, capa, seleções) | OK |
+| (f) `_lockCadastroTabs(false)` destrava as 3 abas ao fechar | OK |
+| (g) Busca fecha ao clicar fora da barra ou em outro botão | OK |
+| (h) Preview do Card mostra ícone de Lembrete (posição/tamanho reais) | OK |
+| (i) Carregamento não abre NOTIFICAÇÕES (badge apenas) | OK |
+| (i) SUGESTÕES aparece conforme config ON/OFF | OK |
+| (i) Notificações de ações do usuário continuam abrindo | OK |
+| Sintaxe JS validada (node --check: 4 blocos OK) | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
+
 
