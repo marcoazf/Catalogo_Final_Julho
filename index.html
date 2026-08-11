@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineCatalog Elo | v31.0.1 - Edição Premium</title>
+    <title>CineCatalog Elo | v31.0.2 - Edição Premium</title>
     
     <!-- RECURSOS EXTERNOS -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
@@ -119,8 +119,8 @@
         }
         .movie-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .movie-card .card-fallback { display: none; width: 100%; height: 100%; align-items: center; justify-content: center; background: linear-gradient(135deg,#1e293b,#0f172a); flex-direction: column; gap: 0.5rem; position: absolute; inset: 0; }
-        .movie-card .card-fallback i { font-size: 2rem; color: #475569; }
-        .movie-card .card-fallback span { font-size: 6px; color: #475569; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
+        .movie-card .card-fallback i { font-size: 4rem; color: #475569; }
+        .movie-card .card-fallback span { font-size: 12px; color: #475569; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; }
         .movie-card img.error + .card-fallback { display: flex; }
         .movie-card img.error { display: none; }
 
@@ -2140,7 +2140,7 @@
     <footer class="px-6 py-2 border-t theme-border flex justify-between items-center bg-black/20">
         <div class="flex items-center gap-0" style="flex-wrap:nowrap">
             <div class="text-[0.75rem] text-gray-400 uppercase tracking-widest font-medium whitespace-nowrap" id="footer-dev-text">
-                ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CRIADO PARA JONAS THEODORO</span> | <span id="app-version-badge" style="background:linear-gradient(135deg,#3B82F6,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-shadow:0 0 20px rgba(59,130,246,0.3)">v31.0.1</span>
+                ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CRIADO PARA JONAS THEODORO</span> | <span id="app-version-badge" style="color:#C7D2FE;font-size:0.9rem;font-weight:800;text-shadow:0 0 16px rgba(165,180,252,0.5)">v31.0.2</span>
             </div>
         </div>
         <div id="user-action-status" class="text-[0.75rem] text-emerald-500 font-bold uppercase opacity-0 pointer-events-none transition-opacity duration-300"></div>
@@ -2148,7 +2148,7 @@
             <div id="stats-counter" class="text-orange-400 font-black text-[0.75rem] uppercase" style="text-shadow:0 0 8px rgba(251,146,60,0.5)">0 TÍTULOS NO ACERVO JONAS</div>
             <div style="width:1px;height:16px;background:var(--border-color);flex-shrink:0"></div>
             <div id="auto-save-indicator" class="flex items-center gap-2" style="display:none">
-                <i id="auto-save-icon" class="fas fa-save" style="font-size:1.1rem;color:#555"></i>
+                <i id="auto-save-icon" class="fas fa-save" title="Auto-salvamento ativo — Clique para abrir Configurações" onclick="UI.openConfig()" style="font-size:1.1rem;color:#555;cursor:pointer;transition:color 0.2s,transform 0.2s" onmouseover="this.style.color='#60A5FA';this.style.transform='scale(1.15)'" onmouseout="this.style.color='#555';this.style.transform=''"></i>
             </div>
         </div>
     </footer>
@@ -2547,7 +2547,7 @@
                 </h3>
                 <button onclick="document.getElementById('reminder-popup').style.display='none'" class="btn-close-premium"><i class="fas fa-times text-xs"></i></button>
             </div>
-            <div id="reminder-created-info" class="text-[0.6rem] text-gray-500 mb-2" style="display:none"></div>
+            <div id="reminder-created-info" class="text-[0.75rem] text-amber-300/80 font-semibold mb-2" style="display:none"></div>
             <textarea id="reminder-text" class="w-full bg-[#1e293b] border border-[#334155] rounded-xl p-3 text-white text-sm outline-none resize-none h-24" placeholder="Digite o lembrete..."></textarea>
             <div class="flex gap-2 mt-3">
                 <button onclick="Logic.saveReminder()" class="flex-1 py-2 bg-gradient-to-r from-amber-600 to-orange-600 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-white hover:scale-[1.02] transition">Salvar</button>
@@ -2951,6 +2951,18 @@
                     <button class="dash-chart-btn" data-chart="diretores" style="padding:0.35rem 0.75rem;border-radius:0.5rem;border:1px solid var(--border-color);background:transparent;color:var(--text-secondary);font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.03em;cursor:pointer;transition:all 0.3s">Diretores</button>
                     <button class="dash-chart-btn" data-chart="dias" style="padding:0.35rem 0.75rem;border-radius:0.5rem;border:1px solid var(--border-color);background:transparent;color:var(--text-secondary);font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.03em;cursor:pointer;transition:all 0.3s">Dias</button>
                     <button class="dash-chart-btn" data-chart="meses" style="padding:0.35rem 0.75rem;border-radius:0.5rem;border:1px solid var(--border-color);background:transparent;color:var(--text-secondary);font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.03em;cursor:pointer;transition:all 0.3s">Meses</button>
+                    <button class="dash-chart-btn" data-chart="generos" style="padding:0.35rem 0.75rem;border-radius:0.5rem;border:1px solid var(--border-color);background:transparent;color:var(--text-secondary);font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.03em;cursor:pointer;transition:all 0.3s">Gêneros Cadastrados</button>
+                    <button class="dash-chart-btn" data-chart="genwatched" style="padding:0.35rem 0.75rem;border-radius:0.5rem;border:1px solid var(--border-color);background:transparent;color:var(--text-secondary);font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.03em;cursor:pointer;transition:all 0.3s">Gêneros Assistidos</button>
+                    <button class="dash-chart-btn" data-chart="seriestop" style="padding:0.35rem 0.75rem;border-radius:0.5rem;border:1px solid var(--border-color);background:transparent;color:var(--text-secondary);font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.03em;cursor:pointer;transition:all 0.3s">Séries Temp/Epis</button>
+                </div>
+                <!-- Chart Model Selector (barras / linhas / colunas / pirâmide / 3D) -->
+                <div class="dashboard-chart-selector" style="display:flex;align-items:center;gap:0.5rem;justify-content:center;margin-bottom:1rem;flex-wrap:wrap">
+                    <span style="font-size:0.75rem;font-weight:700;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.05em">MODELO:</span>
+                    <button class="dash-style-btn" data-style="bar" style="padding:0.35rem 0.75rem;border-radius:0.5rem;border:1px solid var(--border-color);background:rgba(139,92,246,0.15);color:#A78BFA;font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.03em;cursor:pointer;transition:all 0.3s"><i class="fas fa-chart-bar mr-1"></i>Barras</button>
+                    <button class="dash-style-btn" data-style="line" style="padding:0.35rem 0.75rem;border-radius:0.5rem;border:1px solid var(--border-color);background:transparent;color:var(--text-secondary);font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.03em;cursor:pointer;transition:all 0.3s"><i class="fas fa-chart-line mr-1"></i>Linhas</button>
+                    <button class="dash-style-btn" data-style="coluna" style="padding:0.35rem 0.75rem;border-radius:0.5rem;border:1px solid var(--border-color);background:transparent;color:var(--text-secondary);font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.03em;cursor:pointer;transition:all 0.3s"><i class="fas fa-chart-column mr-1"></i>Colunas</button>
+                    <button class="dash-style-btn" data-style="piramide" style="padding:0.35rem 0.75rem;border-radius:0.5rem;border:1px solid var(--border-color);background:transparent;color:var(--text-secondary);font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.03em;cursor:pointer;transition:all 0.3s"><i class="fas fa-genderless mr-1"></i>Pirâmide</button>
+                    <button class="dash-style-btn" data-style="3d" style="padding:0.35rem 0.75rem;border-radius:0.5rem;border:1px solid var(--border-color);background:transparent;color:var(--text-secondary);font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.03em;cursor:pointer;transition:all 0.3s"><i class="fas fa-cube mr-1"></i>3D</button>
                 </div>
                 <div class="dashboard-charts-grid">
                     <div class="chart-box"><canvas id="chart-type"></canvas></div>
@@ -5015,15 +5027,19 @@
                     } else {
                         info.style.display = 'none';
                     }
-                    // Auto-focus textarea
+                    // Auto-focus textarea (cursor blinks at the end)
                     setTimeout(function() {
                         var ta = document.getElementById('reminder-text');
-                        if (ta) { ta.focus(); ta.select(); }
+                        if (ta) {
+                            ta.focus();
+                            try { ta.setSelectionRange(ta.value.length, ta.value.length); } catch(e) {}
+                        }
                     }, 250);
                 });
             },
 
             editReminderById(id) {
+                UI.closeReminderPanel();
                 APP_STATE.selectedId = id;
                 const movie = APP_STATE.movies.find(m => m.id === id);
                 if (!movie) return;
@@ -5041,10 +5057,13 @@
                 } else {
                     info.style.display = 'none';
                 }
-                // Auto-focus textarea
+                // Auto-focus textarea (cursor blinks at the end)
                 setTimeout(function() {
                     var ta = document.getElementById('reminder-text');
-                    if (ta) { ta.focus(); ta.select(); }
+                    if (ta) {
+                        ta.focus();
+                        try { ta.setSelectionRange(ta.value.length, ta.value.length); } catch(e) {}
+                    }
                 }, 250);
             },
 
@@ -5287,7 +5306,7 @@
                     {icon:'fa-download',label:'Exportar Dados',desc:'Exporte todo o seu acervo em formato JSON para backup ou transferência.'},
                     {icon:'fa-upload',label:'Importar Dados',desc:'Importe acervo de arquivos JSON. Restaure backups facilmente.'},
                     {icon:'fa-moon',label:'Modo Noturno',desc:'Alternância de temas com menu flutuante. Escolha entre Dark, Light, Amber e Midnight.'},
-                    {icon:'fa-info-circle',label:'Sobre o Sistema',desc:'CineCatalog Elo v31.0.1 — Edição Premium. Sistema completo de gestão de acervo cinematográfico.'},
+                    {icon:'fa-info-circle',label:'Sobre o Sistema',desc:'CineCatalog Elo v31.0.2 — Edição Premium. Sistema completo de gestão de acervo cinematográfico.'},
                     {icon:'fa-th-large',label:'Modos de Exibição',desc:'Três modos de visualização: Carrossel com setas, Grelha por gêneros, e Cine Marquee com animação. Ajuste velocidade e efeito no menu.'},
                     {icon:'fa-arrows-alt-h',label:'Navegação Carrossel',desc:'Navegue horizontalmente por linha com setas laterais. Duas linhas visíveis com rolagem infinita até o fim dos cards.'},
                     {icon:'fa-tachometer-alt',label:'Desempenho Otimizado',desc:'Renderizaçao lazy com batches de 20 cards. Scroll infinito suave sem travar a interface.'},
@@ -5703,6 +5722,8 @@
                 if (btn) btn.classList.add('active');
                 UI._dashTimeFilter = 'todos';
                 UI._dashTimeFilterRange = null;
+                UI._dashChartStyle = null;
+                document.querySelectorAll('.dash-style-btn').forEach(function(b) { b.classList.remove('active'); b.style.background = 'transparent'; b.style.color = 'var(--text-secondary)'; });
                 UI._populateDashTimeSelects();
                 document.querySelectorAll('#tf-btns .tf-btn').forEach(function(b) { b.classList.remove('active'); });
                 var allBtn = document.querySelector('#tf-btns .tf-btn[data-filter="todos"]');
@@ -6501,6 +6522,7 @@
                 self._renderDynamicChart(textColor, textSec, fontFamily, titleOpts, legendOpts);
                 // Init chart selector buttons
                 self._initChartSelectors();
+                self._initChartStyleSelectors();
             },
             _renderDynamicChart(textColor, textSec, fontFamily, titleOpts, legendOpts) {
                 var movies = APP_STATE.movies;
@@ -6512,29 +6534,21 @@
                 if (this._dynamicChart) { this._dynamicChart.destroy(); this._dynamicChart = null; }
                 if (typeof Chart === 'undefined') return;
                 var self = this;
-                function dc(id, config) {
-                    var c = document.getElementById(id);
-                    if (!c) return;
-                    try {
-                        self._dynamicChart = new Chart(c, config);
-                    } catch(e) {}
-                }
+                var PALETTE = ['#3B82F6','#8B5CF6','#F59E0B','#EF4444','#22C55E','#EC4899','#14B8A6','#F97316','#60A5FA','#A855F7','#84CC16','#FB7185'];
+                var labels = [], values = [], colors = [], title = '', legendLabel = 'Títulos', special = null;
+
                 if (mode === 'consumo') {
-                    // Consumption data: most-watched (favorite+watch counts)
                     var favCount = movies.filter(function(m) { var s = m.statuses || {}; return s.favorite; }).length;
                     var watchCount = movies.filter(function(m) { var s = m.statuses || {}; return s.watch; }).length;
                     var newCount = movies.filter(function(m) { var s = m.statuses || {}; return s.new; }).length;
                     var noneCount = movies.length - favCount - watchCount - newCount;
-                    dc('chart-dynamic', {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['Favoritados', 'Para Assistir', 'Novos', 'Sem Status'],
-                            datasets: [{ data: [favCount, watchCount, newCount, noneCount], backgroundColor: ['#EF4444', '#F59E0B', '#3B82F6', '#4B5563'], borderWidth: 0, hoverOffset: 8 }]
-                        },
-                        options: { responsive: true, maintainAspectRatio: true, plugins: { legend: legendOpts, title: Object.assign({}, titleOpts, { text: 'CONSUMO DO ACERVO' }) }, cutout: '60%' }
-                    });
+                    labels = ['Favoritados', 'Para Assistir', 'Novos', 'Sem Status'];
+                    values = [favCount, watchCount, newCount, noneCount];
+                    colors = ['#EF4444', '#F59E0B', '#3B82F6', '#4B5563'];
+                    title = 'CONSUMO DO ACERVO';
+                    legendLabel = 'Consumo';
+                    special = 'doughnut';
                 } else if (mode === 'decadas') {
-                    // Films by decade
                     var decades = {};
                     movies.forEach(function(m) {
                         if (m.year && m.year.trim()) {
@@ -6546,19 +6560,11 @@
                             }
                         }
                     });
-                    var decLabels = Object.keys(decades).sort();
-                    var decData = decLabels.map(function(k) { return decades[k]; });
-                    var decColors = decLabels.map(function(_, i) { return 'hsla(' + (i * 30 + 200) + ', 70%, 55%, 0.7)'; });
-                    dc('chart-dynamic', {
-                        type: 'bar',
-                        data: {
-                            labels: decLabels.length ? decLabels : ['Sem dados'],
-                            datasets: [{ label: 'Títulos', data: decData.length ? decData : [0], backgroundColor: decColors, borderRadius: 6, borderSkipped: false }]
-                        },
-                        options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false }, title: Object.assign({}, titleOpts, { text: 'FILMES POR DÉCADA' }) }, scales: { x: { ticks: { color: textSec, font: { size: 10, weight: 'bold', family: fontFamily } }, grid: { color: 'rgba(255,255,255,0.04)' } }, y: { beginAtZero: true, ticks: { color: textSec, font: { size: 10, family: fontFamily }, stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.04)' } } } }
-                    });
+                    labels = Object.keys(decades).sort();
+                    values = labels.map(function(k) { return decades[k]; });
+                    colors = labels.map(function(_, i) { return PALETTE[i % PALETTE.length]; });
+                    title = 'FILMES POR DÉCADA';
                 } else if (mode === 'diretores') {
-                    // Top directors
                     var dirMap = {};
                     movies.forEach(function(m) {
                         if (m.director && m.director.trim()) {
@@ -6567,18 +6573,12 @@
                         }
                     });
                     var dirEntries = Object.keys(dirMap).map(function(k) { return { label: k, count: dirMap[k] }; }).sort(function(a, b) { return b.count - a.count; }).slice(0, 8);
-                    var dirLabels = dirEntries.map(function(e) { return e.label; });
-                    var dirData = dirEntries.map(function(e) { return e.count; });
-                    dc('chart-dynamic', {
-                        type: 'bar',
-                        data: {
-                            labels: dirLabels.length ? dirLabels : ['Sem dados'],
-                            datasets: [{ label: 'Filmes', data: dirData.length ? dirData : [0], backgroundColor: ['#3B82F6','#8B5CF6','#F59E0B','#EF4444','#22C55E','#EC4899','#14B8A6','#F97316'], borderRadius: 6, borderSkipped: false }]
-                        },
-                        options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false }, title: Object.assign({}, titleOpts, { text: 'TOP DIRETORES' }) }, scales: { x: { ticks: { color: textSec, font: { size: 9, weight: 'bold', family: fontFamily }, maxRotation: 30 }, grid: { color: 'rgba(255,255,255,0.04)' } }, y: { beginAtZero: true, ticks: { color: textSec, font: { size: 10, family: fontFamily }, stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.04)' } } } }
-                    });
+                    labels = dirEntries.map(function(e) { return e.label; });
+                    values = dirEntries.map(function(e) { return e.count; });
+                    colors = ['#3B82F6','#8B5CF6','#F59E0B','#EF4444','#22C55E','#EC4899','#14B8A6','#F97316'];
+                    title = 'TOP DIRETORES';
+                    legendLabel = 'Filmes';
                 } else if (mode === 'dias') {
-                    // Day of week distribution (from _createdAt)
                     var days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
                     var dayCounts = [0, 0, 0, 0, 0, 0, 0];
                     movies.forEach(function(m) {
@@ -6590,16 +6590,12 @@
                             }
                         }
                     });
-                    dc('chart-dynamic', {
-                        type: 'bar',
-                        data: {
-                            labels: days,
-                            datasets: [{ label: 'Cadastros', data: dayCounts, backgroundColor: days.map(function(_, i) { return 'hsla(' + (i * 50 + 180) + ', 70%, 55%, 0.7)'; }), borderRadius: 6, borderSkipped: false }]
-                        },
-                        options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false }, title: Object.assign({}, titleOpts, { text: 'CADASTROS POR DIA DA SEMANA' }) }, scales: { x: { ticks: { color: textSec, font: { size: 10, weight: 'bold', family: fontFamily } }, grid: { color: 'rgba(255,255,255,0.04)' } }, y: { beginAtZero: true, ticks: { color: textSec, font: { size: 10, family: fontFamily }, stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.04)' } } } }
-                    });
+                    labels = days;
+                    values = dayCounts;
+                    colors = labels.map(function(_, i) { return PALETTE[i % PALETTE.length]; });
+                    title = 'CADASTROS POR DIA DA SEMANA';
+                    legendLabel = 'Cadastros';
                 } else if (mode === 'meses') {
-                    // Monthly registration distribution
                     var monthNames = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
                     var monthCounts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
                     movies.forEach(function(m) {
@@ -6611,15 +6607,152 @@
                             }
                         }
                     });
-                    dc('chart-dynamic', {
-                        type: 'line',
-                        data: {
-                            labels: monthNames,
-                            datasets: [{ label: 'Cadastros', data: monthCounts, borderColor: '#3B82F6', backgroundColor: 'rgba(59,130,246,0.1)', fill: true, tension: 0.3, pointBackgroundColor: '#3B82F6', pointRadius: 4, pointHoverRadius: 6 }]
-                        },
-                        options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { display: false }, title: Object.assign({}, titleOpts, { text: 'CADASTROS POR MÊS' }) }, scales: { x: { ticks: { color: textSec, font: { size: 10, weight: 'bold', family: fontFamily } }, grid: { color: 'rgba(255,255,255,0.04)' } }, y: { beginAtZero: true, ticks: { color: textSec, font: { size: 10, family: fontFamily }, stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.04)' } } } }
+                    labels = monthNames;
+                    values = monthCounts;
+                    colors = ['#3B82F6'];
+                    title = 'CADASTROS POR MÊS';
+                    legendLabel = 'Cadastros';
+                    special = 'line';
+                } else if (mode === 'generos') {
+                    var genreMap = {};
+                    movies.forEach(function(m) {
+                        if (m.genre && m.genre.trim()) {
+                            genreMap[m.genre.trim()] = (genreMap[m.genre.trim()] || 0) + 1;
+                        }
                     });
+                    var genreEntries = Object.keys(genreMap).map(function(k) { return { label: k, count: genreMap[k] }; }).sort(function(a, b) { return b.count - a.count; }).slice(0, 10);
+                    labels = genreEntries.map(function(e) { return e.label; });
+                    values = genreEntries.map(function(e) { return e.count; });
+                    colors = labels.map(function(_, i) { return PALETTE[i % PALETTE.length]; });
+                    title = 'GÊNEROS MAIS CADASTRADOS';
+                } else if (mode === 'genwatched') {
+                    var wMap = {};
+                    movies.forEach(function(m) {
+                        if (m.type !== 'filmes') return;
+                        var s = m.statuses || {};
+                        if (!(s.watch || s.favorite)) return;
+                        if (m.genre && m.genre.trim()) {
+                            wMap[m.genre.trim()] = (wMap[m.genre.trim()] || 0) + 1;
+                        }
+                    });
+                    var wEntries = Object.keys(wMap).map(function(k) { return { label: k, count: wMap[k] }; }).sort(function(a, b) { return b.count - a.count; }).slice(0, 10);
+                    labels = wEntries.map(function(e) { return e.label; });
+                    values = wEntries.map(function(e) { return e.count; });
+                    colors = labels.map(function(_, i) { return PALETTE[i % PALETTE.length]; });
+                    title = 'GÊNEROS MAIS ASSISTIDOS (FILMES)';
+                    legendLabel = 'Filmes assistidos';
+                } else if (mode === 'seriestop') {
+                    var sList = [];
+                    movies.forEach(function(m) {
+                        if (m.type !== 'series') return;
+                        var seasons = 0, eps = 0;
+                        if (m.dynamicEpisodes && m.dynamicEpisodes.length) {
+                            eps = m.dynamicEpisodes.length;
+                            m.dynamicEpisodes.forEach(function(ep) {
+                                var s = parseInt(ep.season) || 1;
+                                if (s > seasons) seasons = s;
+                            });
+                        } else {
+                            seasons = m.season ? parseInt(m.season) || 1 : 1;
+                            eps = m.episodeNumber ? parseInt(m.episodeNumber) || 0 : 0;
+                            if (!eps) eps = 1;
+                        }
+                        sList.push({ t: m.titlePt || m.originalTitle || 'Série', seasons: seasons, eps: eps });
+                    });
+                    sList.sort(function(a, b) { return (b.eps - a.eps) || (b.seasons - a.seasons); });
+                    var top = sList.slice(0, 8);
+                    labels = top.map(function(x) { var nm = x.t; if (nm.length > 20) nm = nm.slice(0, 20) + '…'; return nm; });
+                    values = top.map(function(x) { return x.eps; });
+                    colors = ['#8B5CF6','#A78BFA','#7C3AED','#6D28D9','#8B5CF6','#A78BFA','#7C3AED','#6D28D9'];
+                    title = 'SÉRIES: MAIS TEMPORADAS E EPISÓDIOS';
+                    legendLabel = 'Episódios';
                 }
+
+                var style = this._dashChartStyle || special || 'bar';
+                this._drawDynamic(canvas, style, labels, values, colors, title, legendLabel, textColor, textSec, fontFamily, titleOpts, legendOpts);
+            },
+            _drawDynamic(canvas, style, labels, values, colors, title, legendLabel, textColor, textSec, fontFamily, titleOpts, legendOpts) {
+                var self = this;
+                function barCfg() {
+                    return {
+                        type: 'bar',
+                        data: {
+                            labels: labels.length ? labels : ['Sem dados'],
+                            datasets: [{ label: legendLabel, data: values.length ? values : [0], backgroundColor: colors.length ? colors : ['#3B82F6'], borderRadius: 6, borderSkipped: false }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: true,
+                            plugins: { legend: legendOpts, title: Object.assign({}, titleOpts, { text: title }) },
+                            scales: {
+                                x: { ticks: { color: textSec, font: { size: 10, weight: 'bold', family: fontFamily }, maxRotation: 30 }, grid: { color: 'rgba(255,255,255,0.04)' } },
+                                y: { beginAtZero: true, ticks: { color: textSec, font: { size: 10, family: fontFamily }, stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.04)' } }
+                            }
+                        }
+                    };
+                }
+                var cfg;
+                try {
+                    if (style === 'doughnut' || style === 'pie') {
+                        cfg = {
+                            type: style,
+                            data: { labels: labels.length ? labels : ['Sem dados'], datasets: [{ data: values.length ? values : [0], backgroundColor: colors.length ? colors : ['#3B82F6'], borderWidth: 0, hoverOffset: 8 }] },
+                            options: { responsive: true, maintainAspectRatio: true, plugins: { legend: legendOpts, title: Object.assign({}, titleOpts, { text: title }) }, cutout: style === 'doughnut' ? '60%' : undefined }
+                        };
+                    } else if (style === 'line') {
+                        var lineCol = colors.length ? colors[0] : '#3B82F6';
+                        cfg = barCfg();
+                        cfg.type = 'line';
+                        cfg.data.datasets = [{ label: legendLabel, data: values.length ? values : [0], borderColor: lineCol, backgroundColor: lineCol + '22', fill: true, tension: 0.3, pointBackgroundColor: colors.length ? colors : [lineCol], pointRadius: 4, pointHoverRadius: 7 }];
+                    } else if (style === 'coluna') {
+                        cfg = barCfg();
+                        cfg.options.indexAxis = 'y';
+                        cfg.options.scales = {
+                            x: { beginAtZero: true, ticks: { color: textSec, font: { size: 10, family: fontFamily }, stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.04)' } },
+                            y: { ticks: { color: textSec, font: { size: 9, weight: 'bold', family: fontFamily } }, grid: { color: 'rgba(255,255,255,0.04)' } }
+                        };
+                    } else if (style === 'piramide') {
+                        cfg = {
+                            type: 'bar',
+                            data: {
+                                labels: labels.length ? labels : ['Sem dados'],
+                                datasets: [
+                                    { label: legendLabel, data: values.length ? values : [0], backgroundColor: colors.length ? colors : ['#3B82F6'], borderRadius: 4, borderSkipped: false },
+                                    { label: legendLabel + ' (espelho)', data: (values.length ? values : [0]).map(function(v) { return -v; }), backgroundColor: (colors.length ? colors : ['#3B82F6']).map(function(c) { return c + '66'; }), borderRadius: 4, borderSkipped: false }
+                                ]
+                            },
+                            options: {
+                                indexAxis: 'y',
+                                responsive: true,
+                                maintainAspectRatio: true,
+                                plugins: { legend: legendOpts, title: Object.assign({}, titleOpts, { text: title }) },
+                                scales: {
+                                    x: { ticks: { color: textSec, font: { size: 10, family: fontFamily }, callback: function(v) { return Math.abs(v); } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+                                    y: { ticks: { color: textSec, font: { size: 9, weight: 'bold', family: fontFamily } }, grid: { color: 'rgba(255,255,255,0.04)' } }
+                                }
+                            }
+                        };
+                    } else {
+                        cfg = barCfg();
+                        if (style === '3d') {
+                            var baseCols = colors.length ? colors : ['#3B82F6'];
+                            cfg.data.datasets[0].borderWidth = 1.5;
+                            cfg.data.datasets[0].borderColor = baseCols.map(function(c) { return c + 'AA'; });
+                            cfg.data.datasets[0].backgroundColor = function(context) {
+                                var chart = context.chart;
+                                var area = chart.chartArea;
+                                var col = baseCols[context.dataIndex % baseCols.length];
+                                if (!area) return col;
+                                var g = chart.ctx.createLinearGradient(0, area.bottom, 0, area.top);
+                                g.addColorStop(0, col + '44');
+                                g.addColorStop(0.5, col + 'CC');
+                                g.addColorStop(1, col);
+                                return g;
+                            };
+                        }
+                    }
+                    if (cfg) { self._dynamicChart = new Chart(canvas, cfg); }
+                } catch(e) {}
             },
             _initChartSelectors() {
                 var self = this;
@@ -6638,6 +6771,25 @@
                     };
                 });
             },
+            _initChartStyleSelectors() {
+                var self = this;
+                document.querySelectorAll('.dash-style-btn').forEach(function(btn) {
+                    btn.onclick = function() {
+                        document.querySelectorAll('.dash-style-btn').forEach(function(b) { b.classList.remove('active'); b.style.background = 'transparent'; b.style.color = 'var(--text-secondary)'; });
+                        btn.classList.add('active');
+                        btn.style.background = 'rgba(139,92,246,0.15)';
+                        btn.style.color = '#A78BFA';
+                        self._dashChartStyle = btn.getAttribute('data-style');
+                        var textColor = getComputedStyle(document.body).getPropertyValue('--text-color').trim() || '#f3f4f6';
+                        var textSec2 = getComputedStyle(document.body).getPropertyValue('--text-secondary').trim() || '#9ca3af';
+                        var fontFamily2 = "'Inter', sans-serif";
+                        var titleOpts2 = { display: true, color: textColor, font: { size: 12, weight: 'bold', family: fontFamily2 }, padding: { bottom: 12 } };
+                        var legendOpts2 = { position: 'bottom', labels: { color: textSec2, font: { size: 11, weight: 'bold', family: fontFamily2 }, padding: 10, boxWidth: 12, boxHeight: 12 } };
+                        self._renderDynamicChart(textColor, textSec2, fontFamily2, titleOpts2, legendOpts2);
+                    };
+                });
+            },
+            _dashChartStyle: null,
             _dashTimeFilter: 'todos',
             setDashTimeFilter(type) {
                 this._dashTimeFilter = type;
@@ -6971,7 +7123,7 @@
                         '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;font-family:Inter,sans-serif;min-height:' + fHeight + '">' +
                         '<div style="font-size:' + fDevSize + ';color:' + fDevColor + ';text-transform:uppercase;letter-spacing:0.05em;font-weight:500">' +
                         fDevText + '<span style="opacity:0.5;font-size:' + fCreatedSize + ';color:' + fCreatedColor + '">' + fCreatedText + '</span>' +
-                        ' | <span style="background:linear-gradient(135deg,#3B82F6,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">v31.0.1</span>' +
+                        ' | <span style="color:#C7D2FE;font-weight:800">v31.0.2</span>' +
                         '</div>' +
                         '<div style="display:flex;align-items:center;gap:0.5rem">' +
                         '<span style="font-size:' + fStatusSize + ';color:' + fStatusColor + ';font-weight:900;text-transform:uppercase">0 TÍTULOS</span>' +
@@ -7747,8 +7899,8 @@
                 var container = document.getElementById('cadastro-log-preview');
                 var pagination = document.getElementById('cadastro-log-pagination');
                 if (!container) return;
-                // Get all movies with creation date
-                var all = APP_STATE.movies.slice().sort(function(a, b) {
+                // Get all movies with creation date (apenas FILMES e SÉRIES)
+                var all = APP_STATE.movies.filter(function(m) { return m.type === 'filmes' || m.type === 'series'; }).slice().sort(function(a, b) {
                     var da = a._createdAt || a.id || '0';
                     var db = b._createdAt || b.id || '0';
                     return da > db ? 1 : da < db ? -1 : 0;
@@ -7781,20 +7933,39 @@
                 html += '<div class="sub">CineCatalog Elo — ' + allCount + ' títulos cadastrados</div>';
                 html += '<div class="datetime">Gerado em ' + dateStr + ' | Página ' + page + ' de ' + totalPages + '</div>';
                 html += '</div>';
+                // Totalizadores e Status dinâmicos (em tempo real)
+                var tFilmes = all.filter(function(m) { return m.type === 'filmes'; }).length;
+                var tSeries = all.filter(function(m) { return m.type === 'series'; }).length;
+                var tNew = all.filter(function(m) { return m.statuses && m.statuses.new; }).length;
+                var tWatch = all.filter(function(m) { return m.statuses && m.statuses.watch; }).length;
+                var tFav = all.filter(function(m) { return m.statuses && m.statuses.favorite; }).length;
+                html += '<div style="display:flex;flex-wrap:wrap;gap:0.4rem;justify-content:center;align-items:center;margin:0.8rem 0 1rem">' +
+                    '<div style="background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;border-radius:8px;padding:0.3rem 0.75rem;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em">Filmes: ' + tFilmes + '</div>' +
+                    '<div style="background:#f5f3ff;border:1px solid #ddd6fe;color:#5b21b6;border-radius:8px;padding:0.3rem 0.75rem;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em">Séries: ' + tSeries + '</div>' +
+                    '<div style="background:#e0f2fe;border:1px solid #7dd3fc;color:#075985;border-radius:8px;padding:0.3rem 0.75rem;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em">Novos: ' + tNew + '</div>' +
+                    '<div style="background:#fffbeb;border:1px solid #fcd34d;color:#b45309;border-radius:8px;padding:0.3rem 0.75rem;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em">Assistir: ' + tWatch + '</div>' +
+                    '<div style="background:#fef2f2;border:1px solid #fca5a5;color:#b91c1c;border-radius:8px;padding:0.3rem 0.75rem;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em">Favoritos: ' + tFav + '</div>' +
+                    '</div>';
                 if (!monthKeys.length) {
                     html += '<div style="text-align:center;padding:2rem;color:#94a3b8;font-size:10px">Nenhum título cadastrado ainda.</div>';
                 } else {
                     pageMonths.forEach(function(key) {
                         var mData = months[key];
                         html += '<div class="log-month">' + mData.label + ' <span style="font-weight:400;color:#64748b;font-size:8px">(' + mData.items.length + ' títulos)</span></div>';
-                        html += '<table><thead><tr><th>#</th><th>Data</th><th>Dia</th><th>Título</th><th>Tipo</th><th>Gêneros</th></tr></thead><tbody>';
+                        html += '<table><thead><tr><th>#</th><th>Data</th><th>Dia</th><th>Título</th><th>Tipo</th><th>Gêneros</th><th>Status</th></tr></thead><tbody>';
                         mData.items.forEach(function(m, i) {
                             var d = m._cadastroDate;
                             var dateStr2 = d.getDate().toString().padStart(2,'0') + '/' + (d.getMonth()+1).toString().padStart(2,'0') + '/' + d.getFullYear();
                             var timeStr = d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
                             var dayName = dayNames[d.getDay()];
                             var typeLabel = m.type === 'filmes' ? 'Filme' : m.type === 'series' ? 'Série' : 'Estreia';
-                            html += '<tr><td>' + (i+1) + '</td><td>' + dateStr2 + ' ' + timeStr + '</td><td>' + dayName + '</td><td>' + (m.titlePt || m.originalTitle || '—') + '</td><td>' + typeLabel + '</td><td>' + (m.genre || '—') + '</td></tr>';
+                            var st = m.statuses || {};
+                            var stBadges = '';
+                            if (st.new) stBadges += '<span style="display:inline-block;background:#2563EB;color:#fff;padding:1px 6px;border-radius:999px;font-size:8px;font-weight:700;margin-right:3px">Novo</span>';
+                            if (st.watch) stBadges += '<span style="display:inline-block;background:#D97706;color:#fff;padding:1px 6px;border-radius:999px;font-size:8px;font-weight:700;margin-right:3px">Assistir</span>';
+                            if (st.favorite) stBadges += '<span style="display:inline-block;background:#DC2626;color:#fff;padding:1px 6px;border-radius:999px;font-size:8px;font-weight:700;margin-right:3px">Fav</span>';
+                            if (!stBadges) stBadges = '<span style="color:#94a3b8;font-size:8px">—</span>';
+                            html += '<tr><td>' + (i+1) + '</td><td>' + dateStr2 + ' ' + timeStr + '</td><td>' + dayName + '</td><td>' + (m.titlePt || m.originalTitle || '—') + '</td><td>' + typeLabel + '</td><td>' + (m.genre || '—') + '</td><td>' + stBadges + '</td></tr>';
                         });
                         html += '</tbody></table>';
                     });
@@ -8757,6 +8928,8 @@
                     if (mcfg && mcfg.classList.contains('active')) { UI.closeModal('modal-config'); return; }
                     var mcl = document.getElementById('modal-cadastro-log');
                     if (mcl && mcl.classList.contains('active')) { UI.closeModal('modal-cadastro-log'); return; }
+                    var mdb = document.getElementById('modal-dashboard');
+                    if (mdb && mdb.classList.contains('active')) { UI.closeModal('modal-dashboard'); return; }
                     return;
                 }
                 /* Atalhos customizados */

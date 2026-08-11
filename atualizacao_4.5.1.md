@@ -2239,3 +2239,104 @@ if (_es) {
 | Paletas, tipografia, layout, espaçamentos preservados | OK |
 | Todos os IDs, classes e handlers mantidos | OK |
 
+---
+
+### 87. (a) LEMBRETES: Painel Fecha ao Editar + Cursor no Fim do Texto + Fonte do "Criado em" Aumentada
+
+**Arquivo:** `index.html` — JavaScript (UI: `editReminderById`, `editReminderCtx`, `openReminder`)
+
+**O que foi feito:**
+- Ao clicar em **Editar** um lembrete pelo painel LEMBRETES, o painel é fechado antes de abrir a janela "EDITAR LEMBRETE DE..." (`UI.closeReminderPanel()` adicionado em `editReminderById`).
+- O cursor agora pisca **após o último caractere** do texto do lembrete (substituído o antigo `ta.select()`, que selecionava tudo): `ta.focus()` + `setSelectionRange(ta.value.length, ta.value.length)` dentro de `setTimeout(250ms)` — aplicado em `editReminderCtx()` e `editReminderById(id)`.
+- Fonte do texto "Criado em DD/MM/AAAA HH:MM" aumentada: `text-[0.6rem] text-gray-500` → `text-[0.75rem] text-amber-300/80 font-semibold`.
+
+**Preservação:** Fluxo de criação/edição/remoção de lembretes e atalhos de teclado inalterados.
+
+---
+
+### 88. (b) CARDS SEM CAPA: Fallback Aumentado (Ícone e Texto 2×)
+
+**Arquivo:** `index.html` — CSS (`.movie-card .card-fallback`)
+
+**O que foi feito:**
+- Ícone do fallback de card sem capa aumentado de `2rem` → `4rem` (100% maior).
+- Texto interno aumentado de `6px` → `12px` (100% maior).
+
+**Preservação:** Demais estilos dos cards (neon, hover, tipografia) intactos.
+
+---
+
+### 89. (c) HISTÓRICO DE CADASTRO: Sem Estreias + Totalizadores Dinâmicos + Coluna STATUS
+
+**Arquivo:** `index.html` — JavaScript (`_renderCadastroLog`) + HTML (tabela do log A4)
+
+**O que foi feito:**
+- Filtro aplicado no log: `APP_STATE.movies.filter(m => m.type === 'filmes' || m.type === 'series')` — **ESTREIAS excluídas** da listagem (o `APP_STATE.movies` permanece intacto; filtro apenas no slice do log).
+- Novos **totalizadores dinâmicos** acima da tabela: chips com contagem de Filmes, Séries, Novos, Assistir, Favoritos + subtítulo com o total de títulos cadastrados, atualizados em tempo real conforme o filtro.
+- Nova coluna **STATUS** na tabela com badges coloridas em tempo real: `Novo` (azul), `Assistir` (âmbar), `Fav` (vermelho) — ou `—` quando o título não possui status.
+
+**Preservação:** Colunas, layout A4 e ordenação existentes do log mantidos.
+
+---
+
+### 90. (d) ESTATÍSTICA DO ACERVO: Novos Gráficos + Seletor MODELO (Barras/Linhas/Colunas/Pirâmide/3D) + ESC
+
+**Arquivo:** `index.html` — HTML (painel "VISUALIZAR" + seletor MODELO) + JavaScript (`_renderDynamicChart`, `_drawDynamic`, `_initChartStyleSelectors`, `openDashboard`)
+
+**O que foi feito:**
+- Novos botões em **VISUALIZAR**: `Gêneros Cadastrados` (`data-chart="generos"`), `Gêneros Assistidos` (`data-chart="genwatched"`) e `Séries Temp/Epis` (`data-chart="seriestop"`).
+- Novo seletor **MODELO:** com botões `Barras` (`data-style="bar"`), `Linhas` (`line`), `Colunas` (`coluna`), `Pirâmide` (`piramide`) e `3D` (`3d`).
+- `_renderDynamicChart()` reescrito: unifica todos os modos (consumo, décadas, diretores, dias, meses, gêneros, gêneros assistidos, séries top) e delega o desenho a `_drawDynamic()`.
+- Nova função `_drawDynamic(canvas, style, labels, values, colors, title, legendLabel, ...)`: suporta `doughnut/pie`, `line`, `coluna` (indexAxis 'y'), `piramide` (série espelhada negativa com opacidade 66%) e `3d` (gradiente vertical por coluna).
+- Nova propriedade `_dashChartStyle` (default `null`, resetada a cada abertura do dashboard em `openDashboard`).
+- Nova função `_initChartStyleSelectors()` registra os cliques dos botões de modelo; chamada em `renderDashboard()` junto de `_initChartSelectors()`.
+- **ESC** agora fecha o `modal-dashboard` (inserido logo após `modal-cadastro-log` no handler global de teclado).
+
+**Preservação:** Modo "consumo" mantém `doughnut` como padrão; demais botões e filtros de tempo existentes intactos.
+
+---
+
+### 91. (e) VERSÃO v31.0.2: Rodapé, Config, Info e Manual + Ícone de Disquete Interativo
+
+**Arquivos:** `index.html` + `manual_do_catalogo.html`
+
+**O que foi feito:**
+- `index.html`:
+  - `<title>` atualizado para **v31.0.2**.
+  - Badge de versão no rodapé → `v31.0.2` com `color:#C7D2FE;font-size:0.9rem;font-weight:800` (tom mais claro e fonte maior) + `text-shadow` azul-claro.
+  - Descrição "Sobre o Sistema" (modal Info) → `v31.0.2`.
+  - Preview do rodapé em `applyConfig()` → `v31.0.2` com `color:#C7D2FE;font-weight:800`.
+  - Ícone de disquete (`#auto-save-icon`): tooltip padrão "Auto-salvamento ativo — Clique para abrir Configurações", `onclick="UI.openConfig()"` e hover com cor `#60A5FA` + leve escala.
+- `manual_do_catalogo.html`:
+  - Versão atualizada para **31.0.2** no subtítulo, nav (nova seção `s24` "Novidades v31.0.2"), badge do footer e rodapé da página.
+  - Seção 23 marcada como `ANTERIOR`; ids renumerados `s24→s25` (Estatísticas com Filtros), `s25→s26` (Lembretes), `s26→s27` (Funcionalidades 51).
+
+**Preservação:** Referências `v31.0.1` restantes no manual (linhas 119, 456, 466, 468) referem-se à seção histórica "Novidades v31.0.1" e foram mantidas propositalmente.
+
+---
+
+## Checklist Final (melhorias2.md — Itens 87–91)
+
+| Verificação | Status |
+|---|---|
+| (a) Painel LEMBRETES fecha ao clicar em Editar | OK |
+| (a) Cursor pisca após o último caractere (Editar por painel e por contexto) | OK |
+| (a) Fonte do "Criado em" aumentada (âmbar) | OK |
+| (b) Fallback de card sem capa: ícone 4rem e texto 12px | OK |
+| (c) Histórico de cadastro sem ESTREIAS | OK |
+| (c) Totalizadores dinâmicos (Filmes/Séries/Novos/Assistir/Favoritos) | OK |
+| (c) Coluna STATUS com badges Novo/Assistir/Fav em tempo real | OK |
+| (d) Botões Gêneros Cadastrados / Gêneros Assistidos / Séries Temp-Epis | OK |
+| (d) Seletor MODELO: Barras, Linhas, Colunas, Pirâmide, 3D | OK |
+| (d) `_dashChartStyle` resetado a cada abertura do dashboard | OK |
+| (d) ESC fecha o modal-dashboard | OK |
+| (e) Versão v31.0.2 no título, rodapé, Info e Config | OK |
+| (e) Disquete com tooltip, clique (openConfig) e hover colorido | OK |
+| (e) Manual atualizado para 31.0.2 com nova seção 24 | OK |
+| Referências v31.0.1 no manual mantidas (seção histórica) | OK |
+| Sintaxe JS validada (node --check: 2 blocos OK) | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
+
+
