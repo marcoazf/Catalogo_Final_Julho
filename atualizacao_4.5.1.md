@@ -2643,4 +2643,139 @@ if (_es) {
 | Paletas, tipografia, layout, espaçamentos preservados | OK |
 | Todos os IDs, classes e handlers mantidos | OK |
 
+---
+
+## Novidades v31.0.4 (melhorias2.md — Itens 107+)
+
+### 107. (a) INFO — Tooltip do Play de Trailer abaixo e à direita do cursor
+
+**Arquivo:** `index.html`
+
+**O que foi feito:**
+- CSS do tooltip (`#mmi-trailer-link[data-tooltip]:before` / `#msi-trailer-link[data-tooltip]:before`):
+  - Posição passa a ser `position:fixed` controlada por `--tip-x`/`--tip-y` (abaixo e à direita do cursor, +12px).
+  - Fonte **regular** (`font-weight:400`), sem `text-transform:uppercase`, letras reduzidas.
+  - Background **levemente translúcido** (`rgba(15,23,42,0.78)`) e borda sutil.
+  - `z-index:9999` para nunca ficar atrás das modais.
+- JS no `onload`: listeners `mousemove` nos elementos `mmi-trailer-link` e `msi-trailer-link` atualizam `--tip-x`/`--tip-y`.
+
+### 108. (a) INFO Séries — Remoção de "EXECUTAR TEMPORADA" + Temporadas em Accordion
+
+**Arquivo:** `index.html`
+
+**O que foi feito:**
+- Removido o botão "EXECUTAR TEMPORADA" das temporadas na janela INFO de séries. Somente os **EPISÓDIOS** possuem botão ("EXECUTAR EPISÓDIO").
+- Cada temporada virou um **accordion**: barra clicável (`Logic.toggleSeriesSeason`) com chevron animado; os episódios ficam em `.msi-season-body` recolhido por padrão.
+- Todas as temporadas iniciam **fechadas**; abertura e fechamento são **manuais** pelo usuário.
+- Ao fechar a janela INFO (`UI.closeModal`), todas as temporadas são recolhidas via `Logic._collapseAllInfoSeasons`.
+- Mapeamento extra em `_normalizeSeriesSeasons`: campos `year` e `cast` por episódio (retrocompatível com `date`/`guestCast`).
+- CSS: `.msi-season-toggle`, `.msi-season-chevron`, `.msi-season-head.msi-season-open`, `.msi-season-body`.
+
+### 109. (b) VERSÃO v31.0.4: Rodapé, Manual e Onde a Informação Aparece
+
+**Arquivos:** `index.html` + `manual_do_catalogo.html`
+
+**O que foi feito:**
+- `index.html`: `<title>`, `#app-version-badge` (rodapé), "Sobre o Sistema" e preview do rodapé em `applyConfig()` → **v31.0.4**.
+- `manual_do_catalogo.html`: versão **31.0.4** no subtítulo, seção 14 (Atualizações), rodapé da página e **nova seção `s26` "Novidades v31.0.4"**; ids seguintes renumerados (`s26→s27` Estatísticas, `s27→s28` Lembretes, `s28→s29` Funcionalidades).
+
+### 110. (c) CONFIGURAÇÕES > CAMINHOS: CARDS DE FILMES + CARDS DE SÉRIES (5 caminhos)
+
+**Arquivo:** `index.html`
+
+**O que foi feito:**
+- "CARDS" renomeado para **"CARDS DE FILMES"** (`cfg-path-cards`).
+- Nova opção **"CARDS DE SÉRIES"** (`cfg-path-series-cards` + `cfg-path-series-cards-active`), com Pick Folder e ATIVAR iguais aos demais — **5 caminhos no total**.
+- Campo do caminho reduzido (`flex: 0 1 46%; font-size:11px`) e labels maiores para acomodar os textos (`min-width:110px`).
+- Configuração integrada: defaults (`pathSeriesCards`, `pathSeriesCardsActive`), `applyConfig` (restore), `saveConfig`/`_saveConfigFromForm` (persistência).
+- Capa de séries (upload/pick) usa `pathSeriesCards` quando ativo (fallback para `pathCards`).
+
+### 111. (d) SÉRIES — Gênero com formato estendido ("Drama, História / Suspense Histórico")
+
+**Arquivo:** `index.html`
+
+**O que foi feito:**
+- Campo de gênero de séries deixou de ser `<select>` e virou **`input` + `datalist`** (`fs-category-list`), permitindo texto livre/extendido.
+- O **Sistema de Gestão de Gêneros** (engrenagem `Logic.toggleCatManager`) foi mantido; `renderCategorySelect` preenche o `datalist` com os gêneros salvos.
+- `saveMovie`, `editMovieCtx`, `cloneLastData` e `resetAllForms` continuam lendo `fs-category.value` (sem quebras).
+
+### 112. (e) CARDS de Séries — Gênero oculto quando não escolhido
+
+**Arquivo:** `index.html` (`Render.createCard`)
+
+**O que foi feito:**
+- Em `Render.createCard`, quando não há gênero (nem duração no modo grid), a área de gênero do card é omitida para séries (`.card-category` não é renderizado); demais tipos mantêm o chip vazio de antes.
+
+### 113. (f) CADASTRO NOVO > SÉRIES — Novo layout da Seção 1
+
+**Arquivo:** `index.html` — HTML (aba Séries) + CSS
+
+**O que foi feito:**
+- Removido o cabeçalho "Nova Série" (ícone + título).
+- **Capa** ocupa a coluna esquerda (~50%) com altura flexível que acompanha o final dos campos da direita (alinhamento harmonioso; 9:16 ao carregar imagem).
+- Coluna direita "CADASTRO DA SÉRIE": **Título** (largura total), **Ano + País** (uma linha), **Diretor**, **Elenco Principal**, **Sinopse**, **Trailer**, **Gênero** (largura total da coluna, formato estendido) e **Total de Temporadas + Total de Episódios na mesma linha** com os botões ⚡ e 🗑.
+- Removidas da interface: **URL da Capa**, **Classificação**, **Outras Informações** e **Status**. Os campos correspondentes foram mantidos ocultos (`hidden`/`display:none`) para **preservar dados e evitar quebras** no `saveMovie`/edição.
+
+### 114. (g) TEMPORADAS — Totalizador, 2 linhas por temporada e ordem crescente
+
+**Arquivo:** `index.html` (`UI._renderSeasonBlocks`, `UI._syncSeasonDataFromDom`, CSS)
+
+**O que foi feito:**
+- **Totalizador** no cabeçalho da Seção 2 (`#series-seasons-total`) mostrando a quantidade de temporadas.
+- Cada temporada em **2 linhas**: linha 1 = **Título + Elenco**; linha 2 = **Ano** (tamanho padrão) + **Trailer**.
+- Botões globais **+ / −** e remoção individual mantidos.
+- **Ordem numérica crescente** (1, 2, 3...) — antes exibia do maior para o menor.
+- CSS: `.series-dyn-grid`, `.series-dyn-row`, `.series-totalizador`.
+
+### 115. (h) EPISÓDIOS — Totalizador, 2 linhas por episódio e ordem crescente
+
+**Arquivo:** `index.html` (`UI._renderEpisodeBlocks`, `UI._syncEpisodeDataFromDom`, CSS)
+
+**O que foi feito:**
+- **Totalizador** no cabeçalho da Seção 3 (`#series-episodes-total`).
+- Cada episódio em **2 linhas**: linha 1 = **Dropdown de Temporada** ("Temporada N") + **Título + Elenco**; linha 2 = **Ano** (tamanho padrão) + **Duração** + **Link da Série** (com Pick Folder).
+- Botões globais **+ / −** e remoção individual mantidos.
+- **Ordem numérica crescente**.
+- `_syncEpisodeDataFromDom` mantém compatibilidade (`date`/`guestCast` preenchidos a partir de `year`/`cast`).
+
+### 116. (h) SÉRIES — SALVAR não reseta campos, janela permanece aberta, ESC não fecha
+
+**Arquivo:** `index.html` (`saveMovie`, handler de ESC)
+
+**O que foi feito:**
+- **Séries (novo cadastro):** após SALVAR, os campos **não são resetados** e a janela permanece aberta.
+- **Séries (edição):** após SALVAR, a janela **não fecha** (toast verde "Série atualizada... campos preservados"); filme/estreia mantêm o comportamento original.
+- A tecla **ESC não fecha** a janela de cadastro quando a aba Séries está ativa (`APP_STATE.currentView !== 'series'` no handler).
+- Fechamento apenas pelo botão **"X"** (comportamento inalterado). A detecção de duplicados continua impedindo cadastros repetidos sem alteração.
+
+---
+
+## Checklist Final (v31.0.4 — Itens 107–116)
+
+| Verificação | Status |
+|---|---|
+| (a) Tooltip do trailer abaixo e à direita do cursor | OK |
+| (a) Fonte regular + background translúcido no tooltip | OK |
+| (a) "EXECUTAR TEMPORADA" removido; só episódios têm botão | OK |
+| (a) Accordion de temporadas (fechadas por padrão, abertas/fechadas manualmente) | OK |
+| (a) Todas as temporadas recolhidas ao fechar a janela INFO | OK |
+| (b) v31.0.4 no título, rodapé, Sobre o Sistema e preview do rodapé | OK |
+| (b) Manual atualizado para 31.0.4 (subtítulo, seção 14, rodapé, seção 26) | OK |
+| (c) CARDS DE FILMES + CARDS DE SÉRIES (5 caminhos), campo menor, Pick Folder e ATIVAR | OK |
+| (c) Novo caminho integrado a defaults/applyConfig/saveConfig e capa de séries | OK |
+| (d) Gênero de séries em formato estendido (input+datalist) + Gestor de Gêneros mantido | OK |
+| (e) Card de série sem gênero não exibe a área de gênero | OK |
+| (f) Cabeçalho "Nova Série" removido | OK |
+| (f) Capa ~50% alinhada ao final dos campos da direita | OK |
+| (f) Campos: Título, Ano+País, Diretor, Elenco Principal, Sinopse, Trailer, Gênero, Total Temp/Epis na mesma linha | OK |
+| (f) URL da Capa, Classificação, Outras Informações e Status removidos da interface | OK |
+| (g) Totalizador de temporadas + 2 linhas (Título/Elenco; Ano/Trailer) + ordem crescente | OK |
+| (h) Totalizador de episódios + 2 linhas (Temporada/Título/Elenco; Ano/Duração/Link) + ordem crescente | OK |
+| (h) SALVAR não reseta campos de séries e mantém a janela aberta | OK |
+| (h) ESC não fecha a janela na aba Séries | OK |
+| Sintaxe JS validada (node --check) | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
+
 

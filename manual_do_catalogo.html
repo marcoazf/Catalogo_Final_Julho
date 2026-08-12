@@ -91,7 +91,7 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 </head>
 <body>
 <h1>Manual do Catálogo</h1>
-<p class="subtitle">CineCatalog Elo — Edição Premium | Versão 31.0.3 <span class="badge badge-blue">ÍCONE DA APP</span></p>
+<p class="subtitle">CineCatalog Elo — Edição Premium | Versão 31.0.4 <span class="badge badge-blue">ÍCONE DA APP</span></p>
 
 <div class="nav">
 <a href="#s1">1. Visão Geral</a>
@@ -119,9 +119,10 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <a href="#s23">23. Novidades v31.0.1</a>
 <a href="#s24">24. Novidades v31.0.2</a>
 <a href="#s25">25. Novidades v31.0.3</a>
-<a href="#s26">26. Estatísticas com Filtros</a>
-<a href="#s27">27. Lembretes</a>
-<a href="#s28">28. Funcionalidades (51)</a>
+<a href="#s26">26. Novidades v31.0.4</a>
+<a href="#s27">27. Estatísticas com Filtros</a>
+<a href="#s28">28. Lembretes</a>
+<a href="#s29">29. Funcionalidades (51)</a>
 </div>
 
 <h2 id="s1">1. Visão Geral</h2>
@@ -345,7 +346,7 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <h2 id="s14">14. Atualizações</h2>
 <p>O sistema verifica atualizações automaticamente através da GitHub API.</p>
 <ul>
-<li>Badge da versão no footer: <span class="badge badge-blue">v31.0.3</span></li>
+<li>Badge da versão no footer: <span class="badge badge-blue">v31.0.4</span></li>
 <li>Clique no badge para verificar manualmente</li>
 <li>Se atualizado: badge verde <span class="badge badge-green">✓ Atualizado</span></li>
 <li>Se nova versão: badge âmbar com link para download</li>
@@ -424,7 +425,7 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <p>O ficheiro <code>icon.png</code> encontra-se na raiz do projeto e é referenciado no <code>electron/main.js</code>.</p>
 <div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
 
-<p style="margin-top:2rem;text-align:center;color:#475569;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em">CineCatalog Elo v31.0.3 — Edição Premium — Jonas Theodoro</p>
+<p style="margin-top:2rem;text-align:center;color:#475569;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em">CineCatalog Elo v31.0.4 — Edição Premium — Jonas Theodoro</p>
 
 <h2 id="s21">21. Novidades da Versão 28.1</h2>
 <ul>
@@ -499,7 +500,20 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 </ul>
 <div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
 
-<h2 id="s26">26. Estatísticas com Filtros em Tempo Real</h2>
+<h2 id="s26">26. Novidades da Versão 31.0.4</h2>
+<ul>
+<li><strong>INFO — Tooltip do Trailer:</strong> O tooltip do botão de trailer na janela INFO de FILMES e SÉRIES agora aparece abaixo e à direita do cursor, com fonte regular e fundo levemente translúcido, mais discreto e legível</li>
+<li><strong>INFO — Temporadas em Accordion:</strong> As temporadas na janela INFO de SÉRIES deixaram de ter o botão "EXECUTAR TEMPORADA". Agora cada temporada abre/recolhe os seus episódios ao clicar na barra (accordion), todas começam recolhidas e fecham automaticamente ao fechar a janela INFO. Cada episódio mantém o seu botão "EXECUTAR EPISÓDIO"</li>
+<li><strong>Configurações — Caminhos:</strong> O campo "CARDS" foi renomeado para "CARDS DE FILMES" e foi adicionada a opção "CARDS DE SÉRIES" para configurar a pasta dos cards de séries separadamente (5 caminhos no total), com campo mais compacto, botão PICK FOLDER e ATIVAR/REATIVAR</li>
+<li><strong>Cadastro SÉRIES — Gêneros Estendidos:</strong> O campo de gêneros de séries passou a aceitar formatos livres como "Drama, História / Suspense Histórico". O Sistema de Gestão de Gêneros continua disponível para criar novas categorias</li>
+<li><strong>Cards de Séries:</strong> Quando nenhum gênero é escolhido, a área de gênero não é mais exibida no card da série</li>
+<li><strong>Cadastro SÉRIES — Novo Layout:</strong> Redesign do cadastro com capa central à esquerda (50%), campos à direita, remoção individual de temporadas e episódios, totalizadores e ordens otimizadas</li>
+<li><strong>Rodapé — Versão:</strong> Versão do aplicativo atualizada para <span class="badge badge-blue">v31.0.4</span></li>
+<li><strong>Manual Atualizado:</strong> Todas as funcionalidades, links e versão do aplicativo atualizados para v31.0.4</li>
+</ul>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s27">27. Estatísticas com Filtros em Tempo Real</h2>
 <p>O dashboard de Estatísticas do Acervo agora inclui um sistema completo de filtros temporais que permite analisar cadastros e ações do utilizador por diferentes períodos:</p>
 <h3>Tipos de Filtro Disponíveis</h3>
 <table>
@@ -515,7 +529,7 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <p><strong>Dica:</strong> Use os filtros para comparar períodos específicos, identificar tendências de cadastro e acompanhar o crescimento do acervo ao longo do tempo.</p>
 <div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
 
-<h2 id="s27">27. Lembretes</h2>
+<h2 id="s28">28. Lembretes</h2>
 <p>O painel de Lembretes agora é sempre acessível, mesmo quando não existem lembretes criados.</p>
 <ul>
 <li>Clique no ícone <i class="fas fa-sticky-note"></i> no header para abrir o painel</li>
@@ -526,7 +540,7 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 </ul>
 <div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
 
-<h2 id="s28">28. Funcionalidades (51)</h2>
+<h2 id="s29">29. Funcionalidades (51)</h2>
 <p>A janela Funcionalidades (ícone <i class="fas fa-info-circle"></i> no header) lista agora <strong>51 funcionalidades</strong> organizadas em grid de 7 colunas.</p>
 <ul>
 <li>Os primeiros 28 ícones (4 linhas) ficam visíveis por padrão</li>

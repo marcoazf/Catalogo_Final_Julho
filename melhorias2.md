@@ -1,30 +1,42 @@
 Realize as seguintes implementações por etapa, seguindo uma a uma. Ao final, adicione-a de forma numerada no documento "atualizacao_4.5.1.md". Efetue as seguintes melhorias, sem afetar ou interferir nas funcionalidades já existentes. Para que não haja um volume de texto na janela de contexto, otimize e resuma o feedback das atualizações e implementações.
 
-a) na janela INFO, crie um efeito de hover sobre o ícone de play para trailers, quando ele aparece em vermelho. Cri um tooltip que aparece ao apontar o mouse para o ícone, estando ativo ou não, que fala que este botão é para assistir o trailer do FILME/SÉRIE em uma nova janela.
+a) na janela INFO, altere o Tooltip do botão "Play" de trailer, para aparecer abaixo e à direita do cursor. Troque o estilo da fonte para regular e deixe o background levemente transparênte.
 
-b) aumente um pouco o tamanho da fonte do Status e dos ícones e textos de SINOPSE, DIRETOR e ELENCO. Estes títulos estão muito pequenos.
+A configuração desta janela ficou muito noa, mas preciso de algumas melhorias. Remova os botões de "EXECUTAR TEMPORADA" das Temporadas. Somente possuem botões os EPISÓDIOS.
+Crie opção para que cada Temporada possa ter seus EPISÓDIOS recolhidos como em um Accordeon, porque tem Séries com muitas Temporadas e também existem Temporadas com muitos Episódios. E isso se torna ruim de visualizar. Então inicie todas as Temporadas fechadas e permita o usuário abrir todas manualmente e deverão ser fechadas também manualmente pelo usuário. Sempre feche todas as Temporadas ao fechar a janela INFO.
 
-c) o botão de navegação, deverá funcionar da seguinte forma: se o usuário clicou com o direito em um FILME, então a navegação deverá acontecer somente entre FILMES cadastrados. Se foi em SÉRIES, somente em SÉRIES cadastradas.
+b) atualize sempre a versão da aplicação, no rodapé, no Manual e onde aparecer esta informação.
 
-d) o botão EXECUTAR FILME, deverá aparecer desta forma somente para os FILMES e deverá ser garantido que o FILME seja carregado em uma nova aba em modo Full Size ou Maximizado, já rodando no player definido pelo usuário em CONFIGURAÇÕES imediatamente. Deve haver uma conexão entre este botão, com o player definido pelo usuário. Para as SÉRIES o funcionamento deverá ser diferente, pois, cada SÉRIE, possui TEMPORADAS e EPISÓDIOS. E esta janela deverá trazer dentro da SÉRIES, uma gestão para que o usuário consiga vers informações das Temporadas e Episódios, contigos na SÉRIES, independente de quantos sejam e cada Episódio e cada Temporada terá seu próprio botão EXECUTAR TEMPORADA ou EXECUTAR TEMPORADA individual, que terá conexão com os caminhos configurados na janela CADASTRAR SÉRIES/TEMPORADAS/EPISÓDIOS.
+c) em CONFIGURAÇÕES > CAMINHOS, troque o texto de CARDS para CARDS DE FILMES e abaixo dele, adicone uma nova opção para CARDS DE SÉRIES. Com estes textos maiores, será necessário reduzir o tamanho do campo que mostrará o caminho completo. Crie também um Pick Folder e botão ATIVAR igual aos demais. Serão 5 caminhos no total.
 
-e) atualize sempre a versão da aplicação, no rodapé, no Manual e onde aparecer esta informação.
+d) na janela de SÉRIES, em Gênero, quero que o usuário possa ter este tipo de escolha: "Drama, História / Suspense Histórico". O Sistema de Gestão pode manter, para que o usuário possa criar novas categorias nos Gêneros.
 
-f) CADASTRO NOVO / SÉRIES deverá funcionar da seguinte maneira:
-- crie um novo layout completamente diferente para esta janela, mantendo a identidade da paleta vigente, como:botões, cores, hierarquia de tipografia, botão fechar, etc...
-- crie 3 seções dentro desta janela, sendo:
-1) Será a área de CADASTRO APENAS DA SÉRIE. Mude o título de NOVA SÉRIE para "CADASTRE AQUI O NOME DA SÉRIE:". Mantenha a janela Modal do mesmo tamanho, com o título fixo no topo, o rodapé com os status e botão SALVAR. A rolagem deverá acontecer se houver bastante campos. Nesta primeira seção, teremos os campos: Título da Série, Ano, Páis, Diretor (a), Elenco, Gênero, Capa,  URL da Capa e Trailer da Série (campo para link). Tente deixar estes campos da melhora maneira à esquerda e a Capa à direita. Ajuste da maneira mais harmonica. Ainda na Seção da SÉRIES crie dois campos para o usuário inserir o Total de Temporadas e de Episódios. Ao lado de cada campo, crie um ícone também destacado, que automatiza em tempo real a quantidade de Temporadas e Episódios automaticamente, criando já a quantidade de campos individuais em suas seções. Se o usuário digitar novos valores e clicar no botão novamente, estes campos deverão ser atualizados em tempo real. Crie um ícone para remover individualmente todos os campos da Temporada e outro para os Episódios.
+e) nos Cards de Séries (se o usuário não escolheu Gênero, então nem mostre no Card).
 
-2) A Seção 2 será para "CADASTRE AS TEMPORADAS DA SÉRIE". Todas estas Temporadas cadastradas, estarão ligadas e atreladas a uma determinada SÉRIE. Crie os seguintes campos para cada Temporada: Nº (cada temporada precisará ter uma numeração de cadastro iniciada por "1" e a ordem de exibição deverá ser do maior para o menor), Título, Ano, Elenco e Trailer (para link do trailer). Crie ainda um botão global "+" para criar mais Temporadas e um botão "-" para diminuir. Crie também um botão "remover" para cada Temporada individual. Deverá haver uma relação destas Temporadas com a quantidade Total de Temporadas digitada em SÉRIES. Tudo integrado em tempo real. Obs.: Todas as Temporadas desta janela estão interligadas com a SÉRIE.
+f) na janela CADASTRO NOVO > SÉRIES, faça os seguintes ajustes:
+- remova o ícone e o título NOVA SÉRIE. 
+- reduza o tamanho da área da Capa para 50%. E ajuste para que o tamanho da Capa, coincida com o final dos campos do lado direito, mesmo que o tamanho fique em 52%, 55%. O importante é este alinhamento harmonioso.
+- do lado direito em CADASTRO DA SÉRIE, ajuste para os seguintes campos:
+Título (até o final da coluna).
+Ano (mesmo tamanho do campo) e País (ocupa o restante).
+Diretor (mesmo tamanho)
+Elenco Principal  (mesmo tamanho de campo)
+Sinopse (ocupando os 50% desta largura)
+Trailer (tamanho de 50% da largura)
+Gênero (utilize a largura toda destes 50% para criar a funcionalidade do usuário poder ter o Gênero desta forma extendida: "Drama, História / Suspense Histórico".
+Ajuste para que Total Temporadas e Total Episódios, ocupem a mesma linha e com os respectivos botões Automatização e Lixeira.
+- remova as opções de URL da Capa, Classificação, Outras Informações e Status.
 
-3) A Seção 3 será para "CADASTRE OS EPISÓDIOS DE CADA TEMPORADA DA SERIE". Cada Episódio será interligado com a sua própria Temporada dentro da SÉRIE. Crie os seguintes campos: Nº (cada temporada precisará ter uma numeração de cadastro iniciada por "1" e a ordem de exibição deverá ser do maior para o menor), campo dropdown para selecionar a temporada cadastrada, que deverá aparecer em tempo real, mesmo que o usuário não tenha salvo ainda, Título, Data, Duração, Elenco Convidado e Link da Série (com pick folder para o usuário relacionar o caminho absoluto e completo da Série). Na verdade este caminho já está configurado dentro de CONFIGURAÇÕES.
+g) ainda em SÉRIES > CADASTRAR TEMPORADAS, mostre um totalizador da quantidade de Temporada. Ajuste para 02 linhas cada Temporada:
+Título e Elenco (linha 1).
+Ano (mantenha o tamanho padrão do campo) e Trailer (linha 2).
+Obs.: mantenha os demais botões globais e remover individual. Altere a ordem numérica para ir do menor para o maior.
 
-Crie ainda um botão global "+" para criar mais Episódios e um botão "-" para diminuir. Crie também um botão "remover" para cada Episódio individual. Deverá haver uma relação destes Episódios com cada a quantidade Total de Episódios digitado em SÉRIES. Tudo integrado em tempo real. Obs.: Todos os Episódios desta janela estão interligados diretamente com cada Temporada e interligados por final com a SÉRIE. A SÉRIES comando as Temporadas e cada Temporada possui uma quantidade de Episódios que poderão ser iguais ou diferentes.
+h) ainda em SÉRIES > CADASTRAR EPISÓDIOS, mostre um totalizador da quantidade de Episódios. Ajuste para 02 linhas cada Episódios:
+Número da Temporada. Ex.: Temporada 50 , Título e Elenco (linha 1).
+Ano (mantenha o tamanho padrão do campo), Duração e Link  (com pick folder) (linha 2).
+Obs.: mantenha os demais botões globais e remover individual. Altere a ordem numérica para ir do menor para o maior.
 
-Funciona assim. Exemplo:
-
-SÉRIE: nome
-Temporadas: 10
-Episódios: 6 em cada Temporada.
+h) Quando o usuário clicar no botão SALVAR nesta janela, diferente dos FILMES, os campos não são resetados e a janela permanece aberta. Só é fechada no botão "X" pelo usuário. A tecla "ESC" não fecha esta janela.
 
 Sempre faça uma revisão e checklist antes me entregar as novas implementações. Gere uma sintaxe limpa, fazendo uma revisão completa – verificando que todos os novos elementos, arrays e handlers existem coritem corretamente. Garanta que todas as funcionalidades, classes, variáveis estão funcionando perfeitamente, não foram alteradas ou mexidas e preservadas nas novas implementações de melhorias. Garanta que nada do que estava funcionando corretamente, seja influenciada ou gere alguma ruptura no aplicativo. sempre mantenha inicialmente tudo o que já funciona e está devidamente ajustado, como: paletas de cores, tipografia, layout, espaçamentos, divs e ids, entre outros itens...
