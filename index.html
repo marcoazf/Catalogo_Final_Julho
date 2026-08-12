@@ -391,7 +391,7 @@
         }
         .modal-form-grid .full-col { grid-column: 1 / -1; }
         .series-form-grid {
-            grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+            grid-template-columns: minmax(0, 0.58fr) minmax(0, 1.42fr);
             align-items: stretch;
         }
         .series-form-grid .series-capa-col {
@@ -401,7 +401,9 @@
         .series-form-grid .series-capa-area {
             flex: 1;
             min-height: 260px;
-            aspect-ratio: auto;
+            aspect-ratio: 9/16;
+            align-self: flex-start;
+            max-width: 100%;
         }
 
         .poster-upload-area {
@@ -496,6 +498,45 @@
         }
         .poster-url-wrap { position: relative; }
         .poster-url-wrap.hidden { display: none; }
+
+        /* Tooltip de Gênero nas Séries (melhorias2.md item a) */
+        .fs-cat-tooltip {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            z-index: 300;
+            margin-top: 4px;
+            background: #0F172A;
+            border: 1px solid rgba(139,92,246,0.35);
+            border-radius: 0.6rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            max-height: 144px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scrollbar-width: none;
+            scroll-behavior: smooth;
+            display: none;
+        }
+        .fs-cat-tooltip::-webkit-scrollbar { display: none; }
+        .fs-cat-tooltip .fs-cat-opt {
+            padding: 0.4rem 0.6rem;
+            font-size: 11px;
+            font-weight: 400;
+            color: var(--text-color);
+            cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            border-bottom: 1px solid rgba(139,92,246,0.1);
+            transition: background 0.15s, color 0.15s;
+        }
+        .fs-cat-tooltip .fs-cat-opt:last-child { border-bottom: none; }
+        .fs-cat-tooltip .fs-cat-opt:hover,
+        .fs-cat-tooltip .fs-cat-opt.active {
+            background: rgba(139,92,246,0.25);
+            color: #fff;
+        }
 
         .cat-manager-overlay {
             position: fixed;
@@ -672,6 +713,17 @@
         #modal-movie-info #mmi-cast {
             font-size: 0.9375rem;
         }
+        /* SUGESTÕES DO DIA: fontes e ícones no padrão das outras janelas (melhorias2.md item d) */
+        #modal-sugestao .label-premium {
+            font-size: 11px;
+            margin-bottom: 0.3rem;
+        }
+        #modal-sugestao .label-premium i { font-size: 11px; }
+        #modal-sugestao #sug-synopsis,
+        #modal-sugestao #sug-director,
+        #modal-sugestao #sug-cast {
+            font-size: 0.9375rem;
+        }
         /* Trailer: tooltip + hover vermelho (item a) */
         #modal-movie-info #mmi-trailer-link,
         #modal-series-info #msi-trailer-link {
@@ -768,7 +820,15 @@
             flex-shrink: 0;
         }
         .msi-season-head.msi-season-open .msi-season-chevron { transform: rotate(90deg); }
-        .msi-season-body { margin-top: 0.1rem; }
+        .msi-season-body {
+            margin-top: 0.1rem;
+            max-height: 200px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scrollbar-width: none;
+            scroll-behavior: smooth;
+        }
+        .msi-season-body::-webkit-scrollbar { display: none; }
         .msi-season-badge {
             width: 24px;
             height: 24px;
@@ -839,7 +899,7 @@
         .msi-ep-info { min-width: 0; }
         .msi-ep-title {
             font-size: 9px;
-            font-weight: 800;
+            font-weight: 400;
             color: var(--text-color);
             text-transform: uppercase;
             letter-spacing: 0.03em;
@@ -2646,11 +2706,11 @@
                                     <input type="text" id="fs-title" class="field-premium" placeholder="Título da série" required>
                                 </div>
                                 <div class="flex gap-2" style="align-items:flex-end">
-                                    <div style="flex:1;">
+                                    <div style="flex:0.5;min-width:0;">
                                         <label class="label-premium"><i class="fas fa-calendar mr-1.5 opacity-60"></i>Ano</label>
                                         <input type="text" id="fs-year" class="field-premium" placeholder="2026">
                                     </div>
-                                    <div style="flex:1.6;">
+                                    <div style="flex:2.1;min-width:0;">
                                         <label class="label-premium"><i class="fas fa-globe mr-1.5 opacity-60"></i>País</label>
                                         <input type="text" id="fs-country" class="field-premium" placeholder="Ex: Brasil">
                                     </div>
@@ -2671,16 +2731,19 @@
                                     <label class="label-premium"><i class="fas fa-video mr-1.5 opacity-60"></i>Trailer</label>
                                     <input type="text" id="fs-trailer-url" class="field-premium" placeholder="https://youtube.com/..." style="font-size:10px">
                                 </div>
-                                <div>
-                                    <label class="label-premium"><i class="fas fa-tag mr-1.5 opacity-60"></i>Gênero</label>
-                                    <div style="display:flex;gap:0.6rem;align-items:flex-end">
-                                        <input type="text" id="fs-category" class="field-premium" list="fs-category-list" placeholder="Escolher ou digitar (ex: Drama, História / Suspense Histórico)" style="flex:1;min-width:0;font-size:11px" autocomplete="off">
-                                        <datalist id="fs-category-list"></datalist>
-                                        <div onclick="Logic.toggleCatManager()" class="btn-icon cursor-pointer" title="Gerir gêneros">
-                                            <i class="fas fa-cog text-xs"></i>
+                                    <div>
+                                        <label class="label-premium"><i class="fas fa-tag mr-1.5 opacity-60"></i>Gênero</label>
+                                        <div style="display:flex;gap:0.6rem;align-items:flex-end">
+                                            <div style="position:relative;flex:1;min-width:0">
+                                                <input type="text" id="fs-category" class="field-premium" placeholder="Escolher ou digitar (ex: Drama, História / Suspense Histórico)" style="width:100%;font-size:11px" autocomplete="off" oninput="Logic._filterCategoryTooltip(this.value)" onblur="Logic._hideCategoryTooltip(true)" onkeydown="Logic._categoryTooltipKey(event)">
+                                                <datalist id="fs-category-list"></datalist>
+                                                <div id="fs-category-tooltip" class="fs-cat-tooltip"></div>
+                                            </div>
+                                            <div onclick="Logic.toggleCatManager()" class="btn-icon cursor-pointer" title="Gerir gêneros">
+                                                <i class="fas fa-cog text-xs"></i>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
                                 <div class="flex gap-2" style="align-items:flex-end">
                                     <div style="flex:1;">
                                         <label class="label-premium"><i class="fas fa-list-ol mr-1.5 opacity-60"></i>Total de Temporadas</label>
@@ -3840,8 +3903,8 @@
                         <label class="label-premium"><i class="fas fa-users mr-1.5 opacity-60"></i>Elenco</label>
                         <p id="sug-cast" class="text-sm" style="color:var(--text-color)">—</p>
                     </div>
-                    <a id="sug-play-btn" href="#" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;justify-content:center;gap:0.6rem;width:100%;padding:0.85rem 2rem;border-radius:1rem;font-weight:900;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;text-decoration:none;background:linear-gradient(135deg,#8B5CF6,#7C3AED);color:white;box-shadow:0 4px 20px rgba(139,92,246,0.35);transition:all 0.3s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 30px rgba(139,92,246,0.5)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
-                        <i class="fas fa-play" style="font-size:12px"></i>
+                    <a id="sug-play-btn" href="#" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;justify-content:center;gap:0.6rem;width:100%;padding:0.85rem 2rem;border-radius:1rem;font-weight:900;font-size:14px;text-transform:uppercase;letter-spacing:0.1em;text-decoration:none;background:linear-gradient(135deg,#8B5CF6,#7C3AED);color:white;box-shadow:0 4px 20px rgba(139,92,246,0.35);transition:all 0.3s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 30px rgba(139,92,246,0.5)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+                        <i class="fas fa-play" style="font-size:14px"></i>
                         <span id="sug-play-label">ASSISTIR</span>
                     </a>
                 </div>
@@ -5916,6 +5979,75 @@
                 if (selFs) selFs.value = curValFs;
 
             },
+            _filterCategoryTooltip(val) {
+                var tip = document.getElementById('fs-category-tooltip');
+                var input = document.getElementById('fs-category');
+                if (!tip || !input) return;
+                val = (val || '').trim();
+                var cats = this.getCategories();
+                if (!val || !cats.length) {
+                    tip.style.display = 'none';
+                    return;
+                }
+                var v = val.toLowerCase();
+                var matches = cats.filter(function(c) {
+                    return c.toLowerCase().indexOf(v) === 0;
+                }).slice(0, 6);
+                if (!matches.length) {
+                    tip.style.display = 'none';
+                    return;
+                }
+                tip.innerHTML = matches.map(function(c) {
+                    return '<div class="fs-cat-opt" data-cat="' + c.replace(/"/g, '&quot;') + '">' + c + '</div>';
+                }).join('');
+                tip.querySelectorAll('.fs-cat-opt').forEach(function(opt) {
+                    opt.onclick = function() {
+                        input.value = this.dataset.cat;
+                        tip.style.display = 'none';
+                        input.focus();
+                    };
+                });
+                tip.style.display = 'block';
+            },
+            _hideCategoryTooltip(delayed) {
+                var tip = document.getElementById('fs-category-tooltip');
+                if (!tip) return;
+                var hide = function() { tip.style.display = 'none'; };
+                if (delayed) setTimeout(hide, 150);
+                else hide();
+            },
+            _categoryTooltipKey(e) {
+                var tip = document.getElementById('fs-category-tooltip');
+                if (!tip || tip.style.display === 'none') return;
+                if (e.key === 'Escape') {
+                    this._hideCategoryTooltip(false);
+                    return;
+                }
+                if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    var opts = tip.querySelectorAll('.fs-cat-opt');
+                    if (!opts.length) return;
+                    var cur = -1;
+                    for (var i = 0; i < opts.length; i++) {
+                        if (opts[i].classList.contains('active')) { cur = i; break; }
+                    }
+                    if (e.key === 'ArrowDown') cur = (cur + 1) % opts.length;
+                    else cur = (cur - 1 + opts.length) % opts.length;
+                    opts.forEach(function(o) { o.classList.remove('active'); });
+                    opts[cur].classList.add('active');
+                    opts[cur].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                    return;
+                }
+                if (e.key === 'Enter' || e.key === 'Tab') {
+                    var act = tip.querySelector('.fs-cat-opt.active');
+                    if (act) {
+                        e.preventDefault();
+                        document.getElementById('fs-category').value = act.dataset.cat;
+                        this._hideCategoryTooltip(false);
+                        document.getElementById('fs-category').focus();
+                    }
+                }
+            },
             renderCategoryManager() {
                 var list = document.getElementById('cat-manager-list');
                 if (!list) return;
@@ -6218,6 +6350,8 @@
                     var cloneBtn = document.getElementById('btn-clone-data');
                     if (cloneBtn) cloneBtn.style.display = 'none';
                     _reopenInfoAfterSave = false;
+                    var fsCatTip = document.getElementById('fs-category-tooltip');
+                    if (fsCatTip) fsCatTip.style.display = 'none';
                 }
                 if (id === 'modal-series-info' && typeof Logic._collapseAllInfoSeasons === 'function') {
                     Logic._collapseAllInfoSeasons();
@@ -9707,6 +9841,10 @@
                 if (!e.target.closest('#theme-menu') && !e.target.closest('#btn-theme')) {
                     document.getElementById('theme-menu')?.classList.add('hidden');
                     document.getElementById('btn-theme')?.classList.remove('active');
+                }
+                if (!e.target.closest('#fs-category') && !e.target.closest('#fs-category-tooltip')) {
+                    var fsCatTip = document.getElementById('fs-category-tooltip');
+                    if (fsCatTip) fsCatTip.style.display = 'none';
                 }
             });
             // Close cat-manager overlay when clicking backdrop

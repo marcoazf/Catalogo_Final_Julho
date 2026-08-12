@@ -2778,4 +2778,66 @@ if (_es) {
 | Paletas, tipografia, layout, espaçamentos preservados | OK |
 | Todos os IDs, classes e handlers mantidos | OK |
 
+---
+
+## Novidades (melhorias2.md - Itens 117-120)
+
+### 117. (a) SÉRIES > Gênero - Tooltip com nome completo dos Gêneros
+
+**Arquivo:** `index.html` - CSS + HTML (aba Séries) + JS (`Logic`)
+
+**O que foi feito:**
+- Adicionado o tooltip `.fs-cat-tooltip` logo abaixo do campo de Gênero de Séries.
+- Ao digitar a inicial de um Gênero existente em "Gerir Gênero", o tooltip filtra e mostra até 6 nomes completos compatíveis (prefixo), permitindo clicar para preencher o campo.
+- Navegação por setas (↑/↓), Enter para selecionar, ESC para fechar e clique fora fecha o tooltip (com delay de 150ms no blur para permitir o clique).
+- Estilo padrão do app (fundo escuro, borda roxa, scroll suave sem barra visível, max-height 144px).
+
+### 118. (b) Capa - Proporção 9:16 com área menor + campos da direita maiores
+
+**Arquivo:** `index.html` - CSS (`<style>`)
+
+**O que foi feito:**
+- Espaço da Capa mantém a altura, mas agora em proporção **9:16** (`aspect-ratio`), reduzindo a área ocupada.
+- Coluna da Capa passou de `0.9fr/1.1fr` para `0.58fr/1.42fr` - os campos da direita ficaram maiores.
+- Campo **Ano** reduzido pela metade (`flex: 0.5`) e campo **País** aumentado (`flex: 2.1`).
+
+### 119. (c) INFO SÉRIES - Fonte Regular no "EP.x" + limite de 5 episódios com scroll suave
+
+**Arquivo:** `index.html` - CSS (`<style>`)
+
+**O que foi feito:**
+- Título de cada episódio ("EP.1", etc.) agora usa **fonte Regular** (`font-weight: 400`, sem Bold).
+- A área de episódios tem **max-height: 200px** (≈5 episódios visíveis); quando há mais, cria um **scroll suave** (`scroll-behavior: smooth`) **sem barra de rolagem** (`scrollbar-width: none` + `::-webkit-scrollbar { display: none }`).
+
+### 120. (d) SUGESTÕES DO DIA - Fontes e ícones no padrão das outras janelas + ASSISTIR maior
+
+**Arquivo:** `index.html` - CSS (`<style>`)
+
+**O que foi feito:**
+- **SINOPSE, DIRETOR e ELENCO**: fonte aumentada para `0.9375rem` (padrão de `#modal-movie-info` / `#modal-series-info`); labels e ícones para `11px`.
+- Botão **ASSISTIR**: fonte aumentada de `11px` para `14px` e ícone de play para `14px`.
+- O clique em **ASSISTIR/EXECUTAR EPISÓDIO** continua abrindo imediatamente em **nova aba em tela cheia/maximizado** via `Logic.openMediaWithPlayer`.
+- A tecla **ESC** já fechava a janela SUGESTÕES DO DIA (handler existente, sem alteração).
+
+## Checklist Final (melhorias2.md - Itens 117-120)
+
+| Verificação | Status |
+|---|---|
+| (a) Tooltip de Gênero ao digitar inicial de Gênero existente | OK |
+| (a) Nome completo do Gênero clicável + navegação por teclado | OK |
+| (a) Fecha com ESC, clique fora e ao fechar a janela | OK |
+| (b) Capa em proporção 9:16 com área menor | OK |
+| (b) Campos da direita maiores (grid 0.58fr/1.42fr) | OK |
+| (b) Ano pela metade + País aumentado | OK |
+| (c) "EP.x" com fonte Regular (sem Bold) | OK |
+| (c) Máximo de 5 episódios visíveis + scroll suave sem barra | OK |
+| (d) SINOPSE/DIRETOR/ELENCO com fonte e ícone padrão | OK |
+| (d) ASSISTIR com fonte maior | OK |
+| (d) ASSISTIR carrega em nova aba, FULL SIZE/MAXIMIZADO | OK |
+| (d) ESC fecha a janela | OK |
+| Sintaxe JS validada (node --check) | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
+
 
