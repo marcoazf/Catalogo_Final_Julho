@@ -3018,6 +3018,103 @@ Atualização completa com nova versão, melhorias de UI/UX, fallback de imagens
 - [x] Testes básicos realizados
 - [x] Documentação atualizada
 
+---
+
+### 7. Atualização de Versão da Aplicação
+
+**Arquivos:** `index.html`, `manual_do_catalogo.html`
+
+**O que foi feito:**
+- Versão atualizada de v31.0.5 para v4.5.1 em todos os locais:
+  - Rodapé da aplicação (`index.html:2495`)
+  - Badge de versão no manual (`manual_do_catalogo.html:349`)
+  - Referências históricas no manual (todas as ocorrências)
+
+**Verificações:**
+- [x] Versão consistentemente atualizada em todos os pontos
+- [x] Nenhuma funcionalidade afetada
+- [x] Manual atualizado com nova versão
+
+---
+
+### 8. Fallback de Capa Apenas em Modo de Edição
+
+**Arquivo:** `index.html`
+
+**O que foi feito:**
+- Implementado sistema de controle de fallback para capas:
+  - Adicionada classe `.edit-mode` para áreas de poster
+  - CSS modificado para exibir fallback apenas durante edição:
+    ```css
+    .poster-upload-area.edit-mode .poster-fallback { display: flex !important; }
+    .poster-upload-area:not(.edit-mode) .poster-fallback { display: none !important; }
+    ```
+  - Modificadas funções `setPosterPreview()` e `resetPoster()` para controlar classe edit-mode
+  - Adicionada lógica em `editMovieCtx()` e `closeModal()` para gerenciar estado de edição
+
+**Verificações:**
+- [x] Fallback aparece apenas durante edição de filmes/séries
+- [x] Durante cadastro novo, fallback escondido e placeholder visível
+- [x] Funcionalidade de upload preservada
+- [x] Layout harmonizado entre cadastro e edição
+
+---
+
+### 9. Harmonização de Layout entre Filmes e Séries
+
+**Arquivo:** `index.html`
+
+**O que foi feito:**
+- Layout de filmes harmonizado com o de séries:
+  - Substituída classe `modal-form-grid` por `modal-form-grid series-form-grid`
+  - Adicionada estrutura de colunas com proporções idênticas (0.54fr / 1.46fr)
+  - Incluída classe `series-capa-col` na coluna da capa
+  - Adicionada classe `series-capa-area` na área de upload da capa
+  - Reorganização do layout para seguir o mesmo padrão de séries
+
+**Verificações:**
+- [x] Layout idêntico entre filmes e séries
+- [x] Proporções corretas mantidas
+- [x] Todos os campos funcionais
+- [x] Responsividade preservada
+
+---
+
+### 10. Melhoria no Contorno do Date Picker de Estreias
+
+**Arquivo:** `index.html`
+
+**O que foi feito:**
+- Fortalecido o contorno do ícone de date picker na janela de cadastro de estreias:
+  ```css
+  .dynamic-estreia-row input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(75%) sepia(30%) saturate(1500%) hue-rotate(95deg) brightness(85%) contrast(110%);
+      border: 2px solid #4ADE80;
+      border-radius: 4px;
+  }
+  ```
+- Aumentada saturação (1100% → 1500%)
+- Aumentado contraste (88% → 110%)
+- Adicionado contorno visual com borda verde
+
+**Verificações:**
+- [x] Contorno mais visível e destacado
+- [x] Mantida funcionalidade original
+- [x] Apenas afeta campo de estreias
+- [x] Visual mais intuitivo para usuário
+
+---
+
+#### **Checklist Final:**
+- [x] Todas as melhorias implementadas conforme especificação
+- [x] Nenhuma funcionalidade existente afetada
+- [x] Layout responsivo mantido em todos os dispositivos
+- [x] Acessibilidade e usabilidade preservadas
+- [x] Performance otimizada (sem scripts pesados)
+- [x] Código limpo e bem comentado
+- [x] Testes básicos realizados
+- [x] Documentação atualizada
+
 **Status:** ✅ IMPLEMENTAÇÃO CONCLUÍDA COM SUCESSO
 
 

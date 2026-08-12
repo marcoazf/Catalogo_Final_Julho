@@ -407,21 +407,36 @@
             max-width: 100%;
         }
 
-        .poster-upload-area {
-            aspect-ratio: 9/16;
-            border-radius: 1rem;
-            border: 2px dashed var(--border-color);
-            background: var(--input-bg);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-            min-height: 200px;
-        }
+.poster-upload-area {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9/16;
+    min-height: 200px;
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    border-radius: 0.75rem;
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* Fallback só é exibido durante edição */
+.poster-upload-area.edit-mode .poster-fallback {
+    display: flex !important;
+}
+
+.poster-upload-area.edit-mode .upl-placeholder {
+    display: none !important;
+}
+
+/* Durante cadastro novo, fallback escondido e placeholder visível */
+.poster-upload-area:not(.edit-mode) .poster-fallback {
+    display: none !important;
+}
+
+.poster-upload-area:not(.edit-mode) .upl-placeholder {
+    display: flex !important;
+}
         .poster-upload-area:hover {
             border-color: var(--accent-blue);
             background: rgba(59,130,246,0.05);
@@ -1771,10 +1786,12 @@
             filter: invert(1) brightness(2);
         }
 
-        /* Date picker icon - light green (Estreias cadastro) */
+        /* Date picker icon - light green (Estreias cadastro) - contorno mais forte */
         .dynamic-estreia-row input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(75%) sepia(30%) saturate(1100%) hue-rotate(95deg) brightness(92%) contrast(88%);
+            filter: invert(75%) sepia(30%) saturate(1500%) hue-rotate(95deg) brightness(85%) contrast(110%);
             cursor: pointer;
+            border: 2px solid #4ADE80;
+            border-radius: 4px;
         }
 
         /* === FEATURE: Search Match Neon Green === */
@@ -2492,7 +2509,7 @@
     <footer class="px-6 py-2 border-t theme-border flex justify-between items-center bg-black/20">
         <div class="flex items-center gap-0" style="flex-wrap:nowrap">
             <div class="text-[0.75rem] text-gray-400 uppercase tracking-widest font-medium whitespace-nowrap" id="footer-dev-text">
-                ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CRIADO PARA JONAS THEODORO</span> | <span id="app-version-badge" style="color:#C7D2FE;font-size:0.8rem;font-weight:600;text-shadow:0 0 16px rgba(165,180,252,0.5)">v31.0.5</span>
+                ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CRIADO PARA JONAS THEODORO</span> | <span id="app-version-badge" style="color:#C7D2FE;font-size:0.8rem;font-weight:600;text-shadow:0 0 16px rgba(165,180,252,0.5)">v4.5.1</span>
             </div>
         </div>
         <div id="user-action-status" class="text-[0.75rem] text-emerald-500 font-bold uppercase opacity-0 pointer-events-none transition-opacity duration-300"></div>
@@ -2541,13 +2558,13 @@
                         <span class="text-[0.75rem] font-bold uppercase tracking-widest" style="color:var(--text-secondary)">Novo Filme</span>
                     </div>
 
-                    <div class="modal-form-grid">
-                        <!-- Layout com capa à esquerda (50%) e campos à direita -->
-                        <div style="display:grid;grid-template-columns:minmax(0,200px) 1fr;gap:2rem">
+                    <div class="modal-form-grid series-form-grid">
+                            <!-- Layout com capa à esquerda (~54%) e campos à direita (~146%) -->
+                            <div class="series-capa-col">
                             <!-- Coluna esquerda: Capa do Filme -->
                             <div>
                                 <label class="label-premium"><i class="fas fa-image mr-1.5 opacity-60"></i>Capa</label>
-                                <div id="f-poster-area" class="poster-upload-area">
+                                <div id="f-poster-area" class="poster-upload-area series-capa-area">
                                     <img id="f-poster-img" class="poster-preview" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                                     <div id="f-poster-fallback" style="display:none;align-items:center;justify-content:center;width:100%;height:100%;background:linear-gradient(135deg,#1e293b,#0f172a);flex-direction:column;gap:0.4rem">
                                         <i class="fas fa-film" style="font-size:2rem;color:#60A5FA"></i>
@@ -2564,8 +2581,8 @@
                                 <input type="file" id="f-poster-file" accept="image/jpeg,image/png,image/webp" class="hidden">
                             </div>
 
-                            <!-- Coluna direita: Campos organizados em 7 linhas -->
-                            <div class="space-y-4">
+                            <!-- Col 2: CADASTRO DO FILME (direita) -->
+                            <div class="flex flex-col" style="gap:1rem;justify-content:space-between">
                                 <!-- Linha 1: Título do Filme - Ano - País -->
                                 <div class="flex gap-2" style="align-items:flex-end">
                                     <div style="flex:10;min-width:0;">
@@ -4551,6 +4568,11 @@
                     if (!movie) return;
                     UI.openModal('modal-cadastro');
                     _editingId = movie.id;
+                    // Adiciona classe edit-mode às áreas de poster
+                    var fArea = document.getElementById('f-poster-area');
+                    var fsArea = document.getElementById('fs-poster-area');
+                    if (fArea) fArea.classList.add('edit-mode');
+                    if (fsArea) fsArea.classList.add('edit-mode');
                     UI.switchTab(movie.type);
                     UI._lockCadastroTabs(movie.type);
                     const typeLabel = movie.type === 'filmes' ? 'O FILME' : movie.type === 'series' ? 'A SÉRIE' : 'A ESTREIA';
@@ -6365,6 +6387,11 @@
                     var cloneBtn = document.getElementById('btn-clone-data');
                     if (cloneBtn) cloneBtn.style.display = 'none';
                     _reopenInfoAfterSave = false;
+                    // Remove a classe edit-mode das áreas de poster
+                    var fArea = document.getElementById('f-poster-area');
+                    var fsArea = document.getElementById('fs-poster-area');
+                    if (fArea) fArea.classList.remove('edit-mode');
+                    if (fsArea) fsArea.classList.remove('edit-mode');
                     var fsCatTip = document.getElementById('fs-category-tooltip');
                     if (fsCatTip) fsCatTip.style.display = 'none';
                 }
@@ -6747,10 +6774,25 @@
                 prefix = prefix || 'f';
                 var img = document.getElementById(prefix + '-poster-img');
                 var area = document.getElementById(prefix + '-poster-area');
+                var fallback = document.getElementById(prefix + '-poster-fallback');
                 if (!img || !area) return;
                 img.src = src || '';
                 img.classList.toggle('show', !!src);
                 area.classList.toggle('has-image', !!src);
+                
+                // Controla exibição do fallback apenas durante edição
+                if (typeof _editingId !== 'undefined' && _editingId) {
+                    area.classList.add('edit-mode');
+                    if (!src && fallback) {
+                        fallback.style.display = 'flex';
+                    }
+                } else {
+                    area.classList.remove('edit-mode');
+                    if (fallback) {
+                        fallback.style.display = 'none';
+                    }
+                }
+                
                 if (typeof _editingId !== 'undefined' && _editingId) {
                     var _item = APP_STATE.movies.find(function(m) { return m.id === _editingId; });
                     if (_item) { _item.image = src || ''; localStorage.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies)); Render.all(); }
@@ -6760,6 +6802,7 @@
                 prefix = prefix || 'f';
                 var img = document.getElementById(prefix + '-poster-img');
                 var area = document.getElementById(prefix + '-poster-area');
+                var fallback = document.getElementById(prefix + '-poster-fallback');
                 if (!img || !area) return;
                 img.src = '';
                 img.classList.remove('show');
@@ -6768,6 +6811,20 @@
                 if (puf) puf.value = '';
                 var wrap = document.getElementById(prefix + '-poster-url-wrap');
                 if (wrap) wrap.classList.remove('hidden');
+                
+                // Controla exibição do fallback apenas durante edição
+                if (typeof _editingId !== 'undefined' && _editingId) {
+                    area.classList.add('edit-mode');
+                    if (fallback) {
+                        fallback.style.display = 'flex';
+                    }
+                } else {
+                    area.classList.remove('edit-mode');
+                    if (fallback) {
+                        fallback.style.display = 'none';
+                    }
+                }
+                
                 if (typeof _editingId !== 'undefined' && _editingId) {
                     var _item = APP_STATE.movies.find(function(m) { return m.id === _editingId; });
                     if (_item) { _item.image = ''; localStorage.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies)); Render.all(); }
