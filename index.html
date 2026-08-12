@@ -391,7 +391,7 @@
         }
         .modal-form-grid .full-col { grid-column: 1 / -1; }
         .series-form-grid {
-            grid-template-columns: minmax(0, 0.58fr) minmax(0, 1.42fr);
+            grid-template-columns: minmax(0, 0.54fr) minmax(0, 1.46fr);
             align-items: stretch;
         }
         .series-form-grid .series-capa-col {
@@ -399,8 +399,9 @@
             flex-direction: column;
         }
         .series-form-grid .series-capa-area {
-            flex: 1;
-            min-height: 260px;
+            flex: none;
+            width: 100%;
+            min-height: 0;
             aspect-ratio: 9/16;
             align-self: flex-start;
             max-width: 100%;
@@ -503,8 +504,9 @@
         .fs-cat-tooltip {
             position: absolute;
             top: 100%;
-            left: 0;
+            left: auto;
             right: 0;
+            min-width: 320px;
             z-index: 300;
             margin-top: 4px;
             background: #0F172A;
@@ -2700,19 +2702,38 @@
                             </div>
 
                             <!-- Col 2: CADASTRO DA SÉRIE (direita) -->
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="label-premium"><i class="fas fa-font mr-1.5 opacity-60"></i>Título</label>
-                                    <input type="text" id="fs-title" class="field-premium" placeholder="Título da série" required>
-                                </div>
+                            <div class="flex flex-col" style="gap:1rem;justify-content:space-between">
+                                <!-- Linha 1: Título (50%) | Ano (15%) | País (35%) -->
                                 <div class="flex gap-2" style="align-items:flex-end">
-                                    <div style="flex:0.5;min-width:0;">
+                                    <div style="flex:10;min-width:0;">
+                                        <label class="label-premium"><i class="fas fa-font mr-1.5 opacity-60"></i>Título</label>
+                                        <input type="text" id="fs-title" class="field-premium" placeholder="Título da série" required>
+                                    </div>
+                                    <div style="flex:3;min-width:0;">
                                         <label class="label-premium"><i class="fas fa-calendar mr-1.5 opacity-60"></i>Ano</label>
                                         <input type="text" id="fs-year" class="field-premium" placeholder="2026">
                                     </div>
-                                    <div style="flex:2.1;min-width:0;">
+                                    <div style="flex:7;min-width:0;">
                                         <label class="label-premium"><i class="fas fa-globe mr-1.5 opacity-60"></i>País</label>
                                         <input type="text" id="fs-country" class="field-premium" placeholder="Ex: Brasil">
+                                    </div>
+                                </div>
+                                <!-- Linha 2: Trailer (60%) | Gênero (35%) + Gerir Gêneros (5%) -->
+                                <div class="flex gap-2" style="align-items:flex-end">
+                                    <div style="flex:12;min-width:0;">
+                                        <label class="label-premium"><i class="fas fa-video mr-1.5 opacity-60"></i>Trailer</label>
+                                        <input type="text" id="fs-trailer-url" class="field-premium" placeholder="https://youtube.com/..." style="font-size:10px">
+                                    </div>
+                                    <div style="flex:7;min-width:0;position:relative">
+                                        <label class="label-premium"><i class="fas fa-tag mr-1.5 opacity-60"></i>Gênero</label>
+                                        <input type="text" id="fs-category" class="field-premium" placeholder="Escolher ou digitar (ex: Drama, História / Suspense Histórico)" style="width:100%;font-size:11px" autocomplete="off" oninput="Logic._filterCategoryTooltip(this.value)" onblur="Logic._hideCategoryTooltip(true)" onkeydown="Logic._categoryTooltipKey(event)">
+                                        <datalist id="fs-category-list"></datalist>
+                                        <div id="fs-category-tooltip" class="fs-cat-tooltip"></div>
+                                    </div>
+                                    <div style="flex:1;min-width:0;display:flex;justify-content:flex-end">
+                                        <div onclick="Logic.toggleCatManager()" class="btn-icon shrink-0 cursor-pointer" title="Gerir gêneros">
+                                            <i class="fas fa-cog text-xs"></i>
+                                        </div>
                                     </div>
                                 </div>
                                 <div>
@@ -2727,23 +2748,6 @@
                                     <label class="label-premium"><i class="fas fa-align-left mr-1.5 opacity-60"></i>Sinopse</label>
                                     <textarea id="fs-desc" class="field-premium" placeholder="Sinopse da série..." rows="2" style="resize:vertical;min-height:54px;font-size:0.8rem"></textarea>
                                 </div>
-                                <div>
-                                    <label class="label-premium"><i class="fas fa-video mr-1.5 opacity-60"></i>Trailer</label>
-                                    <input type="text" id="fs-trailer-url" class="field-premium" placeholder="https://youtube.com/..." style="font-size:10px">
-                                </div>
-                                    <div>
-                                        <label class="label-premium"><i class="fas fa-tag mr-1.5 opacity-60"></i>Gênero</label>
-                                        <div style="display:flex;gap:0.6rem;align-items:flex-end">
-                                            <div style="position:relative;flex:1;min-width:0">
-                                                <input type="text" id="fs-category" class="field-premium" placeholder="Escolher ou digitar (ex: Drama, História / Suspense Histórico)" style="width:100%;font-size:11px" autocomplete="off" oninput="Logic._filterCategoryTooltip(this.value)" onblur="Logic._hideCategoryTooltip(true)" onkeydown="Logic._categoryTooltipKey(event)">
-                                                <datalist id="fs-category-list"></datalist>
-                                                <div id="fs-category-tooltip" class="fs-cat-tooltip"></div>
-                                            </div>
-                                            <div onclick="Logic.toggleCatManager()" class="btn-icon cursor-pointer" title="Gerir gêneros">
-                                                <i class="fas fa-cog text-xs"></i>
-                                            </div>
-                                        </div>
-                                    </div>
                                 <div class="flex gap-2" style="align-items:flex-end">
                                     <div style="flex:1;">
                                         <label class="label-premium"><i class="fas fa-list-ol mr-1.5 opacity-60"></i>Total de Temporadas</label>

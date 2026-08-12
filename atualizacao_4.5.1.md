@@ -2840,4 +2840,44 @@ if (_es) {
 | Paletas, tipografia, layout, espaçamentos preservados | OK |
 | Todos os IDs, classes e handlers mantidos | OK |
 
+---
+
+## Implementações Realizadas — Melhorias 2 (melhorias2.md — Item 121)
+
+### 121. (a) CADASTRO NOVO > SÉRIES: Linha 1 (Título 50% / Ano 15% / País 35%) + Trailer/Gênero/Gerir na mesma linha + Capa 9:16
+
+**Arquivo:** `index.html` — CSS (`<style>`) + HTML (aba Séries)
+
+**O que foi feito:**
+
+- **Linha 1 reformulada** — Título (50%, `flex:10`), Ano (15%, `flex:3`) e País (35%, `flex:7`) agora na mesma linha (antes Título em linha própria e Ano/País em outra).
+- **Nova linha Trailer/Gênero/Gerir** — Trailer (60%, `flex:12`), Gênero (35%, `flex:7`) e o botão **Gerir Gêneros** (5%, `flex:1`) na mesma linha. Todos os IDs, handlers (`oninput`, `onblur`, `onkeydown`), `datalist`, tooltip e `toggleCatManager()` preservados.
+- **Tooltip de Gênero adaptado** — com o campo de Gênero mais estreito (35%), o `.fs-cat-tooltip` passou a se ancorar à direita (`left:auto; right:0`) com `min-width:320px`, expandindo sobre a área do Trailer para manter a **exibição do nome completo** dos gêneros (item 117 preservado).
+- **Capa com altura reduzida e proporção 9:16 garantida** — coluna da Capa ajustada de `0.58fr/1.42fr` para `0.54fr/1.46fr`, e a área da capa (`#fs-poster-area`) agora usa `flex:none; width:100%; min-height:0; aspect-ratio:9/16`. A imagem (criada em 9:16) preenche a área **perfeitamente** (`object-fit:cover`), sem distorção.
+- **Campos da direita alinhados ao final da Capa** — a coluna direita deixou de usar `space-y-4` e passou a `display:flex; flex-direction:column; gap:1rem; justify-content:space-between`. Com a coluna da Capa levemente mais alta, os campos terminam exatamente na base da imagem da Capa.
+- Diretor(a), Elenco Principal, Sinopse e Total de Temporadas/Episódios mantidos na mesma ordem e comportamento.
+- Campos ocultos preservados (`fs-episode-title`, `fs-duration`, `fs-stars`, `fs-other-info`, status) — sem quebras no `saveMovie`/edições.
+
+**Preservação:** Nenhuma funcionalidade, handler, ID, classe ou variável existente foi alterada. As outras abas (Filmes, Estreias), as Seções 2 e 3 (Temporadas/Episódios) e o Gestor de Gêneros continuam intactos. Paletas, tipografia e espaçamentos preservados.
+
+### Checklist Final (melhorias2.md — Item 121)
+
+| Verificação | Status |
+|---|---|
+| Linha 1: Título 50% + Ano 15% + País 35% na mesma linha | OK |
+| Trailer 60% + Gênero 35% + Gerir Gêneros 5% na mesma linha | OK |
+| Botão Gerir Gêneros preservado (`toggleCatManager`) | OK |
+| Tooltip de Gênero com nome completo (min-width 320px, ancorado à direita) | OK |
+| Capa: altura reduzida (coluna 0.54fr) | OK |
+| Capa: proporção 9:16 garantida (`aspect-ratio` + `width:100%`) | OK |
+| Imagem da capa preenche perfeitamente a área (`object-fit:cover`) | OK |
+| Campos da direita finalizam na base da área da Capa (`space-between`) | OK |
+| IDs `fs-*` preservados (`fs-title`, `fs-year`, `fs-country`, `fs-trailer-url`, `fs-category`, etc.) | OK |
+| Campos ocultos preservados (sem quebras no saveMovie) | OK |
+| Sintaxe JS validada (node --check) | OK |
+| Balanceamento de tags HTML validado | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
+
 
