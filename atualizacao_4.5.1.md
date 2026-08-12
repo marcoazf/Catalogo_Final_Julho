@@ -2880,4 +2880,144 @@ if (_es) {
 | Paletas, tipografia, layout, espaçamentos preservados | OK |
 | Todos os IDs, classes e handlers mantidos | OK |
 
+---
+
+### 87. (F) VERSÃO v31.0.5 + MELHORIAS COMPLEMENTARES
+
+**Data:** 12/08/2026  
+**Versão:** v31.0.5  
+
+#### **Resumo das Implementações:**
+Atualização completa com nova versão, melhorias de UI/UX, fallback de imagens, correção de campos numéricos e reorganização de layout.
+
+---
+
+#### **a) Atualização de Versão da Aplicação (v31.0.5)**
+**Arquivos:** `index.html`, `manual_do_catalogo.html`  
+**Alterações:**
+- Versão atualizada de v31.0.4 para v31.0.5 em todos os locais:
+  - Rodapé: badge de versão com novo número e estilo
+  - Title HTML: atualizado para nova versão
+  - Modal INFO: "Sobre o Sistema" com versão atualizada
+  - Manual do Catálogo: todas as referências atualizadas
+  - Seção de atualizações: nova seção "Novidades v31.0.5"
+
+**Verificações:**
+- [x] Versão consistente em todos os locais
+- [x] Badge de versão com gradiente neon mantido
+- [x] Links internos do manual atualizados
+- [x] Sintaxe HTML validada
+
+---
+
+#### **b) Aprimoramento do Modal de Funcionalidades**
+**Arquivo:** `index.html`  
+**Alterações:**
+- Modal aumentado para 850px de largura (780px → 850px)
+- Grid de 7 colunas mantidas com espaçamento aumentado
+- Padding superior (1rem) para distanciar do texto informativo
+- Padding inferior equivalente adicionado
+- Espaçamento entre itens: 0.5rem → 0.75rem
+- Padding dos itens ajustado para melhor respiração visual
+
+**Verificações:**
+- [x] Layout responsivo mantido
+- [x] 51 funcionalidades exibidas corretamente
+- [x] Rolagem suave com scroll oculto
+- [x] Visual mais limpo e organizado
+
+---
+
+#### **c) Favicon Colorido e Atualização do Manual**
+**Arquivos:** `favicon_catalogo.svg`, `manual_do_catalogo.html`  
+**Alterações:**
+- Favicon atualizado com cores vibrantes e alegres:
+  - Gradiente de coral (#FF6B6B) para turquesa (#4ECDC4)
+  - Texto em gradiente amarelo (#FFE66D) para coral (#FF6B6B)
+  - Subtexto em gradiente turquesa (#4ECDC4) para azul (#45B7D1)
+- Manual atualizado com todas as novas melhorias
+- Seções renumeradas (s26→s32, s27→s33, s28→s34)
+- Links internos atualizados
+
+**Verificações:**
+- [x] Favicon visível e colorido
+- [x] Manual completo com todas as funcionalidades
+- [x] IDs e links corretos
+- [x] Sintaxe SVG válida
+
+---
+
+#### **d) Fallback para Imagens de Capa**
+**Arquivo:** `index.html`  
+**Alterações:**
+- Fallback implementado para área de capa de filmes:
+  - `<img>` com `onerror` que esconde imagem e mostra fallback
+  - Div fallback com ícone de filme e texto "SEM CAPA"
+  - Mesmo tamanho e estilo dos cards na tela principal
+- Fallback implementado para área de capa de séries:
+  - Mesma estrutura com ícone de TV e texto "SEM CAPA"
+  - Gradiente de fundo idêntico ao dos cards
+
+**Verificações:**
+- [x] Fallback ativado quando imagem não carrega
+- [x] Visual consistente com cards da tela principal
+- [x] Funciona para ambas as abas (Filmes/Séries)
+- [x] Sem quebras na funcionalidade de upload
+
+---
+
+#### **e) Correção de Campos Numéricos em Séries**
+**Arquivo:** `index.html`  
+**Alterações:**
+- Função `clearAllSeasonFields()` atualizada:
+  - Limpa campo `fs-season` após remoção de temporadas
+  - Mostra vazio/nulo em vez de manter valor "1"
+- Função `clearAllEpisodeFields()` atualizada:
+  - Limpa campo `fs-episode-number` após remoção de episódios
+  - Mostra vazio/nulo em vez de manter valor "1"
+
+**Verificações:**
+- [x] Campos corretamente limpos após remoção
+- [x] Números dinâmicos funcionam (criação em tempo real)
+- [x] Sem efeitos colaterais em outras funções
+- [x] Sintaxe JS validada
+
+---
+
+#### **f) Novo Layout para Filmes**
+**Arquivo:** `index.html`  
+**Alterações:**
+- Layout reorganizado com capa à esquerda (50%) e campos à direira
+- Campos organizados em 7 linhas específicas:
+  1. Título do Filme - Ano - País
+  2. Diretor(a) (75%) - Duração (25%)
+  3. Elenco Principal
+  4. Sinopse
+  5. Trailer - Gênero - Gerir Gênero
+  6. Link do Filme com Pick Folder
+  7. Classificação (40%) - Status (60%)
+- Removidos "Outras Informações" e "URL da Capa"
+- Campo País integrado na organização
+
+**Verificações:**
+- [x] Layout idêntico ao de séries
+- [x] Todos os campos funcionais
+- [x] Responsividade mantida
+- [x] IDs dos campos preservados
+- [x] Sem perda de funcionalidades
+
+---
+
+#### **Checklist Final:**
+- [x] Todas as melhorias implementadas conforme especificação
+- [x] Nenhuma funcionalidade existente afetada
+- [x] Layout responsivo mantido em todos os dispositivos
+- [x] Acessibilidade e usabilidade preservadas
+- [x] Performance otimizada (sem scripts pesados)
+- [x] Código limpo e bem comentado
+- [x] Testes básicos realizados
+- [x] Documentação atualizada
+
+**Status:** ✅ IMPLEMENTAÇÃO CONCLUÍDA COM SUCESSO
+
 
