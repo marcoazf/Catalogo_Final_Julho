@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineCatalog Elo | v32.1.0 - Edição Premium</title>
+    <title>CineCatalog Elo | v32.2.0 - Edição Premium</title>
     
     <!-- RECURSOS EXTERNOS -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
@@ -423,6 +423,11 @@
 /* Fallback só é exibido durante edição */
 .poster-upload-area.edit-mode .poster-fallback {
     display: flex !important;
+}
+
+/* Quando um Card (imagem) é carregado durante a edição, o fallback é escondido */
+.poster-upload-area.edit-mode.has-image .poster-fallback {
+    display: none !important;
 }
 
 .poster-upload-area.edit-mode .upl-placeholder {
@@ -1789,12 +1794,16 @@
             filter: invert(1) brightness(2);
         }
 
-        /* Date picker icon - light green (Estreias cadastro) - contorno mais forte */
+        /* Date picker icon - verde padrão da janela Estreias (svg) - visível e destacado */
         .dynamic-estreia-row input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(75%) sepia(30%) saturate(1500%) hue-rotate(95deg) brightness(85%) contrast(110%);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%2310B981' d='M96 32l0 32L48 64C21.5 64 0 85.5 0 112l0 48 448 0 0-48c0-26.5-21.5-48-48-48l-48 0 0-32c0-17.7-14.3-32-32-32s-32 14.3-32 32l0 32L160 64l0-32c0-17.7-14.3-32-32-32S96 14.3 96 32zM448 192L0 192 0 464c0 26.5 21.5 48 48 48l352 0c26.5 0 48-21.5 48-48l0-272z'/%3E%3C/svg%3E");
+            background-size: 20px 20px;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 0 4px rgba(16,185,129,0.55));
             cursor: pointer;
-            border: 2px solid #4ADE80;
-            border-radius: 4px;
+            width: 26px;
+            height: 26px;
         }
 
         /* === FEATURE: Search Match Neon Green === */
@@ -2512,7 +2521,7 @@
     <footer class="px-6 py-2 border-t theme-border flex justify-between items-center bg-black/20">
         <div class="flex items-center gap-0" style="flex-wrap:nowrap">
             <div class="text-[0.75rem] text-gray-400 uppercase tracking-widest font-medium whitespace-nowrap" id="footer-dev-text">
-                ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CRIADO PARA JONAS THEODORO</span> | <span id="app-version-badge" style="color:#C7D2FE;font-size:0.8rem;font-weight:600;text-shadow:0 0 16px rgba(165,180,252,0.5)">v32.1.0</span>
+                ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CRIADO PARA JONAS THEODORO</span> | <span id="app-version-badge" style="color:#C7D2FE;font-size:0.8rem;font-weight:600;text-shadow:0 0 16px rgba(165,180,252,0.5)">v32.2.0</span>
             </div>
         </div>
         <div id="user-action-status" class="text-[0.75rem] text-emerald-500 font-bold uppercase opacity-0 pointer-events-none transition-opacity duration-300"></div>
@@ -2566,7 +2575,7 @@
                             <div class="series-capa-col">
                                 <label class="label-premium"><i class="fas fa-image mr-1.5 opacity-60"></i>Capa</label>
                                 <div id="f-poster-area" class="poster-upload-area series-capa-area">
-                                    <img id="f-poster-img" class="poster-preview" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                                    <img id="f-poster-img" class="poster-preview" alt="" onerror="this.style.display='none';var a=this.closest('.poster-upload-area');if(a)a.classList.remove('has-image');this.nextElementSibling.style.display='flex'">
                                     <div id="f-poster-fallback" class="poster-fallback" style="display:none;align-items:center;justify-content:center;width:100%;height:100%;background:linear-gradient(135deg,#1e293b,#0f172a);flex-direction:column;gap:0.4rem">
                                         <i class="fas fa-film" style="font-size:2rem;color:#60A5FA"></i>
                                         <span style="color:#94A3B8;font-size:0.7rem;font-weight:600">SEM CAPA</span>
@@ -2622,7 +2631,7 @@
                                 <!-- Linha 3: Elenco Principal -->
                                 <div>
                                     <label class="label-premium"><i class="fas fa-users mr-1.5 opacity-60"></i>Elenco Principal</label>
-                                    <input type="text" id="f-cast" class="field-premium" placeholder="Atores principais">
+                                    <textarea id="f-cast" class="field-premium custom-scroll" rows="2" placeholder="Atores principais" style="resize:vertical;min-height:72px;font-size:0.8rem;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--accent-blue) transparent"></textarea>
                                 </div>
 
                                 <!-- Linha 4: Sinopse -->
@@ -2650,19 +2659,17 @@
                                     </div>
                                 </div>
 
-                                <!-- Linha 6: Link do Filme com Pick Folder -->
-                                <div>
-                                    <label class="label-premium"><i class="fas fa-link mr-1.5 opacity-60"></i>Link do Filme</label>
-                                    <div class="input-with-icon">
-                                        <input type="text" id="f-media-url" class="field-premium" placeholder="https://example.com/filme.mp4" style="font-size:10px">
-                                        <button type="button" class="input-icon-btn" id="f-media-picker-btn" title="Selecionar ficheiro local"><i class="fas fa-folder-open"></i></button>
-                                        <input type="file" id="f-media-file" accept="video/*" class="hidden">
-                                    </div>
-                                </div>
-
-                                <!-- Linha 7: Classificação (40%) - Status (60%) -->
+                                <!-- Linha 6: Link do Filme + Classificação + Status na mesma linha -->
                                 <div class="flex gap-2" style="align-items:flex-end">
-                                    <div style="flex:8;min-width:0;">
+                                    <div style="flex:10;min-width:0;">
+                                        <label class="label-premium"><i class="fas fa-link mr-1.5 opacity-60"></i>Link do Filme</label>
+                                        <div class="input-with-icon">
+                                            <input type="text" id="f-media-url" class="field-premium" placeholder="https://example.com/filme.mp4" style="font-size:10px">
+                                            <button type="button" class="input-icon-btn" id="f-media-picker-btn" title="Selecionar ficheiro local"><i class="fas fa-folder-open"></i></button>
+                                            <input type="file" id="f-media-file" accept="video/*" class="hidden">
+                                        </div>
+                                    </div>
+                                    <div style="flex:6;min-width:0;">
                                         <label class="label-premium"><i class="fas fa-star mr-1.5 opacity-60"></i>Classificação</label>
                                         <div id="star-input-container" class="flex gap-1" style="color:#4B5563;font-size:1.1rem;padding:0.25rem 0">
                                             <i class="fas fa-star cursor-pointer" data-v="1"></i>
@@ -2673,7 +2680,7 @@
                                         </div>
                                         <input type="hidden" id="f-stars" value="0">
                                     </div>
-                                    <div style="flex:12;min-width:0;">
+                                    <div style="flex:14;min-width:0;">
                                         <label class="label-premium"><i class="fas fa-flag mr-1.5 opacity-60"></i>Status</label>
                                         <div class="status-check-group">
                                             <div class="status-check-item" data-status="new" onclick="Logic.toggleStatus(this)">
@@ -2713,7 +2720,7 @@
                             <div class="series-capa-col">
                                 <label class="label-premium"><i class="fas fa-image mr-1.5 opacity-60"></i>Capa</label>
                                 <div id="fs-poster-area" class="poster-upload-area series-capa-area">
-                                    <img id="fs-poster-img" class="poster-preview" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                                    <img id="fs-poster-img" class="poster-preview" alt="" onerror="this.style.display='none';var a=this.closest('.poster-upload-area');if(a)a.classList.remove('has-image');this.nextElementSibling.style.display='flex'">
                                     <div id="fs-poster-fallback" class="poster-fallback" style="display:none;align-items:center;justify-content:center;width:100%;height:100%;background:linear-gradient(135deg,#1e293b,#0f172a);flex-direction:column;gap:0.4rem">
                                         <i class="fas fa-film" style="font-size:2rem;color:#60A5FA"></i>
                                         <span style="color:#94A3B8;font-size:0.7rem;font-weight:600">SEM CAPA</span>
@@ -2777,7 +2784,7 @@
                                 </div>
                                 <div>
                                     <label class="label-premium"><i class="fas fa-users mr-1.5 opacity-60"></i>Elenco Principal</label>
-                                    <input type="text" id="fs-cast" class="field-premium" placeholder="Atores principais">
+                                    <textarea id="fs-cast" class="field-premium custom-scroll" rows="2" placeholder="Atores principais" style="resize:vertical;min-height:72px;font-size:0.8rem;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--accent-blue) transparent"></textarea>
                                 </div>
                                 <div>
                                     <label class="label-premium"><i class="fas fa-align-left mr-1.5 opacity-60"></i>Sinopse</label>
@@ -5822,7 +5829,7 @@
                     {icon:'fa-download',label:'Exportar Dados',desc:'Exporte todo o seu acervo em formato JSON para backup ou transferência.'},
                     {icon:'fa-upload',label:'Importar Dados',desc:'Importe acervo de arquivos JSON. Restaure backups facilmente.'},
                     {icon:'fa-moon',label:'Modo Noturno',desc:'Alternância de temas com menu flutuante. Escolha entre Dark, Light, Amber e Midnight.'},
-                    {icon:'fa-info-circle',label:'Sobre o Sistema',desc:'CineCatalog Elo v32.0.0 — Edição Premium. Sistema completo de gestão de acervo cinematográfico.'},
+                    {icon:'fa-info-circle',label:'Sobre o Sistema',desc:'CineCatalog Elo v32.2.0 — Edição Premium. Sistema completo de gestão de acervo cinematográfico.'},
                     {icon:'fa-th-large',label:'Modos de Exibição',desc:'Três modos de visualização: Carrossel com setas, Grelha por gêneros, e Cine Marquee com animação. Ajuste velocidade e efeito no menu.'},
                     {icon:'fa-arrows-alt-h',label:'Navegação Carrossel',desc:'Navegue horizontalmente por linha com setas laterais. Duas linhas visíveis com rolagem infinita até o fim dos cards.'},
                     {icon:'fa-tachometer-alt',label:'Desempenho Otimizado',desc:'Renderizaçao lazy com batches de 20 cards. Scroll infinito suave sem travar a interface.'},
@@ -6783,6 +6790,7 @@
                 var area = document.getElementById(prefix + '-poster-area');
                 var fallback = document.getElementById(prefix + '-poster-fallback');
                 if (!img || !area) return;
+                img.style.display = '';
                 img.src = src || '';
                 img.classList.toggle('show', !!src);
                 area.classList.toggle('has-image', !!src);
@@ -6790,8 +6798,8 @@
                 // Controla exibição do fallback apenas durante edição
                 if (typeof _editingId !== 'undefined' && _editingId) {
                     area.classList.add('edit-mode');
-                    if (!src && fallback) {
-                        fallback.style.display = 'flex';
+                    if (fallback) {
+                        fallback.style.display = src ? 'none' : 'flex';
                     }
                 } else {
                     area.classList.remove('edit-mode');
@@ -6811,6 +6819,7 @@
                 var area = document.getElementById(prefix + '-poster-area');
                 var fallback = document.getElementById(prefix + '-poster-fallback');
                 if (!img || !area) return;
+                img.style.display = '';
                 img.src = '';
                 img.classList.remove('show');
                 area.classList.remove('has-image');
@@ -7777,7 +7786,7 @@
                         '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;font-family:Inter,sans-serif;min-height:' + fHeight + '">' +
                         '<div style="font-size:' + fDevSize + ';color:' + fDevColor + ';text-transform:uppercase;letter-spacing:0.05em;font-weight:500">' +
                         fDevText + '<span style="opacity:0.5;font-size:' + fCreatedSize + ';color:' + fCreatedColor + '">' + fCreatedText + '</span>' +
-                         ' | <span style="color:#C7D2FE;font-weight:600">v31.0.5</span>' +
+                         ' | <span style="color:#C7D2FE;font-weight:600">v32.2.0</span>' +
                         '</div>' +
                         '<div style="display:flex;align-items:center;gap:0.5rem">' +
                         '<span style="font-size:' + fStatusSize + ';color:' + fStatusColor + ';font-weight:900;text-transform:uppercase">0 TÍTULOS</span>' +

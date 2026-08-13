@@ -3397,4 +3397,140 @@ Todas as implementações foram realizadas sem afetar as funcionalidades existen
 | Nenhuma funcionalidade existente alterada | OK |
 | Paletas, tipografia, layout, espaçamentos preservados | OK |
 
+---
+
+## Implementações Realizadas — Melhorias 2 (melhorias2.md — Item 123)
+
+### 123. (a) CADASTRAR ESTRÉIAS: Ícone do Date Picker — Contorno Removido, Verde Preenchido e Tamanho Maior
+
+**Arquivo:** `index.html` — CSS (`.dynamic-estreia-row input[type="date"]::-webkit-calendar-picker-indicator`)
+
+**O que foi feito:**
+
+- **Contorno removido:** a borda verde (`border: 2px solid #4ADE80`) e o `border-radius: 4px` do ícone foram removidos. Como o `filter` do pseudo-elemento também é aplicado à borda, ela era renderizada com tons avermelhados/magenta (o "contorno vermelho" percebido). Sem a borda, o contorno desaparece.
+- **Verde preenchido e vivo:** o filtro foi trocado de `invert(75%) sepia(30%) saturate(1500%) hue-rotate(95deg) brightness(85%) contrast(110%)` para `invert(1) sepia(1) saturate(2000%) hue-rotate(95deg) contrast(110%)`. O `invert(1)` transforma o glifo em branco puro antes da tingidura, produzindo um verde claro (#34D399) **preenchido e saturado**, sem a opacidade/esmaecimento anterior (`brightness(85%)` removido).
+- **Tamanho maior:** o ícone passou de tamanho padrão (~20px) para **24×24px** via `width: 24px; height: 24px;`, ficando um pouco maior e mais destacado.
+
+| Aspecto | Antes | Depois |
+|---|---|---|
+| Borda do ícone | `2px solid #4ADE80` (contorno) | Removida |
+| `border-radius` | 4px | Removido |
+| `filter` | `invert(75%) ... brightness(85%)` (opaco) | `invert(1) sepia(1) saturate(2000%) hue-rotate(95deg) contrast(110%)` (verde preenchido) |
+| Tamanho | padrão | 24×24px |
+
+**Preservação:** Nenhum outro seletor de data da aplicação foi alterado — a regra permanece restrita às linhas de estreia (`.dynamic-estreia-row`). O `cursor: pointer`, o `onchange` (`UI._checkEstreiaDateNotification`), os IDs `de-date-*` e toda a lógica das estreias permanecem intactos. Paletas, tipografia, layout e espaçamentos preservados.
+
+### Checklist Final (melhorias2.md — Item 123)
+
+| Verificação | Status |
+|---|---|
+| Contorno (borda) do ícone do date picker removido | OK |
+| Ícone preenchido com o verde (#34D399) da janela de estreias | OK |
+| Ícone mais vivo e destacado (sem opacidade) | OK |
+| Ícone maior (24×24px) | OK |
+| `cursor: pointer` mantido | OK |
+| Demais date pickers (brancos) inalterados | OK |
+| Handler `onchange` e IDs `de-date-*` preservados | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+
+---
+
+## Implementações Realizadas — Melhorias 2 (melhorias2.md — Item a)
+
+### 124. (a) CADASTRAR ESTREIAS: Ícone do Calendário Preto → Verde Padrão da Janela (SVG)
+
+**Arquivo:** `index.html` — CSS (`.dynamic-estreia-row input[type="date"]::-webkit-calendar-picker-indicator`)
+
+**O que foi feito:**
+
+- O ícone do seletor de data na janela CADASTRAR ESTREIAS aparecia **preto** (a abordagem anterior por `filter` não estava renderizando o verde de forma confiável no navegador).
+- **Substituído o método por filtro por uma imagem SVG embutida** (`data:image/svg+xml`) do ícone de calendário (Font Awesome 6 solid), preenchido com o **verde padrão da janela `#10B981`** (mesmo tom do botão "+" de adicionar estreia e das bordas da barra de resumo).
+- O ícone agora é **sempre renderizado verde**, independente de filtros/temas do navegador — mais visível e destacado.
+- Adicionado um leve **brilho verde** (`drop-shadow: 0 0 4px rgba(16,185,129,0.55)`) para reforçar o destaque.
+- Tamanho aumentado para **26×26px** (ícone 20px), mantendo `cursor: pointer`.
+
+```css
+.dynamic-estreia-row input[type="date"]::-webkit-calendar-picker-indicator {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 448 512'%3E%3Cpath fill='%2310B981' d='...'/%3E%3C/svg%3E");
+    background-size: 20px 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: drop-shadow(0 0 4px rgba(16,185,129,0.55));
+    cursor: pointer;
+    width: 26px;
+    height: 26px;
+}
+```
+
+**Preservação:** A regra continua restrita às linhas de estreia (`.dynamic-estreia-row`). Os demais date pickers (brancos, do dashboard e filtros) permanecem inalterados. O `cursor: pointer`, o `onchange` (`UI._checkEstreiaDateNotification`), os IDs `de-date-*` e toda a lógica das estreias permanecem intactos. Paletas, tipografia, layout e espaçamentos preservados.
+
+### Checklist Final (melhorias2.md — Item a)
+
+| Verificação | Status |
+|---|---|
+| Ícone do calendário verde (não mais preto) na janela CADASTRAR ESTREIAS | OK |
+| Usa o verde padrão da janela (#10B981) | OK |
+| Ícone mais visível e destacado (26×26px + brilho verde) | OK |
+| Renderização garantida via SVG embutido (independente de filtros) | OK |
+| Demais date pickers (brancos) inalterados | OK |
+| `cursor: pointer` mantido | OK |
+| Handler `onchange` e IDs `de-date-*` preservados | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+
+---
+
+## Implementações Realizadas — Melhorias 2 (melhorias2.md — Itens a a d)
+
+### 125. (a/b/c/d) Edição de Card, Linha do Link, Campo Elenco e Versão v32.2.0
+
+**Arquivos:** `index.html`, `manual_do_catalogo.html`, `atualizacao_4.5.1.md`
+
+**O que foi feito:**
+
+**A) Capa acima do Fallback na Edição:**
+- Adicionada a regra CSS `.poster-upload-area.edit-mode.has-image .poster-fallback { display: none !important; }`, garantindo que o fallback (fundo, ícone e texto) seja escondido sempre que um Card for carregado durante a edição.
+- A função `setPosterPreview()` agora restaura o `img.style.display` (que era limpo pelo `onerror`) e esconde o fallback quando há `src`, reaparecendo-o quando a imagem é removida pelo "X".
+- A função `resetPoster()` também restaura o `img.style.display` para garantir a reexibição correta.
+
+**B) Classificação e Status na Linha do Link do Filme:**
+- O campo "Link do Filme" (Linha 6 do cadastro de FILMES) passou a conter, na mesma linha, também **Classificação** e **Status**.
+- Proporções da linha: Link (flex:10) · Classificação (flex:6) · Status (flex:14), com `align-items:flex-end` para alinhamento perfeito das bases dos três campos.
+- A linha removida (Linha 7 separada de Classificação/Status) foi eliminada do layout de FILMES.
+
+**C) Campo Elenco Principal com Maior Altura + Scrollbar Minimalista Azul:**
+- O campo Elenco Principal de **FILMES** (`#f-cast`) e de **SÉRIES** (`#fs-cast`) foi convertido de `<input>` para `<textarea>`.
+- Nova altura mínima de `72px` (contra o padrão dos inputs simples), com `resize: vertical` opcional.
+- A barra de rolagem só aparece quando necessário (`overflow-y:auto`) e usa o padrão da aplicação: classe `custom-scroll` (thumb azul 5px) + `scrollbar-width:thin` / `scrollbar-color:var(--accent-blue) transparent` para Firefox.
+- Todas as leituras/gravações via `.value` continuam funcionando normalmente (textareas usam a mesma propriedade).
+
+**D) Versão da Aplicação Atualizada para v32.2.0:**
+- `<title>` do `index.html`: `v32.1.0` → `v32.2.0`.
+- Badge de versão no Rodapé (`#app-version-badge`): `v32.1.0` → `v32.2.0`.
+- Descrição "Sobre o Sistema" no modal Funcionalidades: `v32.0.0` → `v32.2.0`.
+- String da versão no preview do Rodapé (função do Config): `v31.0.5` → `v32.2.0`.
+- Manual (`manual_do_catalogo.html`): subtítulo e badge da secção "Atualizações" atualizados para `v32.2.0`.
+- Nova secção "30. Novidades da Versão 32.2.0" adicionada ao Manual, com link no menu de navegação.
+
+### Checklist Final (melhorias2.md — Itens a a d)
+
+| Verificação | Status |
+|---|---|
+| (a) Fallback escondido ao carregar Card em edição | OK |
+| (a) Fallback reaparece ao remover imagem ("X") | OK |
+| (a) `setPosterPreview`/`resetPoster` com `img.style.display` | OK |
+| (a) Regra CSS `.edit-mode.has-image` criada | OK |
+| (b) Classificação e Status na linha do Link do Filme | OK |
+| (b) Alinhamento perfeito na linha (align-items:flex-end) | OK |
+| (b) Proporções flex:10/6/14 aplicadas | OK |
+| (c) Elenco de FILMES como textarea com altura 72px | OK |
+| (c) Elenco de SÉRIES como textarea com altura 72px | OK |
+| (c) Scrollbar minimalista azul (custom-scroll + Firefox) | OK |
+| (c) Leitura `.value` de `#f-cast`/`#fs-cast` preservada | OK |
+| (d) Título, Rodapé, Sobre o Sistema e preview → v32.2.0 | OK |
+| (d) Manual: subtítulo, badge e nova secção v32.2.0 | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
 
