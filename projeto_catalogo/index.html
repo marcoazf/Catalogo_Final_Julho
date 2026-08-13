@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineCatalog Elo | v22.1 - Edição Premium</title>
+    <title>CineCatalog Elo | v32.0.0 - Edição Premium</title>
     
     <!-- RECURSOS EXTERNOS -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
@@ -378,6 +378,22 @@
             gap: 1rem 1.5rem;
         }
         .modal-form-grid .full-col { grid-column: 1 / -1; }
+        .series-form-grid {
+            grid-template-columns: minmax(0, 0.54fr) minmax(0, 1.46fr);
+            align-items: stretch;
+        }
+        .series-form-grid .series-capa-col {
+            display: flex;
+            flex-direction: column;
+        }
+        .series-form-grid .series-capa-area {
+            flex: none;
+            width: 100%;
+            min-height: 0;
+            aspect-ratio: 9/16;
+            align-self: flex-start;
+            max-width: 100%;
+        }
 
         .poster-upload-area {
             aspect-ratio: 9/16;
@@ -1979,7 +1995,7 @@
                         <span class="text-[0.75rem] font-bold uppercase tracking-widest" style="color:var(--text-secondary)">Novo Filme</span>
                     </div>
 
-                    <div class="modal-form-grid">
+                    <div class="modal-form-grid series-form-grid">
                         <!-- Col 1 -->
                         <div class="space-y-4">
                             <div>
@@ -2038,66 +2054,131 @@
                             <textarea id="f-desc" class="field-premium" placeholder="Sinopse do filme..." rows="3" style="resize:vertical;min-height:65px;font-size:0.8rem"></textarea>
                         </div>
 
-                        <!-- Row 4: Poster + Media/Status side by side -->
-                        <div class="full-col" style="display:grid;grid-template-columns:minmax(0,180px) 1fr;gap:1.5rem">
-                            <!-- Col A: Poster area (compacto) -->
-                            <div>
-                                <label class="label-premium"><i class="fas fa-image mr-1.5 opacity-60"></i>Capa</label>
-                                <div id="f-poster-area" class="poster-upload-area">
-                                    <img id="f-poster-img" class="poster-preview" alt="">
-                                    <div class="upl-placeholder">
-                                        <i class="fas fa-cloud-upload-alt"></i>
-                                        <span class="upl-txt">Carregar capa</span>
-                                        <span class="upl-sub">JPG • PNG • WEBP</span>
-                                        <span class="upl-ratio">Proporção 9:16<br>(720 x 1280 px)</span>
+                        <!-- Layout com capa à esquerda (~54%) e campos à direita (~146%) -->
+                            <div class="series-capa-col">
+                                <!-- Coluna esquerda: Capa do Filme -->
+                                <div>
+                                    <label class="label-premium"><i class="fas fa-image mr-1.5 opacity-60"></i>Capa</label>
+                                    <div id="f-poster-area" class="poster-upload-area series-capa-area">
+                                        <img id="f-poster-img" class="poster-preview" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                                        <div id="f-poster-fallback" style="display:none;align-items:center;justify-content:center;width:100%;height:100%;background:linear-gradient(135deg,#1e293b,#0f172a);flex-direction:column;gap:0.4rem">
+                                            <i class="fas fa-film" style="font-size:2rem;color:#60A5FA"></i>
+                                            <span style="color:#94A3B8;font-size:0.7rem;font-weight:600">SEM CAPA</span>
+                                        </div>
+                                        <div class="upl-placeholder">
+                                            <i class="fas fa-cloud-upload-alt"></i>
+                                            <span class="upl-txt">Carregar capa</span>
+                                            <span class="upl-sub">JPG • PNG • WEBP</span>
+                                            <span class="upl-ratio">Proporção 9:16<br>(720 x 1280 px)</span>
+                                        </div>
+                                        <div class="poster-clear-btn" id="f-poster-clear" title="Remover imagem"><i class="fas fa-times"></i></div>
                                     </div>
-                                    <div class="poster-clear-btn" id="f-poster-clear" title="Remover imagem"><i class="fas fa-times"></i></div>
+                                    <input type="file" id="f-poster-file" accept="image/jpeg,image/png,image/webp" class="hidden">
                                 </div>
-                                <input type="file" id="f-poster-file" accept="image/jpeg,image/png,image/webp" class="hidden">
-                            </div>
 
-                            <!-- Col B: Media + Status -->
-                            <div class="space-y-3">
-                                <div>
-                                    <label class="label-premium"><i class="fas fa-link mr-1.5 opacity-60"></i>Link do Filme</label>
-                                    <div class="input-with-icon">
-                                        <input type="text" id="f-media-url" class="field-premium" placeholder="https://example.com/filme.mp4" style="font-size:10px">
-                                        <button type="button" class="input-icon-btn" id="f-media-picker-btn" title="Selecionar ficheiro local"><i class="fas fa-folder-open"></i></button>
-                                        <input type="file" id="f-media-file" accept="video/*" class="hidden">
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="label-premium"><i class="fas fa-video mr-1.5 opacity-60"></i>Trailer</label>
-                                    <input type="text" id="f-trailer-url" class="field-premium" placeholder="https://youtube.com/..." style="font-size:10px">
-                                </div>
-                                <div id="f-poster-url-wrap" class="poster-url-wrap">
-                                    <label class="label-premium"><i class="fas fa-image mr-1.5 opacity-60"></i>URL da Capa</label>
-                                    <div class="relative">
-                                        <input type="text" id="f-poster-url" class="field-premium" placeholder="https://... URL da imagem" style="padding-left:2rem;font-size:10px">
-                                        <i class="fas fa-link absolute left-3 top-1/2 -translate-y-1/2 text-[8px]" style="color:var(--text-secondary)"></i>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="label-premium"><i class="fas fa-info-circle mr-1.5 opacity-60"></i>Outras Informações</label>
-                                    <textarea id="f-other-info" class="field-premium" placeholder="Informações adicionais..." rows="3" style="resize:vertical;min-height:60px;font-size:10px"></textarea>
-                                </div>
-                                <div>
-                                    <label class="label-premium"><i class="fas fa-flag mr-1.5 opacity-60"></i>Status</label>
-                                    <div class="status-check-group">
-                                        <div class="status-check-item" data-status="new" onclick="Logic.toggleStatus(this)">
-                                            <input type="checkbox" id="f-status-new">
-                                            <i class="fas fa-plus-circle" style="font-size:9px"></i>
-                                            Novo
+                                <!-- Col 2: CADASTRO DO FILME (direita) -->
+                                <div class="flex flex-col" style="gap:1rem;justify-content:space-between">
+                                    <!-- Linha 1: Título do Filme - Ano - País -->
+                                    <div class="flex gap-2" style="align-items:flex-end">
+                                        <div style="flex:10;min-width:0;">
+                                            <label class="label-premium"><i class="fas fa-font mr-1.5 opacity-60"></i>Título do Filme</label>
+                                            <input type="text" id="f-title" class="field-premium" placeholder="Título do filme" required>
                                         </div>
-                                        <div class="status-check-item" data-status="watch" onclick="Logic.toggleStatus(this)">
-                                            <input type="checkbox" id="f-status-watch">
-                                            <i class="fas fa-eye" style="font-size:9px"></i>
-                                            Assistir
+                                        <div style="flex:3;min-width:0;">
+                                            <label class="label-premium"><i class="fas fa-calendar mr-1.5 opacity-60"></i>Ano</label>
+                                            <input type="text" id="f-year" class="field-premium" placeholder="2026">
                                         </div>
-                                        <div class="status-check-item" data-status="fav" onclick="Logic.toggleStatus(this)">
-                                            <input type="checkbox" id="f-status-fav">
-                                            <i class="fas fa-heart" style="font-size:9px"></i>
-                                            Favorito
+                                        <div style="flex:7;min-width:0;">
+                                            <label class="label-premium"><i class="fas fa-globe mr-1.5 opacity-60"></i>País</label>
+                                            <input type="text" id="f-country" class="field-premium" placeholder="Ex: Brasil">
+                                        </div>
+                                    </div>
+
+                                    <!-- Linha 2: Diretor(a) (75%) - Duração (25%) -->
+                                    <div class="flex gap-2" style="align-items:flex-end">
+                                        <div style="flex:15;min-width:0;">
+                                            <label class="label-premium"><i class="fas fa-user mr-1.5 opacity-60"></i>Diretor(a)</label>
+                                            <input type="text" id="f-director" class="field-premium" placeholder="Nome do realizador">
+                                        </div>
+                                        <div style="flex:5;min-width:0;">
+                                            <label class="label-premium"><i class="fas fa-clock mr-1.5 opacity-60"></i>Duração</label>
+                                            <input type="text" id="f-duration" class="field-premium" placeholder="Ex: 120">
+                                        </div>
+                                    </div>
+
+                                    <!-- Linha 3: Elenco Principal -->
+                                    <div>
+                                        <label class="label-premium"><i class="fas fa-users mr-1.5 opacity-60"></i>Elenco Principal</label>
+                                        <input type="text" id="f-cast" class="field-premium" placeholder="Atores principais">
+                                    </div>
+
+                                    <!-- Linha 4: Sinopse -->
+                                    <div>
+                                        <label class="label-premium"><i class="fas fa-align-left mr-1.5 opacity-60"></i>Sinopse</label>
+                                        <textarea id="f-desc" class="field-premium" placeholder="Sinopse do filme..." rows="2" style="resize:vertical;min-height:54px;font-size:0.8rem"></textarea>
+                                    </div>
+
+                                    <!-- Linha 5: Trailer - Gênero - Gerir Gênero -->
+                                    <div class="flex gap-2" style="align-items:flex-end">
+                                        <div style="flex:8;min-width:0;">
+                                            <label class="label-premium"><i class="fas fa-video mr-1.5 opacity-60"></i>Trailer</label>
+                                            <input type="text" id="f-trailer-url" class="field-premium" placeholder="https://youtube.com/..." style="font-size:10px">
+                                        </div>
+                                        <div style="flex:6;min-width:0;position:relative">
+                                            <label class="label-premium"><i class="fas fa-tag mr-1.5 opacity-60"></i>Gênero</label>
+                                            <div class="flex gap-2 items-center">
+                                                <select id="f-category" class="field-premium flex-1" style="min-width:0;font-size:10px">
+                                                    <option value="">Escolher Gênero</option>
+                                                </select>
+                                                <div onclick="Logic.toggleCatManager()" class="btn-icon shrink-0 cursor-pointer" title="Gerir gêneros">
+                                                    <i class="fas fa-cog text-xs"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Linha 6: Link do Filme com Pick Folder -->
+                                    <div>
+                                        <label class="label-premium"><i class="fas fa-link mr-1.5 opacity-60"></i>Link do Filme</label>
+                                        <div class="input-with-icon">
+                                            <input type="text" id="f-media-url" class="field-premium" placeholder="https://example.com/filme.mp4" style="font-size:10px">
+                                            <button type="button" class="input-icon-btn" id="f-media-picker-btn" title="Selecionar ficheiro local"><i class="fas fa-folder-open"></i></button>
+                                            <input type="file" id="f-media-file" accept="video/*" class="hidden">
+                                        </div>
+                                    </div>
+
+                                    <!-- Linha 7: Classificação (40%) - Status (60%) -->
+                                    <div class="flex gap-2" style="align-items:flex-end">
+                                        <div style="flex:8;min-width:0;">
+                                            <label class="label-premium"><i class="fas fa-star mr-1.5 opacity-60"></i>Classificação</label>
+                                            <div id="star-input-container" class="flex gap-1" style="color:#4B5563;font-size:1.1rem;padding:0.25rem 0">
+                                                <i class="fas fa-star cursor-pointer" data-v="1"></i>
+                                                <i class="fas fa-star cursor-pointer" data-v="2"></i>
+                                                <i class="fas fa-star cursor-pointer" data-v="3"></i>
+                                                <i class="fas fa-star cursor-pointer" data-v="4"></i>
+                                                <i class="fas fa-star cursor-pointer" data-v="5"></i>
+                                            </div>
+                                            <input type="hidden" id="f-stars" value="0">
+                                        </div>
+                                        <div style="flex:12;min-width:0;">
+                                            <label class="label-premium"><i class="fas fa-flag mr-1.5 opacity-60"></i>Status</label>
+                                            <div class="status-check-group">
+                                                <div class="status-check-item" data-status="new" onclick="Logic.toggleStatus(this)">
+                                                    <input type="checkbox" id="f-status-new">
+                                                    <i class="fas fa-plus-circle" style="font-size:9px"></i>
+                                                    Novo
+                                                </div>
+                                                <div class="status-check-item" data-status="watch" onclick="Logic.toggleStatus(this)">
+                                                    <input type="checkbox" id="f-status-watch">
+                                                    <i class="fas fa-eye" style="font-size:9px"></i>
+                                                    Assistir
+                                                </div>
+                                                <div class="status-check-item" data-status="fav" onclick="Logic.toggleStatus(this)">
+                                                    <input type="checkbox" id="f-status-fav">
+                                                    <i class="fas fa-heart" style="font-size:9px"></i>
+                                                    Favorito
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -2117,7 +2198,7 @@
                         </button>
                     </div>
 
-                    <div class="modal-form-grid">
+                    <div class="modal-form-grid series-form-grid">
                         <!-- Col 1 -->
                         <div class="space-y-4">
                             <div>

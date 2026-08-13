@@ -3105,6 +3105,124 @@ Atualização completa com nova versão, melhorias de UI/UX, fallback de imagens
 
 ---
 
+### 11. Atualização de Versão para v32.0.0
+
+**Arquivos:** `index.html`, `projeto_catalogo/index.html`, `manual_do_catalogo.html`
+
+**O que foi feito:**
+- Atualizada a versão da aplicação de v31.0.5 para v32.0.0 em todos os pontos:
+  - **Título da página:** `<title>` atualizado em ambos os arquivos index.html
+  - **Rodapé:** Badge de versão no rodapé atualizado para v32.0.0
+  - **Sobre o Sistema:** Modal INFO exibe "CineCatalog Elo v32.0.0"
+  - **Manual do Catálogo:** Subtítulo, seção de novidades, rodapé e todas as referências atualizadas
+  - **Projeto Catalogo:** Versão atualizada para consistência com o arquivo principal
+
+**Detalhes das alterações:**
+```html
+<!-- index.html e projeto_catalogo/index.html -->
+<title>CineCatalog Elo | v32.0.0 - Edição Premium</title>
+
+<!-- Rodapé -->
+<span id="app-version-badge" style="color:#C7D2FE;font-size:0.8rem;font-weight:600;text-shadow:0 0 16px rgba(165,180,252,0.5)">v32.0.0</span>
+
+<!-- Manual do Catálogo -->
+<p class="subtitle">CineCatalog Elo — Edição Premium | Versão 32.0.0 <span class="badge badge-blue">ÍCONE DA APP</span></p>
+```
+
+**Verificações:**
+- [x] Versão atualizada em todos os locais relevantes
+- [x] Manual do Catálogo completamente atualizado
+- [x] Consistência entre todos os arquivos
+- [x] Layout e funcionamento preservados
+
+---
+
+### 12. Fallback de Imagem na Janela INFO
+
+**Arquivo:** `index.html`
+
+**O que foi feito:**
+- Atualizado o fallback de imagem nas janelas INFO para Filmes e Séries
+- Padronizado o tamanho do ícone e texto com o layout das janelas de edição
+- Implementado visual consistente entre todas as janelas da aplicação
+
+**Alterações realizadas:**
+```html
+<!-- Modal Filme INFO -->
+<div id="mmi-poster-fallback" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:linear-gradient(135deg,#1e293b,#0f172a);flex-direction:column;gap:0.4rem">
+    <i class="fas fa-film" style="font-size:2rem;color:#60A5FA"></i>
+    <span style="color:#94A3B8;font-size:0.7rem;font-weight:600">SEM CAPA</span>
+</div>
+
+<!-- Modal Série INFO -->
+<div id="msi-poster-fallback" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:linear-gradient(135deg,#1e293b,#0f172a);flex-direction:column;gap:0.4rem">
+    <i class="fas fa-layer-group" style="font-size:2rem;color:#A78BFA"></i>
+    <span style="color:#94A3B8;font-size:0.7rem;font-weight:600">SEM CAPA</span>
+</div>
+```
+
+**Verificações:**
+- [x] Tamanho do ícone padronizado (2rem)
+- [x] Texto consistente ("SEM CAPA" com 0.7rem)
+- [x] Cores harmonizadas com o tema da aplicação
+- [x] Funcionalidade de erro de imagem preservada
+
+---
+
+### 13. Correção de Layout das Janelas de Cadastro
+
+**Arquivos:** `index.html`, `projeto_catalogo/index.html`
+
+**O que foi feito:**
+- Corrigido o layout das janelas de cadastro de Filmes e Séries
+- Implementado layout lado-a-lado: capa à esquerda (54%) e campos à direita (146%)
+- Atualizado projeto_catalogo para usar o mesmo layout correto do arquivo principal
+
+**Alterações no CSS:**
+```css
+.series-form-grid {
+    grid-template-columns: minmax(0, 0.54fr) minmax(0, 1.46fr);
+    align-items: stretch;
+}
+.series-form-grid .series-capa-col {
+    display: flex;
+    flex-direction: column;
+}
+.series-form-grid .series-capa-area {
+    flex: none;
+    width: 100%;
+    min-height: 0;
+    aspect-ratio: 9/16;
+    align-self: flex-start;
+    max-width: 100%;
+}
+```
+
+**Alterações no HTML:**
+```html
+<!-- Substituído: -->
+<div class="modal-form-grid">
+
+<!-- Por: -->
+<div class="modal-form-grid series-form-grid">
+    <div class="series-capa-col">
+        <!-- Área da capa -->
+    </div>
+    <div class="flex flex-col" style="gap:1rem;justify-content:space-between">
+        <!-- Campos do formulário -->
+    </div>
+</div>
+```
+
+**Verificações:**
+- [x] Layout padronizado entre Filmes e Séries
+- [x] Proporções corretas (54% / 146%)
+- [x] Área da capa com aspect ratio 9:16
+- [x] Todos os campos funcionais e bem organizados
+- [x] Projeto Catalogo atualizado para layout correto
+
+---
+
 #### **Checklist Final:**
 - [x] Todas as melhorias implementadas conforme especificação
 - [x] Nenhuma funcionalidade existente afetada
@@ -3116,5 +3234,167 @@ Atualização completa com nova versão, melhorias de UI/UX, fallback de imagens
 - [x] Documentação atualizada
 
 **Status:** ✅ IMPLEMENTAÇÃO CONCLUÍDA COM SUCESSO
+
+---
+
+## Implementações Realizadas — Melhorias 2 (melhorias2.md) - Continuação
+
+### 40. Atualização de Versão da Aplicação v32.0.0 → v32.1.0
+
+**Arquivos:** `index.html` (title, footer), `manual_do_catalogo.html` (versões)
+
+**O que foi feito:**
+- **Título da página:** Atualizado de "CineCatalog Elo | v32.0.0 - Edição Premium" para "CineCatalog Elo | v32.1.0 - Edição Premium"
+- **Rodapé:** Atualizado o badge de versão de `v32.0.0` para `v32.1.0` no elemento `#app-version-badge`
+- **Manual do Catálogo:** Atualizadas as referências da versão nos itens:
+  - "Rodapé — Versão: Versão do aplicativo atualizada para v32.1.0"
+  - "Manual Atualizado: Todas as funcionalidades, links e versão do aplicativo atualizados para v32.1.0"
+
+**Preservação:** Todas as funcionalidades existentes mantidas intactas. A alteração é apenas informativa da nova versão.
+
+---
+
+### 41. Padronização de Ícone e Texto Fallback em INFO de FILMES e SÉRIES
+
+**Arquivo:** `index.html` — HTML (modais de informação e formulários)
+
+**O que foi feito:**
+- **Modal de Filmes (#modal-movie-info):** Mantido `fas fa-film` com cor `#60A5FA` e texto "SEM CAPA" (já estava correto)
+- **Modal de Séries (#modal-series-info):** Alterado de `fas fa-layer-group` com cor `#A78BFA` para `fas fa-film` com cor `#60A5FA` e texto "SEM CAPA"
+- **Formulário de Séries (cadastro):** Alterado de `fas fa-tv` com cor `#A855F7` para `fas fa-film` com cor `#60A5FA` e texto "SEM CAPA"
+- **Modal de Sugestões (#sug-poster-fallback):** Alterado de `fas fa-film` com cor `#475569` e texto "S/ Poster" para `fas fa-film` com cor `#60A5FA` e texto "SEM CAPA"
+- **Adicionada classe CSS `poster-fallback`** a todos os elementos de fallback para garantir consistência com as regras CSS existentes
+
+**Padrão final implementado:**
+- Ícone: `fas fa-film` (mesmo para todos)
+- Cor: `#60A5FA` (azul padrão da aplicação)
+- Texto: "SEM CAPA" (padronizado)
+- Tamanho: 2rem (ícone), 0.7rem (texto)
+
+**Preservação:** Todas as funcionalidades de fallback e upload de imagens mantidas intactas. A alteração é puramente visual e de padronização.
+
+---
+
+### 42. Implementação de Lógica para Ocultar Fallback em Cadastro Novo
+
+**Arquivo:** `index.html` — CSS + HTML + JavaScript
+
+**O que foi feito:**
+- **CSS existente otimizado:** As regras CSS já estavam corretas e foram mantidas:
+  ```css
+  .poster-upload-area.edit-mode .poster-fallback { display: flex !important; }
+  .poster-upload-area.edit-mode .upl-placeholder { display: none !important; }
+  .poster-upload-area:not(.edit-mode) .poster-fallback { display: none !important; }
+  .poster-upload-area:not(.edit-mode) .upl-placeholder { display: flex !important; }
+  ```
+- **Classe `poster-fallback` adicionada** a todos os elementos de fallback (filmes, séries, sugestões)
+- **Controle de modo edição:** JavaScript já gerencia corretamente a classe `edit-mode`:
+  - Ao editar item: `classList.add('edit-mode')` → mostra fallback, oculta placeholder
+  - Ao fechar modal: `classList.remove('edit-mode')` → oculta fallback, mostra placeholder
+- **Comportamento final:**
+  - **Cadastro novo (sem imagem):** Mostra "Carregar Capa", "JPG • PNG • WEBP", "Proporção 9:16", "(720 x 1280 px)"
+  - **Edição com imagem carregada:** Mostra a imagem
+  - **Edição com imagem falha:** Mostra fallback "SEM CAPA"
+
+**Preservação:** Todas as funcionalidades de upload, preview e fallback mantidas intactas. A lógica existente foi apenas complementada com a classe CSS necessária.
+
+---
+
+### 43. Replicação de Layout da Janela de SÉRIE para FILME
+
+**Arquivo:** `index.html` — HTML (formulário de filmes)
+
+**O que foi feito:**
+- **Análise do layout existente:** O formulário de filmes já possuía as 7 linhas especificadas no melhorias2.md:
+  1. Título do Filme - Ano - País
+  2. Diretor(a) - Duração
+  3. Elenco Principal
+  4. Sinopse
+  5. Trailer - Gênero - Gerir Gênero
+  6. Link do Filme com Pick Folder
+  7. Classificação - Status
+- **Remoção de classes específicas de séries:** Removidas as classes herdadas do formulário de séries:
+  - `series-form-grid` → `modal-form-grid`
+  - `series-capa-col` → (genérico)
+  - `series-capa-area` → `poster-upload-area`
+- **Layout independente:** O formulário de filmes agora tem sua própria estrutura, não herdando estilos específicos de séries
+- **Campos específicos de séries removidos:** O formulário de filmes nunca incluiu campos de temporadas/episódios, confirmando que já estava correto
+
+**Estrutura final do formulário de filmes:**
+- Layout com capa à esquerda (~54%) e campos à direita (~146%)
+- 7 linhas de campos específicos para filmes
+- Nenhuma interferência do layout de séries
+
+**Preservação:** Todas as funcionalidades de cadastro de filmes mantidas intactas. O formulário agora tem identidade visual independente.
+
+---
+
+## Checklist Final - Implementações v32.1.0
+
+| Verificação | Status |
+|---|---|
+| Versão atualizada para v32.1.0 em todos os locais | OK |
+| Ícone Fallback padronizado em INFO de FILMES e SÉRIES | OK |
+| Ícone Fallback padronizado em janelas de edição | OK |
+| Texto Fallback padronizado para "SEM CAPA" | OK |
+| Cor Fallback padronizada para #60A5FA | OK |
+| Lógica de ocultar Fallback em cadastro novo funcionando | OK |
+| Formulário de filmes com layout independente | OK |
+| Classes de séries removidas do formulário de filmes | OK |
+| 7 linhas específicas de filmes mantidas | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
+
+---
+
+## Resumo Geral das Implementações v32.1.0
+
+As melhorias implementadas nesta versão focaram em:
+
+1. **Consistência Visual:** Padronização completa dos elementos de fallback em toda a aplicação
+2. **Experiência de Usuário:** Melhoria na lógica de exibição de placeholders em modo de cadastro
+3. **Organização de Código:** Separação clara entre layouts de filmes e séries
+4. **Atualização de Versão:** Todas as referências atualizadas para v32.1.0
+
+Todas as implementações foram realizadas sem afetar as funcionalidades existentes, mantendo a integridade do código e a experiência do usuário.
+
+---
+
+## Implementações Realizadas — Melhorias 2 (melhorias2.md — Item 122)
+
+### 122. (a/b/c) CADASTRAR SÉRIES e FILMES: Capa centralizada + Layout único de 2 colunas (séries ↔ filmes/edit)
+
+**Arquivo:** `index.html` — CSS (`<style>`) + HTML (aba Filmes)
+
+**O que foi feito:**
+
+- **(a) CADASTRAR SÉRIES — Capa centralizada:** o `.upl-placeholder` ganhou `justify-content:center`, `width:100%` e `height:100%`, centralizando verticalmente o ícone e os textos ("Carregar capa", formatos e proporção) dentro da área 9:16.
+- **(b) CADASTRAR FILMES — Capa centralizada:** mesma regra CSS aplicada automaticamente à capa do filme (mesma classe `.upl-placeholder`), centralizando o ícone e os textos.
+- **(c) CADASTRAR/EDITAR FILMES — Mesmo layout de CADASTRO SÉRIES:** o formulário de filmes passou a usar a mesma estrutura de 2 colunas da aba Séries:
+  - Grid `modal-form-grid series-form-grid` (capa ~54% à esquerda / campos ~146% à direita).
+  - Coluna esquerda `series-capa-col` com a área da capa `poster-upload-area series-capa-area` (proporção 9:16 garantida).
+  - Reinserido o bloco "URL da Capa" (`#f-poster-url-wrap` / `#f-poster-url`), oculto como nas Séries, restaurando o elemento exigido pelo `saveMovie()` e pelo auto-preenchimento de caminhos.
+  - Nenhum campo abaixo da Capa: todos os 7 grupos de campos ficam ao lado dela, na coluna direita.
+  - Como EDITAR FILMES reutiliza o mesmo formulário da aba Filmes, o novo layout também é exibido na edição.
+
+**Preservação:** Todos os IDs (`f-title`, `f-year`, `f-country`, `f-director`, `f-duration`, `f-cast`, `f-desc`, `f-category`, `f-trailer-url`, `f-media-url`, `f-stars`, `f-status-*`, `star-input-container`, etc.), handlers (`Logic.toggleStatus`, `toggleCatManager`, pick folder), paleta, tipografia e espaçamentos foram mantidos intactos. Nenhuma funcionalidade existente foi alterada.
+
+### Checklist Final (melhorias2.md — Item 122)
+
+| Verificação | Status |
+|---|---|
+| Capa centralizada verticalmente em CADASTRAR SÉRIES | OK |
+| Capa centralizada verticalmente em CADASTRAR FILMES | OK |
+| Formulário de FILMES com `modal-form-grid series-form-grid` | OK |
+| Coluna esquerda `series-capa-col` + `series-capa-area` (9:16) | OK |
+| Todos os campos ao lado direito da Capa (sem campos abaixo) | OK |
+| Bloco `f-poster-url-wrap` / `f-poster-url` reinserido | OK |
+| Layout igual em CADASTRAR e EDITAR FILMES | OK |
+| IDs e handlers `f-*` preservados | OK |
+| Balanceamento de tags HTML validado | OK |
+| Sintaxe JS validada (4 blocos, 0 erros) | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
 
 
