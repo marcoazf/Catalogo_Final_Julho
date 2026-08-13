@@ -116,7 +116,7 @@
 
             Storage.load();
             // Load saved theme
-            var savedTheme = localStorage.getItem('cinecatalog_theme') || 'dark';
+            var savedTheme = Store.getItem('cinecatalog_theme') || 'dark';
             Logic.setTheme(savedTheme);
             /* Tooltip do trailer: acompanha o cursor (abaixo e à direita) */
             ['mmi-trailer-link', 'msi-trailer-link'].forEach(function(tid) {

@@ -162,7 +162,7 @@
                     var posterSrc = posterImg && posterImg.classList.contains('show') ? posterImg.src : '';
                     var urlSrc = document.getElementById('fs-poster-url').value;
                     var epKey = _editingId || 'pending';
-                    var savedEps = JSON.parse(localStorage.getItem('_dyn_series_episodes') || '{}');
+                    var savedEps = JSON.parse(Store.getItem('_dyn_series_episodes') || '{}');
                     var dynEpisodes = savedEps[epKey] || [];
                     item = {
                         id: _editingId || Date.now().toString(),
@@ -201,7 +201,7 @@
                     item.dynamicEpisodesNew = (UI._episodeData && UI._episodeData.length > 0) ? UI._episodeData.slice() : [];
                     // Clean up temp storage
                     delete savedEps[epKey];
-                    localStorage.setItem('_dyn_series_episodes', JSON.stringify(savedEps));
+                    Store.setItem('_dyn_series_episodes', JSON.stringify(savedEps));
                 } else if (type === 'estreias') {
                     // Dynamic estreia rows: delegate to saveAllDynamicEstreias
                     UI.saveAllDynamicEstreias();
@@ -214,7 +214,7 @@
                         if (cloneBtn) cloneBtn.style.display = 'none';
                         var dupBtnEdit = document.getElementById('btn-duplicate-series');
                         if (dupBtnEdit) dupBtnEdit.style.display = 'none';
-                        localStorage.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
+                        Store.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
                         _checkStorageQuota();
                         ConfigAutoSave();
                         Render.all();
@@ -278,7 +278,7 @@
                     var dupBtnEdit = document.getElementById('btn-duplicate-series');
                     if (dupBtnEdit) dupBtnEdit.style.display = 'none';
 
-                    localStorage.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
+                    Store.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
                     _checkStorageQuota();
                     ConfigAutoSave();
                     Render.all();
@@ -341,7 +341,7 @@
                     }
 
                     APP_STATE.movies.push(item);
-                    localStorage.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
+                    Store.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
                     _checkStorageQuota();
                     ConfigAutoSave();
                     Render.all();

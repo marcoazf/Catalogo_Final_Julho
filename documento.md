@@ -67,10 +67,11 @@ Ordem escolhida para **CORREÇÕES CIRÚRGICAS 01** (do Diagnostico01.md), prior
 - [ ] `git commit`.
 
 ### Etapa 3 — IndexedDB via localForage (fim do localStorage)
-- [ ] Instalar localForage (bundled local) e criar camada `storage.js` compatível com a API antiga.
-- [ ] Migração automática: ler `localStorage` legado e gravar no IndexedDB na primeira carga.
-- [ ] Capas deixam de ser DataURL e viram **Blob** (imagens armazenadas no IndexedDB).
-- [ ] Smoke test com persistência (salvar → recarregar → dados presentes) → VERDE.
+- [x] Instalar localForage (bundled local) e criar camada `Store` compatível com a API antiga (`js/store.js` + `js/vendor/localforage.min.js`).
+- [x] Migração automática: ler `localStorage` legado e gravar no IndexedDB na primeira carga.
+- [x] Todos os call sites de `localStorage.getItem/setItem/removeItem` em `js/*.js` redirecionados para `Store` (só o `_checkStorageQuota` inspeciona o espelho).
+- [x] Smoke test com persistência (salvar → recarregar → dados presentes) + teste novo 09 (localStorage limpo → dados vindos do IndexedDB) → VERDE (9/9).
+- [ ] **Sub-etapa 3b:** Capas deixam de ser DataURL e viram **Blob** (imagens armazenadas no IndexedDB).
 - [ ] `git commit`.
 
 ### Etapa 4 — Performance de imagens
@@ -115,6 +116,9 @@ Ordem escolhida para **CORREÇÕES CIRÚRGICAS 01** (do Diagnostico01.md), prior
 | Data | Etapa | Descrição | Resultado | Referência |
 |------|-------|-----------|-----------|------------|
 | 2026-08-13 | 0 | Criado `documento.md`, backup v32.2.0 em `backup/index_v32.2.0_20260813_1910.html`, `package.json` + Playwright instalado, suíte `tests/smoke.spec.js` (8 testes), config, helpers e `tests/MANUAL.md` | Baseline VERDE: 8/8 testes passando na v32.2.0 intacta | `tests/smoke.spec.js`, `tests/helpers.js`, `playwright.config.js` |
+| 2026-08-13 | 1 | Monólito quebrado: `index.html` (646KB/10.518 linhas) → `css/style.css` (2.368 linhas) + `js/storage.js` (263), `js/render.js` (263), `js/logic.js` (1.806), `js/ui.js` (3.447), `js/main.js` (216), `js/autosave.js` (483). `index.html` agora tem 1.670 linhas (só HTML + links). Split cirúrgico via `scripts/split_monolith.js` com verificação de âncoras de linha. `_isElectron()` (helper Electron) ficou no fim de `logic.js` (era do bloco 1) e é global — sem conflito | VERDE: 8/8 testes; `node --check` OK nos 6 arquivos | `scripts/split_monolith.js`, `css/style.css`, `js/*.js` |
+| 2026-08-13 | 2 | Tailwind purgado: removido `<script src="https://cdn.tailwindcss.com">` (CDN runtime ~100KB+). Adicionado build local `css/tailwind.css` (~19KB minificado) via `npx tailwindcss` com `tailwind.config.js` (content: index.html + js/*.js) e `css/tailwind.input.css` (@tailwind base/components/utilities). Ordem de cascata preservada (style.css antes de tailwind.css). Ordem de carregamento: 1.670 → 1.668 linhas | VERDE: 8/8 testes + comparação de pixels `scripts/compare_shots.js`: home/cadastro 0% de pixels diferentes, cards/grid diff máx 7-8 (anti-aliasing) — visual idêntico ao CDN | `tailwind.config.js`, `css/tailwind.input.css`, `css/tailwind.css`, `scripts/screenshot_before.js`, `scripts/compare_shots.js` |
+| 2026-08-13 | 3a | IndexedDB via localForage. `js/vendor/localforage.min.js` (vendored, 29KB) + `js/store.js` (fachada síncrona `Store`): cache em memória + dupla escrita localStorage (espelho, boot instantâneo) + IndexedDB (durável). Boot: semeadura síncrona do localStorage → sobreposição assíncrona do IndexedDB (chaves não-escritas na sessão) → migração localStorage→IndexedDB das chaves ausentes. `_ready` reaplica `Storage.load/applyConfig/renderCategorySelect/updateCounters/updateReminderBadge` após a sobreposição. `Store.setItem/getItem/removeItem` assíncrono com fallback localforage LOCALSTORAGE. Todos os call sites de `localStorage.getItem/setItem/removeItem` em `js/*.js` (40 ocorrências) → `Store.*` via `scripts/replace_localstorage.js` (Node/UTF-8; PowerShell corromperia acentos). Restam só: `_checkStorageQuota` (autosave.js:113-115, mede o espelho) e textos descritivos atualizados. Teste novo 09: salvar → `localStorage.clear()` → reload → dados vindos do IndexedDB | VERDE: 9/9 testes (07 e 09 cobrem persistência) | `js/store.js`, `js/vendor/localforage.min.js`, `index.html` (bloco 8), `scripts/replace_localstorage.js`, `tests/smoke.spec.js` (teste 09) |
 
 ---
 
@@ -124,7 +128,8 @@ Ordem escolhida para **CORREÇÕES CIRÚRGICAS 01** (do Diagnostico01.md), prior
 
 | Data | Sintoma | Causa | Correção | Arq:Linha | Teste |
 |------|---------|-------|----------|-----------|-------|
-|      |         |       |          |           |       |
+| 2026-08-13 | Após Etapa 3a, testes 07/09 falhavam no reload (0 cards) e o espelho localStorage não era gravado (`LS has key: false`) | O `Store.init()` foi inserido no lugar errado por um `edit` (caiu dentro do corpo do método `init`, logo após o fechamento do IIFE assíncrono), então `init()` nunca era chamado: `_ready` ficava `undefined`, `_hasLS` `false` e `_idb` `null`. Sintoma inicial oculto: nenhum warning, porque a chamada recursiva só existiria se alguém invocasse `init` | Restaurada a estrutura original do `init()` e movido `Store.init();` para o fim do arquivo, após o fechamento do IIFE externo | `js/store.js:117-144` | 9/9 VERDE |
+| 2026-08-13 | Acentos corrompidos nos arquivos JS após substituição em massa (`Séries` → `S�ries`) | PowerShell 5.1 `Get-Content`/`Set-Content` com encoding ANSI padrão leu/gravou UTF-8 como mojibake | Restaurado via `git checkout` e reexecutada a substituição com script Node (`fs.readFileSync/writeFileSync` utf-8) | `scripts/replace_localstorage.js` | 9/9 VERDE |
 
 ---
 

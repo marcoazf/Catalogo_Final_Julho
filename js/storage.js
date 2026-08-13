@@ -16,14 +16,14 @@
             save() {
                 // Strip temporary properties before saving
                 var clean = APP_STATE.movies.map(function(m) { var c = Object.assign({}, m); delete c._searchMatch; delete c._cadastroDate; return c; });
-                localStorage.setItem('cinecatalog_v126', JSON.stringify(clean));
+                Store.setItem('cinecatalog_v126', JSON.stringify(clean));
                 UI.updateCounters();
                 UI.updateFooterStats();
                 Logic.updateReminderBadge();
                 Logic.showStatus('Sincronizado');
             },
             load() {
-                const data = localStorage.getItem('cinecatalog_v126');
+                const data = Store.getItem('cinecatalog_v126');
                 if (data) {
                     try { APP_STATE.movies = JSON.parse(data); } catch(e) { APP_STATE.movies = []; }
                     APP_STATE.movies.forEach(function(m) {
@@ -51,7 +51,7 @@
         const CONFIG_STORAGE_KEY = 'cinecatalog_config';
 
         function loadConfig() {
-            var raw = localStorage.getItem(CONFIG_STORAGE_KEY);
+            var raw = Store.getItem(CONFIG_STORAGE_KEY);
             if (raw) {
                 try { return JSON.parse(raw); } catch(e) {}
             }
@@ -131,7 +131,7 @@
         }
 
         function saveConfig() {
-            localStorage.setItem(CONFIG_STORAGE_KEY, JSON.stringify(window._appConfig));
+            Store.setItem(CONFIG_STORAGE_KEY, JSON.stringify(window._appConfig));
         }
 
         function applyConfig() {

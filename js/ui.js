@@ -119,12 +119,12 @@
             ],
             _shortcutsLoad: function() {
                 var saved = null;
-                try { saved = JSON.parse(localStorage.getItem('cinecatalog_shortcuts')); } catch(e) {}
+                try { saved = JSON.parse(Store.getItem('cinecatalog_shortcuts')); } catch(e) {}
                 if (saved && Array.isArray(saved)) return saved;
                 return JSON.parse(JSON.stringify(UI._shortcutsDefaults));
             },
             _shortcutsPersist: function(list) {
-                localStorage.setItem('cinecatalog_shortcuts', JSON.stringify(list));
+                Store.setItem('cinecatalog_shortcuts', JSON.stringify(list));
             },
             _shortcutsRender: function() {
                 var list = UI._shortcutsLoad();
@@ -297,10 +297,10 @@
                 // Mark as closed for today
                 var todayStr = new Date().toISOString().slice(0,10);
                 var key = 'cinecatalog_notif_' + todayStr;
-                var raw = localStorage.getItem(key);
+                var raw = Store.getItem(key);
                 var nd = raw ? JSON.parse(raw) : { count: 0, closed: false, firstShown: true };
                 nd.closed = true;
-                localStorage.setItem(key, JSON.stringify(nd));
+                Store.setItem(key, JSON.stringify(nd));
             },
             toggleNotifications() {
                 var overlay = document.getElementById('notification-overlay');
@@ -467,7 +467,7 @@
                 
                 if (typeof _editingId !== 'undefined' && _editingId) {
                     var _item = APP_STATE.movies.find(function(m) { return m.id === _editingId; });
-                    if (_item) { _item.image = src || ''; localStorage.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies)); Render.all(); }
+                    if (_item) { _item.image = src || ''; Store.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies)); Render.all(); }
                 }
             },
             resetPoster(prefix) {
@@ -500,7 +500,7 @@
                 
                 if (typeof _editingId !== 'undefined' && _editingId) {
                     var _item = APP_STATE.movies.find(function(m) { return m.id === _editingId; });
-                    if (_item) { _item.image = ''; localStorage.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies)); Render.all(); }
+                    if (_item) { _item.image = ''; Store.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies)); Render.all(); }
                 }
             },
             setZoom(lvl) {
@@ -1648,7 +1648,7 @@
                 if (!confirm('TEM CERTEZA? Esta acao ira apagar PERMANENTEMENTE todos os ' + total + ' itens do seu acervo!')) return;
                 if (!confirm('CONFIRMACAO FINAL: Deseja realmente eliminar TODO o acervo (' + total + ' itens)? Esta acao nao pode ser desfeita!')) return;
                 APP_STATE.movies = [];
-                localStorage.removeItem('cinecatalog_v126');
+                Store.removeItem('cinecatalog_v126');
                 Render.all();
                 UI.updateCounters();
                 Logic.showStatus('Acervo completamente limpo!');
@@ -2056,10 +2056,10 @@
             _showSuggestionOnLoad() {
                 var cfg = window._appConfig;
                 if (!cfg || cfg.sugestoesActive !== true) return;
-                var shown = localStorage.getItem('sugestao_shown_today');
+                var shown = Store.getItem('sugestao_shown_today');
                 var today = new Date().toISOString().slice(0, 10);
                 if (shown === today) return;
-                localStorage.setItem('sugestao_shown_today', today);
+                Store.setItem('sugestao_shown_today', today);
                 // Delay to allow app to fully render
                 setTimeout(function() {
                     UI.pickSuggestion();
@@ -2924,7 +2924,7 @@
                 }
             },
             saveAllDynamicEpisodes() {
-                var saved = JSON.parse(localStorage.getItem('_dyn_series_episodes') || '{}');
+                var saved = JSON.parse(Store.getItem('_dyn_series_episodes') || '{}');
                 var key = _editingId || 'pending';
                 if (!saved[key]) saved[key] = [];
                 var count = 0;
@@ -2955,7 +2955,7 @@
                         count++;
                     });
                 });
-                localStorage.setItem('_dyn_series_episodes', JSON.stringify(saved));
+                Store.setItem('_dyn_series_episodes', JSON.stringify(saved));
                 Logic.showStatus(count + ' episódios salvos com sucesso!');
             },
             _pickEpFile(epId) {
@@ -2987,7 +2987,7 @@
                 var link = linkEl ? (linkEl.dataset.ref || linkEl.value) : '';
                 if (!title) { Logic.showStatus('Preencha o título do episódio'); return; }
                 var epData = {num: episode, season: season, title: title, duration: duration, year: year, link: link};
-                var saved = JSON.parse(localStorage.getItem('_dyn_series_episodes') || '{}');
+                var saved = JSON.parse(Store.getItem('_dyn_series_episodes') || '{}');
                 var key = _editingId || 'pending';
                 if (!saved[key]) saved[key] = [];
                 var existing = -1;
@@ -2999,13 +2999,13 @@
                 }
                 if (existing >= 0) saved[key][existing] = epData;
                 else saved[key].push(epData);
-                localStorage.setItem('_dyn_series_episodes', JSON.stringify(saved));
+                Store.setItem('_dyn_series_episodes', JSON.stringify(saved));
                 Logic.showStatus('Episódio T' + season + 'E' + episode + ' aplicado!');
                 var applyBtn = event && event.target ? event.target.closest('button') : null;
                 if (applyBtn) { applyBtn.style.background = 'rgba(16,185,129,0.4)'; setTimeout(function() { applyBtn.style.background = 'rgba(16,185,129,0.2)'; }, 1000); }
             },
             _editEpisode(epId, season, episode) {
-                var saved = JSON.parse(localStorage.getItem('_dyn_series_episodes') || '{}');
+                var saved = JSON.parse(Store.getItem('_dyn_series_episodes') || '{}');
                 var key = _editingId || 'pending';
                 var episodes = saved[key] || [];
                 for (var i = 0; i < episodes.length; i++) {

@@ -146,4 +146,29 @@ test.describe('CineCatalog Elo — Smoke Test (baseline v32.2.0)', () => {
     await expect(page.locator('.movie-card.search-match')).toHaveCount(1);
   });
 
+  test('09 - Persistência via IndexedDB (localStorage limpo após salvar)', async ({ page }) => {
+    await boot(page);
+    await openCadastro(page);
+    await fillFilme(page, 'Filme IndexedDB Smoke');
+    await salvarFilme(page);
+    await closeCadastro(page);
+    await expect(page.locator('.movie-card')).toHaveCount(1);
+
+    // Espera o IndexedDB terminar a escrita assíncrona
+    await page.waitForFunction(async () => {
+      if (!window.Store) return false;
+      await window.Store._ready;
+      return true;
+    });
+    await page.waitForTimeout(800);
+
+    // Apaga TODO o localStorage (inclusive o espelho) e recarrega:
+    // os dados devem vir do IndexedDB via Store
+    await page.evaluate(() => localStorage.clear());
+    await page.reload({ waitUntil: 'load' });
+    await page.waitForTimeout(500);
+    await expect(page.locator('.movie-card')).toHaveCount(1);
+    await expect(page.locator('#movies-container .movie-card').first()).toContainText('2026');
+  });
+
 });

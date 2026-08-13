@@ -32,7 +32,7 @@
                 var title = movie.titlePt || movie.originalTitle || 'Estreia';
                 if (!confirm('Remover a estreia "' + title + '"? Esta ação não pode ser desfeita.')) return;
                 APP_STATE.movies = APP_STATE.movies.filter(function(m) { return m.id !== id; });
-                localStorage.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
+                Store.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
                 Render.all();
                 UI.updateCounters();
                 Logic.updateReminderBadge();
@@ -141,9 +141,9 @@
                                     }
                                 }
                             });
-                            var saved = JSON.parse(localStorage.getItem('_dyn_series_episodes') || '{}');
+                            var saved = JSON.parse(Store.getItem('_dyn_series_episodes') || '{}');
                             saved[_editingId] = movie.dynamicEpisodes;
-                            localStorage.setItem('_dyn_series_episodes', JSON.stringify(saved));
+                            Store.setItem('_dyn_series_episodes', JSON.stringify(saved));
                         }
                         var st = movie.statuses || {};
                         document.getElementById('fs-status-new').checked = st.new || false;
@@ -472,7 +472,7 @@
                 var icon = document.getElementById('theme-icon');
                 var icons = { dark: 'fa-moon', light: 'fa-sun', amber: 'fa-fire', midnight: 'fa-star' };
                 icon.className = 'fas ' + (icons[name] || 'fa-moon') + ' text-xs';
-                localStorage.setItem('cinecatalog_theme', name);
+                Store.setItem('cinecatalog_theme', name);
                 document.getElementById('theme-menu').classList.add('hidden');
                 document.getElementById('btn-theme')?.classList.remove('active');
                 document.querySelectorAll('#theme-menu .theme-option').forEach(function(b) {
@@ -1312,8 +1312,8 @@
                     {icon:'fa-closed-captioning',label:'Legendas Customizáveis',desc:'Suporte a legendas em múltiplos formatos. Configure estilo, cor e tamanho das legendas nas configurações de mídia.'},
                     {icon:'fa-tv',label:'Modo Smart TV',desc:'Interface otimizada para Smart TV com navegação por DPAD (setas direcionais), contorno de foco amarelo e cards focáveis.'},
                     {icon:'fa-cloud-upload-alt',label:'Upload de Capas',desc:'Área de upload com drag-and-drop para capas. Aceita JPG, PNG e WebP com proporção 9:16 (720x1280px). Preview em tempo real.'},
-                    {icon:'fa-hdd',label:'Backup Automático',desc:'Auto salvamento contínuo para localStorage e exportação automática para ficheiro JSON na pasta configurada do acervo.'},
-                    {icon:'fa-moon',label:'4 Temas Visuais',desc:'Dark, Light, Amber Noir e Midnight. Troca instantânea com persistência no localStorage. Cores adaptam-se automaticamente.'},
+                    {icon:'fa-hdd',label:'Backup Automático',desc:'Auto salvamento contínuo para IndexedDB (localForage) com exportação automática para ficheiro JSON na pasta configurada do acervo.'},
+                    {icon:'fa-moon',label:'4 Temas Visuais',desc:'Dark, Light, Amber Noir e Midnight. Troca instantânea com persistência em IndexedDB. Cores adaptam-se automaticamente.'},
                     {icon:'fa-text-height',label:'Tipografia Responsiva',desc:'Sistema de tipografia fluida que escala proporcionalmente entre HD, FHD, 2K e 4K. Usa clamp() para transição suave.'},
                     {icon:'fa-window-maximize',label:'Modais Premium',desc:'Janelas de cadastro e informação com design premium: bordas arredondadas, sombras neon, animações de entrada e backdrop blur.'},
                     {icon:'fa-minus-circle',label:'Estreias: Remoção Individual',desc:'Cada linha de estreia possui seu próprio botão "-" para remover apenas aquela estreia da lista, com confirmação e atualização em tempo real.'},
@@ -1406,7 +1406,7 @@
                     movies: APP_STATE.movies,
                     categories: Logic.getCategories(),
                     config: {
-                        theme: localStorage.getItem('cinecatalog_theme') || 'dark'
+                        theme: Store.getItem('cinecatalog_theme') || 'dark'
                     }
                 };
                 var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
@@ -1423,17 +1423,17 @@
                         var data = JSON.parse(event.target.result);
                         if (data.movies) {
                             APP_STATE.movies = data.movies;
-                            localStorage.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
+                            Store.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
                             if (data.categories) {
-                                localStorage.setItem('cinecatalog_categories', JSON.stringify(data.categories));
+                                Store.setItem('cinecatalog_categories', JSON.stringify(data.categories));
                             }
                             if (data.config && data.config.theme) {
-                                localStorage.setItem('cinecatalog_theme', data.config.theme);
+                                Store.setItem('cinecatalog_theme', data.config.theme);
                                 Logic.setTheme(data.config.theme);
                             }
                         } else {
                             APP_STATE.movies = data;
-                            localStorage.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
+                            Store.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
                         }
                         Storage.save();
                         Render.all();
@@ -1448,7 +1448,7 @@
             clearAllData() {
                 if (confirm('Eliminar todos os dados permanentemente?')) {
                     APP_STATE.movies = [];
-                    localStorage.removeItem('cinecatalog_v126');
+                    Store.removeItem('cinecatalog_v126');
                     Render.all();
                     UI.updateCounters();
                     Logic.showStatus('Todos os dados eliminados');
@@ -1457,7 +1457,7 @@
 
             // --- Category Management ---
             getCategories() {
-                var cats = JSON.parse(localStorage.getItem('cinecatalog_categories'));
+                var cats = JSON.parse(Store.getItem('cinecatalog_categories'));
                 if (!cats || !cats.length) {
                     cats = ['Ação', 'Comédia', 'Drama', 'Ficção Científica', 'Terror'];
                     this.saveCategories(cats);
@@ -1465,7 +1465,7 @@
                 return cats.sort();
             },
             saveCategories(cats) {
-                localStorage.setItem('cinecatalog_categories', JSON.stringify(cats));
+                Store.setItem('cinecatalog_categories', JSON.stringify(cats));
                 this.renderCategorySelect();
                 this.renderCategoryManager();
             },
@@ -1707,10 +1707,10 @@
                 var hasNewPopup = false;
                 popupCandidates.forEach(function(pc) {
                     var popKey = 'est_popup_' + pc.id + '_' + pc.diff;
-                    var shown = localStorage.getItem(popKey);
+                    var shown = Store.getItem(popKey);
                     if (!shown) {
                         hasNewPopup = true;
-                        localStorage.setItem(popKey, '1');
+                        Store.setItem(popKey, '1');
                     }
                 });
 
@@ -1753,12 +1753,12 @@
                 // Auto-close after 6 seconds for non-first popups
                 var todayStr = new Date().toISOString().slice(0,10);
                 var key = notifKey || 'cinecatalog_notif_' + todayStr;
-                var raw = localStorage.getItem(key);
+                var raw = Store.getItem(key);
                 var nd = raw ? JSON.parse(raw) : { count: 0, closed: false, firstShown: true };
                 nd.count = (nd.count || 0) + 1;
                 nd.firstShown = nd.count === 1;
                 nd.closed = false;
-                localStorage.setItem(key, JSON.stringify(nd));
+                Store.setItem(key, JSON.stringify(nd));
 
                 if (nd.count > 1) {
                     var notifDuration = (window._appConfig && window._appConfig.notificationsDuration) || 5000;
