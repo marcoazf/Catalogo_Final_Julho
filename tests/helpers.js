@@ -46,7 +46,7 @@ async function fillFilme(page, titulo, extra) {
   await page.locator('#f-cast').fill(extra && extra.cast ? extra.cast : 'Elenco Teste');
   await page.locator('#f-desc').fill(extra && extra.desc ? extra.desc : 'Sinopse de teste para o smoke test.');
   await page.locator('#f-category').selectOption({ index: 1 }).catch(() => {});
-  if (extra && extra.statusNew) await page.locator('#f-status-new').check({ force: true });
+  if (extra && extra.statusNew) await page.locator('.status-check-item[data-status="new"]').click();
 }
 
 async function salvarFilme(page) {
