@@ -3534,3 +3534,103 @@ Todas as implementações foram realizadas sem afetar as funcionalidades existen
 | Paletas, tipografia, layout, espaçamentos preservados | OK |
 | Todos os IDs, classes e handlers mantidos | OK |
 
+---
+
+## Implementações Realizadas — Melhorias 2 (melhorias2.md — Itens a–c)
+
+### 126. (a/b/c) ELENCO com Altura Padrão, SINOPSE Maior com Scrollbar Azul e Linha LINK/CLASSIFICAÇÃO/STATUS Ajustada
+
+**Arquivo:** `index.html` — CSS (`<style>`) + HTML (abas Filmes e Séries)
+
+**O que foi feito:**
+
+**A) Campo ELENCO voltou à altura padrão (Filmes e Séries):**
+- `#f-cast` e `#fs-cast` foram convertidos de `<textarea>` (altura 72px + scrollbar) de volta para `<input type="text">`, com a mesma altura padrão dos demais campos (Diretor, País, etc.).
+- Removidos `resize`, `min-height`, `overflow-y` e as regras de scrollbar — o campo não exibe mais barra de rolagem.
+
+| Campo | Antes | Depois |
+|---|---|---|
+| `#f-cast` (Filmes) | `<textarea rows="2">` 72px + scroll | `<input type="text">` altura padrão |
+| `#fs-cast` (Séries) | `<textarea rows="2">` 72px + scroll | `<input type="text">` altura padrão |
+
+**B) Campo SINOPSE com altura maior (~4 linhas) e scrollbar minimalista azul (Filmes e Séries):**
+- `#f-desc` e `#fs-desc` mantidos como `<textarea rows="4">` com `min-height:96px`, exibindo aproximadamente **4 linhas visíveis** de texto.
+- Nova classe CSS `.synopsis-textarea`: `resize:none`, `line-height:1.4`, `overflow-y:auto` e scrollbar **fina (5px) e azul** (`var(--accent-blue)`) — padrão do sistema — com `::-webkit-scrollbar-button { display:none }` (**sem setas**), trilho transparente e canto sem botões.
+- A barra de rolagem só aparece quando o texto excede as 4 linhas.
+
+| Campo | Antes | Depois |
+|---|---|---|
+| `#f-desc` (Filmes) | `rows="2"` / 54px / `resize:vertical` | `rows="4"` / 96px / scrollbar fina azul sem setas |
+| `#fs-desc` (Séries) | `rows="2"` / 54px / `resize:vertical` | `rows="4"` / 96px / scrollbar fina azul sem setas |
+
+**C) Linha LINK DO FILME / CLASSIFICAÇÃO / STATUS (Filmes):**
+- **Link do Filme aumentado:** coluna passou de `flex:10` para `flex:12` (~20% maior).
+- **Espaçamento à esquerda da CLASSIFICAÇÃO:** o container de estrelas (`#star-input-container`) ganhou `padding-left:0.5rem` (mesmo padrão do gap da linha), afastando as estrelas do campo LINK (antes muito colado).
+- **STATUS finalizando no final da linha:** adicionada a classe `form-status-group` ao grupo de status com CSS próprio (`.form-status-group .status-check-item { flex:1; justify-content:center }` e `flex-wrap:nowrap`) — os três pills (Novo/Assistir/Favorito) agora preenchem toda a largura da coluna e o conjunto finaliza **perfeitamente no final da linha**.
+
+**Preservação:** Todos os IDs (`f-cast`, `f-desc`, `fs-cast`, `fs-desc`, `f-media-url`, `f-stars`, `f-status-*`, `star-input-container`) e handlers (`Logic.toggleStatus`, `initStars`, leitura/gravação via `.value`, pick folder) permanecem intactos. O layout de FILMES e SÉRIES, paletas, tipografia e espaçamentos preservados. Nenhuma funcionalidade existente foi alterada.
+
+### Checklist Final (melhorias2.md — Itens a–c)
+
+| Verificação | Status |
+|---|---|
+| (a) `#f-cast` (Filmes) com altura padrão, sem scrollbar | OK |
+| (a) `#fs-cast` (Séries) com altura padrão, sem scrollbar | OK |
+| (a) Leitura `.value` de `#f-cast`/`#fs-cast` preservada | OK |
+| (b) `#f-desc` (Filmes) com ~4 linhas visíveis (rows=4, 96px) | OK |
+| (b) `#fs-desc` (Séries) com ~4 linhas visíveis (rows=4, 96px) | OK |
+| (b) Scrollbar fina (5px) e azul padrão do sistema | OK |
+| (b) Scrollbar sem setas (`::-webkit-scrollbar-button`) | OK |
+| (b) Scrollbar só aparece quando necessário | OK |
+| (c) LINK DO FILME aumentado (flex:10 → flex:12) | OK |
+| (c) Espaçamento à esquerda da CLASSIFICAÇÃO (padding 0.5rem) | OK |
+| (c) Grupo STATUS preenche a linha e finaliza no final | OK |
+| (c) Pills com `flex:1` + centralizados, sem quebrar linha | OK |
+| (c) Estilo aplicado a FILMES e SÉRIES (ELENCO e SINOPSE) | OK |
+| Balanceamento de tags HTML validado (0 erros) | OK |
+| Sintaxe JS validada (node --check: 2 blocos, 0 erros) | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+| Todos os IDs, classes e handlers mantidos | OK |
+
+---
+
+### 127. Correção — Erro "Cannot read properties of null (reading 'value')" ao editar/salvar FILMES
+
+**Arquivo:** `index.html` — HTML (aba Filmes do modal de cadastro)
+
+**Problema:**
+- Ao editar um FILME e salvar (ATUALIZAR), ou ao escolher uma nova capa/Card para um filme cuja imagem não carregou, era exibido o alerta: `ERRO: Cannot read properties of null (reading 'value')`.
+- **Causa raiz:** o formulário de FILMES não possuía o campo `#f-other-info` (Outras Informações), mas as funções o referenciam sem proteção:
+  - `editMovieCtx()` (carregar o filme para edição) — `document.getElementById('f-other-info').value = ...`;
+  - `saveMovie()` (salvar/atualizar) — `document.getElementById('f-other-info').value`.
+- Como o elemento não existia no DOM, `getElementById` retornava `null` e a leitura `.value` lançava o erro. Em `editMovieCtx()`, a exceção ocorria antes do carregamento da capa — por isso a imagem do filme não era carregada ao editar.
+- O formulário de SÉRIES não tinha o problema (já possuía o `<input type="hidden" id="fs-other-info">`).
+
+**O que foi feito:**
+- Adicionado o campo oculto preservado ao final da Col 2 do formulário de FILMES, espelhando o padrão já existente em SÉRIES:
+  ```html
+  <!-- Campos preservados ocultos (opções removidas da interface) -->
+  <input type="hidden" id="f-other-info" value="">
+  ```
+- Com o elemento presente, `editMovieCtx()` carrega normalmente (incluindo a capa) e `saveMovie()` salva o filme sem lançar o erro.
+
+**Validações:**
+- Sintaxe JS: `node --check` nos 2 blocos inline — 0 erros.
+- Balanceamento de tags HTML — 0 erros (idêntico ao HEAD).
+- `#f-other-info` e `#fs-other-info` presentes no DOM.
+
+### Checklist (Correção item 127)
+
+| Verificação | Status |
+|---|---|
+| `#f-other-info` adicionado ao formulário de FILMES (hidden) | OK |
+| `editMovieCtx()` carrega o filme sem lançar erro de `.value` | OK |
+| `saveMovie()` (aba Filmes) salva sem "reading 'value'" | OK |
+| Fluxo de escolher nova capa/Card em edição restaurado | OK |
+| Série (`#fs-other-info`) inalterada | OK |
+| Balanceamento de tags HTML validado (0 erros) | OK |
+| Sintaxe JS validada (2 blocos, 0 erros) | OK |
+| Nenhuma funcionalidade existente alterada | OK |
+| Paletas, tipografia, layout, espaçamentos preservados | OK |
+

@@ -374,6 +374,25 @@
             opacity: var(--placeholder-opacity, 0.5) !important;
         }
 
+        /* SINOPSE: altura maior (~4 linhas visíveis) com scrollbar minimalista, fina e azul padrão (sem setas) */
+        .synopsis-textarea {
+            resize: none;
+            line-height: 1.4;
+            min-height: 96px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--accent-blue) transparent;
+        }
+        .synopsis-textarea::-webkit-scrollbar { width: 5px; }
+        .synopsis-textarea::-webkit-scrollbar-track { background: transparent; }
+        .synopsis-textarea::-webkit-scrollbar-thumb { background: var(--accent-blue); border-radius: 10px; }
+        .synopsis-textarea::-webkit-scrollbar-button { display: none; }
+        .synopsis-textarea::-webkit-scrollbar-corner { display: none; }
+
+        /* STATUS da linha Link/Classificação: grupo preenche a linha e finaliza perfeitamente no final */
+        .form-status-group { flex-wrap: nowrap; width: 100%; }
+        .form-status-group .status-check-item { flex: 1 1 0; justify-content: center; min-width: 0; white-space: nowrap; }
+
         .label-premium {
             font-size: 0.65rem;
             font-weight: 700;
@@ -2631,13 +2650,13 @@
                                 <!-- Linha 3: Elenco Principal -->
                                 <div>
                                     <label class="label-premium"><i class="fas fa-users mr-1.5 opacity-60"></i>Elenco Principal</label>
-                                    <textarea id="f-cast" class="field-premium custom-scroll" rows="2" placeholder="Atores principais" style="resize:vertical;min-height:72px;font-size:0.8rem;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--accent-blue) transparent"></textarea>
+                                    <input type="text" id="f-cast" class="field-premium" placeholder="Atores principais" style="font-size:0.8rem">
                                 </div>
 
                                 <!-- Linha 4: Sinopse -->
                                 <div>
                                     <label class="label-premium"><i class="fas fa-align-left mr-1.5 opacity-60"></i>Sinopse</label>
-                                    <textarea id="f-desc" class="field-premium" placeholder="Sinopse do filme..." rows="2" style="resize:vertical;min-height:54px;font-size:0.8rem"></textarea>
+                                    <textarea id="f-desc" class="field-premium synopsis-textarea" rows="4" placeholder="Sinopse do filme..." style="font-size:0.8rem"></textarea>
                                 </div>
 
                                 <!-- Linha 5: Trailer - Gênero - Gerir Gênero -->
@@ -2661,7 +2680,7 @@
 
                                 <!-- Linha 6: Link do Filme + Classificação + Status na mesma linha -->
                                 <div class="flex gap-2" style="align-items:flex-end">
-                                    <div style="flex:10;min-width:0;">
+                                    <div style="flex:12;min-width:0;">
                                         <label class="label-premium"><i class="fas fa-link mr-1.5 opacity-60"></i>Link do Filme</label>
                                         <div class="input-with-icon">
                                             <input type="text" id="f-media-url" class="field-premium" placeholder="https://example.com/filme.mp4" style="font-size:10px">
@@ -2671,7 +2690,7 @@
                                     </div>
                                     <div style="flex:6;min-width:0;">
                                         <label class="label-premium"><i class="fas fa-star mr-1.5 opacity-60"></i>Classificação</label>
-                                        <div id="star-input-container" class="flex gap-1" style="color:#4B5563;font-size:1.1rem;padding:0.25rem 0">
+                                        <div id="star-input-container" class="flex gap-1" style="color:#4B5563;font-size:1.1rem;padding:0.25rem 0 0.25rem 0.5rem">
                                             <i class="fas fa-star cursor-pointer" data-v="1"></i>
                                             <i class="fas fa-star cursor-pointer" data-v="2"></i>
                                             <i class="fas fa-star cursor-pointer" data-v="3"></i>
@@ -2682,7 +2701,7 @@
                                     </div>
                                     <div style="flex:14;min-width:0;">
                                         <label class="label-premium"><i class="fas fa-flag mr-1.5 opacity-60"></i>Status</label>
-                                        <div class="status-check-group">
+                                        <div class="status-check-group form-status-group">
                                             <div class="status-check-item" data-status="new" onclick="Logic.toggleStatus(this)">
                                                 <input type="checkbox" id="f-status-new">
                                                 <i class="fas fa-plus-circle" style="font-size:9px"></i>
@@ -2701,6 +2720,9 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Campos preservados ocultos (opções removidas da interface) -->
+                                <input type="hidden" id="f-other-info" value="">
                             </div>
                     </div>
                 </div>
@@ -2784,11 +2806,11 @@
                                 </div>
                                 <div>
                                     <label class="label-premium"><i class="fas fa-users mr-1.5 opacity-60"></i>Elenco Principal</label>
-                                    <textarea id="fs-cast" class="field-premium custom-scroll" rows="2" placeholder="Atores principais" style="resize:vertical;min-height:72px;font-size:0.8rem;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--accent-blue) transparent"></textarea>
+                                    <input type="text" id="fs-cast" class="field-premium" placeholder="Atores principais" style="font-size:0.8rem">
                                 </div>
                                 <div>
                                     <label class="label-premium"><i class="fas fa-align-left mr-1.5 opacity-60"></i>Sinopse</label>
-                                    <textarea id="fs-desc" class="field-premium" placeholder="Sinopse da série..." rows="2" style="resize:vertical;min-height:54px;font-size:0.8rem"></textarea>
+                                    <textarea id="fs-desc" class="field-premium synopsis-textarea" rows="4" placeholder="Sinopse da série..." style="font-size:0.8rem"></textarea>
                                 </div>
                                 <div class="flex gap-2" style="align-items:flex-end">
                                     <div style="flex:1;">
