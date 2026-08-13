@@ -1,0 +1,13 @@
+{
+  "name": "cinecatalog-elo",
+  "version": "32.2.0",
+  "private": true,
+  "description": "CineCatalog Elo - refatoração da fase correções cirúrgicas 01 (monólito -> modular, com testes)",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}
