@@ -1,0 +1,62 @@
+{
+  "name": "CineCatalog Elo",
+  "short_name": "CineCatalog",
+  "description": "Catálogo de filmes e séries com organização avançada e recursos offline",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "categories": ["entertainment", "movies", "tv"],
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "cinecatalogo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "cinecatalogo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "cinecatalogo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "cinecatalogo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshot-home.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Adicionar Filme",
+      "short_name": "Adicionar",
+      "description": "Cadastrar novo filme",
+      "url": "/#modal-cadastro",
+      "icons": [{ "src": "cinecatalogo.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Meu Catálogo",
+      "short_name": "Catálogo",
+      "description": "Ver minha coleção",
+      "url": "/",
+      "icons": [{ "src": "cinecatalogo.png", "sizes": "192x192" }]
+    }
+  ]
+}
