@@ -197,8 +197,8 @@
                         '<div class="estreia-title">' + title + '</div>' +
                         '<div class="estreia-type-badge ' + typeClass + '">' + typeLabel + '</div>' +
                         (hasTrailer ? '<a href="' + m.trailUrl.replace(/"/g,'&quot;') + '" target="_blank" rel="noopener noreferrer" class="estreia-play-link" title="Ver Trailer"><i class="fas fa-play"></i></a>' : '<div class="estreia-play-link" style="opacity:0.25;cursor:default;pointer-events:none"><i class="fas fa-play"></i></div>') +
-                        '<button onclick="Logic.editEstreia(\'' + safeId + '\')" class="estreia-edit-link" title="Editar"><i class="fas fa-edit"></i></button>' +
-                        '<button onclick="Logic.deleteEstreiaConfirm(\'' + safeId + '\')" class="estreia-delete-link" title="Remover"><i class="fas fa-trash"></i></button>' +
+                        '<button data-onclick="Logic.editEstreia(\'' + safeId + '\')" class="estreia-edit-link" title="Editar"><i class="fas fa-edit"></i></button>' +
+                        '<button data-onclick="Logic.deleteEstreiaConfirm(\'' + safeId + '\')" class="estreia-delete-link" title="Remover"><i class="fas fa-trash"></i></button>' +
                         '</div>' +
                         '</div>';
                 }
@@ -250,12 +250,12 @@
                     imgSrc = data.image || '';
                 }
                 div.innerHTML =
-                    '<img src="' + imgSrc + '" loading="lazy" decoding="async" onerror="this.onerror=null;this.classList.add(\'error\');this.nextElementSibling.style.display=\'flex\'">' +
+                    '<img src="' + imgSrc + '" loading="lazy" decoding="async" data-onerror="this.data-onerror=null;this.classList.add(\'error\');this.nextElementSibling.style.display=\'flex\'">' +
                     '<div class="card-fallback"><i class="fas fa-film"></i><span>S/ Poster</span></div>' +
                     catChip +
-                    '<div class="card-heart' + (isFav ? ' active' : '') + '" onclick="event.stopPropagation();Logic.toggleCardFav(\'' + data.id + '\', this)"><i class="' + (isFav ? 'fas' : 'fa-regular') + ' fa-heart"></i></div>' +
+                    '<div class="card-heart' + (isFav ? ' active' : '') + '" data-onclick="event.stopPropagation();Logic.toggleCardFav(\'' + data.id + '\', this)"><i class="' + (isFav ? 'fas' : 'fa-regular') + ' fa-heart"></i></div>' +
                     (hasReminder ? '<div class="absolute top-0.5 right-12 z-5 text-amber-400 text-[0.6rem]" title="' + reminderTitle + '"><i class="fas fa-sticky-note"></i></div>' : '') +
-                    (hasMedia ? '<div class="card-play-overlay"><div class="card-play-btn" onclick="event.stopPropagation();Logic.playMedia(\'' + data.id + '\')"><i class="fas fa-play"></i></div></div>' : '') +
+                    (hasMedia ? '<div class="card-play-overlay"><div class="card-play-btn" data-onclick="event.stopPropagation();Logic.playMedia(\'' + data.id + '\')"><i class="fas fa-play"></i></div></div>' : '') +
                     '<div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-3" style="z-index:3">' +
                     '<div class="flex items-center gap-2">' +
                     '<span class="font-bold" style="font-size:var(--card-year-size,15px);color:var(--card-year-color,#60A5FA)">' + (data.year || '') + '</span>' +

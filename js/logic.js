@@ -816,7 +816,7 @@
                     if (s.year) seasonMeta.push(s.year);
                     if (s.cast) seasonMeta.push(s.cast);
                     html += '<div class="msi-season-card">' +
-                        '<div class="msi-season-head msi-season-toggle" onclick="Logic.toggleSeriesSeason(this)" title="Clique para expandir/recolher as temporadas">' +
+                        '<div class="msi-season-head msi-season-toggle" data-onclick="Logic.toggleSeriesSeason(this)" title="Clique para expandir/recolher as temporadas">' +
                         '<i class="fas fa-chevron-right msi-season-chevron"></i>' +
                         '<span class="msi-season-badge">' + s.number + '</span>' +
                         '<div style="flex:1;min-width:0">' +
@@ -838,7 +838,7 @@
                                 '<div class="msi-ep-title"><i class="fas fa-play-circle" style="font-size:8px;color:' + (epUrl ? '#34D399' : '#4B5563') + ';margin-right:0.25rem"></i>EP. ' + ep.number + (ep.title ? ' — ' + ep.title : '') + '</div>' +
                                 (epMeta.length ? '<div class="msi-ep-meta">' + epMeta.join(' • ') + '</div>' : '') +
                                 '</div>' +
-                                '<button type="button" class="msi-play-btn green' + (epUrl ? '' : ' disabled') + '" onclick="Logic.playInfoEpisode(' + s.number + ',' + j + ')" title="Executar episódio no player configurado"><i class="fas fa-play" style="font-size:7px"></i> Executar Episódio</button>' +
+                                '<button type="button" class="msi-play-btn green' + (epUrl ? '' : ' disabled') + '" data-onclick="Logic.playInfoEpisode(' + s.number + ',' + j + ')" title="Executar episódio no player configurado"><i class="fas fa-play" style="font-size:7px"></i> Executar Episódio</button>' +
                                 '</div>';
                         }
                     } else {
@@ -1174,8 +1174,8 @@
                         (dateStr ? '<div style="font-size:0.7rem;color:rgba(255,255,255,0.5);margin-bottom:4px">' + dateStr + '</div>' : '') +
                         '<div style="font-size:15px;color:var(--text-color);font-weight:500;word-break:break-word;margin-bottom:6px">' + m.reminder + '</div>' +
                         '<div style="display:flex;gap:4px">' +
-                        '<button onclick="Logic.editReminderById(\'' + m.id + '\');Logic._reminderListRefresh=true" class="text-blue-400 hover:text-blue-300 text-xs px-2 py-0.5 rounded" style="background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3)"><i class="fas fa-edit mr-1"></i>Editar</button>' +
-                        '<button onclick="Logic.removeReminderNotif(\'' + m.id + '\')" class="text-red-400 hover:text-red-300 text-xs px-2 py-0.5 rounded" style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3)"><i class="fas fa-trash mr-1"></i>Remover</button>' +
+                        '<button data-onclick="Logic.editReminderById(\'' + m.id + '\');Logic._reminderListRefresh=true" class="text-blue-400 hover:text-blue-300 text-xs px-2 py-0.5 rounded" style="background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.3)"><i class="fas fa-edit mr-1"></i>Editar</button>' +
+                        '<button data-onclick="Logic.removeReminderNotif(\'' + m.id + '\')" class="text-red-400 hover:text-red-300 text-xs px-2 py-0.5 rounded" style="background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3)"><i class="fas fa-trash mr-1"></i>Remover</button>' +
                         '</div>' +
                         '</div>' +
                         '</div></div>';
@@ -1778,7 +1778,7 @@
                     else { icon = 'fa-calendar-times'; color = '#EF4444'; badgeIcon = 'fa-times-circle'; badgeColor = '#EF4444'; }
                     // Sem possibilidade de edição/remoção: listagem apenas informativa
                     var delBtn = '';
-                    return '<div style="padding:1rem;border-radius:1.25rem;border:1px solid var(--border-color);margin-bottom:0.6rem;background:rgba(255,255,255,0.03);transition:all 0.2s" onmouseover="this.style.borderColor=\'' + color + '40\';this.style.background=\'rgba(255,255,255,0.06)\'" onmouseout="this.style.borderColor=\'\';this.style.background=\'\'">' +
+                    return '<div style="padding:1rem;border-radius:1.25rem;border:1px solid var(--border-color);margin-bottom:0.6rem;background:rgba(255,255,255,0.03);transition:all 0.2s" data-onmouseover="this.style.borderColor=\'' + color + '40\';this.style.background=\'rgba(255,255,255,0.06)\'" data-onmouseout="this.style.borderColor=\'\';this.style.background=\'\'">' +
                         '<div style="display:flex;align-items:center;gap:0.85rem">' +
                         '<div style="width:36px;height:36px;border-radius:10px;background:' + color + '18;display:flex;align-items:center;justify-content:center;flex-shrink:0">' +
                         '<i class="fas ' + icon + '" style="color:' + color + ';font-size:16px"></i>' +

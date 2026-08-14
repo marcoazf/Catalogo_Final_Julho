@@ -134,12 +134,12 @@
                 for (var i = 0; i < list.length; i++) {
                     var s = list[i];
                     var locked = s.locked ? 'opacity:0.5;pointer-events:none;' : '';
-                    var removeBtn = s.locked ? '' : '<button onclick="UI._shortcutsRemove(\'' + s.id + '\')" style="background:rgba(239,68,68,0.15);color:#EF4444;border:1px solid rgba(239,68,68,0.3);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:10px;flex-shrink:0;transition:all 0.2s" onmouseover="this.style.background=\'rgba(239,68,68,0.3)\'" onmouseout="this.style.background=\'rgba(239,68,68,0.15)\'" title="Remover atalho"><i class="fas fa-times"></i></button>';
-                    var resetBtn = s.locked ? '' : '<button onclick="UI._shortcutsResetOne(\'' + s.id + '\')" style="background:rgba(245,158,11,0.15);color:#F59E0B;border:1px solid rgba(245,158,11,0.3);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:10px;flex-shrink:0;transition:all 0.2s" onmouseover="this.style.background=\'rgba(245,158,11,0.3)\'" onmouseout="this.style.background=\'rgba(245,158,11,0.15)\'" title="Repor atalho padrão"><i class="fas fa-undo"></i></button>';
+                    var removeBtn = s.locked ? '' : '<button data-onclick="UI._shortcutsRemove(\'' + s.id + '\')" style="background:rgba(239,68,68,0.15);color:#EF4444;border:1px solid rgba(239,68,68,0.3);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:10px;flex-shrink:0;transition:all 0.2s" data-onmouseover="this.style.background=\'rgba(239,68,68,0.3)\'" data-onmouseout="this.style.background=\'rgba(239,68,68,0.15)\'" title="Remover atalho"><i class="fas fa-times"></i></button>';
+                    var resetBtn = s.locked ? '' : '<button data-onclick="UI._shortcutsResetOne(\'' + s.id + '\')" style="background:rgba(245,158,11,0.15);color:#F59E0B;border:1px solid rgba(245,158,11,0.3);border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:10px;flex-shrink:0;transition:all 0.2s" data-onmouseover="this.style.background=\'rgba(245,158,11,0.3)\'" data-onmouseout="this.style.background=\'rgba(245,158,11,0.15)\'" title="Repor atalho padrão"><i class="fas fa-undo"></i></button>';
                     html += '<div id="shortcut-row-' + s.id + '" style="display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0.85rem;border-radius:0.75rem;border:1px solid var(--border-color);background:var(--input-bg);margin-bottom:0.5rem;transition:all 0.25s;' + locked + '">';
                     html += '<div style="flex:1;min-width:0"><div style="font-size:0.8rem;font-weight:700;color:var(--text-color);margin-bottom:0.15rem">' + s.label + '</div>';
                     html += '<div style="font-size:0.65rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.04em">' + s.action + '</div></div>';
-                    html += '<button onclick="UI._shortcutsEdit(\'' + s.id + '\')" style="background:var(--input-bg);border:1px solid var(--border-color);border-radius:0.5rem;padding:0.35rem 0.75rem;cursor:pointer;transition:all 0.2s;min-width:120px;text-align:center;font-size:0.75rem;font-weight:800;color:var(--accent-blue);font-family:monospace;letter-spacing:0.05em" onmouseover="this.style.borderColor=\'var(--accent-blue)\';this.style.boxShadow=\'0 0 0 3px rgba(59,130,246,0.15)\'" onmouseout="this.style.borderColor=\'var(--border-color)\';this.style.boxShadow=\'none\'" title="Clique para alterar">' + s.key + '</button>';
+                    html += '<button data-onclick="UI._shortcutsEdit(\'' + s.id + '\')" style="background:var(--input-bg);border:1px solid var(--border-color);border-radius:0.5rem;padding:0.35rem 0.75rem;cursor:pointer;transition:all 0.2s;min-width:120px;text-align:center;font-size:0.75rem;font-weight:800;color:var(--accent-blue);font-family:monospace;letter-spacing:0.05em" data-onmouseover="this.style.borderColor=\'var(--accent-blue)\';this.style.boxShadow=\'0 0 0 3px rgba(59,130,246,0.15)\'" data-onmouseout="this.style.borderColor=\'var(--border-color)\';this.style.boxShadow=\'none\'" title="Clique para alterar">' + s.key + '</button>';
                     html += '<div style="display:flex;gap:0.3rem">' + resetBtn + removeBtn + '</div>';
                     html += '</div>';
                 }
@@ -250,7 +250,7 @@
                     cats.forEach(function(c) {
                         if (shown < 7) {
                             var active = APP_STATE.activeFilter.toLowerCase() === c.toLowerCase() ? ' active' : '';
-                            html += '<button onclick="Logic.applyFilter(\'' + c.replace(/'/g,"\\'") + '\')" class="filter-btn' + active + '"><i class="fas fa-tag mr-2"></i>' + c + '</button>';
+                            html += '<button data-onclick="Logic.applyFilter(\'' + c.replace(/'/g,"\\'") + '\')" class="filter-btn' + active + '"><i class="fas fa-tag mr-2"></i>' + c + '</button>';
                             shown++;
                         }
                     });
@@ -268,7 +268,7 @@
                 if (yrContainer) {
                     yrContainer.innerHTML = years.map(function(y) {
                         var active = APP_STATE.filterYear === y ? ' active' : '';
-                        return '<button onclick="Logic.setYearFilter(\'' + y + '\')" class="filter-year-btn' + active + '">' + y + '</button>';
+                        return '<button data-onclick="Logic.setYearFilter(\'' + y + '\')" class="filter-year-btn' + active + '">' + y + '</button>';
                     }).join('');
                 }
             },
@@ -2177,12 +2177,12 @@
                 if (pagination) {
                     if (totalPages <= 1) { pagination.innerHTML = ''; return; }
                     var phtml = '';
-                    if (page > 1) phtml += '<button onclick="UI._renderListContent(' + (page-1) + ')" style="background:#374151;color:#fff">Anterior</button>';
+                    if (page > 1) phtml += '<button data-onclick="UI._renderListContent(' + (page-1) + ')" style="background:#374151;color:#fff">Anterior</button>';
                     for (var p = 1; p <= totalPages; p++) {
                         var active = p === page ? ' style="background:#2563EB;color:#fff"' : ' style="background:#1f2937;color:#94a3b8"';
-                        phtml += '<button onclick="UI._renderListContent(' + p + ')"' + active + '>' + p + '</button>';
+                        phtml += '<button data-onclick="UI._renderListContent(' + p + ')"' + active + '>' + p + '</button>';
                     }
-                    if (page < totalPages) phtml += '<button onclick="UI._renderListContent(' + (page+1) + ')" style="background:#374151;color:#fff">Próximo</button>';
+                    if (page < totalPages) phtml += '<button data-onclick="UI._renderListContent(' + (page+1) + ')" style="background:#374151;color:#fff">Próximo</button>';
                     pagination.innerHTML = phtml;
                 }
             },
@@ -2325,12 +2325,12 @@
                 if (pagination) {
                     if (totalPages <= 1) { pagination.innerHTML = ''; return; }
                     var phtml = '';
-                    if (page > 1) phtml += '<button onclick="UI._renderCadastroLog(' + (page-1) + ')" style="background:#374151;color:#fff">Anterior</button>';
+                    if (page > 1) phtml += '<button data-onclick="UI._renderCadastroLog(' + (page-1) + ')" style="background:#374151;color:#fff">Anterior</button>';
                     for (var p = 1; p <= totalPages; p++) {
                         var active = p === page ? ' style="background:#2563EB;color:#fff"' : ' style="background:#1f2937;color:#94a3b8"';
-                        phtml += '<button onclick="UI._renderCadastroLog(' + p + ')"' + active + '>' + p + '</button>';
+                        phtml += '<button data-onclick="UI._renderCadastroLog(' + p + ')"' + active + '>' + p + '</button>';
                     }
-                    if (page < totalPages) phtml += '<button onclick="UI._renderCadastroLog(' + (page+1) + ')" style="background:#374151;color:#fff">Próximo</button>';
+                    if (page < totalPages) phtml += '<button data-onclick="UI._renderCadastroLog(' + (page+1) + ')" style="background:#374151;color:#fff">Próximo</button>';
                     pagination.innerHTML = phtml;
                 }
             },
@@ -2467,7 +2467,7 @@
                         '<input type="text" data-field="trailerUrl" value="' + (d.trailerUrl || '').replace(/"/g, '&quot;') + '" placeholder="Trailer" class="field-premium series-field">' +
                         '</div>' +
                         '</div>' +
-                        '<button type="button" class="series-dyn-remove" onclick="UI._removeSeasonBlock(' + i + ')" title="Remover temporada"><i class="fas fa-times"></i></button>' +
+                        '<button type="button" class="series-dyn-remove" data-onclick="UI._removeSeasonBlock(' + i + ')" title="Remover temporada"><i class="fas fa-times"></i></button>' +
                         '</div>';
                 }
                 container.innerHTML = html;
@@ -2582,11 +2582,11 @@
                         '<input type="text" data-field="duration" value="' + (d.duration || '').replace(/"/g, '&quot;') + '" placeholder="Duração" class="field-premium series-field" style="flex:0 0 85px">' +
                         '<div style="display:flex;gap:0.25rem;align-items:center;flex:1;min-width:0">' +
                         '<input type="text" data-field="mediaUrl" value="' + (dispMedia || '').replace(/"/g, '&quot;') + '" placeholder="Link da Série" class="field-premium series-field">' +
-                        '<button type="button" class="input-icon-btn" onclick="UI._pickEpisodeFile(' + i + ')" title="Selecionar ficheiro local"><i class="fas fa-folder-open"></i></button>' +
+                        '<button type="button" class="input-icon-btn" data-onclick="UI._pickEpisodeFile(' + i + ')" title="Selecionar ficheiro local"><i class="fas fa-folder-open"></i></button>' +
                         '</div>' +
                         '</div>' +
                         '</div>' +
-                        '<button type="button" class="series-dyn-remove" onclick="UI._removeEpisodeBlock(' + i + ')" title="Remover episódio"><i class="fas fa-times"></i></button>' +
+                        '<button type="button" class="series-dyn-remove" data-onclick="UI._removeEpisodeBlock(' + i + ')" title="Remover episódio"><i class="fas fa-times"></i></button>' +
                         '</div>';
                 }
                 container.innerHTML = html;
@@ -2666,7 +2666,7 @@
                     html += '<input type="text" data-field="totalSeasons" class="field-premium" value="' + totalSeasons + '" readonly style="font-size:0.6rem;padding:0.25rem 0.3rem;text-align:center;background:rgba(139,92,246,0.1);color:#C4B5FD">';
                     html += '<input type="text" data-field="year" class="field-premium" value="' + (saved.year || '') + '" placeholder="Ano" style="font-size:0.6rem;padding:0.25rem 0.3rem">';
                     html += statusHtml;
-                    html += '<div onclick="UI._clearSeasonBlock(' + i + ')" class="cursor-pointer flex items-center justify-center" style="width:24px;height:24px;border-radius:0.4rem;background:rgba(239,68,68,0.15);color:#EF4444;font-size:0.5rem" title="Limpar"><i class="fas fa-times"></i></div>';
+                    html += '<div data-onclick="UI._clearSeasonBlock(' + i + ')" class="cursor-pointer flex items-center justify-center" style="width:24px;height:24px;border-radius:0.4rem;background:rgba(239,68,68,0.15);color:#EF4444;font-size:0.5rem" title="Limpar"><i class="fas fa-times"></i></div>';
                     html += '</div>';
                 }
                 container.innerHTML = html;
@@ -2768,7 +2768,7 @@
                     html += '<select data-field="season" class="field-premium" style="font-size:0.55rem;padding:0.2rem 0.25rem;min-width:0">' + seasonOpts + '</select>';
                     html += '<span style="font-size:0.5rem;font-weight:700;color:var(--text-secondary);padding:0 0.2rem;white-space:nowrap">EP ' + (e + 1) + '/' + totalEpisodes + '</span>';
                     html += statusHtml;
-                    html += '<div onclick="UI._clearEpisodeBlock(' + e + ')" class="cursor-pointer flex items-center justify-center" style="width:22px;height:22px;border-radius:0.4rem;background:rgba(239,68,68,0.15);color:#EF4444;font-size:0.5rem;min-width:22px" title="Limpar"><i class="fas fa-times"></i></div>';
+                    html += '<div data-onclick="UI._clearEpisodeBlock(' + e + ')" class="cursor-pointer flex items-center justify-center" style="width:22px;height:22px;border-radius:0.4rem;background:rgba(239,68,68,0.15);color:#EF4444;font-size:0.5rem;min-width:22px" title="Limpar"><i class="fas fa-times"></i></div>';
                     html += '</div>';
                     // Row 2: Title + Synopsis + Duration
                     html += '<div style="display:grid;grid-template-columns:1fr 1.5fr 60px;gap:0.3rem;margin-bottom:0.3rem">';
@@ -2881,7 +2881,7 @@
                 for (var s in UI._dynSeasonEps) { totalEps += UI._dynSeasonEps[s]; }
                 var html = '<div style="margin-bottom:0.75rem;display:flex;align-items:center;justify-content:space-between;background:rgba(139,92,246,0.06);border-radius:0.75rem;padding:0.5rem 0.75rem;border:1px solid rgba(139,92,246,0.1)">' +
                     '<span style="font-size:0.65rem;font-weight:700;color:#C4B5FD">' + numSeasons + ' TEMPORADAS · ' + totalEps + ' EPISÓDIOS</span>' +
-                    '<button onclick="UI.saveAllDynamicEpisodes()" class="px-3 py-1.5 rounded-lg text-[0.55rem] font-black uppercase tracking-wider transition" style="background:linear-gradient(135deg,#10B981,#059669);color:white;box-shadow:0 2px 10px rgba(16,185,129,0.3)" onmouseover="this.style.filter=\'brightness(1.15)\'" onmouseout="this.style.filter=\'\'"><i class="fas fa-save mr-1"></i> SALVAR TUDO</button>' +
+                    '<button data-onclick="UI.saveAllDynamicEpisodes()" class="px-3 py-1.5 rounded-lg text-[0.55rem] font-black uppercase tracking-wider transition" style="background:linear-gradient(135deg,#10B981,#059669);color:white;box-shadow:0 2px 10px rgba(16,185,129,0.3)" data-onmouseover="this.style.filter=\'brightness(1.15)\'" data-onmouseout="this.style.filter=\'\'"><i class="fas fa-save mr-1"></i> SALVAR TUDO</button>' +
                     '</div>';
                 for (var s = 1; s <= numSeasons; s++) {
                     var epsInSeason = UI._dynSeasonEps[s] || 1;
@@ -2890,8 +2890,8 @@
                         '<span class="w-7 h-7 rounded-full flex items-center justify-center text-[0.7rem] font-black" style="background:linear-gradient(135deg,#8B5CF6,#7C3AED);color:white">' + s + '</span>' +
                         '<span class="season-status text-[0.75rem] font-black uppercase tracking-widest" style="color:#8B5CF6">TEMPORADA ' + s + ' — <span class="ep-count">' + epsInSeason + '</span> EPISÓDIOS</span>' +
                         '<div style="flex:1"></div>' +
-                        '<button onclick="UI._addEp(' + s + ')" class="w-6 h-6 rounded-full flex items-center justify-center text-[0.6rem] font-black transition" style="background:rgba(16,185,129,0.2);color:#10B981;border:1px solid rgba(16,185,129,0.3)" title="Adicionar episódio" onmouseover="this.style.background=\'rgba(16,185,129,0.4)\'" onmouseout="this.style.background=\'rgba(16,185,129,0.2)\'"><i class="fas fa-plus"></i></button>' +
-                        '<button onclick="UI._removeEp(' + s + ')" class="w-6 h-6 rounded-full flex items-center justify-center text-[0.6rem] font-black transition" style="background:rgba(239,68,68,0.2);color:#EF4444;border:1px solid rgba(239,68,68,0.3)" title="Remover episódio" onmouseover="this.style.background=\'rgba(239,68,68,0.4)\'" onmouseout="this.style.background=\'rgba(239,68,68,0.2)\'"><i class="fas fa-minus"></i></button>' +
+                        '<button data-onclick="UI._addEp(' + s + ')" class="w-6 h-6 rounded-full flex items-center justify-center text-[0.6rem] font-black transition" style="background:rgba(16,185,129,0.2);color:#10B981;border:1px solid rgba(16,185,129,0.3)" title="Adicionar episódio" data-onmouseover="this.style.background=\'rgba(16,185,129,0.4)\'" data-onmouseout="this.style.background=\'rgba(16,185,129,0.2)\'"><i class="fas fa-plus"></i></button>' +
+                        '<button data-onclick="UI._removeEp(' + s + ')" class="w-6 h-6 rounded-full flex items-center justify-center text-[0.6rem] font-black transition" style="background:rgba(239,68,68,0.2);color:#EF4444;border:1px solid rgba(239,68,68,0.3)" title="Remover episódio" data-onmouseover="this.style.background=\'rgba(239,68,68,0.4)\'" data-onmouseout="this.style.background=\'rgba(239,68,68,0.2)\'"><i class="fas fa-minus"></i></button>' +
                         '</div>' +
                         '<div class="season-eps" data-season="' + s + '">';
                     for (var e = 1; e <= epsInSeason; e++) {
@@ -2912,10 +2912,10 @@
                     '<input type="text" id="' + epId + '-year" class="field-premium" placeholder="Ano" style="flex:0 0 60px;font-size:0.6rem;padding:0.3rem 0.5rem">' +
                     '<div class="input-with-icon" style="flex:2;min-width:0">' +
                     '<input type="text" id="' + epId + '-link" class="field-premium" placeholder="Link / vídeo" style="font-size:0.6rem;padding:0.3rem 1.8rem 0.3rem 0.5rem">' +
-                    '<button type="button" class="input-icon-btn" style="width:20px;height:20px;font-size:0.5rem" onclick="UI._pickEpFile(\'' + epId + '\')"><i class="fas fa-folder-open"></i></button>' +
+                    '<button type="button" class="input-icon-btn" style="width:20px;height:20px;font-size:0.5rem" data-onclick="UI._pickEpFile(\'' + epId + '\')"><i class="fas fa-folder-open"></i></button>' +
                     '</div>' +
-                    '<button onclick="UI._applyEpisode(\'' + epId + '\',' + season + ',' + episode + ')" class="px-2 py-1 rounded text-[0.5rem] font-black uppercase tracking-wider transition" style="background:rgba(16,185,129,0.2);color:#10B981;border:1px solid rgba(16,185,129,0.3)" title="Aplicar"><i class="fas fa-check"></i></button>' +
-                    '<button onclick="UI._editEpisode(\'' + epId + '\',' + season + ',' + episode + ')" class="px-2 py-1 rounded text-[0.5rem] font-black uppercase tracking-wider transition" style="background:rgba(59,130,246,0.2);color:#60A5FA;border:1px solid rgba(59,130,246,0.3)" title="Editar"><i class="fas fa-edit"></i></button>' +
+                    '<button data-onclick="UI._applyEpisode(\'' + epId + '\',' + season + ',' + episode + ')" class="px-2 py-1 rounded text-[0.5rem] font-black uppercase tracking-wider transition" style="background:rgba(16,185,129,0.2);color:#10B981;border:1px solid rgba(16,185,129,0.3)" title="Aplicar"><i class="fas fa-check"></i></button>' +
+                    '<button data-onclick="UI._editEpisode(\'' + epId + '\',' + season + ',' + episode + ')" class="px-2 py-1 rounded text-[0.5rem] font-black uppercase tracking-wider transition" style="background:rgba(59,130,246,0.2);color:#60A5FA;border:1px solid rgba(59,130,246,0.3)" title="Editar"><i class="fas fa-edit"></i></button>' +
                     '</div>';
             },
             _addEp(season) {
@@ -2947,7 +2947,7 @@
                 if (summaryEl) {
                     var numSeasons = Object.keys(UI._dynSeasonEps).length;
                     summaryEl.innerHTML = '<span style="font-size:0.65rem;font-weight:700;color:#C4B5FD">' + numSeasons + ' TEMPORADAS · ' + totalEps + ' EPISÓDIOS</span>' +
-                        '<button onclick="UI.saveAllDynamicEpisodes()" class="px-3 py-1.5 rounded-lg text-[0.55rem] font-black uppercase tracking-wider transition" style="background:linear-gradient(135deg,#10B981,#059669);color:white;box-shadow:0 2px 10px rgba(16,185,129,0.3)" onmouseover="this.style.filter=\'brightness(1.15)\'" onmouseout="this.style.filter=\'\'"><i class="fas fa-save mr-1"></i> SALVAR TUDO</button>';
+                        '<button data-onclick="UI.saveAllDynamicEpisodes()" class="px-3 py-1.5 rounded-lg text-[0.55rem] font-black uppercase tracking-wider transition" style="background:linear-gradient(135deg,#10B981,#059669);color:white;box-shadow:0 2px 10px rgba(16,185,129,0.3)" data-onmouseover="this.style.filter=\'brightness(1.15)\'" data-onmouseout="this.style.filter=\'\'"><i class="fas fa-save mr-1"></i> SALVAR TUDO</button>';
                 }
             },
             saveAllDynamicEpisodes() {
@@ -3075,12 +3075,12 @@
                 var trailerVal = (data.trailUrl || '').replace(/"/g,'&quot;');
                 return '<div class="dynamic-estreia-row" data-index="' + index + '" data-saved-id="' + (data.id || '') + '" style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.6rem;padding:0.6rem 0.6rem;border-radius:0.75rem;background:rgba(0,0,0,0.12);border:1px solid var(--border-color);flex-wrap:nowrap">' +
                     '<span class="font-black shrink-0" style="color:#34D399;min-width:28px;text-align:center;font-size:0.9rem">' + (index + 1) + '</span>' +
-                    '<input type="date" id="de-date-' + index + '" class="field-premium" style="flex:0 0 150px;font-size:0.85rem;padding:0.4rem 0.5rem;min-height:38px;color-scheme:dark" value="' + dateVal + '" onchange="UI._checkEstreiaDateNotification(this.value)">' +
+                    '<input type="date" id="de-date-' + index + '" class="field-premium" style="flex:0 0 150px;font-size:0.85rem;padding:0.4rem 0.5rem;min-height:38px;color-scheme:dark" value="' + dateVal + '" data-onchange="UI._checkEstreiaDateNotification(this.value)">' +
                     '<input type="text" id="de-title-' + index + '" class="field-premium" placeholder="Título" style="flex:2;font-size:0.85rem;padding:0.45rem 0.6rem;min-width:0" value="' + titleVal + '">' +
                     '<select id="de-type-' + index + '" class="field-premium" title="Tipo" style="flex:0 0 110px;font-size:0.8rem;padding:0.45rem 0.6rem;min-width:0">' + typeOpts + '</select>' +
                     '<select id="de-category-' + index + '" class="field-premium" style="flex:0 0 140px;font-size:0.8rem;padding:0.45rem 0.6rem;min-width:0">' + opts + '</select>' +
                     '<input type="text" id="de-trailer-' + index + '" class="field-premium" placeholder="Trailer URL" style="flex:1;font-size:0.8rem;padding:0.45rem 0.6rem;min-width:0" value="' + trailerVal + '">' +
-                    '<button type="button" class="estreia-btn estreia-btn-remove" onclick="UI._removeEstreiaRow(' + index + ')" title="Remover esta estreia" style="flex:0 0 30px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;padding:0"><i class="fas fa-minus"></i></button>' +
+                    '<button type="button" class="estreia-btn estreia-btn-remove" data-onclick="UI._removeEstreiaRow(' + index + ')" title="Remover esta estreia" style="flex:0 0 30px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;padding:0"><i class="fas fa-minus"></i></button>' +
                     '</div>';
             },
             _initDynamicEstreias(savedData) {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-pt">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,49 +21,49 @@
         <div id="logo-img" class="logo-header" style="display:flex;align-items:center"><img src="cinecatalogo.png" alt="CineCatalog Elo" style="height:100%;width:auto;object-fit:contain"></div>
 
         <div class="flex items-center gap-1.5">
-            <button onclick="UI.toggleSearchBar()" class="btn-icon" title="Pesquisar"><i class="fas fa-search text-xs"></i></button>
+            <button data-onclick="UI.toggleSearchBar()" class="btn-icon" title="Pesquisar"><i class="fas fa-search text-xs"></i></button>
 
-            <button onclick="UI.openGenerateList()" id="btn-generate-list" class="btn-icon" title="Gerar Lista"><i class="fas fa-print text-xs"></i></button>
+            <button data-onclick="UI.openGenerateList()" id="btn-generate-list" class="btn-icon" title="Gerar Lista"><i class="fas fa-print text-xs"></i></button>
 
             <nav class="flex gap-1 theme-bg-input p-1 rounded-full theme-border">
-                <span onclick="Logic.setMainView('filmes')" id="link-filmes" class="nav-link active">Filmes</span>
-                <span onclick="Logic.setMainView('series')" id="link-series" class="nav-link">Séries</span>
-                <span onclick="Logic.setMainView('estreias')" id="link-estreias" class="nav-link">Estreias</span>
+                <span data-onclick="Logic.setMainView('filmes')" id="link-filmes" class="nav-link active">Filmes</span>
+                <span data-onclick="Logic.setMainView('series')" id="link-series" class="nav-link">Séries</span>
+                <span data-onclick="Logic.setMainView('estreias')" id="link-estreias" class="nav-link">Estreias</span>
             </nav>
 
-            <button onclick="UI.openModal('modal-cadastro')" class="btn-cadastrar bg-blue-600 text-white px-4 py-2 rounded-full font-black hover:bg-blue-700 transition uppercase tracking-widest shadow-lg shrink-0">
+            <button data-onclick="UI.openModal('modal-cadastro')" class="btn-cadastrar bg-blue-600 text-white px-4 py-2 rounded-full font-black hover:bg-blue-700 transition uppercase tracking-widest shadow-lg shrink-0">
                 <i class="fas fa-plus mr-1"></i> Cadastrar
             </button>
 
             <div class="hidden lg:flex items-center gap-1.5">
                 <div class="flex theme-bg-input rounded-full p-1 theme-border gap-0.5">
-                    <button onclick="UI.setZoom(1)" id="z1" class="zoom-btn active" title="Zoom 1X (5 colunas)">1X</button>
-                    <button onclick="UI.setZoom(2)" id="z2" class="zoom-btn" title="Zoom 2X (6 colunas)">2X</button>
-                    <button onclick="UI.setZoom(3)" id="z3" class="zoom-btn" title="Zoom 3X (7 colunas)">3X</button>
-                    <button onclick="UI.setZoom(4)" id="z4" class="zoom-btn" title="Zoom 4X (8 colunas)">4X</button>
+                    <button data-onclick="UI.setZoom(1)" id="z1" class="zoom-btn active" title="Zoom 1X (5 colunas)">1X</button>
+                    <button data-onclick="UI.setZoom(2)" id="z2" class="zoom-btn" title="Zoom 2X (6 colunas)">2X</button>
+                    <button data-onclick="UI.setZoom(3)" id="z3" class="zoom-btn" title="Zoom 3X (7 colunas)">3X</button>
+                    <button data-onclick="UI.setZoom(4)" id="z4" class="zoom-btn" title="Zoom 4X (8 colunas)">4X</button>
                 </div>
 
-                <button onclick="Logic.openDashboard()" id="btn-dashboard" class="btn-icon" title="Dashboard"><i class="fas fa-chart-pie text-xs"></i></button>
+                <button data-onclick="Logic.openDashboard()" id="btn-dashboard" class="btn-icon" title="Dashboard"><i class="fas fa-chart-pie text-xs"></i></button>
 
                 <div class="relative">
-                    <button onclick="UI.toggleFilters()" id="btn-filters" class="btn-icon" title="Filtros"><i class="fas fa-filter text-xs"></i></button>
+                    <button data-onclick="UI.toggleFilters()" id="btn-filters" class="btn-icon" title="Filtros"><i class="fas fa-filter text-xs"></i></button>
                     <div id="filters-dropdown" class="hidden absolute top-full right-0 mt-2 theme-bg-input theme-border rounded-xl p-2 shadow-2xl z-[110]">
                         <div class="filter-scroll">
                             <div class="filter-section-label"><i class="fas fa-sliders-h mr-1.5 opacity-60"></i>Geral</div>
-                            <button onclick="Logic.applyFilter('todos')" class="filter-btn" data-filter="todos"><i class="fas fa-list mr-2"></i>Todos</button>
-                            <button onclick="Logic.applyFilter('recente')" class="filter-btn" data-filter="recente"><i class="fas fa-clock mr-2"></i>Recente</button>
-                            <button onclick="Logic.applyFilter('antigos')" class="filter-btn" data-filter="antigos"><i class="fas fa-history mr-2"></i>Antigos</button>
-                            <button onclick="Logic.applyFilter('az')" class="filter-btn" data-filter="az"><i class="fas fa-sort-alpha-down mr-2"></i>Ordenação A-Z</button>
+                            <button data-onclick="Logic.applyFilter('todos')" class="filter-btn" data-filter="todos"><i class="fas fa-list mr-2"></i>Todos</button>
+                            <button data-onclick="Logic.applyFilter('recente')" class="filter-btn" data-filter="recente"><i class="fas fa-clock mr-2"></i>Recente</button>
+                            <button data-onclick="Logic.applyFilter('antigos')" class="filter-btn" data-filter="antigos"><i class="fas fa-history mr-2"></i>Antigos</button>
+                            <button data-onclick="Logic.applyFilter('az')" class="filter-btn" data-filter="az"><i class="fas fa-sort-alpha-down mr-2"></i>Ordenação A-Z</button>
                             <div class="filter-sub">
                                 <div class="filter-section-label small"><i class="fas fa-calendar mr-1.5 opacity-60"></i>Ano</div>
                                 <div id="filter-year-list" class="filter-year-list"></div>
                             </div>
-                            <button onclick="Logic.applyFilter('favoritados')" class="filter-btn" data-filter="favoritados"><i class="fas fa-star mr-2"></i>Favoritados</button>
+                            <button data-onclick="Logic.applyFilter('favoritados')" class="filter-btn" data-filter="favoritados"><i class="fas fa-star mr-2"></i>Favoritados</button>
                             <div class="filter-divider"></div>
                             <div class="filter-section-label"><i class="fas fa-tags mr-1.5 opacity-60"></i>Status</div>
-                            <button onclick="Logic.applyFilter('new')" class="filter-btn" data-filter="new"><i class="fas fa-plus-circle mr-2"></i>Novo</button>
-                            <button onclick="Logic.applyFilter('watch')" class="filter-btn" data-filter="watch"><i class="fas fa-eye mr-2"></i>Assistir</button>
-                            <button onclick="Logic.applyFilter('fav')" class="filter-btn" data-filter="fav"><i class="fas fa-heart mr-2"></i>Favoritos</button>
+                            <button data-onclick="Logic.applyFilter('new')" class="filter-btn" data-filter="new"><i class="fas fa-plus-circle mr-2"></i>Novo</button>
+                            <button data-onclick="Logic.applyFilter('watch')" class="filter-btn" data-filter="watch"><i class="fas fa-eye mr-2"></i>Assistir</button>
+                            <button data-onclick="Logic.applyFilter('fav')" class="filter-btn" data-filter="fav"><i class="fas fa-heart mr-2"></i>Favoritos</button>
                             <div class="filter-divider"></div>
                             <div class="filter-section-label"><i class="fas fa-folder mr-1.5 opacity-60"></i>Gêneros</div>
                             <div id="filter-categories-list"></div>
@@ -72,70 +72,70 @@
                 </div>
 
                 <div class="hidden sm:flex theme-bg-input rounded-full p-1 theme-border gap-0.5">
-                    <button onclick="Logic.setViewMode('carrossel')" class="view-btn active" title="Carrossel" id="view-carrossel"><i class="fas fa-stream"></i></button>
-                    <button onclick="Logic.setViewMode('grid')" class="view-btn" title="Grelha" id="view-grid"><i class="fas fa-border-all"></i></button>
-                    <button onclick="Logic.setViewMode('marquee')" class="view-btn" title="Cine Marquee" id="view-marquee"><i class="fas fa-play"></i></button>
-                    <button onclick="Logic.toggleViewContextMenu(event)" class="view-btn" title="Configurar Animação" id="view-ctx-btn"><i class="fas fa-ellipsis-v"></i></button>
+                    <button data-onclick="Logic.setViewMode('carrossel')" class="view-btn active" title="Carrossel" id="view-carrossel"><i class="fas fa-stream"></i></button>
+                    <button data-onclick="Logic.setViewMode('grid')" class="view-btn" title="Grelha" id="view-grid"><i class="fas fa-border-all"></i></button>
+                    <button data-onclick="Logic.setViewMode('marquee')" class="view-btn" title="Cine Marquee" id="view-marquee"><i class="fas fa-play"></i></button>
+                    <button data-onclick="Logic.toggleViewContextMenu(event)" class="view-btn" title="Configurar Animação" id="view-ctx-btn"><i class="fas fa-ellipsis-v"></i></button>
                     <!-- View Context Menu -->
                     <div id="view-context-menu">
                         <div class="view-ctx-label">Velocidade Animação</div>
                         <div class="view-ctx-option">
                             <span>Velocidade</span>
-                            <input type="range" id="marquee-speed" min="10" max="60" value="30" oninput="Logic.setMarqueeSpeed(this.value)">
+                            <input type="range" id="marquee-speed" min="10" max="60" value="30" data-oninput="Logic.setMarqueeSpeed(this.value)">
                             <span class="val" id="marquee-speed-val">30s</span>
                         </div>
                         <div class="view-ctx-label">Efeito</div>
-                        <div class="view-ctx-option" onclick="Logic.setMarqueeEffect('linear')">
+                        <div class="view-ctx-option" data-onclick="Logic.setMarqueeEffect('linear')">
                             <span>Linear</span>
                             <span id="effect-linear" style="color:#22D3EE">✓</span>
                         </div>
-                        <div class="view-ctx-option" onclick="Logic.setMarqueeEffect('ease')">
+                        <div class="view-ctx-option" data-onclick="Logic.setMarqueeEffect('ease')">
                             <span>Suave</span>
                             <span id="effect-ease" style="display:none;color:#22D3EE">✓</span>
                         </div>
-                        <div class="view-ctx-option" onclick="Logic.setMarqueeEffect('alternate')">
+                        <div class="view-ctx-option" data-onclick="Logic.setMarqueeEffect('alternate')">
                             <span>Alternado</span>
                             <span id="effect-alternate" style="display:none;color:#22D3EE">✓</span>
                         </div>
                         <div class="view-ctx-footer">
-                            <button onclick="Logic.setMarqueePause(true)" style="background:#F59E0B;color:#fff">Pausar</button>
-                            <button onclick="Logic.setMarqueePause(false)" style="background:#22C55E;color:#fff">Retomar</button>
-                            <button onclick="Logic.closeViewContextMenu()" style="background:#4B5563;color:#fff">Cancelar</button>
+                            <button data-onclick="Logic.setMarqueePause(true)" style="background:#F59E0B;color:#fff">Pausar</button>
+                            <button data-onclick="Logic.setMarqueePause(false)" style="background:#22C55E;color:#fff">Retomar</button>
+                            <button data-onclick="Logic.closeViewContextMenu()" style="background:#4B5563;color:#fff">Cancelar</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="relative">
-                    <button onclick="Logic.toggleThemeMenu()" class="btn-icon" id="btn-theme" title="Temas"><i class="fas fa-moon text-xs" id="theme-icon"></i></button>
+                    <button data-onclick="Logic.toggleThemeMenu()" class="btn-icon" id="btn-theme" title="Temas"><i class="fas fa-moon text-xs" id="theme-icon"></i></button>
                     <div id="theme-menu" class="hidden absolute top-full right-0 mt-2 theme-bg-input theme-border rounded-xl p-1.5 shadow-2xl z-[110]" style="min-width:175px">
-                        <button onclick="Logic.setTheme('dark')" class="theme-option" data-theme="dark"><i class="fas fa-moon mr-2.5"></i>Dark</button>
-                        <button onclick="Logic.setTheme('light')" class="theme-option" data-theme="light"><i class="fas fa-sun mr-2.5"></i>Light</button>
-                        <button onclick="Logic.setTheme('amber')" class="theme-option" data-theme="amber"><i class="fas fa-fire mr-2.5"></i>Amber Noir</button>
-                        <button onclick="Logic.setTheme('midnight')" class="theme-option" data-theme="midnight"><i class="fas fa-star mr-2.5"></i>Midnight</button>
+                        <button data-onclick="Logic.setTheme('dark')" class="theme-option" data-theme="dark"><i class="fas fa-moon mr-2.5"></i>Dark</button>
+                        <button data-onclick="Logic.setTheme('light')" class="theme-option" data-theme="light"><i class="fas fa-sun mr-2.5"></i>Light</button>
+                        <button data-onclick="Logic.setTheme('amber')" class="theme-option" data-theme="amber"><i class="fas fa-fire mr-2.5"></i>Amber Noir</button>
+                        <button data-onclick="Logic.setTheme('midnight')" class="theme-option" data-theme="midnight"><i class="fas fa-star mr-2.5"></i>Midnight</button>
                     </div>
                 </div>
 
-                <button onclick="UI.toggleNotifications()" id="btn-notifications" class="btn-icon relative" title="Notificações">
+                <button data-onclick="UI.toggleNotifications()" id="btn-notifications" class="btn-icon relative" title="Notificações">
                     <i class="fas fa-bell text-sm"></i>
                     <span id="notification-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-black rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-0.5" style="display:none">0</span>
                 </button>
 
-                <button onclick="UI.toggleReminderPanel()" id="btn-reminders" class="btn-icon relative" title="Lembretes">
+                <button data-onclick="UI.toggleReminderPanel()" id="btn-reminders" class="btn-icon relative" title="Lembretes">
                     <i class="fas fa-sticky-note text-sm"></i>
                     <span id="reminder-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-black rounded-full min-w-[18px] h-[18px] flex items-center justify-center px-0.5" style="display:none">0</span>
                 </button>
 
                 <div class="flex items-center gap-0.5 theme-bg-input rounded-full p-1 theme-border" style="display:none">
-                    <button onclick="Logic.exportData()" class="btn-icon" style="width:31px;height:31px;border:none" title="Exportar"><i class="fas fa-download text-[9px]"></i></button>
+                    <button data-onclick="Logic.exportData()" class="btn-icon" style="width:31px;height:31px;border:none" title="Exportar"><i class="fas fa-download text-[9px]"></i></button>
                     <label class="btn-icon" style="width:31px;height:31px;border:none;cursor:pointer" title="Importar">
                         <i class="fas fa-upload text-[9px]"></i>
-                        <input type="file" class="hidden" onchange="Logic.importData(event)">
+                        <input type="file" class="hidden" data-onchange="Logic.importData(event)">
                     </label>
                 </div>
 
-                <button onclick="UI.openCadastroLog()" id="btn-cadastro-log" class="btn-icon" title="Histórico de Cadastro"><i class="fas fa-clipboard-list text-xs"></i></button>
-                <button onclick="UI.openConfig()" id="btn-config" class="btn-icon" title="Configurações"><i class="fas fa-cog text-xs"></i></button>
-                <button onclick="UI.toggleModal('modal-info')" id="btn-info" class="btn-icon" title="Funcionalidades"><i class="fas fa-info-circle text-xs"></i></button>
+                <button data-onclick="UI.openCadastroLog()" id="btn-cadastro-log" class="btn-icon" title="Histórico de Cadastro"><i class="fas fa-clipboard-list text-xs"></i></button>
+                <button data-onclick="UI.openConfig()" id="btn-config" class="btn-icon" title="Configurações"><i class="fas fa-cog text-xs"></i></button>
+                <button data-onclick="UI.toggleModal('modal-info')" id="btn-info" class="btn-icon" title="Funcionalidades"><i class="fas fa-info-circle text-xs"></i></button>
             </div>
         </div>
     </header>
@@ -144,8 +144,8 @@
     <div id="search-bar-container">
         <div class="max-w-4xl mx-auto relative flex items-center">
             <i class="fas fa-search absolute left-5 text-blue-500"></i>
-            <input type="text" id="main-search" placeholder="pesquise títulos, diretores, elencos, ... (use + busca booleana)" class="w-full theme-bg-input theme-border rounded-2xl py-2.5 pl-12 pr-20 outline-none text-sm" oninput="Logic.handleSearch(this.value)">
-            <button onclick="Logic.clearSearch()" class="absolute right-4 w-6 h-6 flex items-center justify-center rounded-full text-red-500 hover:bg-red-500 hover:text-white transition" title="Limpar pesquisa"><i class="fas fa-times text-xs"></i></button>
+            <input type="text" id="main-search" placeholder="pesquise títulos, diretores, elencos, ... (use + busca booleana)" class="w-full theme-bg-input theme-border rounded-2xl py-2.5 pl-12 pr-20 outline-none text-sm" data-oninput="Logic.handleSearch(this.value)">
+            <button data-onclick="Logic.clearSearch()" class="absolute right-4 w-6 h-6 flex items-center justify-center rounded-full text-red-500 hover:bg-red-500 hover:text-white transition" title="Limpar pesquisa"><i class="fas fa-times text-xs"></i></button>
         </div>
     </div>
 
@@ -179,7 +179,7 @@
             <div id="stats-counter" class="text-orange-400 font-black text-[0.75rem] uppercase" style="text-shadow:0 0 8px rgba(251,146,60,0.5)">0 TÍTULOS NO ACERVO JONAS</div>
             <div style="width:1px;height:16px;background:var(--border-color);flex-shrink:0"></div>
             <div id="auto-save-indicator" class="flex items-center gap-2" style="display:none">
-                <i id="auto-save-icon" class="fas fa-save" title="Auto-salvamento ativo — Clique para abrir Configurações" onclick="UI.openConfig()" style="font-size:1.1rem;color:#555;cursor:pointer;transition:color 0.2s,transform 0.2s" onmouseover="this.style.color='#60A5FA';this.style.transform='scale(1.15)'" onmouseout="this.style.color='#555';this.style.transform=''"></i>
+                <i id="auto-save-icon" class="fas fa-save" title="Auto-salvamento ativo — Clique para abrir Configurações" data-onclick="UI.openConfig()" style="font-size:1.1rem;color:#555;cursor:pointer;transition:color 0.2s,transform 0.2s" data-onmouseover="this.style.color='#60A5FA';this.style.transform='scale(1.15)'" data-onmouseout="this.style.color='#555';this.style.transform=''"></i>
             </div>
         </div>
     </footer>
@@ -197,12 +197,12 @@
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <button onclick="UI.switchTab('filmes')" id="tab-filmes" class="tab-premium active" data-tab="filmes">Filmes</button>
-                    <button onclick="UI.switchTab('series')" id="tab-series" class="tab-premium" data-tab="series">Séries</button>
-                    <button onclick="UI.switchTab('estreias')" id="tab-estreias" class="tab-premium" data-tab="estreias">Estreias</button>
+                    <button data-onclick="UI.switchTab('filmes')" id="tab-filmes" class="tab-premium active" data-tab="filmes">Filmes</button>
+                    <button data-onclick="UI.switchTab('series')" id="tab-series" class="tab-premium" data-tab="series">Séries</button>
+                    <button data-onclick="UI.switchTab('estreias')" id="tab-estreias" class="tab-premium" data-tab="estreias">Estreias</button>
                 </div>
 
-                <button onclick="UI.closeModal('modal-cadastro')" class="btn-close-premium">
+                <button data-onclick="UI.closeModal('modal-cadastro')" class="btn-close-premium">
                     <i class="fas fa-times text-xs"></i>
                 </button>
             </div>
@@ -225,7 +225,7 @@
                             <div class="series-capa-col">
                                 <label class="label-premium"><i class="fas fa-image mr-1.5 opacity-60"></i>Capa</label>
                                 <div id="f-poster-area" class="poster-upload-area series-capa-area">
-                                    <img id="f-poster-img" class="poster-preview" alt="" onerror="this.style.display='none';var a=this.closest('.poster-upload-area');if(a)a.classList.remove('has-image');this.nextElementSibling.style.display='flex'">
+                                    <img id="f-poster-img" class="poster-preview" alt="" data-onerror="this.style.display='none';var a=this.closest('.poster-upload-area');if(a)a.classList.remove('has-image');this.nextElementSibling.style.display='flex'">
                                     <div id="f-poster-fallback" class="poster-fallback" style="display:none;align-items:center;justify-content:center;width:100%;height:100%;background:linear-gradient(135deg,#1e293b,#0f172a);flex-direction:column;gap:0.4rem">
                                         <i class="fas fa-film" style="font-size:2rem;color:#60A5FA"></i>
                                         <span style="color:#94A3B8;font-size:0.7rem;font-weight:600">SEM CAPA</span>
@@ -302,7 +302,7 @@
                                             <select id="f-category" class="field-premium flex-1" style="min-width:0;font-size:10px">
                                                 <option value="">Escolher Gênero</option>
                                             </select>
-                                            <div onclick="Logic.toggleCatManager()" class="btn-icon shrink-0 cursor-pointer" title="Gerir gêneros">
+                                            <div data-onclick="Logic.toggleCatManager()" class="btn-icon shrink-0 cursor-pointer" title="Gerir gêneros">
                                                 <i class="fas fa-cog text-xs"></i>
                                             </div>
                                         </div>
@@ -333,17 +333,17 @@
                                     <div style="flex:14;min-width:0;">
                                         <label class="label-premium"><i class="fas fa-flag mr-1.5 opacity-60"></i>Status</label>
                                         <div class="status-check-group form-status-group">
-                                            <div class="status-check-item" data-status="new" onclick="Logic.toggleStatus(this)">
+                                            <div class="status-check-item" data-status="new" data-onclick="Logic.toggleStatus(this)">
                                                 <input type="checkbox" id="f-status-new">
                                                 <i class="fas fa-plus-circle" style="font-size:9px"></i>
                                                 Novo
                                             </div>
-                                            <div class="status-check-item" data-status="watch" onclick="Logic.toggleStatus(this)">
+                                            <div class="status-check-item" data-status="watch" data-onclick="Logic.toggleStatus(this)">
                                                 <input type="checkbox" id="f-status-watch">
                                                 <i class="fas fa-eye" style="font-size:9px"></i>
                                                 Assistir
                                             </div>
-                                            <div class="status-check-item" data-status="fav" onclick="Logic.toggleStatus(this)">
+                                            <div class="status-check-item" data-status="fav" data-onclick="Logic.toggleStatus(this)">
                                                 <input type="checkbox" id="f-status-fav">
                                                 <i class="fas fa-heart" style="font-size:9px"></i>
                                                 Favorito
@@ -373,7 +373,7 @@
                             <div class="series-capa-col">
                                 <label class="label-premium"><i class="fas fa-image mr-1.5 opacity-60"></i>Capa</label>
                                 <div id="fs-poster-area" class="poster-upload-area series-capa-area">
-                                    <img id="fs-poster-img" class="poster-preview" alt="" onerror="this.style.display='none';var a=this.closest('.poster-upload-area');if(a)a.classList.remove('has-image');this.nextElementSibling.style.display='flex'">
+                                    <img id="fs-poster-img" class="poster-preview" alt="" data-onerror="this.style.display='none';var a=this.closest('.poster-upload-area');if(a)a.classList.remove('has-image');this.nextElementSibling.style.display='flex'">
                                     <div id="fs-poster-fallback" class="poster-fallback" style="display:none;align-items:center;justify-content:center;width:100%;height:100%;background:linear-gradient(135deg,#1e293b,#0f172a);flex-direction:column;gap:0.4rem">
                                         <i class="fas fa-film" style="font-size:2rem;color:#60A5FA"></i>
                                         <span style="color:#94A3B8;font-size:0.7rem;font-weight:600">SEM CAPA</span>
@@ -421,12 +421,12 @@
                                     </div>
                                     <div style="flex:7;min-width:0;position:relative">
                                         <label class="label-premium"><i class="fas fa-tag mr-1.5 opacity-60"></i>Gênero</label>
-                                        <input type="text" id="fs-category" class="field-premium" placeholder="Escolher ou digitar (ex: Drama, História / Suspense Histórico)" style="width:100%;font-size:11px" autocomplete="off" oninput="Logic._filterCategoryTooltip(this.value)" onblur="Logic._hideCategoryTooltip(true)" onkeydown="Logic._categoryTooltipKey(event)">
+                                        <input type="text" id="fs-category" class="field-premium" placeholder="Escolher ou digitar (ex: Drama, História / Suspense Histórico)" style="width:100%;font-size:11px" autocomplete="off" data-oninput="Logic._filterCategoryTooltip(this.value)" data-onblur="Logic._hideCategoryTooltip(true)" data-onkeydown="Logic._categoryTooltipKey(event)">
                                         <datalist id="fs-category-list"></datalist>
                                         <div id="fs-category-tooltip" class="fs-cat-tooltip"></div>
                                     </div>
                                     <div style="flex:1;min-width:0;display:flex;justify-content:flex-end">
-                                        <div onclick="Logic.toggleCatManager()" class="btn-icon shrink-0 cursor-pointer" title="Gerir gêneros">
+                                        <div data-onclick="Logic.toggleCatManager()" class="btn-icon shrink-0 cursor-pointer" title="Gerir gêneros">
                                             <i class="fas fa-cog text-xs"></i>
                                         </div>
                                     </div>
@@ -448,16 +448,16 @@
                                         <label class="label-premium"><i class="fas fa-list-ol mr-1.5 opacity-60"></i>Total de Temporadas</label>
                                         <div style="display:flex;gap:0.4rem;align-items:center">
                                             <input type="number" id="fs-season" class="field-premium" placeholder="Ex: 10" style="flex:1;min-width:0">
-                                            <button type="button" class="series-total-btn" onclick="UI.autoGenerateSeasons()" title="Criar os campos das Temporadas na seção 2, em tempo real"><i class="fas fa-magic"></i></button>
-                                            <button type="button" class="series-total-btn red" onclick="UI.clearAllSeasonFields()" title="Remover todos os campos das Temporadas"><i class="fas fa-trash"></i></button>
+                                            <button type="button" class="series-total-btn" data-onclick="UI.autoGenerateSeasons()" title="Criar os campos das Temporadas na seção 2, em tempo real"><i class="fas fa-magic"></i></button>
+                                            <button type="button" class="series-total-btn red" data-onclick="UI.clearAllSeasonFields()" title="Remover todos os campos das Temporadas"><i class="fas fa-trash"></i></button>
                                         </div>
                                     </div>
                                     <div style="flex:1;">
                                         <label class="label-premium"><i class="fas fa-hashtag mr-1.5 opacity-60"></i>Total de Episódios</label>
                                         <div style="display:flex;gap:0.4rem;align-items:center">
                                             <input type="number" id="fs-episode-number" class="field-premium" placeholder="Ex: 6" style="flex:1;min-width:0">
-                                            <button type="button" class="series-total-btn" onclick="UI.autoGenerateEpisodes()" title="Criar os campos individuais dos Episódios na seção 3, em tempo real"><i class="fas fa-magic"></i></button>
-                                            <button type="button" class="series-total-btn red" onclick="UI.clearAllEpisodeFields()" title="Remover todos os campos dos Episódios"><i class="fas fa-trash"></i></button>
+                                            <button type="button" class="series-total-btn" data-onclick="UI.autoGenerateEpisodes()" title="Criar os campos individuais dos Episódios na seção 3, em tempo real"><i class="fas fa-magic"></i></button>
+                                            <button type="button" class="series-total-btn red" data-onclick="UI.clearAllEpisodeFields()" title="Remover todos os campos dos Episódios"><i class="fas fa-trash"></i></button>
                                         </div>
                                     </div>
                                 </div>
@@ -481,8 +481,8 @@
                             <span>CADASTRE AS TEMPORADAS DA SÉRIE</span>
                             <span class="series-totalizador" id="series-seasons-total">0 Temporadas</span>
                             <div style="flex:1"></div>
-                            <button type="button" class="series-ghost-btn" onclick="UI.seriesAddSeason()" title="Adicionar campo de Temporada"><i class="fas fa-plus"></i></button>
-                            <button type="button" class="series-ghost-btn red" onclick="UI.seriesRemoveSeason()" title="Remover campo de Temporada"><i class="fas fa-minus"></i></button>
+                            <button type="button" class="series-ghost-btn" data-onclick="UI.seriesAddSeason()" title="Adicionar campo de Temporada"><i class="fas fa-plus"></i></button>
+                            <button type="button" class="series-ghost-btn red" data-onclick="UI.seriesRemoveSeason()" title="Remover campo de Temporada"><i class="fas fa-minus"></i></button>
                         </div>
                         <div id="series-season-blocks"></div>
                         <div class="series-empty-hint" id="series-seasons-hint" style="display:block">Nenhuma temporada. Digite o <b>Total de Temporadas</b> na seção 1 e clique no ícone <i class="fas fa-magic" style="color:#8B5CF6"></i>.</div>
@@ -495,8 +495,8 @@
                             <span>CADASTRE OS EPISÓDIOS DE CADA TEMPORADA DA SERIE</span>
                             <span class="series-totalizador" id="series-episodes-total">0 Episódios</span>
                             <div style="flex:1"></div>
-                            <button type="button" class="series-ghost-btn" onclick="UI.seriesAddEpisode()" title="Adicionar campo de Episódio"><i class="fas fa-plus"></i></button>
-                            <button type="button" class="series-ghost-btn red" onclick="UI.seriesRemoveEpisode()" title="Remover campo de Episódio"><i class="fas fa-minus"></i></button>
+                            <button type="button" class="series-ghost-btn" data-onclick="UI.seriesAddEpisode()" title="Adicionar campo de Episódio"><i class="fas fa-plus"></i></button>
+                            <button type="button" class="series-ghost-btn red" data-onclick="UI.seriesRemoveEpisode()" title="Remover campo de Episódio"><i class="fas fa-minus"></i></button>
                         </div>
                         <div id="series-episode-blocks"></div>
                         <div class="series-empty-hint" id="series-episodes-hint" style="display:block">Nenhum episódio. Digite o <b>Total de Episódios</b> na seção 1 e clique no ícone <i class="fas fa-magic" style="color:#7C3AED"></i>.</div>
@@ -520,8 +520,8 @@
                         <div id="dynamic-estreia-summary" style="display:flex;align-items:center;justify-content:space-between;background:rgba(16,185,129,0.06);border-radius:0.75rem;padding:0.6rem 0.85rem;border:1px solid rgba(16,185,129,0.1)">
                             <span id="estreia-count-display" style="font-size:0.85rem;font-weight:700;color:#34D399">0 ESTREIAS</span>
                             <div style="display:flex;gap:0.5rem">
-                                <button onclick="UI._addEstreiaRow()" class="estreia-summary-btn rounded-full flex items-center justify-center font-black transition" style="width:30px;height:30px;background:rgba(16,185,129,0.2);color:#10B981;border:1px solid rgba(16,185,129,0.3);font-size:0.8rem" title="Adicionar"><i class="fas fa-plus"></i></button>
-                                <button onclick="UI._removeAllEstreias()" class="estreia-summary-btn rounded-full flex items-center justify-center font-black transition" style="width:30px;height:30px;background:rgba(239,68,68,0.2);color:#EF4444;border:1px solid rgba(239,68,68,0.3);font-size:0.8rem" title="Remover todas as estreias"><i class="fas fa-trash"></i></button>
+                                <button data-onclick="UI._addEstreiaRow()" class="estreia-summary-btn rounded-full flex items-center justify-center font-black transition" style="width:30px;height:30px;background:rgba(16,185,129,0.2);color:#10B981;border:1px solid rgba(16,185,129,0.3);font-size:0.8rem" title="Adicionar"><i class="fas fa-plus"></i></button>
+                                <button data-onclick="UI._removeAllEstreias()" class="estreia-summary-btn rounded-full flex items-center justify-center font-black transition" style="width:30px;height:30px;background:rgba(239,68,68,0.2);color:#EF4444;border:1px solid rgba(239,68,68,0.3);font-size:0.8rem" title="Remover todas as estreias"><i class="fas fa-trash"></i></button>
                             </div>
                         </div>
                         <!-- Auto-delete warning -->
@@ -547,9 +547,9 @@
                     <span class="text-[11px] font-black uppercase tracking-wider text-emerald-400">Estreias <span id="counter-estreias">0</span></span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button id="btn-clone-data" onclick="Logic.cloneLastData()" class="btn-save-batch" style="display:none;background:linear-gradient(135deg,#8B5CF6,#7C3AED);box-shadow:0 4px 15px rgba(139,92,246,0.3)"><i class="fas fa-copy mr-1.5"></i> CLONAR DADOS</button>
-                    <button id="btn-save-v2" onclick="saveMovie()" class="btn-save-premium"><i class="fas fa-check mr-2"></i> SALVAR +</button>
-                    <button id="btn-duplicate-series" onclick="Logic.cloneLastData()" class="btn-save-batch" style="display:none;background:linear-gradient(135deg,#10B981,#059669);box-shadow:0 4px 15px rgba(16,185,129,0.3)"><i class="fas fa-copy mr-1.5"></i> CLONAR SÉRIE</button>
+                    <button id="btn-clone-data" data-onclick="Logic.cloneLastData()" class="btn-save-batch" style="display:none;background:linear-gradient(135deg,#8B5CF6,#7C3AED);box-shadow:0 4px 15px rgba(139,92,246,0.3)"><i class="fas fa-copy mr-1.5"></i> CLONAR DADOS</button>
+                    <button id="btn-save-v2" data-onclick="saveMovie()" class="btn-save-premium"><i class="fas fa-check mr-2"></i> SALVAR +</button>
+                    <button id="btn-duplicate-series" data-onclick="Logic.cloneLastData()" class="btn-save-batch" style="display:none;background:linear-gradient(135deg,#10B981,#059669);box-shadow:0 4px 15px rgba(16,185,129,0.3)"><i class="fas fa-copy mr-1.5"></i> CLONAR SÉRIE</button>
                 </div>
             </div>
         </div>
@@ -558,40 +558,40 @@
     <!-- Menu Contextual -->
     <div id="context-menu">
         <div class="p-2 space-y-1">
-            <button onclick="Logic.viewMovieCtx()" class="w-full text-left px-4 py-2 hover:bg-blue-600 hover:text-white rounded-lg flex items-center gap-3 text-[0.85rem] font-normal uppercase transition"><i class="fas fa-info-circle"></i> Info</button>
-            <button onclick="Logic.editMovieCtx()" class="w-full text-left px-4 py-2 hover:bg-blue-600 hover:text-white rounded-lg flex items-center gap-3 text-[0.85rem] font-normal uppercase transition"><i class="fas fa-edit"></i> Editar</button>
-            <button onclick="Logic.editReminderCtx()" class="w-full text-left px-4 py-2 hover:bg-amber-600 hover:text-white rounded-lg flex items-center gap-3 text-[0.85rem] font-normal uppercase transition"><i class="fas fa-bell"></i> <span id="ctx-reminder-label">Criar Lembrete</span></button>
-            <button onclick="Logic.deleteMovieCtx()" class="w-full text-left px-4 py-2 hover:bg-red-600 hover:text-white rounded-lg flex items-center gap-3 text-[0.85rem] font-normal uppercase text-red-500 transition"><i class="fas fa-trash"></i> Remover</button>
+            <button data-onclick="Logic.viewMovieCtx()" class="w-full text-left px-4 py-2 hover:bg-blue-600 hover:text-white rounded-lg flex items-center gap-3 text-[0.85rem] font-normal uppercase transition"><i class="fas fa-info-circle"></i> Info</button>
+            <button data-onclick="Logic.editMovieCtx()" class="w-full text-left px-4 py-2 hover:bg-blue-600 hover:text-white rounded-lg flex items-center gap-3 text-[0.85rem] font-normal uppercase transition"><i class="fas fa-edit"></i> Editar</button>
+            <button data-onclick="Logic.editReminderCtx()" class="w-full text-left px-4 py-2 hover:bg-amber-600 hover:text-white rounded-lg flex items-center gap-3 text-[0.85rem] font-normal uppercase transition"><i class="fas fa-bell"></i> <span id="ctx-reminder-label">Criar Lembrete</span></button>
+            <button data-onclick="Logic.deleteMovieCtx()" class="w-full text-left px-4 py-2 hover:bg-red-600 hover:text-white rounded-lg flex items-center gap-3 text-[0.85rem] font-normal uppercase text-red-500 transition"><i class="fas fa-trash"></i> Remover</button>
         </div>
     </div>
 
     <!-- Reminder Popup -->
     <div id="reminder-popup" class="fixed inset-0 z-[200] hidden items-center justify-center bg-black/60 backdrop-blur-sm" style="display:none">
-        <div class="bg-[#0f172a] border border-[#1e293b] rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl" onclick="event.stopPropagation()">
+        <div class="bg-[#0f172a] border border-[#1e293b] rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl" data-onclick="event.stopPropagation()">
             <div class="flex items-center justify-between mb-4">
                 <h3 id="reminder-popup-title" class="text-lg font-black uppercase tracking-tighter" style="background:linear-gradient(135deg,#fff,#FBBF24);-webkit-background-clip:text;-webkit-text-fill-color:transparent">
                     <i class="fas fa-sticky-note mr-2 text-2xl"></i>Criar Lembrete
                 </h3>
-                <button onclick="document.getElementById('reminder-popup').style.display='none'" class="btn-close-premium"><i class="fas fa-times text-xs"></i></button>
+                <button data-onclick="document.getElementById('reminder-popup').style.display='none'" class="btn-close-premium"><i class="fas fa-times text-xs"></i></button>
             </div>
             <div id="reminder-created-info" class="text-[0.75rem] text-amber-300/80 font-semibold mb-2" style="display:none"></div>
             <textarea id="reminder-text" class="w-full bg-[#1e293b] border border-[#334155] rounded-xl p-3 text-white text-sm outline-none resize-none h-24" placeholder="Digite o lembrete..."></textarea>
             <div class="flex gap-2 mt-3">
-                <button onclick="Logic.saveReminder()" class="flex-1 py-2 bg-gradient-to-r from-amber-600 to-orange-600 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-white hover:scale-[1.02] transition">Salvar</button>
-                <button onclick="document.getElementById('reminder-popup').style.display='none'" class="flex-1 py-2 bg-gray-700 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-gray-300 hover:bg-gray-600 transition">Cancelar</button>
-                <button onclick="Logic.deleteReminder()" id="reminder-delete-btn" class="py-2 px-4 bg-red-600/20 border border-red-600/30 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-red-400 hover:bg-red-600/30 transition" style="display:none">Remover</button>
+                <button data-onclick="Logic.saveReminder()" class="flex-1 py-2 bg-gradient-to-r from-amber-600 to-orange-600 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-white hover:scale-[1.02] transition">Salvar</button>
+                <button data-onclick="document.getElementById('reminder-popup').style.display='none'" class="flex-1 py-2 bg-gray-700 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-gray-300 hover:bg-gray-600 transition">Cancelar</button>
+                <button data-onclick="Logic.deleteReminder()" id="reminder-delete-btn" class="py-2 px-4 bg-red-600/20 border border-red-600/30 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-red-400 hover:bg-red-600/30 transition" style="display:none">Remover</button>
             </div>
         </div>
     </div>
 
     <!-- Dynamic Series Modal (overlay) -->
     <div id="modal-dynamic-series" class="fixed inset-0 z-[250] hidden items-center justify-center bg-black/60 backdrop-blur-sm" style="display:none">
-        <div class="bg-[#0f172a] border border-[#1e293b] rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl" onclick="event.stopPropagation()">
+        <div class="bg-[#0f172a] border border-[#1e293b] rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl" data-onclick="event.stopPropagation()">
             <div class="flex items-center justify-between mb-5">
                 <h3 class="text-lg font-black uppercase tracking-tighter flex items-center gap-2" style="background:linear-gradient(135deg,#fff,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">
                     <i class="fas fa-dice-d6 text-2xl"></i>CADASTRO DINÂMICO
                 </h3>
-                <button onclick="UI.closeDynamicSeriesModal()" class="w-8 h-8 rounded-full flex items-center justify-center transition" style="background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4)" onmouseover="this.style.background='rgba(239,68,68,0.5)';this.style.transform='rotate(90deg)'" onmouseout="this.style.background='rgba(239,68,68,0.2)';this.style.transform=''">
+                <button data-onclick="UI.closeDynamicSeriesModal()" class="w-8 h-8 rounded-full flex items-center justify-center transition" style="background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4)" data-onmouseover="this.style.background='rgba(239,68,68,0.5)';this.style.transform='rotate(90deg)'" data-onmouseout="this.style.background='rgba(239,68,68,0.2)';this.style.transform=''">
                     <i class="fas fa-times text-white text-xs"></i>
                 </button>
             </div>
@@ -608,58 +608,58 @@
                 </div>
             </div>
             <div class="flex gap-2 mt-6">
-                <button onclick="UI.generateDynamicSeriesFields()" class="flex-1 py-2.5 bg-gradient-to-r from-purple-600 to-violet-600 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-white transition hover:scale-[1.02] shadow-lg shadow-purple-600/30">
+                <button data-onclick="UI.generateDynamicSeriesFields()" class="flex-1 py-2.5 bg-gradient-to-r from-purple-600 to-violet-600 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-white transition hover:scale-[1.02] shadow-lg shadow-purple-600/30">
                     <i class="fas fa-magic mr-1.5"></i> CRIAR CAMPOS
                 </button>
-                <button onclick="UI.closeDynamicSeriesModal()" class="py-2.5 px-4 bg-gray-700 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-gray-300 hover:bg-gray-600 transition">Cancelar</button>
+                <button data-onclick="UI.closeDynamicSeriesModal()" class="py-2.5 px-4 bg-gray-700 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-gray-300 hover:bg-gray-600 transition">Cancelar</button>
             </div>
         </div>
     </div>
 
     <!-- Season Modal (overlay) -->
     <div id="modal-seasons" class="fixed inset-0 z-[260] hidden items-center justify-center bg-black/60 backdrop-blur-sm" style="display:none">
-        <div class="bg-[#0f172a] border border-[#1e293b] rounded-2xl p-5 max-w-2xl w-full mx-4 shadow-2xl" onclick="event.stopPropagation()" style="max-height:80vh;display:flex;flex-direction:column">
+        <div class="bg-[#0f172a] border border-[#1e293b] rounded-2xl p-5 max-w-2xl w-full mx-4 shadow-2xl" data-onclick="event.stopPropagation()" style="max-height:80vh;display:flex;flex-direction:column">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-[13px] font-black uppercase tracking-widest flex items-center gap-2" style="background:linear-gradient(135deg,#fff,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent">
                     <i class="fas fa-layer-group" style="font-size:13px;-webkit-text-fill-color:#8B5CF6"></i> CADASTRAR TEMPORADAS
                 </h3>
-                <button onclick="UI.closeSeasonModal()" class="w-8 h-8 rounded-full flex items-center justify-center transition" style="background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4)" onmouseover="this.style.background='rgba(239,68,68,0.5)';this.style.transform='rotate(90deg)'" onmouseout="this.style.background='rgba(239,68,68,0.2)';this.style.transform=''">
+                <button data-onclick="UI.closeSeasonModal()" class="w-8 h-8 rounded-full flex items-center justify-center transition" style="background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4)" data-onmouseover="this.style.background='rgba(239,68,68,0.5)';this.style.transform='rotate(90deg)'" data-onmouseout="this.style.background='rgba(239,68,68,0.2)';this.style.transform=''">
                     <i class="fas fa-times text-white text-xs"></i>
                 </button>
             </div>
             <div id="season-blocks-container" style="overflow-y:auto;flex:1;max-height:calc(80vh - 120px);padding-right:4px" class="custom-scroll"></div>
             <div class="flex gap-2 mt-4 pt-3" style="border-top:1px solid var(--border-color)">
-                <button id="season-footer-btn" onclick="UI.saveSeasons()" class="flex-1 py-2.5 bg-gradient-to-r from-purple-600 to-violet-600 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-white transition hover:scale-[1.02] shadow-lg shadow-purple-600/30">
+                <button id="season-footer-btn" data-onclick="UI.saveSeasons()" class="flex-1 py-2.5 bg-gradient-to-r from-purple-600 to-violet-600 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-white transition hover:scale-[1.02] shadow-lg shadow-purple-600/30">
                     <i class="fas fa-check mr-1.5"></i> CRIAR TEMPORADAS
                 </button>
-                <button onclick="UI.clearAllSeasons()" class="py-2.5 px-4 rounded-xl text-[0.7rem] font-black uppercase tracking-wider transition" style="background:rgba(239,68,68,0.15);color:#EF4444;border:1px solid rgba(239,68,68,0.3)">
+                <button data-onclick="UI.clearAllSeasons()" class="py-2.5 px-4 rounded-xl text-[0.7rem] font-black uppercase tracking-wider transition" style="background:rgba(239,68,68,0.15);color:#EF4444;border:1px solid rgba(239,68,68,0.3)">
                     <i class="fas fa-trash mr-1"></i> LIMPAR TUDO
                 </button>
-                <button onclick="UI.closeSeasonModal()" class="py-2.5 px-4 bg-gray-700 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-gray-300 hover:bg-gray-600 transition">Cancelar</button>
+                <button data-onclick="UI.closeSeasonModal()" class="py-2.5 px-4 bg-gray-700 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-gray-300 hover:bg-gray-600 transition">Cancelar</button>
             </div>
         </div>
     </div>
 
     <!-- Episode Modal (overlay) -->
     <div id="modal-episodes" class="fixed inset-0 z-[260] hidden items-center justify-center bg-black/60 backdrop-blur-sm" style="display:none">
-        <div class="bg-[#0f172a] border border-[#1e293b] rounded-2xl p-5 max-w-3xl w-full mx-4 shadow-2xl" onclick="event.stopPropagation()" style="max-height:85vh;display:flex;flex-direction:column">
+        <div class="bg-[#0f172a] border border-[#1e293b] rounded-2xl p-5 max-w-3xl w-full mx-4 shadow-2xl" data-onclick="event.stopPropagation()" style="max-height:85vh;display:flex;flex-direction:column">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-[13px] font-black uppercase tracking-widest flex items-center gap-2" style="background:linear-gradient(135deg,#fff,#7C3AED);-webkit-background-clip:text;-webkit-text-fill-color:transparent">
                     <i class="fas fa-film" style="font-size:13px;-webkit-text-fill-color:#7C3AED"></i> CADASTRAR EPISÓDIOS
                 </h3>
-                <button onclick="UI.closeEpisodeModal()" class="w-8 h-8 rounded-full flex items-center justify-center transition" style="background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4)" onmouseover="this.style.background='rgba(239,68,68,0.5)';this.style.transform='rotate(90deg)'" onmouseout="this.style.background='rgba(239,68,68,0.2)';this.style.transform=''">
+                <button data-onclick="UI.closeEpisodeModal()" class="w-8 h-8 rounded-full flex items-center justify-center transition" style="background:rgba(239,68,68,0.2);border:1px solid rgba(239,68,68,0.4)" data-onmouseover="this.style.background='rgba(239,68,68,0.5)';this.style.transform='rotate(90deg)'" data-onmouseout="this.style.background='rgba(239,68,68,0.2)';this.style.transform=''">
                     <i class="fas fa-times text-white text-xs"></i>
                 </button>
             </div>
             <div id="episode-blocks-container" style="overflow-y:auto;flex:1;max-height:calc(85vh - 120px);padding-right:4px" class="custom-scroll"></div>
             <div class="flex gap-2 mt-4 pt-3" style="border-top:1px solid var(--border-color)">
-                <button id="episode-footer-btn" onclick="UI.saveEpisodes()" class="flex-1 py-2.5 bg-gradient-to-r from-purple-600 to-violet-600 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-white transition hover:scale-[1.02] shadow-lg shadow-purple-600/30">
+                <button id="episode-footer-btn" data-onclick="UI.saveEpisodes()" class="flex-1 py-2.5 bg-gradient-to-r from-purple-600 to-violet-600 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-white transition hover:scale-[1.02] shadow-lg shadow-purple-600/30">
                     <i class="fas fa-check mr-1.5"></i> CRIAR EPISÓDIOS
                 </button>
-                <button onclick="UI.clearAllEpisodes()" class="py-2.5 px-4 rounded-xl text-[0.7rem] font-black uppercase tracking-wider transition" style="background:rgba(239,68,68,0.15);color:#EF4444;border:1px solid rgba(239,68,68,0.3)">
+                <button data-onclick="UI.clearAllEpisodes()" class="py-2.5 px-4 rounded-xl text-[0.7rem] font-black uppercase tracking-wider transition" style="background:rgba(239,68,68,0.15);color:#EF4444;border:1px solid rgba(239,68,68,0.3)">
                     <i class="fas fa-trash mr-1"></i> LIMPAR TUDO
                 </button>
-                <button onclick="UI.closeEpisodeModal()" class="py-2.5 px-4 bg-gray-700 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-gray-300 hover:bg-gray-600 transition">Cancelar</button>
+                <button data-onclick="UI.closeEpisodeModal()" class="py-2.5 px-4 bg-gray-700 rounded-xl text-[0.7rem] font-black uppercase tracking-wider text-gray-300 hover:bg-gray-600 transition">Cancelar</button>
             </div>
         </div>
     </div>
@@ -669,11 +669,11 @@
         <div class="cat-manager-pop">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-[13px] font-black uppercase tracking-widest flex items-center gap-2" style="background:linear-gradient(135deg,#fff,#60A5FA);-webkit-background-clip:text;-webkit-text-fill-color:transparent"><i class="fas fa-tags" style="font-size:13px;-webkit-text-fill-color:#60A5FA"></i> Gerir Gêneros</h3>
-                <div onclick="Logic.toggleCatManager()" class="btn-close-premium" style="width:30px;height:30px"><i class="fas fa-times text-[9px]"></i></div>
+                <div data-onclick="Logic.toggleCatManager()" class="btn-close-premium" style="width:30px;height:30px"><i class="fas fa-times text-[9px]"></i></div>
             </div>
             <div class="cat-input-group">
-                <input type="text" id="cat-input" placeholder="Novo gênero..." onkeydown="if(event.key==='Enter')Logic.addCategory(this.value)">
-                <button onclick="Logic.addCategory(document.getElementById('cat-input').value)"><i class="fas fa-plus"></i></button>
+                <input type="text" id="cat-input" placeholder="Novo gênero..." data-onkeydown="if(event.key==='Enter')Logic.addCategory(this.value)">
+                <button data-onclick="Logic.addCategory(document.getElementById('cat-input').value)"><i class="fas fa-plus"></i></button>
             </div>
             <div id="cat-manager-list"></div>
         </div>
@@ -694,7 +694,7 @@
                         <span id="notification-count-label" style="font-size:0.6rem;color:var(--text-secondary);font-weight:600;text-transform:uppercase;letter-spacing:0.05em">0 notificações</span>
                     </div>
                 </div>
-                <button onclick="UI.closeNotifications()" class="btn-close-premium" style="width:34px;height:34px"><i class="fas fa-times text-sm"></i></button>
+                <button data-onclick="UI.closeNotifications()" class="btn-close-premium" style="width:34px;height:34px"><i class="fas fa-times text-sm"></i></button>
             </div>
             <div id="notification-list"></div>
         </div>
@@ -707,7 +707,7 @@
                 <h3 id="reminder-panel-title" class="text-lg font-black uppercase tracking-widest" style="background:linear-gradient(135deg,#FBBF24,#F59E0B);-webkit-background-clip:text;-webkit-text-fill-color:transparent">
                     <i class="fas fa-sticky-note mr-2 text-2xl"></i>LEMBRETES
                 </h3>
-                <div onclick="UI.closeReminderPanel()" class="btn-close-premium" style="width:34px;height:34px"><i class="fas fa-times text-sm"></i></div>
+                <div data-onclick="UI.closeReminderPanel()" class="btn-close-premium" style="width:34px;height:34px"><i class="fas fa-times text-sm"></i></div>
             </div>
             <div id="reminder-list"></div>
         </div>
@@ -725,8 +725,8 @@
                     <span id="mmi-category" class="text-sm font-black uppercase tracking-widest px-3 py-1 rounded-full" style="background:rgba(59,130,246,0.15);color:#60A5FA;border:1px solid rgba(59,130,246,0.25)">—</span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button onclick="Logic.editFromInfo('filmes')" class="btn-icon" title="Editar"><i class="fas fa-edit text-sm"></i></button>
-                    <button onclick="UI.closeModal('modal-movie-info')" class="btn-close-premium" >
+                    <button data-onclick="Logic.editFromInfo('filmes')" class="btn-icon" title="Editar"><i class="fas fa-edit text-sm"></i></button>
+                    <button data-onclick="UI.closeModal('modal-movie-info')" class="btn-close-premium" >
                         <i class="fas fa-times text-xs"></i>
                     </button>
                 </div>
@@ -737,7 +737,7 @@
                 <!-- Coluna 1: Poster -->
                 <div>
                     <div style="aspect-ratio:9/16;border-radius:0.85rem;overflow:hidden;background:var(--input-bg);border:1px solid var(--border-color);position:relative">
-                        <img id="mmi-poster" src="" style="width:100%;height:100%;object-fit:cover;display:none" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                        <img id="mmi-poster" src="" style="width:100%;height:100%;object-fit:cover;display:none" data-onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                         <div id="mmi-poster-fallback" class="poster-fallback" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:linear-gradient(135deg,#1e293b,#0f172a);flex-direction:column;gap:0.4rem">
                             <i class="fas fa-film" style="font-size:2rem;color:#60A5FA"></i>
                             <span style="color:#94A3B8;font-size:0.7rem;font-weight:600">SEM CAPA</span>
@@ -782,7 +782,7 @@
                     </div>
 
                     <!-- Botão Executar -->
-                    <button id="mmi-play-btn" onclick="Logic.playInfoMedia('filmes')" style="display:inline-flex;align-items:center;justify-content:center;gap:0.6rem;width:100%;padding:0.85rem 2rem;border-radius:1rem;font-weight:900;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;background:linear-gradient(135deg,#3B82F6,#2563EB);color:white;box-shadow:0 4px 20px rgba(59,130,246,0.35);transition:all 0.3s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 30px rgba(59,130,246,0.5)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+                    <button id="mmi-play-btn" data-onclick="Logic.playInfoMedia('filmes')" style="display:inline-flex;align-items:center;justify-content:center;gap:0.6rem;width:100%;padding:0.85rem 2rem;border-radius:1rem;font-weight:900;font-size:12px;text-transform:uppercase;letter-spacing:0.1em;background:linear-gradient(135deg,#3B82F6,#2563EB);color:white;box-shadow:0 4px 20px rgba(59,130,246,0.35);transition:all 0.3s" data-onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 30px rgba(59,130,246,0.5)'" data-onmouseout="this.style.transform='';this.style.boxShadow=''">
                         <i class="fas fa-play" style="font-size:12px"></i>
                         <span>EXECUTAR FILME</span>
                     </button>
@@ -791,9 +791,9 @@
 
             <!-- Footer: Navegação -->
             <div style="display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1.5rem;border-top:1px solid var(--border-color)">
-                <button onclick="Logic.navigateMovieInfo(-1)" class="btn-icon" title="Anterior"><i class="fas fa-chevron-left text-sm"></i></button>
+                <button data-onclick="Logic.navigateMovieInfo(-1)" class="btn-icon" title="Anterior"><i class="fas fa-chevron-left text-sm"></i></button>
                 <span id="mmi-counter" class="text-sm font-black uppercase tracking-widest" style="color:var(--text-secondary)">—</span>
-                <button onclick="Logic.navigateMovieInfo(1)" class="btn-icon" title="Seguinte"><i class="fas fa-chevron-right text-sm"></i></button>
+                <button data-onclick="Logic.navigateMovieInfo(1)" class="btn-icon" title="Seguinte"><i class="fas fa-chevron-right text-sm"></i></button>
             </div>
         </div>
     </div>
@@ -810,8 +810,8 @@
                     <span id="msi-category" class="text-sm font-black uppercase tracking-widest px-3 py-1 rounded-full" style="background:rgba(139,92,246,0.15);color:#A78BFA;border:1px solid rgba(139,92,246,0.25)">—</span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button onclick="Logic.editFromInfo('series')" class="btn-icon" title="Editar"><i class="fas fa-edit text-sm"></i></button>
-                    <button onclick="UI.closeModal('modal-series-info')" class="btn-close-premium" >
+                    <button data-onclick="Logic.editFromInfo('series')" class="btn-icon" title="Editar"><i class="fas fa-edit text-sm"></i></button>
+                    <button data-onclick="UI.closeModal('modal-series-info')" class="btn-close-premium" >
                         <i class="fas fa-times text-xs"></i>
                     </button>
                 </div>
@@ -822,7 +822,7 @@
                 <!-- Coluna 1: Poster -->
                 <div>
                     <div style="aspect-ratio:9/16;border-radius:0.85rem;overflow:hidden;background:var(--input-bg);border:1px solid var(--border-color);position:relative">
-                        <img id="msi-poster" src="" style="width:100%;height:100%;object-fit:cover;display:none" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                        <img id="msi-poster" src="" style="width:100%;height:100%;object-fit:cover;display:none" data-onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                         <div id="msi-poster-fallback" class="poster-fallback" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:linear-gradient(135deg,#1e293b,#0f172a);flex-direction:column;gap:0.4rem">
                             <i class="fas fa-film" style="font-size:2rem;color:#60A5FA"></i>
                             <span style="color:#94A3B8;font-size:0.7rem;font-weight:600">SEM CAPA</span>
@@ -875,9 +875,9 @@
 
             <!-- Footer: Navegação -->
             <div style="display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1.5rem;border-top:1px solid var(--border-color)">
-                <button onclick="Logic.navigateSeriesInfo(-1)" class="btn-icon" title="Anterior"><i class="fas fa-chevron-left text-sm"></i></button>
+                <button data-onclick="Logic.navigateSeriesInfo(-1)" class="btn-icon" title="Anterior"><i class="fas fa-chevron-left text-sm"></i></button>
                 <span id="msi-counter" class="text-sm font-black uppercase tracking-widest" style="color:var(--text-secondary)">—</span>
-                <button onclick="Logic.navigateSeriesInfo(1)" class="btn-icon" title="Seguinte"><i class="fas fa-chevron-right text-sm"></i></button>
+                <button data-onclick="Logic.navigateSeriesInfo(1)" class="btn-icon" title="Seguinte"><i class="fas fa-chevron-right text-sm"></i></button>
             </div>
         </div>
     </div>
@@ -890,7 +890,7 @@
                     <i class="fas fa-chart-pie text-blue-500 text-2xl"></i>
                     <span class="text-[1.2rem] font-black uppercase tracking-widest" style="color:var(--text-color);-webkit-text-fill-color:var(--text-color)">ESTATÍSTICA DO ACERVO</span>
                 </div>
-                <button onclick="UI.closeModal('modal-dashboard')" class="btn-close-premium" ><i class="fas fa-times text-xs"></i></button>
+                <button data-onclick="UI.closeModal('modal-dashboard')" class="btn-close-premium" ><i class="fas fa-times text-xs"></i></button>
             </div>
             <div class="p-6 overflow-y-auto custom-scroll" style="max-height:75vh">
                 <div class="dashboard-cards">
@@ -903,49 +903,49 @@
                 <div class="dash-time-filter" id="dash-time-filter">
                     <label><i class="fas fa-clock mr-1 opacity-60"></i>Período:</label>
                     <div class="tf-group" id="tf-btns">
-                        <button class="tf-btn active" data-filter="todos" onclick="UI.setDashTimeFilter('todos')">Todos</button>
-                        <button class="tf-btn" data-filter="dia" onclick="UI.setDashTimeFilter('dia')">Dia</button>
-                        <button class="tf-btn" data-filter="periodo-dias" onclick="UI.setDashTimeFilter('periodo-dias')">Período Dias</button>
-                        <button class="tf-btn" data-filter="mes" onclick="UI.setDashTimeFilter('mes')">Mês</button>
-                        <button class="tf-btn" data-filter="periodo-meses" onclick="UI.setDashTimeFilter('periodo-meses')">Período Meses</button>
-                        <button class="tf-btn" data-filter="ano" onclick="UI.setDashTimeFilter('ano')">Ano</button>
-                        <button class="tf-btn" data-filter="periodo-anos" onclick="UI.setDashTimeFilter('periodo-anos')">Período Anos</button>
+                        <button class="tf-btn active" data-filter="todos" data-onclick="UI.setDashTimeFilter('todos')">Todos</button>
+                        <button class="tf-btn" data-filter="dia" data-onclick="UI.setDashTimeFilter('dia')">Dia</button>
+                        <button class="tf-btn" data-filter="periodo-dias" data-onclick="UI.setDashTimeFilter('periodo-dias')">Período Dias</button>
+                        <button class="tf-btn" data-filter="mes" data-onclick="UI.setDashTimeFilter('mes')">Mês</button>
+                        <button class="tf-btn" data-filter="periodo-meses" data-onclick="UI.setDashTimeFilter('periodo-meses')">Período Meses</button>
+                        <button class="tf-btn" data-filter="ano" data-onclick="UI.setDashTimeFilter('ano')">Ano</button>
+                        <button class="tf-btn" data-filter="periodo-anos" data-onclick="UI.setDashTimeFilter('periodo-anos')">Período Anos</button>
                     </div>
                     <div class="tf-separator"></div>
                     <!-- Filter Inputs by type -->
                     <div class="tf-range show" id="tf-input-dia">
                         <label>Data:</label>
-                        <input type="date" id="tf-dia-date" onchange="UI.applyDashTimeFilter()">
+                        <input type="date" id="tf-dia-date" data-onchange="UI.applyDashTimeFilter()">
                     </div>
                     <div class="tf-range" id="tf-input-periodo-dias">
                         <label>De:</label>
-                        <input type="date" id="tf-dias-start" onchange="UI.applyDashTimeFilter()">
+                        <input type="date" id="tf-dias-start" data-onchange="UI.applyDashTimeFilter()">
                         <label>Até:</label>
-                        <input type="date" id="tf-dias-end" onchange="UI.applyDashTimeFilter()">
+                        <input type="date" id="tf-dias-end" data-onchange="UI.applyDashTimeFilter()">
                     </div>
                     <div class="tf-range" id="tf-input-mes">
                         <label>Mês:</label>
-                        <select id="tf-mes-month" onchange="UI.applyDashTimeFilter()">
+                        <select id="tf-mes-month" data-onchange="UI.applyDashTimeFilter()">
                             <option value="1">Janeiro</option><option value="2">Fevereiro</option><option value="3">Março</option>
                             <option value="4">Abril</option><option value="5">Maio</option><option value="6">Junho</option>
                             <option value="7">Julho</option><option value="8">Agosto</option><option value="9">Setembro</option>
                             <option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option>
                         </select>
                         <label>Ano:</label>
-                        <select id="tf-mes-year" onchange="UI.applyDashTimeFilter()"></select>
+                        <select id="tf-mes-year" data-onchange="UI.applyDashTimeFilter()"></select>
                     </div>
                     <div class="tf-range" id="tf-input-periodo-meses">
                         <label>Mês Início:</label>
-                        <select id="tf-pm-start-month" onchange="UI.applyDashTimeFilter()">
+                        <select id="tf-pm-start-month" data-onchange="UI.applyDashTimeFilter()">
                             <option value="1">Jan</option><option value="2">Fev</option><option value="3">Mar</option>
                             <option value="4">Abr</option><option value="5">Mai</option><option value="6">Jun</option>
                             <option value="7">Jul</option><option value="8">Ago</option><option value="9">Set</option>
                             <option value="10">Out</option><option value="11">Nov</option><option value="12">Dez</option>
                         </select>
                         <label>Ano:</label>
-                        <select id="tf-pm-year" onchange="UI.applyDashTimeFilter()"></select>
+                        <select id="tf-pm-year" data-onchange="UI.applyDashTimeFilter()"></select>
                         <label>até</label>
-                        <select id="tf-pm-end-month" onchange="UI.applyDashTimeFilter()">
+                        <select id="tf-pm-end-month" data-onchange="UI.applyDashTimeFilter()">
                             <option value="1">Jan</option><option value="2">Fev</option><option value="3">Mar</option>
                             <option value="4">Abr</option><option value="5">Mai</option><option value="6">Jun</option>
                             <option value="7">Jul</option><option value="8">Ago</option><option value="9">Set</option>
@@ -954,13 +954,13 @@
                     </div>
                     <div class="tf-range" id="tf-input-ano">
                         <label>Ano:</label>
-                        <select id="tf-ano-year" onchange="UI.applyDashTimeFilter()"></select>
+                        <select id="tf-ano-year" data-onchange="UI.applyDashTimeFilter()"></select>
                     </div>
                     <div class="tf-range" id="tf-input-periodo-anos">
                         <label>De:</label>
-                        <select id="tf-anos-start" onchange="UI.applyDashTimeFilter()"></select>
+                        <select id="tf-anos-start" data-onchange="UI.applyDashTimeFilter()"></select>
                         <label>Até:</label>
-                        <select id="tf-anos-end" onchange="UI.applyDashTimeFilter()"></select>
+                        <select id="tf-anos-end" data-onchange="UI.applyDashTimeFilter()"></select>
                     </div>
                 </div>
                 <!-- Chart Type Selector -->
@@ -1006,7 +1006,7 @@
                     <i class="fas fa-cog text-blue-500 text-2xl"></i>
                     <span class="text-[1rem] font-black uppercase tracking-widest" style="color:var(--text-color);-webkit-text-fill-color:var(--text-color)">CONFIGURAÇÕES</span>
                 </div>
-                <button onclick="UI.closeModal('modal-config')" class="btn-close-premium" ><i class="fas fa-times text-xs"></i></button>
+                <button data-onclick="UI.closeModal('modal-config')" class="btn-close-premium" ><i class="fas fa-times text-xs"></i></button>
             </div>
             <div class="p-5 overflow-y-auto custom-scroll" style="max-height:80vh">
                 
@@ -1015,8 +1015,8 @@
                     <div class="config-section-title"><i class="fas fa-image"></i>Logotipo</div>
                     <div class="config-row">
                         <label>URL da Imagem</label>
-                        <input type="text" id="cfg-logo-url" class="field-premium" placeholder="https://exemplo.com/logo.png" oninput="UI._updateConfigPreview()">
-                        <button onclick="UI.pickFolder('cfg-logo-url')" class="input-icon-btn" title="Selecionar ficheiro"><i class="fas fa-folder-open"></i></button>
+                        <input type="text" id="cfg-logo-url" class="field-premium" placeholder="https://exemplo.com/logo.png" data-oninput="UI._updateConfigPreview()">
+                        <button data-onclick="UI.pickFolder('cfg-logo-url')" class="input-icon-btn" title="Selecionar ficheiro"><i class="fas fa-folder-open"></i></button>
                     </div>
                     <div style="font-size:0.7rem;color:var(--text-secondary);margin:0.25rem 0 0.5rem;padding-left:80px">Formatos aceitos: JPG, PNG, WebP, SVG</div>
                     <div id="cfg-logo-preview" style="padding-left:80px;min-height:30px;display:flex;align-items:center"></div>
@@ -1027,8 +1027,8 @@
                     <div class="config-section-title"><i class="fas fa-box-open"></i>Acervo Vazio</div>
                     <div class="config-row">
                         <label>Ícone (FA)</label>
-                        <input type="text" id="cfg-empty-icon" class="field-premium" placeholder="fa-clapperboard" oninput="UI._updateConfigPreview()">
-                        <button onclick="UI.pickIconFile('cfg-empty-icon')" class="input-icon-btn" title="Carregar imagem de ícone"><i class="fas fa-folder-open"></i></button>
+                        <input type="text" id="cfg-empty-icon" class="field-premium" placeholder="fa-clapperboard" data-oninput="UI._updateConfigPreview()">
+                        <button data-onclick="UI.pickIconFile('cfg-empty-icon')" class="input-icon-btn" title="Carregar imagem de ícone"><i class="fas fa-folder-open"></i></button>
                     </div>
                     <div style="font-size:0.65rem;color:var(--text-secondary);margin:0 0 0.5rem;padding-left:80px">Formatos aceitos: PNG, ICO, SVG e WEBP</div>
                     <div id="cfg-icon-preview" style="padding-left:80px;min-height:36px;display:none;align-items:center;gap:0.75rem;margin-bottom:0.5rem">
@@ -1038,69 +1038,69 @@
                     <div style="display:flex;align-items:center;gap:1.5rem;margin:0.75rem 0;padding:0.5rem 0">
                         <div style="display:flex;align-items:center;gap:0.5rem;flex:1">
                             <label style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-secondary);min-width:110px;flex-shrink:0">Tamanho Ícone</label>
-                            <input type="range" id="cfg-empty-icon-size" class="opacity-slider" style="flex:1" min="24" max="320" value="56" oninput="document.getElementById('opv-cfg-empty-icon-size').textContent=this.value+'px';UI._updateConfigPreview()">
+                            <input type="range" id="cfg-empty-icon-size" class="opacity-slider" style="flex:1" min="24" max="320" value="56" data-oninput="document.getElementById('opv-cfg-empty-icon-size').textContent=this.value+'px';UI._updateConfigPreview()">
                             <span class="opacity-label" id="opv-cfg-empty-icon-size" style="font-size:0.65rem;min-width:42px;text-align:right">56px</span>
                         </div>
                         <div style="display:flex;align-items:center;gap:0.5rem;flex:1">
                             <label style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-secondary);min-width:110px;flex-shrink:0">Opacidade Ícone</label>
-                            <input type="range" id="cfg-empty-icon-opacity" class="opacity-slider" style="flex:1" min="10" max="100" value="100" oninput="document.getElementById('opv-cfg-empty-icon-opacity').textContent=this.value+'%';UI._updateConfigPreview()">
+                            <input type="range" id="cfg-empty-icon-opacity" class="opacity-slider" style="flex:1" min="10" max="100" value="100" data-oninput="document.getElementById('opv-cfg-empty-icon-opacity').textContent=this.value+'%';UI._updateConfigPreview()">
                             <span class="opacity-label" id="opv-cfg-empty-icon-opacity" style="font-size:0.65rem;min-width:42px;text-align:right">100%</span>
                         </div>
                     </div>
                     <div class="config-row">
                         <label>Título</label>
-                        <input type="text" id="cfg-empty-title" class="field-premium" placeholder="ACERVO VAZIO" oninput="UI._updateConfigPreview()">
-                        <button onclick="UI._toggleEmptyStyle('title','bold')" id="cfg-empty-title-bold" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Negrito"><i class="fas fa-bold"></i></button>
-                        <button onclick="UI._toggleEmptyStyle('title','italic')" id="cfg-empty-title-italic" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Itálico"><i class="fas fa-italic"></i></button>
-                        <input type="text" id="cfg-empty-title-size" class="field-premium small" value="14px" placeholder="14px" style="max-width:55px" oninput="UI._updateConfigPreview()">
+                        <input type="text" id="cfg-empty-title" class="field-premium" placeholder="ACERVO VAZIO" data-oninput="UI._updateConfigPreview()">
+                        <button data-onclick="UI._toggleEmptyStyle('title','bold')" id="cfg-empty-title-bold" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Negrito"><i class="fas fa-bold"></i></button>
+                        <button data-onclick="UI._toggleEmptyStyle('title','italic')" id="cfg-empty-title-italic" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Itálico"><i class="fas fa-italic"></i></button>
+                        <input type="text" id="cfg-empty-title-size" class="field-premium small" value="14px" placeholder="14px" style="max-width:55px" data-oninput="UI._updateConfigPreview()">
                         <div class="color-picker-wrap" style="flex:0 0 auto">
-                            <input type="text" id="cfg-empty-title-color-hex" class="color-hex-input" value="#FFFFFF" oninput="UI._updateColorFromHex('cfg-empty-title-color',this.value)">
-                            <div class="color-swatch" id="sw-cfg-empty-title-color" style="background:#FFFFFF" onclick="UI._openColorPicker('cfg-empty-title-color',this)"></div>
-                            <input type="color" id="cfg-empty-title-color" class="color-input-hidden" value="#FFFFFF" onchange="UI._updateColorSwatch('cfg-empty-title-color');UI._updateConfigPreview()">
+                            <input type="text" id="cfg-empty-title-color-hex" class="color-hex-input" value="#FFFFFF" data-oninput="UI._updateColorFromHex('cfg-empty-title-color',this.value)">
+                            <div class="color-swatch" id="sw-cfg-empty-title-color" style="background:#FFFFFF" data-onclick="UI._openColorPicker('cfg-empty-title-color',this)"></div>
+                            <input type="color" id="cfg-empty-title-color" class="color-input-hidden" value="#FFFFFF" data-onchange="UI._updateColorSwatch('cfg-empty-title-color');UI._updateConfigPreview()">
                         </div>
                     </div>
                     <div class="config-row">
                         <label>Subtítulo 1</label>
-                        <input type="text" id="cfg-empty-sub1" class="field-premium" placeholder="O SEU CINEMA PARTICULAR COMEÇA," oninput="UI._updateConfigPreview()">
-                        <button onclick="UI._toggleEmptyStyle('sub1','bold')" id="cfg-empty-sub1-bold" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Negrito"><i class="fas fa-bold"></i></button>
-                        <button onclick="UI._toggleEmptyStyle('sub1','italic')" id="cfg-empty-sub1-italic" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Itálico"><i class="fas fa-italic"></i></button>
-                        <input type="text" id="cfg-empty-sub1-size" class="field-premium small" value="8px" placeholder="8px" style="max-width:55px" oninput="UI._updateConfigPreview()">
+                        <input type="text" id="cfg-empty-sub1" class="field-premium" placeholder="O SEU CINEMA PARTICULAR COMEÇA," data-oninput="UI._updateConfigPreview()">
+                        <button data-onclick="UI._toggleEmptyStyle('sub1','bold')" id="cfg-empty-sub1-bold" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Negrito"><i class="fas fa-bold"></i></button>
+                        <button data-onclick="UI._toggleEmptyStyle('sub1','italic')" id="cfg-empty-sub1-italic" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Itálico"><i class="fas fa-italic"></i></button>
+                        <input type="text" id="cfg-empty-sub1-size" class="field-premium small" value="8px" placeholder="8px" style="max-width:55px" data-oninput="UI._updateConfigPreview()">
                         <div class="color-picker-wrap" style="flex:0 0 auto">
-                            <input type="text" id="cfg-empty-sub1-color-hex" class="color-hex-input" value="#FFFFFF" oninput="UI._updateColorFromHex('cfg-empty-sub1-color',this.value)">
-                            <div class="color-swatch" id="sw-cfg-empty-sub1-color" style="background:#FFFFFF" onclick="UI._openColorPicker('cfg-empty-sub1-color',this)"></div>
-                            <input type="color" id="cfg-empty-sub1-color" class="color-input-hidden" value="#FFFFFF" onchange="UI._updateColorSwatch('cfg-empty-sub1-color');UI._updateConfigPreview()">
+                            <input type="text" id="cfg-empty-sub1-color-hex" class="color-hex-input" value="#FFFFFF" data-oninput="UI._updateColorFromHex('cfg-empty-sub1-color',this.value)">
+                            <div class="color-swatch" id="sw-cfg-empty-sub1-color" style="background:#FFFFFF" data-onclick="UI._openColorPicker('cfg-empty-sub1-color',this)"></div>
+                            <input type="color" id="cfg-empty-sub1-color" class="color-input-hidden" value="#FFFFFF" data-onchange="UI._updateColorSwatch('cfg-empty-sub1-color');UI._updateConfigPreview()">
                         </div>
                     </div>
                     <div class="config-row">
                         <label>Subtítulo 2</label>
-                        <input type="text" id="cfg-empty-sub2" class="field-premium" placeholder="COM O PRIMEIRO CADASTRO" oninput="UI._updateConfigPreview()">
-                        <button onclick="UI._toggleEmptyStyle('sub2','bold')" id="cfg-empty-sub2-bold" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Negrito"><i class="fas fa-bold"></i></button>
-                        <button onclick="UI._toggleEmptyStyle('sub2','italic')" id="cfg-empty-sub2-italic" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Itálico"><i class="fas fa-italic"></i></button>
-                        <input type="text" id="cfg-empty-sub2-size" class="field-premium small" value="8px" placeholder="8px" style="max-width:55px" oninput="UI._updateConfigPreview()">
+                        <input type="text" id="cfg-empty-sub2" class="field-premium" placeholder="COM O PRIMEIRO CADASTRO" data-oninput="UI._updateConfigPreview()">
+                        <button data-onclick="UI._toggleEmptyStyle('sub2','bold')" id="cfg-empty-sub2-bold" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Negrito"><i class="fas fa-bold"></i></button>
+                        <button data-onclick="UI._toggleEmptyStyle('sub2','italic')" id="cfg-empty-sub2-italic" style="width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-secondary);cursor:pointer;font-size:11px;transition:all 0.15s" title="Itálico"><i class="fas fa-italic"></i></button>
+                        <input type="text" id="cfg-empty-sub2-size" class="field-premium small" value="8px" placeholder="8px" style="max-width:55px" data-oninput="UI._updateConfigPreview()">
                         <div class="color-picker-wrap" style="flex:0 0 auto">
-                            <input type="text" id="cfg-empty-sub2-color-hex" class="color-hex-input" value="#FFFFFF" oninput="UI._updateColorFromHex('cfg-empty-sub2-color',this.value)">
-                            <div class="color-swatch" id="sw-cfg-empty-sub2-color" style="background:#FFFFFF" onclick="UI._openColorPicker('cfg-empty-sub2-color',this)"></div>
-                            <input type="color" id="cfg-empty-sub2-color" class="color-input-hidden" value="#FFFFFF" onchange="UI._updateColorSwatch('cfg-empty-sub2-color');UI._updateConfigPreview()">
+                            <input type="text" id="cfg-empty-sub2-color-hex" class="color-hex-input" value="#FFFFFF" data-oninput="UI._updateColorFromHex('cfg-empty-sub2-color',this.value)">
+                            <div class="color-swatch" id="sw-cfg-empty-sub2-color" style="background:#FFFFFF" data-onclick="UI._openColorPicker('cfg-empty-sub2-color',this)"></div>
+                            <input type="color" id="cfg-empty-sub2-color" class="color-input-hidden" value="#FFFFFF" data-onchange="UI._updateColorSwatch('cfg-empty-sub2-color');UI._updateConfigPreview()">
                         </div>
                     </div>
                     <div id="cfg-empty-preview"></div>
                     <div style="display:flex;align-items:center;gap:1.5rem;margin:0.75rem 0;padding:0.5rem 0">
                         <div style="display:flex;align-items:center;gap:0.5rem;flex:1">
                             <label style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-secondary);min-width:110px;flex-shrink:0">Padding Ícone</label>
-                            <input type="range" id="cfg-empty-icon-padding" class="opacity-slider" style="flex:1" min="0" max="50" value="20" oninput="document.getElementById('opv-cfg-empty-icon-padding').textContent=this.value+'px';UI._updateConfigPreview()">
+                            <input type="range" id="cfg-empty-icon-padding" class="opacity-slider" style="flex:1" min="0" max="50" value="20" data-oninput="document.getElementById('opv-cfg-empty-icon-padding').textContent=this.value+'px';UI._updateConfigPreview()">
                             <span class="opacity-label" id="opv-cfg-empty-icon-padding" style="font-size:0.65rem;min-width:42px;text-align:right">20px</span>
                         </div>
                         <div style="display:flex;align-items:center;gap:0.5rem;flex:1">
                             <label style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-secondary);min-width:110px;flex-shrink:0">Borda Ícone</label>
                             <label class="config-switch" style="margin:0">
-                                <input type="checkbox" id="cfg-empty-icon-border" checked onchange="UI._updateConfigPreview()">
+                                <input type="checkbox" id="cfg-empty-icon-border" checked data-onchange="UI._updateConfigPreview()">
                                 <span class="slider"></span>
                                 <span class="switch-label">On/Off</span>
                             </label>
                         </div>
                         <div style="display:flex;align-items:center;gap:0.5rem;flex:1">
                             <label style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--text-secondary);min-width:110px;flex-shrink:0">Dist. Ícone/Título</label>
-                            <input type="range" id="cfg-empty-title-gap" class="opacity-slider" style="flex:1" min="0" max="60" value="12" oninput="document.getElementById('opv-cfg-empty-title-gap').textContent=this.value+'px';UI._updateConfigPreview()">
+                            <input type="range" id="cfg-empty-title-gap" class="opacity-slider" style="flex:1" min="0" max="60" value="12" data-oninput="document.getElementById('opv-cfg-empty-title-gap').textContent=this.value+'px';UI._updateConfigPreview()">
                             <span class="opacity-label" id="opv-cfg-empty-title-gap" style="font-size:0.65rem;min-width:42px;text-align:right">12px</span>
                         </div>
                     </div>
@@ -1113,40 +1113,40 @@
                         <div class="config-row">
                             <label>Cor Estrelas</label>
                             <div class="color-picker-wrap">
-                                <input type="text" id="cfg-star-color-hex" class="color-hex-input" value="#EAB308" oninput="UI._updateColorFromHex('cfg-star-color', this.value)">
-                                <div class="color-swatch" id="sw-cfg-star-color" style="background:#EAB308" onclick="UI._openColorPicker('cfg-star-color',this)"></div>
-                                <input type="color" id="cfg-star-color" class="color-input-hidden" value="#EAB308" onchange="UI._updateColorSwatch('cfg-star-color');UI._updateConfigPreview()">
-                                <input type="range" id="op-cfg-star-color" class="opacity-slider" min="0" max="100" value="100" oninput="UI._updateColorOpacity('cfg-star-color');UI._updateConfigPreview()">
+                                <input type="text" id="cfg-star-color-hex" class="color-hex-input" value="#EAB308" data-oninput="UI._updateColorFromHex('cfg-star-color', this.value)">
+                                <div class="color-swatch" id="sw-cfg-star-color" style="background:#EAB308" data-onclick="UI._openColorPicker('cfg-star-color',this)"></div>
+                                <input type="color" id="cfg-star-color" class="color-input-hidden" value="#EAB308" data-onchange="UI._updateColorSwatch('cfg-star-color');UI._updateConfigPreview()">
+                                <input type="range" id="op-cfg-star-color" class="opacity-slider" min="0" max="100" value="100" data-oninput="UI._updateColorOpacity('cfg-star-color');UI._updateConfigPreview()">
                                 <span class="opacity-label" id="opv-cfg-star-color">100%</span>
                             </div>
                         </div>
                         <div class="config-row">
                             <label>Cor Ano</label>
                             <div class="color-picker-wrap">
-                                <input type="text" id="cfg-year-color-hex" class="color-hex-input" value="#60A5FA" oninput="UI._updateColorFromHex('cfg-year-color', this.value)">
-                                <div class="color-swatch" id="sw-cfg-year-color" style="background:#60A5FA" onclick="UI._openColorPicker('cfg-year-color',this)"></div>
-                                <input type="color" id="cfg-year-color" class="color-input-hidden" value="#60A5FA" onchange="UI._updateColorSwatch('cfg-year-color');UI._updateConfigPreview()">
-                                <input type="range" id="op-cfg-year-color" class="opacity-slider" min="0" max="100" value="100" oninput="UI._updateColorOpacity('cfg-year-color');UI._updateConfigPreview()">
+                                <input type="text" id="cfg-year-color-hex" class="color-hex-input" value="#60A5FA" data-oninput="UI._updateColorFromHex('cfg-year-color', this.value)">
+                                <div class="color-swatch" id="sw-cfg-year-color" style="background:#60A5FA" data-onclick="UI._openColorPicker('cfg-year-color',this)"></div>
+                                <input type="color" id="cfg-year-color" class="color-input-hidden" value="#60A5FA" data-onchange="UI._updateColorSwatch('cfg-year-color');UI._updateConfigPreview()">
+                                <input type="range" id="op-cfg-year-color" class="opacity-slider" min="0" max="100" value="100" data-oninput="UI._updateColorOpacity('cfg-year-color');UI._updateConfigPreview()">
                                 <span class="opacity-label" id="opv-cfg-year-color">100%</span>
                             </div>
                         </div>
                         <div class="config-row">
                             <label>Tamanho Ano</label>
-                            <input type="text" id="cfg-year-size" class="field-premium small" value="15px" oninput="UI._updateConfigPreview()">
+                            <input type="text" id="cfg-year-size" class="field-premium small" value="15px" data-oninput="UI._updateConfigPreview()">
                         </div>
                         <div class="config-row">
                             <label>Cor Texto Status</label>
                             <div class="color-picker-wrap">
-                                <input type="text" id="cfg-status-text-color-hex" class="color-hex-input" value="#FFFFFF" oninput="UI._updateColorFromHex('cfg-status-text-color', this.value)">
-                                <div class="color-swatch" id="sw-cfg-status-text-color" style="background:#FFFFFF" onclick="UI._openColorPicker('cfg-status-text-color',this)"></div>
-                                <input type="color" id="cfg-status-text-color" class="color-input-hidden" value="#FFFFFF" onchange="UI._updateColorSwatch('cfg-status-text-color');UI._updateConfigPreview()">
-                                <input type="range" id="op-cfg-status-text-color" class="opacity-slider" min="0" max="100" value="100" oninput="UI._updateColorOpacity('cfg-status-text-color');UI._updateConfigPreview()">
+                                <input type="text" id="cfg-status-text-color-hex" class="color-hex-input" value="#FFFFFF" data-oninput="UI._updateColorFromHex('cfg-status-text-color', this.value)">
+                                <div class="color-swatch" id="sw-cfg-status-text-color" style="background:#FFFFFF" data-onclick="UI._openColorPicker('cfg-status-text-color',this)"></div>
+                                <input type="color" id="cfg-status-text-color" class="color-input-hidden" value="#FFFFFF" data-onchange="UI._updateColorSwatch('cfg-status-text-color');UI._updateConfigPreview()">
+                                <input type="range" id="op-cfg-status-text-color" class="opacity-slider" min="0" max="100" value="100" data-oninput="UI._updateColorOpacity('cfg-status-text-color');UI._updateConfigPreview()">
                                 <span class="opacity-label" id="opv-cfg-status-text-color">100%</span>
                             </div>
                         </div>
                         <div class="config-row">
                             <label>Tamanho Status</label>
-                            <input type="text" id="cfg-status-size" class="field-premium small" value="11px" oninput="UI._updateConfigPreview()">
+                            <input type="text" id="cfg-status-size" class="field-premium small" value="11px" data-oninput="UI._updateConfigPreview()">
                         </div>
                     </div>
                     <div style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid var(--border-color)">
@@ -1155,30 +1155,30 @@
                             <div class="config-row">
                                 <label>Novo</label>
                                 <div class="color-picker-wrap">
-                                    <input type="text" id="cfg-status-new-bg-hex" class="color-hex-input" value="#2563EB" oninput="UI._updateColorFromHex('cfg-status-new-bg', this.value)">
-                                    <div class="color-swatch" id="sw-cfg-status-new-bg" style="background:#2563EB" onclick="UI._openColorPicker('cfg-status-new-bg',this)"></div>
-                                    <input type="color" id="cfg-status-new-bg" class="color-input-hidden" value="#2563EB" onchange="UI._updateColorSwatch('cfg-status-new-bg');UI._updateConfigPreview()">
-                                    <input type="range" id="op-cfg-status-new-bg" class="opacity-slider" min="0" max="100" value="100" oninput="UI._updateColorOpacity('cfg-status-new-bg');UI._updateConfigPreview()">
+                                    <input type="text" id="cfg-status-new-bg-hex" class="color-hex-input" value="#2563EB" data-oninput="UI._updateColorFromHex('cfg-status-new-bg', this.value)">
+                                    <div class="color-swatch" id="sw-cfg-status-new-bg" style="background:#2563EB" data-onclick="UI._openColorPicker('cfg-status-new-bg',this)"></div>
+                                    <input type="color" id="cfg-status-new-bg" class="color-input-hidden" value="#2563EB" data-onchange="UI._updateColorSwatch('cfg-status-new-bg');UI._updateConfigPreview()">
+                                    <input type="range" id="op-cfg-status-new-bg" class="opacity-slider" min="0" max="100" value="100" data-oninput="UI._updateColorOpacity('cfg-status-new-bg');UI._updateConfigPreview()">
                                     <span class="opacity-label" id="opv-cfg-status-new-bg">100%</span>
                                 </div>
                             </div>
                             <div class="config-row">
                                 <label>Assistir</label>
                                 <div class="color-picker-wrap">
-                                    <input type="text" id="cfg-status-watch-bg-hex" class="color-hex-input" value="#D97706" oninput="UI._updateColorFromHex('cfg-status-watch-bg', this.value)">
-                                    <div class="color-swatch" id="sw-cfg-status-watch-bg" style="background:#D97706" onclick="UI._openColorPicker('cfg-status-watch-bg',this)"></div>
-                                    <input type="color" id="cfg-status-watch-bg" class="color-input-hidden" value="#D97706" onchange="UI._updateColorSwatch('cfg-status-watch-bg');UI._updateConfigPreview()">
-                                    <input type="range" id="op-cfg-status-watch-bg" class="opacity-slider" min="0" max="100" value="100" oninput="UI._updateColorOpacity('cfg-status-watch-bg');UI._updateConfigPreview()">
+                                    <input type="text" id="cfg-status-watch-bg-hex" class="color-hex-input" value="#D97706" data-oninput="UI._updateColorFromHex('cfg-status-watch-bg', this.value)">
+                                    <div class="color-swatch" id="sw-cfg-status-watch-bg" style="background:#D97706" data-onclick="UI._openColorPicker('cfg-status-watch-bg',this)"></div>
+                                    <input type="color" id="cfg-status-watch-bg" class="color-input-hidden" value="#D97706" data-onchange="UI._updateColorSwatch('cfg-status-watch-bg');UI._updateConfigPreview()">
+                                    <input type="range" id="op-cfg-status-watch-bg" class="opacity-slider" min="0" max="100" value="100" data-oninput="UI._updateColorOpacity('cfg-status-watch-bg');UI._updateConfigPreview()">
                                     <span class="opacity-label" id="opv-cfg-status-watch-bg">100%</span>
                                 </div>
                             </div>
                             <div class="config-row">
                                 <label>Favorito</label>
                                 <div class="color-picker-wrap">
-                                    <input type="text" id="cfg-status-fav-bg-hex" class="color-hex-input" value="#DC2626" oninput="UI._updateColorFromHex('cfg-status-fav-bg', this.value)">
-                                    <div class="color-swatch" id="sw-cfg-status-fav-bg" style="background:#DC2626" onclick="UI._openColorPicker('cfg-status-fav-bg',this)"></div>
-                                    <input type="color" id="cfg-status-fav-bg" class="color-input-hidden" value="#DC2626" onchange="UI._updateColorSwatch('cfg-status-fav-bg');UI._updateConfigPreview()">
-                                    <input type="range" id="op-cfg-status-fav-bg" class="opacity-slider" min="0" max="100" value="100" oninput="UI._updateColorOpacity('cfg-status-fav-bg');UI._updateConfigPreview()">
+                                    <input type="text" id="cfg-status-fav-bg-hex" class="color-hex-input" value="#DC2626" data-oninput="UI._updateColorFromHex('cfg-status-fav-bg', this.value)">
+                                    <div class="color-swatch" id="sw-cfg-status-fav-bg" style="background:#DC2626" data-onclick="UI._openColorPicker('cfg-status-fav-bg',this)"></div>
+                                    <input type="color" id="cfg-status-fav-bg" class="color-input-hidden" value="#DC2626" data-onchange="UI._updateColorSwatch('cfg-status-fav-bg');UI._updateConfigPreview()">
+                                    <input type="range" id="op-cfg-status-fav-bg" class="opacity-slider" min="0" max="100" value="100" data-oninput="UI._updateColorOpacity('cfg-status-fav-bg');UI._updateConfigPreview()">
                                     <span class="opacity-label" id="opv-cfg-status-fav-bg">100%</span>
                                 </div>
                             </div>
@@ -1190,26 +1190,26 @@
                             <div class="config-row">
                                 <label>Cor Texto</label>
                                 <div class="color-picker-wrap">
-                                    <input type="text" id="cfg-cat-color-hex" class="color-hex-input" value="#FFFFFF" oninput="UI._updateColorFromHex('cfg-cat-color', this.value)">
-                                    <div class="color-swatch" id="sw-cfg-cat-color" style="background:#FFFFFF" onclick="UI._openColorPicker('cfg-cat-color',this)"></div>
-                                    <input type="color" id="cfg-cat-color" class="color-input-hidden" value="#FFFFFF" onchange="UI._updateColorSwatch('cfg-cat-color');UI._updateConfigPreview()">
-                                    <input type="range" id="op-cfg-cat-color" class="opacity-slider" min="0" max="100" value="100" oninput="UI._updateColorOpacity('cfg-cat-color');UI._updateConfigPreview()">
+                                    <input type="text" id="cfg-cat-color-hex" class="color-hex-input" value="#FFFFFF" data-oninput="UI._updateColorFromHex('cfg-cat-color', this.value)">
+                                    <div class="color-swatch" id="sw-cfg-cat-color" style="background:#FFFFFF" data-onclick="UI._openColorPicker('cfg-cat-color',this)"></div>
+                                    <input type="color" id="cfg-cat-color" class="color-input-hidden" value="#FFFFFF" data-onchange="UI._updateColorSwatch('cfg-cat-color');UI._updateConfigPreview()">
+                                    <input type="range" id="op-cfg-cat-color" class="opacity-slider" min="0" max="100" value="100" data-oninput="UI._updateColorOpacity('cfg-cat-color');UI._updateConfigPreview()">
                                     <span class="opacity-label" id="opv-cfg-cat-color">100%</span>
                                 </div>
                             </div>
                             <div class="config-row">
                                 <label>Fundo</label>
                                 <div class="color-picker-wrap">
-                                    <input type="text" id="cfg-cat-bg-hex" class="color-hex-input" value="#000000" oninput="UI._updateColorFromHex('cfg-cat-bg', this.value)">
-                                    <div class="color-swatch" id="sw-cfg-cat-bg" style="background:#000000" onclick="UI._openColorPicker('cfg-cat-bg',this)"></div>
-                                    <input type="color" id="cfg-cat-bg" class="color-input-hidden" value="#000000" onchange="UI._updateColorSwatch('cfg-cat-bg');UI._updateConfigPreview()">
-                                    <input type="range" id="op-cfg-cat-bg" class="opacity-slider" min="0" max="100" value="100" oninput="UI._updateColorOpacity('cfg-cat-bg');UI._updateConfigPreview()">
+                                    <input type="text" id="cfg-cat-bg-hex" class="color-hex-input" value="#000000" data-oninput="UI._updateColorFromHex('cfg-cat-bg', this.value)">
+                                    <div class="color-swatch" id="sw-cfg-cat-bg" style="background:#000000" data-onclick="UI._openColorPicker('cfg-cat-bg',this)"></div>
+                                    <input type="color" id="cfg-cat-bg" class="color-input-hidden" value="#000000" data-onchange="UI._updateColorSwatch('cfg-cat-bg');UI._updateConfigPreview()">
+                                    <input type="range" id="op-cfg-cat-bg" class="opacity-slider" min="0" max="100" value="100" data-oninput="UI._updateColorOpacity('cfg-cat-bg');UI._updateConfigPreview()">
                                     <span class="opacity-label" id="opv-cfg-cat-bg">100%</span>
                                 </div>
                             </div>
                             <div class="config-row">
                                 <label>Tamanho</label>
-                                <input type="text" id="cfg-cat-size" class="field-premium small" value="13px" placeholder="ex: 13px" oninput="UI._updateConfigPreview()">
+                                <input type="text" id="cfg-cat-size" class="field-premium small" value="13px" placeholder="ex: 13px" data-oninput="UI._updateConfigPreview()">
                             </div>
                         </div>
                     </div>
@@ -1226,8 +1226,8 @@
                     <div class="config-section-title"><i class="fas fa-folder"></i>Caminhos</div>
                     <div class="config-row path-row">
                         <label>Cards de Filmes</label>
-                        <input type="text" id="cfg-path-cards" class="field-premium" placeholder="C:\Users\...\Cards" oninput="UI._onPathInput('cfg-path-cards','cfg-path-cards-active')">
-                        <button onclick="UI.pickFolder('cfg-path-cards')" class="input-icon-btn" title="Selecionar pasta"><i class="fas fa-folder-open"></i></button>
+                        <input type="text" id="cfg-path-cards" class="field-premium" placeholder="C:\Users\...\Cards" data-oninput="UI._onPathInput('cfg-path-cards','cfg-path-cards-active')">
+                        <button data-onclick="UI.pickFolder('cfg-path-cards')" class="input-icon-btn" title="Selecionar pasta"><i class="fas fa-folder-open"></i></button>
                         <label class="config-switch">
                             <input type="checkbox" id="cfg-path-cards-active">
                             <span class="slider"></span>
@@ -1236,8 +1236,8 @@
                     </div>
                     <div class="config-row path-row">
                         <label>Cards de Séries</label>
-                        <input type="text" id="cfg-path-series-cards" class="field-premium" placeholder="C:\Users\...\Cards Séries" oninput="UI._onPathInput('cfg-path-series-cards','cfg-path-series-cards-active')">
-                        <button onclick="UI.pickFolder('cfg-path-series-cards')" class="input-icon-btn" title="Selecionar pasta"><i class="fas fa-folder-open"></i></button>
+                        <input type="text" id="cfg-path-series-cards" class="field-premium" placeholder="C:\Users\...\Cards Séries" data-oninput="UI._onPathInput('cfg-path-series-cards','cfg-path-series-cards-active')">
+                        <button data-onclick="UI.pickFolder('cfg-path-series-cards')" class="input-icon-btn" title="Selecionar pasta"><i class="fas fa-folder-open"></i></button>
                         <label class="config-switch">
                             <input type="checkbox" id="cfg-path-series-cards-active">
                             <span class="slider"></span>
@@ -1246,8 +1246,8 @@
                     </div>
                     <div class="config-row path-row">
                         <label>Filmes</label>
-                        <input type="text" id="cfg-path-videos" class="field-premium" placeholder="C:\Users\...\Filmes" oninput="UI._onPathInput('cfg-path-videos','cfg-path-videos-active')">
-                        <button onclick="UI.pickFolder('cfg-path-videos')" class="input-icon-btn" title="Selecionar pasta"><i class="fas fa-folder-open"></i></button>
+                        <input type="text" id="cfg-path-videos" class="field-premium" placeholder="C:\Users\...\Filmes" data-oninput="UI._onPathInput('cfg-path-videos','cfg-path-videos-active')">
+                        <button data-onclick="UI.pickFolder('cfg-path-videos')" class="input-icon-btn" title="Selecionar pasta"><i class="fas fa-folder-open"></i></button>
                         <label class="config-switch">
                             <input type="checkbox" id="cfg-path-videos-active">
                             <span class="slider"></span>
@@ -1256,8 +1256,8 @@
                     </div>
                     <div class="config-row path-row">
                         <label>Séries</label>
-                        <input type="text" id="cfg-path-backups" class="field-premium" placeholder="C:\Users\...\Séries" oninput="UI._onPathInput('cfg-path-backups','cfg-path-backups-active')">
-                        <button onclick="UI.pickFolder('cfg-path-backups')" class="input-icon-btn" title="Selecionar pasta"><i class="fas fa-folder-open"></i></button>
+                        <input type="text" id="cfg-path-backups" class="field-premium" placeholder="C:\Users\...\Séries" data-oninput="UI._onPathInput('cfg-path-backups','cfg-path-backups-active')">
+                        <button data-onclick="UI.pickFolder('cfg-path-backups')" class="input-icon-btn" title="Selecionar pasta"><i class="fas fa-folder-open"></i></button>
                         <label class="config-switch">
                             <input type="checkbox" id="cfg-path-backups-active">
                             <span class="slider"></span>
@@ -1267,10 +1267,10 @@
                     <div class="config-row">
                         <label>Acervo Geral</label>
                         <div style="display:flex;gap:0.5rem;flex:1;align-items:center">
-                            <input type="text" id="cfg-acervo-backup-name" class="field-premium" placeholder="Nome do backup" style="flex:0 0 35%;font-size:12px" oninput="UI._onPathInput('cfg-path-acervo','cfg-path-acervo-active')">
-                            <input type="text" id="cfg-path-acervo" class="field-premium" placeholder="C:\Users\...\Acervo Geral" style="flex:1;font-size:12px" oninput="UI._onPathInput('cfg-path-acervo','cfg-path-acervo-active')">
+                            <input type="text" id="cfg-acervo-backup-name" class="field-premium" placeholder="Nome do backup" style="flex:0 0 35%;font-size:12px" data-oninput="UI._onPathInput('cfg-path-acervo','cfg-path-acervo-active')">
+                            <input type="text" id="cfg-path-acervo" class="field-premium" placeholder="C:\Users\...\Acervo Geral" style="flex:1;font-size:12px" data-oninput="UI._onPathInput('cfg-path-acervo','cfg-path-acervo-active')">
                         </div>
-                        <button onclick="UI.pickFolder('cfg-path-acervo')" class="input-icon-btn" title="Selecionar pasta"><i class="fas fa-folder-open"></i></button>
+                        <button data-onclick="UI.pickFolder('cfg-path-acervo')" class="input-icon-btn" title="Selecionar pasta"><i class="fas fa-folder-open"></i></button>
                         <label class="config-switch">
                             <input type="checkbox" id="cfg-path-acervo-active">
                             <span class="slider"></span>
@@ -1297,7 +1297,7 @@
                     <div class="config-section-title"><i class="fas fa-play"></i>Gestão de Mídia</div>
                     <div class="config-row">
                         <label>Player de Vídeo</label>
-                        <select id="cfg-video-player" class="field-premium" style="flex:1;font-size:12px;padding:0.4rem 0.6rem;border-radius:0.5rem;background:var(--input-bg);border:1px solid var(--border-color);color:var(--text-color);outline:none;cursor:pointer" onchange="UI._toggleCustomPlayerRow(this.value)">
+                        <select id="cfg-video-player" class="field-premium" style="flex:1;font-size:12px;padding:0.4rem 0.6rem;border-radius:0.5rem;background:var(--input-bg);border:1px solid var(--border-color);color:var(--text-color);outline:none;cursor:pointer" data-onchange="UI._toggleCustomPlayerRow(this.value)">
                             <option value="system">Padrão do Sistema</option>
                             <option value="wmp">Windows Media Player</option>
                             <option value="custom">Personalizado</option>
@@ -1305,8 +1305,8 @@
                     </div>
                     <div id="cfg-custom-player-row" class="config-row" style="display:none">
                         <label>Caminho Player</label>
-                        <input type="text" id="cfg-custom-player-path" class="field-premium" placeholder="C:\...\meu_player.exe" oninput="UI._updateConfigPreview()">
-                        <button onclick="UI.pickPlayerFile()" class="input-icon-btn" title="Selecionar arquivo .exe"><i class="fas fa-folder-open"></i></button>
+                        <input type="text" id="cfg-custom-player-path" class="field-premium" placeholder="C:\...\meu_player.exe" data-oninput="UI._updateConfigPreview()">
+                        <button data-onclick="UI.pickPlayerFile()" class="input-icon-btn" title="Selecionar arquivo .exe"><i class="fas fa-folder-open"></i></button>
                         <label class="config-switch" style="margin-left:0.5rem;flex:0 0 auto">
                             <input type="checkbox" id="cfg-video-player-active">
                             <span class="slider"></span>
@@ -1331,7 +1331,7 @@
                     </div>
                     <div class="config-row">
                         <label>Duração (ms)</label>
-                        <input type="number" id="cfg-notifications-duration" class="field-premium" style="max-width:100px;appearance:textfield;-moz-appearance:textfield;-webkit-appearance:textfield" value="5000" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                        <input type="number" id="cfg-notifications-duration" class="field-premium" style="max-width:100px;appearance:textfield;-moz-appearance:textfield;-webkit-appearance:textfield" value="5000" data-oninput="this.value=this.value.replace(/[^0-9]/g,'')">
                     </div>
                     <div style="font-size:0.65rem;color:var(--text-secondary);margin-top:0.25rem;padding-left:80px">
                         <i class="fas fa-info-circle mr-1"></i>Quando desativado, pop-ups de estreias não serão exibidos.
@@ -1351,7 +1351,7 @@
                     </div>
                     <div class="config-row">
                         <label>Duração (ms)</label>
-                        <input type="number" id="cfg-cadastro-notify-duration" class="field-premium" style="max-width:100px;appearance:textfield;-moz-appearance:textfield;-webkit-appearance:textfield" value="6000" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                        <input type="number" id="cfg-cadastro-notify-duration" class="field-premium" style="max-width:100px;appearance:textfield;-moz-appearance:textfield;-webkit-appearance:textfield" value="6000" data-oninput="this.value=this.value.replace(/[^0-9]/g,'')">
                     </div>
                     <div style="font-size:0.65rem;color:var(--text-secondary);margin-top:0.25rem;padding-left:80px">
                         <i class="fas fa-info-circle mr-1"></i>Controla a duração da mensagem "atualizado com sucesso!" após atualizar um cadastro ou salvar um Filme, Série ou Estreia.
@@ -1364,71 +1364,71 @@
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem">
                         <div class="config-row" style="grid-column:1/-1">
                             <label>Texto Desenvolvedor</label>
-                            <input type="text" id="cfg-footer-dev-text" class="field-premium" placeholder="ELO SISTEMA E TECNOLOGIA | 2026 - " oninput="UI._updateConfigPreview()">
+                            <input type="text" id="cfg-footer-dev-text" class="field-premium" placeholder="ELO SISTEMA E TECNOLOGIA | 2026 - " data-oninput="UI._updateConfigPreview()">
                         </div>
                         <div class="config-row" style="grid-column:1/-1">
                             <label>Texto Criador</label>
-                            <input type="text" id="cfg-footer-created-text" class="field-premium" placeholder="CRIADO PARA JONAS THEODORO" oninput="UI._updateConfigPreview()">
+                            <input type="text" id="cfg-footer-created-text" class="field-premium" placeholder="CRIADO PARA JONAS THEODORO" data-oninput="UI._updateConfigPreview()">
                         </div>
                         <div class="config-row">
                             <label>Font Size</label>
-                            <input type="text" id="cfg-footer-dev-size" class="field-premium small" placeholder="0.6rem" oninput="UI._updateConfigPreview()">
+                            <input type="text" id="cfg-footer-dev-size" class="field-premium small" placeholder="0.6rem" data-oninput="UI._updateConfigPreview()">
                         </div>
                         <div class="config-row">
                             <label>Cor</label>
                             <div class="color-picker-wrap">
-                                <input type="text" id="cfg-footer-dev-color-hex" class="color-hex-input" value="#9CA3AF" oninput="UI._updateColorFromHex('cfg-footer-dev-color', this.value)">
-                                <div class="color-swatch" id="sw-cfg-footer-dev-color" style="background:#9CA3AF" onclick="UI._openColorPicker('cfg-footer-dev-color',this)"></div>
-                                <input type="color" id="cfg-footer-dev-color" class="color-input-hidden" value="#9CA3AF" onchange="UI._updateColorSwatch('cfg-footer-dev-color');UI._updateConfigPreview()">
+                                <input type="text" id="cfg-footer-dev-color-hex" class="color-hex-input" value="#9CA3AF" data-oninput="UI._updateColorFromHex('cfg-footer-dev-color', this.value)">
+                                <div class="color-swatch" id="sw-cfg-footer-dev-color" style="background:#9CA3AF" data-onclick="UI._openColorPicker('cfg-footer-dev-color',this)"></div>
+                                <input type="color" id="cfg-footer-dev-color" class="color-input-hidden" value="#9CA3AF" data-onchange="UI._updateColorSwatch('cfg-footer-dev-color');UI._updateConfigPreview()">
                             </div>
                         </div>
                         <div class="config-row">
                             <label>Created Size</label>
-                            <input type="text" id="cfg-footer-created-size" class="field-premium small" placeholder="0.6rem" oninput="UI._updateConfigPreview()">
+                            <input type="text" id="cfg-footer-created-size" class="field-premium small" placeholder="0.6rem" data-oninput="UI._updateConfigPreview()">
                         </div>
                         <div class="config-row">
                             <label>Created Cor</label>
                             <div class="color-picker-wrap">
-                                <input type="text" id="cfg-footer-created-color-hex" class="color-hex-input" value="#9CA3AF" oninput="UI._updateColorFromHex('cfg-footer-created-color', this.value)">
-                                <div class="color-swatch" id="sw-cfg-footer-created-color" style="background:#9CA3AF" onclick="UI._openColorPicker('cfg-footer-created-color',this)"></div>
-                                <input type="color" id="cfg-footer-created-color" class="color-input-hidden" value="#9CA3AF" onchange="UI._updateColorSwatch('cfg-footer-created-color');UI._updateConfigPreview()">
+                                <input type="text" id="cfg-footer-created-color-hex" class="color-hex-input" value="#9CA3AF" data-oninput="UI._updateColorFromHex('cfg-footer-created-color', this.value)">
+                                <div class="color-swatch" id="sw-cfg-footer-created-color" style="background:#9CA3AF" data-onclick="UI._openColorPicker('cfg-footer-created-color',this)"></div>
+                                <input type="color" id="cfg-footer-created-color" class="color-input-hidden" value="#9CA3AF" data-onchange="UI._updateColorSwatch('cfg-footer-created-color');UI._updateConfigPreview()">
                             </div>
                         </div>
                         <div class="config-row">
                             <label>AutoSave Size</label>
-                            <input type="text" id="cfg-footer-autosave-size" class="field-premium small" placeholder="0.55rem" oninput="UI._updateConfigPreview()">
+                            <input type="text" id="cfg-footer-autosave-size" class="field-premium small" placeholder="0.55rem" data-oninput="UI._updateConfigPreview()">
                         </div>
                         <div class="config-row">
                             <label>AutoSave Cor</label>
                             <div class="color-picker-wrap">
-                                <input type="text" id="cfg-footer-autosave-color-hex" class="color-hex-input" value="#22C55E" oninput="UI._updateColorFromHex('cfg-footer-autosave-color', this.value)">
-                                <div class="color-swatch" id="sw-cfg-footer-autosave-color" style="background:#22C55E" onclick="UI._openColorPicker('cfg-footer-autosave-color',this)"></div>
-                                <input type="color" id="cfg-footer-autosave-color" class="color-input-hidden" value="#22C55E" onchange="UI._updateColorSwatch('cfg-footer-autosave-color');UI._updateConfigPreview()">
+                                <input type="text" id="cfg-footer-autosave-color-hex" class="color-hex-input" value="#22C55E" data-oninput="UI._updateColorFromHex('cfg-footer-autosave-color', this.value)">
+                                <div class="color-swatch" id="sw-cfg-footer-autosave-color" style="background:#22C55E" data-onclick="UI._openColorPicker('cfg-footer-autosave-color',this)"></div>
+                                <input type="color" id="cfg-footer-autosave-color" class="color-input-hidden" value="#22C55E" data-onchange="UI._updateColorSwatch('cfg-footer-autosave-color');UI._updateConfigPreview()">
                             </div>
                         </div>
                         <div class="config-row">
                             <label>Status Size</label>
-                            <input type="text" id="cfg-footer-status-size" class="field-premium small" placeholder="0.75rem" oninput="UI._updateConfigPreview()">
+                            <input type="text" id="cfg-footer-status-size" class="field-premium small" placeholder="0.75rem" data-oninput="UI._updateConfigPreview()">
                         </div>
                         <div class="config-row">
                             <label>Status Cor</label>
                             <div class="color-picker-wrap">
-                                <input type="text" id="cfg-footer-status-color-hex" class="color-hex-input" value="#FB923C" oninput="UI._updateColorFromHex('cfg-footer-status-color', this.value)">
-                                <div class="color-swatch" id="sw-cfg-footer-status-color" style="background:#FB923C" onclick="UI._openColorPicker('cfg-footer-status-color',this)"></div>
-                                <input type="color" id="cfg-footer-status-color" class="color-input-hidden" value="#FB923C" onchange="UI._updateColorSwatch('cfg-footer-status-color');UI._updateConfigPreview()">
+                                <input type="text" id="cfg-footer-status-color-hex" class="color-hex-input" value="#FB923C" data-oninput="UI._updateColorFromHex('cfg-footer-status-color', this.value)">
+                                <div class="color-swatch" id="sw-cfg-footer-status-color" style="background:#FB923C" data-onclick="UI._openColorPicker('cfg-footer-status-color',this)"></div>
+                                <input type="color" id="cfg-footer-status-color" class="color-input-hidden" value="#FB923C" data-onchange="UI._updateColorSwatch('cfg-footer-status-color');UI._updateConfigPreview()">
                             </div>
                         </div>
                         <div class="config-row">
                             <label>Altura</label>
-                            <input type="text" id="cfg-footer-height" class="field-premium small" placeholder="2.5rem" oninput="UI._updateConfigPreview()">
+                            <input type="text" id="cfg-footer-height" class="field-premium small" placeholder="2.5rem" data-oninput="UI._updateConfigPreview()">
                         </div>
                     </div>
                     <div id="cfg-footer-preview" style="margin-top:0.5rem;border:1px solid var(--border-color);border-radius:0.75rem;padding:0.5rem 0.75rem;background:var(--card-bg)"></div>
                     <div style="display:flex;gap:0.5rem;margin-top:0.75rem;flex-wrap:wrap">
-                        <button onclick="UI.resetFooterToDefault()" class="bg-amber-600 text-white px-4 py-2.5 rounded-full font-black text-[0.75rem] hover:bg-amber-700 transition uppercase tracking-widest">
+                        <button data-onclick="UI.resetFooterToDefault()" class="bg-amber-600 text-white px-4 py-2.5 rounded-full font-black text-[0.75rem] hover:bg-amber-700 transition uppercase tracking-widest">
                             <i class="fas fa-undo mr-1.5"></i>Resetar Rodapé
                         </button>
-                        <button onclick="UI.resetCardsToDefault()" class="bg-purple-600 text-white px-4 py-2.5 rounded-full font-black text-[0.75rem] hover:bg-purple-700 transition uppercase tracking-widest">
+                        <button data-onclick="UI.resetCardsToDefault()" class="bg-purple-600 text-white px-4 py-2.5 rounded-full font-black text-[0.75rem] hover:bg-purple-700 transition uppercase tracking-widest">
                             <i class="fas fa-undo mr-1.5"></i>Resetar Cards
                         </button>
                     </div>
@@ -1440,16 +1440,16 @@
                     <div class="config-row">
                         <label>Cor</label>
                         <div class="color-picker-wrap">
-                            <input type="text" id="cfg-placeholder-color-hex" class="color-hex-input" value="#9CA3AF" oninput="UI._updateColorFromHex('cfg-placeholder-color', this.value)">
-                            <div class="color-swatch" id="sw-cfg-placeholder-color" style="background:#9CA3AF" onclick="UI._openColorPicker('cfg-placeholder-color',this)"></div>
-                            <input type="color" id="cfg-placeholder-color" class="color-input-hidden" value="#9CA3AF" onchange="UI._updateColorSwatch('cfg-placeholder-color');UI._placeholderPreview()">
-                            <input type="range" id="op-cfg-placeholder-color" class="opacity-slider" min="0" max="100" value="50" oninput="UI._updateColorOpacity('cfg-placeholder-color');UI._placeholderPreview()">
+                            <input type="text" id="cfg-placeholder-color-hex" class="color-hex-input" value="#9CA3AF" data-oninput="UI._updateColorFromHex('cfg-placeholder-color', this.value)">
+                            <div class="color-swatch" id="sw-cfg-placeholder-color" style="background:#9CA3AF" data-onclick="UI._openColorPicker('cfg-placeholder-color',this)"></div>
+                            <input type="color" id="cfg-placeholder-color" class="color-input-hidden" value="#9CA3AF" data-onchange="UI._updateColorSwatch('cfg-placeholder-color');UI._placeholderPreview()">
+                            <input type="range" id="op-cfg-placeholder-color" class="opacity-slider" min="0" max="100" value="50" data-oninput="UI._updateColorOpacity('cfg-placeholder-color');UI._placeholderPreview()">
                             <span class="opacity-label" id="opv-cfg-placeholder-color">50%</span>
                         </div>
                     </div>
                     <div style="display:flex;gap:0.5rem;margin-top:0.5rem;align-items:center">
                         <div style="flex:1;background:var(--input-bg);border:1px solid var(--border-color);border-radius:0.75rem;padding:0.7rem 0.9rem;font-size:0.91rem;color:var(--text-secondary);opacity:var(--placeholder-opacity,0.5)" id="cfg-placeholder-preview">Pré-visualização do placeholder</div>
-                        <button onclick="UI._resetPlaceholderColor()" class="bg-amber-600 text-white px-4 py-2.5 rounded-full font-black text-[0.75rem] hover:bg-amber-700 transition uppercase tracking-widest whitespace-nowrap">
+                        <button data-onclick="UI._resetPlaceholderColor()" class="bg-amber-600 text-white px-4 py-2.5 rounded-full font-black text-[0.75rem] hover:bg-amber-700 transition uppercase tracking-widest whitespace-nowrap">
                             <i class="fas fa-undo mr-1"></i>Reset
                         </button>
                     </div>
@@ -1462,7 +1462,7 @@
                         <span style="display:block;font-weight:600;margin-bottom:0.25rem"><i class="fas fa-exclamation-triangle mr-1.5" style="color:#EF4444"></i>Esta ação irá eliminar permanentemente todos os itens do acervo.</span>
                         <span id="cfg-reset-total" style="font-size:0.7rem">—</span>
                     </div>
-                    <button onclick="UI.resetAllData()" class="bg-red-600 text-white px-5 py-2.5 rounded-full font-black text-[0.75rem] hover:bg-red-700 transition uppercase tracking-widest">
+                    <button data-onclick="UI.resetAllData()" class="bg-red-600 text-white px-5 py-2.5 rounded-full font-black text-[0.75rem] hover:bg-red-700 transition uppercase tracking-widest">
                         <i class="fas fa-trash-alt mr-1.5"></i>ELIMINAR TODO O ACERVO
                     </button>
                 </div>
@@ -1514,10 +1514,10 @@
 
                 <!-- Apply -->
                 <div style="display:flex;justify-content:flex-end;gap:0.75rem;margin-top:0.75rem">
-                    <button onclick="UI.closeModal('modal-config')" class="bg-gray-600 text-white px-5 py-2.5 rounded-full font-black text-[0.7rem] hover:bg-gray-700 transition uppercase tracking-widest">
+                    <button data-onclick="UI.closeModal('modal-config')" class="bg-gray-600 text-white px-5 py-2.5 rounded-full font-black text-[0.7rem] hover:bg-gray-700 transition uppercase tracking-widest">
                         Cancelar
                     </button>
-                    <button onclick="UI.applyConfig()" class="bg-blue-600 text-white px-5 py-2.5 rounded-full font-black text-[0.7rem] hover:bg-blue-700 transition uppercase tracking-widest shadow-lg">
+                    <button data-onclick="UI.applyConfig()" class="bg-blue-600 text-white px-5 py-2.5 rounded-full font-black text-[0.7rem] hover:bg-blue-700 transition uppercase tracking-widest shadow-lg">
                         <i class="fas fa-check mr-1.5"></i>Aplicar
                     </button>
                 </div>
@@ -1535,11 +1535,11 @@
                     <span class="text-[1rem] font-black uppercase tracking-widest" style="color:var(--text-color);-webkit-text-fill-color:var(--text-color)">FUNCIONALIDADES</span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button onclick="window.open('manual_do_catalogo.html','_blank')" class="flex items-center gap-2 px-3 py-1.5 rounded-full text-[0.65rem] font-black uppercase tracking-wider transition-all" style="background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;box-shadow:0 4px 15px rgba(59,130,246,0.35);cursor:pointer;border:none" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 25px rgba(59,130,246,0.5)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 15px rgba(59,130,246,0.35)'" title="Abrir Manual do Catálogo em nova aba">
+                    <button data-onclick="window.open('manual_do_catalogo.html','_blank')" class="flex items-center gap-2 px-3 py-1.5 rounded-full text-[0.65rem] font-black uppercase tracking-wider transition-all" style="background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;box-shadow:0 4px 15px rgba(59,130,246,0.35);cursor:pointer;border:none" data-onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 25px rgba(59,130,246,0.5)'" data-onmouseout="this.style.transform='';this.style.boxShadow='0 4px 15px rgba(59,130,246,0.35)'" title="Abrir Manual do Catálogo em nova aba">
                         <i class="fas fa-book-open" style="font-size:12px"></i>
                         <span>Manual</span>
                     </button>
-                    <button onclick="UI.closeModal('modal-info')" class="btn-close-premium" ><i class="fas fa-times text-xs"></i></button>
+                    <button data-onclick="UI.closeModal('modal-info')" class="btn-close-premium" ><i class="fas fa-times text-xs"></i></button>
                 </div>
             </div>
             <div class="p-5 overflow-y-auto custom-scroll" style="max-height:86vh">
@@ -1567,15 +1567,15 @@
                     <span class="text-[1rem] font-black uppercase tracking-widest" style="color:var(--text-color);-webkit-text-fill-color:var(--text-color)">SUGESTÃO DO DIA</span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button onclick="UI.pickSuggestion()" class="btn-icon" title="Nova Sugestão"><i class="fas fa-random text-sm"></i></button>
-                    <button onclick="UI.closeModal('modal-sugestao')" class="btn-close-premium" ><i class="fas fa-times text-xs"></i></button>
+                    <button data-onclick="UI.pickSuggestion()" class="btn-icon" title="Nova Sugestão"><i class="fas fa-random text-sm"></i></button>
+                    <button data-onclick="UI.closeModal('modal-sugestao')" class="btn-close-premium" ><i class="fas fa-times text-xs"></i></button>
                 </div>
             </div>
             <div class="p-6 overflow-y-auto custom-scroll" style="flex:1;display:grid;grid-template-columns:190px 1fr;gap:1.5rem;min-height:0" id="sugestao-body">
                 <!-- Coluna 1: Poster -->
                 <div>
                     <div style="aspect-ratio:9/16;border-radius:0.85rem;overflow:hidden;background:var(--input-bg);border:1px solid var(--border-color);position:relative">
-                        <img id="sug-poster" src="" style="width:100%;height:100%;object-fit:cover;display:none" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                        <img id="sug-poster" src="" style="width:100%;height:100%;object-fit:cover;display:none" data-onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
                         <div id="sug-poster-fallback" class="poster-fallback" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:linear-gradient(135deg,#1e293b,#0f172a);flex-direction:column;gap:0.4rem">
                             <i class="fas fa-film" style="font-size:2rem;color:#60A5FA"></i>
                             <span style="color:#94A3B8;font-size:0.7rem;font-weight:600">SEM CAPA</span>
@@ -1602,7 +1602,7 @@
                         <label class="label-premium"><i class="fas fa-users mr-1.5 opacity-60"></i>Elenco</label>
                         <p id="sug-cast" class="text-sm" style="color:var(--text-color)">—</p>
                     </div>
-                    <a id="sug-play-btn" href="#" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;justify-content:center;gap:0.6rem;width:100%;padding:0.85rem 2rem;border-radius:1rem;font-weight:900;font-size:14px;text-transform:uppercase;letter-spacing:0.1em;text-decoration:none;background:linear-gradient(135deg,#8B5CF6,#7C3AED);color:white;box-shadow:0 4px 20px rgba(139,92,246,0.35);transition:all 0.3s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 30px rgba(139,92,246,0.5)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+                    <a id="sug-play-btn" href="#" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;justify-content:center;gap:0.6rem;width:100%;padding:0.85rem 2rem;border-radius:1rem;font-weight:900;font-size:14px;text-transform:uppercase;letter-spacing:0.1em;text-decoration:none;background:linear-gradient(135deg,#8B5CF6,#7C3AED);color:white;box-shadow:0 4px 20px rgba(139,92,246,0.35);transition:all 0.3s" data-onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 30px rgba(139,92,246,0.5)'" data-onmouseout="this.style.transform='';this.style.boxShadow=''">
                         <i class="fas fa-play" style="font-size:14px"></i>
                         <span id="sug-play-label">ASSISTIR</span>
                     </a>
@@ -1619,14 +1619,14 @@
                     <i class="fas fa-print text-blue-500 text-2xl"></i>
                     <span class="text-[1rem] font-black uppercase tracking-widest" style="color:var(--text-color);-webkit-text-fill-color:var(--text-color)">GERAR LISTA</span>
                 </div>
-                <button onclick="UI.closeModal('modal-generate-list')" class="btn-close-premium" ><i class="fas fa-times text-xs"></i></button>
+                <button data-onclick="UI.closeModal('modal-generate-list')" class="btn-close-premium" ><i class="fas fa-times text-xs"></i></button>
             </div>
             <div class="p-4 overflow-y-auto custom-scroll" style="max-height:82vh">
                 <div class="list-controls no-print">
-                    <button onclick="UI.printList()" style="background:#2563EB;color:#fff"><i class="fas fa-print mr-1.5"></i> Imprimir</button>
-                    <button onclick="UI.exportListPDF()" style="background:#DC2626;color:#fff"><i class="fas fa-file-pdf mr-1.5"></i> Exportar PDF</button>
-                    <button onclick="UI.exportListJPG()" style="background:#7C3AED;color:#fff"><i class="fas fa-file-image mr-1.5"></i> Exportar JPG</button>
-                    <button onclick="UI.closeModal('modal-generate-list')" style="background:#4B5563;color:#fff">Cancelar</button>
+                    <button data-onclick="UI.printList()" style="background:#2563EB;color:#fff"><i class="fas fa-print mr-1.5"></i> Imprimir</button>
+                    <button data-onclick="UI.exportListPDF()" style="background:#DC2626;color:#fff"><i class="fas fa-file-pdf mr-1.5"></i> Exportar PDF</button>
+                    <button data-onclick="UI.exportListJPG()" style="background:#7C3AED;color:#fff"><i class="fas fa-file-image mr-1.5"></i> Exportar JPG</button>
+                    <button data-onclick="UI.closeModal('modal-generate-list')" style="background:#4B5563;color:#fff">Cancelar</button>
                 </div>
                 <div id="a4-preview"></div>
                 <div id="list-pagination" class="list-controls no-print" style="margin-top:0.5rem"></div>
@@ -1642,15 +1642,15 @@
                     <i class="fas fa-clipboard-list text-blue-500 text-2xl"></i>
                     <span class="text-[1rem] font-black uppercase tracking-widest" style="color:var(--text-color);-webkit-text-fill-color:var(--text-color)">HISTÓRICO DE CADASTRO</span>
                 </div>
-                <button onclick="UI.closeModal('modal-cadastro-log')" class="btn-close-premium" ><i class="fas fa-times text-xs"></i></button>
+                <button data-onclick="UI.closeModal('modal-cadastro-log')" class="btn-close-premium" ><i class="fas fa-times text-xs"></i></button>
             </div>
             <div class="p-4 overflow-y-auto custom-scroll" style="max-height:82vh">
                 <div class="list-controls no-print">
-                    <button onclick="UI.printCadastroLog()" style="background:#2563EB;color:#fff"><i class="fas fa-print mr-1.5"></i> Imprimir</button>
-                    <button onclick="UI.exportCadastroLogPDF()" style="background:#DC2626;color:#fff"><i class="fas fa-file-pdf mr-1.5"></i> Exportar PDF</button>
-                    <button onclick="UI.exportCadastroLogImage('jpg')" style="background:#7C3AED;color:#fff"><i class="fas fa-file-image mr-1.5"></i> Exportar JPG</button>
-                    <button onclick="UI.exportCadastroLogImage('webp')" style="background:#059669;color:#fff"><i class="fas fa-file-image mr-1.5"></i> Exportar WEBP</button>
-                    <button onclick="UI.closeModal('modal-cadastro-log')" style="background:#4B5563;color:#fff">Cancelar</button>
+                    <button data-onclick="UI.printCadastroLog()" style="background:#2563EB;color:#fff"><i class="fas fa-print mr-1.5"></i> Imprimir</button>
+                    <button data-onclick="UI.exportCadastroLogPDF()" style="background:#DC2626;color:#fff"><i class="fas fa-file-pdf mr-1.5"></i> Exportar PDF</button>
+                    <button data-onclick="UI.exportCadastroLogImage('jpg')" style="background:#7C3AED;color:#fff"><i class="fas fa-file-image mr-1.5"></i> Exportar JPG</button>
+                    <button data-onclick="UI.exportCadastroLogImage('webp')" style="background:#059669;color:#fff"><i class="fas fa-file-image mr-1.5"></i> Exportar WEBP</button>
+                    <button data-onclick="UI.closeModal('modal-cadastro-log')" style="background:#4B5563;color:#fff">Cancelar</button>
                 </div>
                 <div id="cadastro-log-preview" class="log-a4-preview"></div>
                 <div id="cadastro-log-pagination" class="list-controls no-print" style="margin-top:0.5rem"></div>
@@ -1667,6 +1667,9 @@
     <script src="js/logic.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/globals.js"></script>
+    <script src="js/accessibility.js"></script>
+    <script src="js/simple-bind.js"></script>
     <script src="js/autosave.js"></script>
 </body>
 </html>
