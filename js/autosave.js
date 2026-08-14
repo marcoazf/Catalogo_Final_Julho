@@ -131,11 +131,10 @@
                 var item;
 
                 if (type === 'filmes') {
-                    var posterImg = document.getElementById('f-poster-img');
-                    var posterSrc = posterImg && posterImg.classList.contains('show') ? posterImg.src : '';
                     var urlSrc = document.getElementById('f-poster-url').value;
+                    var newId = _editingId || Date.now().toString();
                     item = {
-                        id: _editingId || Date.now().toString(),
+                        id: newId,
                         _createdAt: Date.now().toString(),
                         type: 'filmes',
                         originalTitle: document.getElementById('f-title').value.trim(),
@@ -146,7 +145,7 @@
                         director: document.getElementById('f-director').value,
                         cast: document.getElementById('f-cast').value,
                         genre: document.getElementById('f-category').value,
-                        image: posterSrc || urlSrc || 'https://via.placeholder.com/300x450',
+                        image: '',
                         trailUrl: document.getElementById('f-trailer-url').value,
                         otherInfo: document.getElementById('f-other-info').value,
                         mediaFile: (function(){ var el=document.getElementById('f-media-url'); if (!el) return ''; if (el.dataset.ref) return el.dataset.ref; if (el.dataset.path) return el.dataset.path; return el.value; })(),
@@ -157,15 +156,17 @@
                         },
                         stars: document.getElementById('f-stars').value || 0
                     };
+                    var pr = Logic.resolvePosterOnSave('f', item.id, urlSrc);
+                    item.image = pr.image;
+                    if (pr.imageKey) item.imageKey = pr.imageKey; else delete item.imageKey;
                 } else if (type === 'series') {
-                    var posterImg = document.getElementById('fs-poster-img');
-                    var posterSrc = posterImg && posterImg.classList.contains('show') ? posterImg.src : '';
                     var urlSrc = document.getElementById('fs-poster-url').value;
+                    var newId = _editingId || Date.now().toString();
                     var epKey = _editingId || 'pending';
                     var savedEps = JSON.parse(Store.getItem('_dyn_series_episodes') || '{}');
                     var dynEpisodes = savedEps[epKey] || [];
                     item = {
-                        id: _editingId || Date.now().toString(),
+                        id: newId,
                         _createdAt: Date.now().toString(),
                         type: 'series',
                         originalTitle: document.getElementById('fs-title').value.trim(),
@@ -179,7 +180,7 @@
                         director: document.getElementById('fs-director').value,
                         cast: document.getElementById('fs-cast').value,
                         genre: document.getElementById('fs-category').value,
-                        image: posterSrc || urlSrc || 'https://via.placeholder.com/300x450',
+                        image: '',
                         trailUrl: document.getElementById('fs-trailer-url').value,
                         trailerUrl: document.getElementById('fs-trailer-url').value,
                         otherInfo: document.getElementById('fs-other-info').value,
@@ -195,6 +196,9 @@
                         dynamicSeasons: (UI._seasonData && UI._seasonData.length > 0) ? UI._seasonData.slice() : [],
                         dynamicEpisodesNew: (UI._episodeData && UI._episodeData.length > 0) ? UI._episodeData.slice() : []
                     };
+                    var pr = Logic.resolvePosterOnSave('fs', item.id, urlSrc);
+                    item.image = pr.image;
+                    if (pr.imageKey) item.imageKey = pr.imageKey; else delete item.imageKey;
                     UI._syncSeasonDataFromDom();
                     UI._syncEpisodeDataFromDom();
                     item.dynamicSeasons = (UI._seasonData && UI._seasonData.length > 0) ? UI._seasonData.slice() : [];
@@ -214,7 +218,7 @@
                         if (cloneBtn) cloneBtn.style.display = 'none';
                         var dupBtnEdit = document.getElementById('btn-duplicate-series');
                         if (dupBtnEdit) dupBtnEdit.style.display = 'none';
-                        Store.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
+                        Store.setItem('cinecatalog_v126', Storage.toJSON());
                         _checkStorageQuota();
                         ConfigAutoSave();
                         Render.all();
@@ -278,7 +282,7 @@
                     var dupBtnEdit = document.getElementById('btn-duplicate-series');
                     if (dupBtnEdit) dupBtnEdit.style.display = 'none';
 
-                    Store.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
+                    Store.setItem('cinecatalog_v126', Storage.toJSON());
                     _checkStorageQuota();
                     ConfigAutoSave();
                     Render.all();
@@ -341,7 +345,7 @@
                     }
 
                     APP_STATE.movies.push(item);
-                    Store.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
+                    Store.setItem('cinecatalog_v126', Storage.toJSON());
                     _checkStorageQuota();
                     ConfigAutoSave();
                     Render.all();
@@ -421,7 +425,16 @@
                     sc('f-status-new', last.statuses && last.statuses.new);
                     sc('f-status-watch', last.statuses && last.statuses.watch);
                     sc('f-status-fav', last.statuses && last.statuses.favorite);
-                    if (last.image && /^data:|^https?:\/\//.test(last.image)) {
+                    if (last.imageKey && typeof StoreImages !== 'undefined') {
+                        var bl = StoreImages.blobFor(last.imageKey);
+                        var url = StoreImages.urlFor(last.imageKey);
+                        var piF = document.getElementById('f-poster-img');
+                        if (url && piF) { piF.src = url; piF.classList.add('show'); }
+                        if (bl) {
+                            Logic._posterBlobs = Logic._posterBlobs || {};
+                            Logic._posterBlobs['f'] = bl;
+                        }
+                    } else if (last.image && /^data:|^https?:\/\//.test(last.image)) {
                         var pi = document.getElementById('f-poster-img');
                         if (pi) { pi.src = last.image; pi.classList.add('show'); }
                         var pu = document.getElementById('f-poster-url');
@@ -448,7 +461,16 @@
                     UI._episodeData = (last.dynamicEpisodesNew && last.dynamicEpisodesNew.length > 0) ? last.dynamicEpisodesNew.slice() : [];
                     UI._renderSeasonBlocks();
                     UI._renderEpisodeBlocks();
-                    if (last.image && /^data:|^https?:\/\//.test(last.image)) {
+                    if (last.imageKey && typeof StoreImages !== 'undefined') {
+                        var blS = StoreImages.blobFor(last.imageKey);
+                        var urlS = StoreImages.urlFor(last.imageKey);
+                        var piFS = document.getElementById('fs-poster-img');
+                        if (urlS && piFS) { piFS.src = urlS; piFS.classList.add('show'); }
+                        if (blS) {
+                            Logic._posterBlobs = Logic._posterBlobs || {};
+                            Logic._posterBlobs['fs'] = blS;
+                        }
+                    } else if (last.image && /^data:|^https?:\/\//.test(last.image)) {
                         var pi = document.getElementById('fs-poster-img');
                         if (pi) { pi.src = last.image; pi.classList.add('show'); }
                         var pu = document.getElementById('fs-poster-url');

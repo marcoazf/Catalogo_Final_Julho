@@ -32,7 +32,7 @@
                 var title = movie.titlePt || movie.originalTitle || 'Estreia';
                 if (!confirm('Remover a estreia "' + title + '"? Esta ação não pode ser desfeita.')) return;
                 APP_STATE.movies = APP_STATE.movies.filter(function(m) { return m.id !== id; });
-                Store.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
+                Store.setItem('cinecatalog_v126', Storage.toJSON());
                 Render.all();
                 UI.updateCounters();
                 Logic.updateReminderBadge();
@@ -69,11 +69,13 @@
                         document.getElementById('f-other-info').value = movie.otherInfo || '';
                         document.getElementById('f-stars').value = movie.stars || 0;
                         document.querySelectorAll('#star-input-container i').forEach(function(s) { s.classList.toggle('text-yellow-500', s.dataset.v <= (movie.stars || 0)); });
-                        if (movie.image && movie.image !== 'https://via.placeholder.com/300x450') {
+                        UI._restoringPoster = true;
+                        if ((movie.image && movie.image !== 'https://via.placeholder.com/300x450') || movie.imageKey) {
                             UI.setPosterPreview(movie.image);
                         } else {
                             UI.resetPoster();
                         }
+                        UI._restoringPoster = false;
                         if (movie.mediaFile) {
                             var fMedia = document.getElementById('f-media-url');
                             if (fMedia) {
@@ -103,11 +105,13 @@
                         document.getElementById('fs-other-info').value = movie.otherInfo || '';
                         document.getElementById('fs-stars').value = movie.stars || 0;
                         document.querySelectorAll('#star-input-container-series i').forEach(function(s) { s.classList.toggle('text-yellow-500', s.dataset.v <= (movie.stars || 0)); });
-                        if (movie.image && movie.image !== 'https://via.placeholder.com/300x450') {
+                        UI._restoringPoster = true;
+                        if ((movie.image && movie.image !== 'https://via.placeholder.com/300x450') || movie.imageKey) {
                             UI.setPosterPreview(movie.image, 'fs');
                         } else {
                             UI.resetPoster('fs');
                         }
+                        UI._restoringPoster = false;
                         var countryEl = document.getElementById('fs-country');
                         if (countryEl) countryEl.value = movie.country || '';
                         // Load dynamic episodes
@@ -1423,7 +1427,7 @@
                         var data = JSON.parse(event.target.result);
                         if (data.movies) {
                             APP_STATE.movies = data.movies;
-                            Store.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
+                            Store.setItem('cinecatalog_v126', Storage.toJSON());
                             if (data.categories) {
                                 Store.setItem('cinecatalog_categories', JSON.stringify(data.categories));
                             }
@@ -1433,7 +1437,7 @@
                             }
                         } else {
                             APP_STATE.movies = data;
-                            Store.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies));
+                            Store.setItem('cinecatalog_v126', Storage.toJSON());
                         }
                         Storage.save();
                         Render.all();
@@ -1638,7 +1642,7 @@
                                     quality -= 0.05;
                                     tryCompress();
                                 } else {
-                                    callback(URL.createObjectURL(blob));
+                                    callback(URL.createObjectURL(blob), blob);
                                 }
                             }, 'image/jpeg', quality);
                         }
@@ -1647,6 +1651,41 @@
                     img.src = e.target.result;
                 };
                 reader.readAsDataURL(file);
+            },
+
+            // --- Poster Blob helpers ---
+            // Aplica um arquivo de imagem ao campo de capa: comprime, guarda
+            // o Blob em _posterBlobs[prefix] e mostra o preview. O Blob é
+            // persistido no IndexedDB apenas no save (ou no preview em edição).
+            applyPosterFile(file, prefix) {
+                if (!file || !file.type || file.type.indexOf('image/') !== 0) return;
+                var self = this;
+                this._posterBlobs = this._posterBlobs || {};
+                this.compressImage(file, 300 * 1024, function(url, blob) {
+                    if (blob) self._posterBlobs[prefix] = blob;
+                    UI.setPosterPreview(url, prefix);
+                });
+            },
+
+            // Resolve a capa na hora do save:
+            //  - Blob pendente (capa escolhida agora) -> grava no IndexedDB e usa imageKey
+            //  - URL externa no campo de URL -> usa image (formato legado)
+            //  - Edição sem nova capa -> preserva o que já existia (imageKey ou image)
+            resolvePosterOnSave(prefix, id, urlSrc) {
+                var out = { imageKey: '', image: '' };
+                var blob = (this._posterBlobs || {})[prefix] || null;
+                if (blob) {
+                    out.imageKey = 'img_' + id;
+                    StoreImages.save(out.imageKey, blob);
+                    out.image = StoreImages.urlFor(out.imageKey) || '';
+                } else if (urlSrc && /^(https?:|file:)/i.test(urlSrc)) {
+                    out.image = urlSrc;
+                } else if (window._editingId) {
+                    var cur = APP_STATE.movies.find(function(m) { return m.id === window._editingId; });
+                    if (cur) { out.imageKey = cur.imageKey || ''; out.image = cur.image || ''; }
+                }
+                if (!out.imageKey && !out.image) out.image = 'https://via.placeholder.com/300x450';
+                return out;
             },
 
             // --- Unified Notifications (estreias only) ---

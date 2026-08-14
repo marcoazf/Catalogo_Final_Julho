@@ -171,4 +171,72 @@ test.describe('CineCatalog Elo — Smoke Test (baseline v32.2.0)', () => {
     await expect(page.locator('#movies-container .movie-card').first()).toContainText('2026');
   });
 
+  test('10 - Capa vira Blob no IndexedDB (imageKey) e sobrevive ao reload', async ({ page }) => {
+    await boot(page);
+    await openCadastro(page);
+
+    // Anexa um PNG real ao campo de capa do filme
+    const png = Buffer.from(
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
+      'base64'
+    );
+    await page.setInputFiles('#f-poster-file', { name: 'capa.png', mimeType: 'image/png', buffer: png });
+
+    // Compressão + preview pronto (src blob:, não data:)
+    await page.waitForFunction(() => {
+      const img = document.getElementById('f-poster-img');
+      return img && img.classList.contains('show') && img.src.indexOf('blob:') === 0;
+    });
+
+    await fillFilme(page, 'Filme Capa Blob Smoke');
+    await salvarFilme(page);
+
+    // CREATE MODE: card renderizado atrás do modal com src blob:
+    await page.waitForFunction(() => {
+      const im = document.querySelector('#movies-container .movie-card img');
+      return im && im.src && im.src.indexOf('blob:') === 0;
+    });
+
+    // Persistido com imageKey e SEM DataURL/objectURL no JSON
+    const stored = await page.evaluate(() => {
+      const all = JSON.parse(window.Store.getItem('cinecatalog_v126'));
+      const m = all.find((x) => x.titlePt === 'Filme Capa Blob Smoke');
+      return { imageKey: m.imageKey || '', image: m.image || '' };
+    });
+    expect(stored.imageKey).toMatch(/^img_/);
+    expect(stored.image).not.toContain('data:');
+    expect(stored.image).not.toContain('blob:');
+
+    await closeCadastro(page);
+
+    // Garante que a escrita do Blob no IndexedDB terminou
+    await page.waitForFunction(async () => {
+      if (!window.StoreImages) return false;
+      await window.StoreImages._ready;
+      return true;
+    });
+    await page.waitForTimeout(1000);
+
+    await page.reload({ waitUntil: 'load' });
+    await page.waitForTimeout(500);
+
+    // StoreImages recarrega o Blob do IDB e hidrata o filme
+    await page.waitForFunction(async () => {
+      if (!window.StoreImages) return false;
+      await window.StoreImages._ready;
+      const m = (window.APP_STATE.movies || []).find((x) => x.titlePt === 'Filme Capa Blob Smoke');
+      return m && m.imageKey && m.image && m.image.indexOf('blob:') === 0;
+    });
+
+    await expect(page.locator('.movie-card')).toHaveCount(1);
+    await page.waitForFunction(() => {
+      const im = document.querySelector('#movies-container .movie-card img');
+      return im && im.src && im.src.indexOf('blob:') === 0;
+    });
+
+    // O card exibe a imagem (sem classe de erro / fallback)
+    const hasError = await page.locator('#movies-container .movie-card img').evaluate((el) => el.classList.contains('error'));
+    expect(hasError).toBe(false);
+  });
+
 });

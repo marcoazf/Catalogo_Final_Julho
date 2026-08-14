@@ -467,7 +467,30 @@
                 
                 if (typeof _editingId !== 'undefined' && _editingId) {
                     var _item = APP_STATE.movies.find(function(m) { return m.id === _editingId; });
-                    if (_item) { _item.image = src || ''; Store.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies)); Render.all(); }
+                    if (_item) {
+                        if (UI._restoringPoster) {
+                            // Apenas preview: o item já carrega imageKey/image hidratada
+                        } else if (src && src.indexOf('blob:') === 0) {
+                            var pending = (Logic._posterBlobs || {})[prefix];
+                            if (pending) {
+                                var oldKey = _item.imageKey;
+                                var key = 'img_' + _item.id;
+                                if (oldKey && oldKey !== key) StoreImages.remove(oldKey);
+                                StoreImages.save(key, pending);
+                                delete Logic._posterBlobs[prefix];
+                                _item.imageKey = key;
+                                _item.image = src;
+                            } else {
+                                if (_item.imageKey) { StoreImages.remove(_item.imageKey); delete _item.imageKey; }
+                                _item.image = '';
+                            }
+                        } else {
+                            if (_item.imageKey) { StoreImages.remove(_item.imageKey); delete _item.imageKey; }
+                            _item.image = src || '';
+                        }
+                        Store.setItem('cinecatalog_v126', Storage.toJSON());
+                        Render.all();
+                    }
                 }
             },
             resetPoster(prefix) {
@@ -477,13 +500,18 @@
                 var fallback = document.getElementById(prefix + '-poster-fallback');
                 if (!img || !area) return;
                 img.style.display = '';
+                var oldSrc = img.src;
                 img.src = '';
+                if (oldSrc && oldSrc.indexOf('blob:') === 0) {
+                    try { URL.revokeObjectURL(oldSrc); } catch(e) {}
+                }
                 img.classList.remove('show');
                 area.classList.remove('has-image');
                 var puf = document.getElementById(prefix + '-poster-url');
                 if (puf) puf.value = '';
                 var wrap = document.getElementById(prefix + '-poster-url-wrap');
                 if (wrap) wrap.classList.remove('hidden');
+                if (Logic && Logic._posterBlobs) delete Logic._posterBlobs[prefix];
                 
                 // Controla exibição do fallback apenas durante edição
                 if (typeof _editingId !== 'undefined' && _editingId) {
@@ -500,7 +528,12 @@
                 
                 if (typeof _editingId !== 'undefined' && _editingId) {
                     var _item = APP_STATE.movies.find(function(m) { return m.id === _editingId; });
-                    if (_item) { _item.image = ''; Store.setItem('cinecatalog_v126', JSON.stringify(APP_STATE.movies)); Render.all(); }
+                    if (_item) {
+                        if (_item.imageKey) { StoreImages.remove(_item.imageKey); delete _item.imageKey; }
+                        _item.image = '';
+                        Store.setItem('cinecatalog_v126', Storage.toJSON());
+                        Render.all();
+                    }
                 }
             },
             setZoom(lvl) {
@@ -626,9 +659,7 @@
                                                 if (!err && buf) {
                                                     var fName = selPath.split(/[\\\/]/).pop() || 'capa';
                                                     var file = new File([buf], fName, { type: 'image/*' });
-                                                    Logic.compressImage(file, 300 * 1024, function(url) {
-                                                        UI.setPosterPreview(url, prefix);
-                                                    });
+                                                    Logic.applyPosterFile(file, prefix);
                                                 }
                                             });
                                         }
@@ -644,9 +675,7 @@
                                     if (handles && handles[0]) {
                                         var file = await handles[0].getFile();
                                         if (file && file.type.startsWith('image/')) {
-                                            Logic.compressImage(file, 300 * 1024, function(url) {
-                                                UI.setPosterPreview(url, prefix);
-                                            });
+                                            Logic.applyPosterFile(file, prefix);
                                         }
                                         var pu = document.getElementById(prefix + '-poster-url');
                                         if (pu) pu.value = basePath + '\\' + file.name;
@@ -664,9 +693,7 @@
                             var file = this.files[0];
                             var cfg = window._appConfig || {};
                             var basePath = (prefix === 'fs' && cfg.pathSeriesCardsActive && cfg.pathSeriesCards) ? cfg.pathSeriesCards : (cfg.pathCards || '');
-                            Logic.compressImage(file, 300 * 1024, function(url) {
-                                UI.setPosterPreview(url, prefix);
-                            });
+                            Logic.applyPosterFile(file, prefix);
                             var pu = document.getElementById(prefix + '-poster-url');
                             if (pu) pu.value = basePath ? (basePath + '\\' + file.name) : file.name;
                             this.value = '';
@@ -684,9 +711,7 @@
                         this.classList.remove('dragover');
                         var file = e.dataTransfer.files[0];
                         if (file && file.type.startsWith('image/')) {
-                            Logic.compressImage(file, 300 * 1024, function(url) {
-                                UI.setPosterPreview(url, prefix);
-                            });
+                            Logic.applyPosterFile(file, prefix);
                         }
                     });
                     area.addEventListener('paste', function(e) {
@@ -695,9 +720,7 @@
                             if (items[i].type.startsWith('image/')) {
                                 var file = items[i].getAsFile();
                                 if (file) {
-                                    Logic.compressImage(file, 300 * 1024, function(url) {
-                                        UI.setPosterPreview(url, prefix);
-                                    });
+                                    Logic.applyPosterFile(file, prefix);
                                 }
                                 break;
                             }

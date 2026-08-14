@@ -13,10 +13,18 @@
         };
 
         const Storage = {
+            toJSON() {
+                return JSON.stringify(APP_STATE.movies.map(function(m) {
+                    var c = Object.assign({}, m);
+                    delete c._searchMatch;
+                    delete c._cadastroDate;
+                    if (c.imageKey) delete c.image;
+                    return c;
+                }));
+            },
             save() {
                 // Strip temporary properties before saving
-                var clean = APP_STATE.movies.map(function(m) { var c = Object.assign({}, m); delete c._searchMatch; delete c._cadastroDate; return c; });
-                Store.setItem('cinecatalog_v126', JSON.stringify(clean));
+                Store.setItem('cinecatalog_v126', Storage.toJSON());
                 UI.updateCounters();
                 UI.updateFooterStats();
                 Logic.updateReminderBadge();
@@ -36,11 +44,15 @@
                             delete m.status;
                             delete m.watched;
                         }
+                        // Limpa URLs de blob: legadas (não persistem entre sessões)
+                        if (m.image && m.image.indexOf('blob:') === 0) m.image = '';
                     });
                 }
                 if (!APP_STATE.movies || !APP_STATE.movies.length) {
                     APP_STATE.movies = [];
                 }
+                // Hidrata objectURLs a partir das capas Blob já carregadas
+                if (typeof StoreImages !== 'undefined') StoreImages.hydrateMovies(APP_STATE.movies);
                 Render.all();
                 Logic.renderCategorySelect();
                 UI.updateCounters();
