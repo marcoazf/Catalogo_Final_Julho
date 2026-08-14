@@ -250,7 +250,7 @@
                     imgSrc = data.image || '';
                 }
                 div.innerHTML =
-                    '<img src="' + imgSrc + '" onerror="this.onerror=null;this.classList.add(\'error\');this.nextElementSibling.style.display=\'flex\'">' +
+                    '<img src="' + imgSrc + '" loading="lazy" decoding="async" onerror="this.onerror=null;this.classList.add(\'error\');this.nextElementSibling.style.display=\'flex\'">' +
                     '<div class="card-fallback"><i class="fas fa-film"></i><span>S/ Poster</span></div>' +
                     catChip +
                     '<div class="card-heart' + (isFav ? ' active' : '') + '" onclick="event.stopPropagation();Logic.toggleCardFav(\'' + data.id + '\', this)"><i class="' + (isFav ? 'fas' : 'fa-regular') + ' fa-heart"></i></div>' +

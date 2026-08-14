@@ -239,4 +239,46 @@ test.describe('CineCatalog Elo — Smoke Test (baseline v32.2.0)', () => {
     expect(hasError).toBe(false);
   });
 
+  test('11 - Capas com lazy/async nos cards e remoção libera o Blob do IndexedDB', async ({ page }) => {
+    await boot(page);
+    await openCadastro(page);
+
+    const png = Buffer.from(
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==',
+      'base64'
+    );
+    await page.setInputFiles('#f-poster-file', { name: 'capa.png', mimeType: 'image/png', buffer: png });
+    await page.waitForFunction(() => {
+      const img = document.getElementById('f-poster-img');
+      return img && img.classList.contains('show') && img.src.indexOf('blob:') === 0;
+    });
+
+    await fillFilme(page, 'Filme Lazy Async Blob');
+    await salvarFilme(page);
+    await closeCadastro(page);
+
+    // Card com loading="lazy" e decoding="async"
+    const cardImg = page.locator('#movies-container .movie-card img');
+    await expect(cardImg).toHaveCount(1);
+    await expect(cardImg).toHaveAttribute('loading', 'lazy');
+    await expect(cardImg).toHaveAttribute('decoding', 'async');
+
+    const key = await page.evaluate(() => {
+      const m = window.APP_STATE.movies.find((x) => x.titlePt === 'Filme Lazy Async Blob');
+      return m && m.imageKey ? m.imageKey : null;
+    });
+    expect(key).toMatch(/^img_/);
+    expect(await page.evaluate((k) => !!window.StoreImages.blobFor(k), key)).toBe(true);
+
+    // Remove o filme pelo menu de contexto
+    page.on('dialog', (d) => d.accept());
+    await page.locator('.movie-card').first().click({ button: 'right' });
+    await page.locator('#context-menu.show').waitFor({ state: 'visible' });
+    await page.locator('#context-menu button', { hasText: 'Remover' }).first().click();
+    await expect(page.locator('.movie-card')).toHaveCount(0);
+
+    // O Blob da capa foi liberado junto com o filme
+    expect(await page.evaluate((k) => window.StoreImages.blobFor(k), key)).toBe(null);
+  });
+
 });

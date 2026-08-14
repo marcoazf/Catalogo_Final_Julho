@@ -448,7 +448,11 @@
                 var fallback = document.getElementById(prefix + '-poster-fallback');
                 if (!img || !area) return;
                 img.style.display = '';
+                var oldPreview = img.src;
                 img.src = src || '';
+                if (oldPreview && oldPreview.indexOf('blob:') === 0 && oldPreview !== (src || '')) {
+                    try { URL.revokeObjectURL(oldPreview); } catch(e) {}
+                }
                 img.classList.toggle('show', !!src);
                 area.classList.toggle('has-image', !!src);
                 
@@ -3304,14 +3308,17 @@
             },
             _autoDeleteExpiredEstreias() {
                 var deleted = [];
+                var removedBlobs = [];
                 APP_STATE.movies = APP_STATE.movies.filter(function(m) {
                     if (m.type !== 'estreias') return true;
                     if (UI._isDateExpired(m.date)) {
                         deleted.push(m.titlePt || m.originalTitle || 'Sem título');
+                        if (m.imageKey && typeof StoreImages !== 'undefined') removedBlobs.push(m.imageKey);
                         return false;
                     }
                     return true;
                 });
+                removedBlobs.forEach(function(k) { StoreImages.remove(k); });
                 if (deleted.length > 0) {
                     Storage.save();
                     Render.all();

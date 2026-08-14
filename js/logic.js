@@ -15,6 +15,8 @@
                 var self = this;
                 this.closeCtxMenu(function() {
                     if(confirm("Eliminar permanentemente?")) {
+                        var mv = APP_STATE.movies.find(m => m.id === APP_STATE.selectedId);
+                        if (mv && mv.imageKey && typeof StoreImages !== 'undefined') StoreImages.remove(mv.imageKey);
                         APP_STATE.movies = APP_STATE.movies.filter(m => m.id !== APP_STATE.selectedId);
                         Storage.save();
                         Render.all();
@@ -31,6 +33,7 @@
                 if (!movie) return;
                 var title = movie.titlePt || movie.originalTitle || 'Estreia';
                 if (!confirm('Remover a estreia "' + title + '"? Esta ação não pode ser desfeita.')) return;
+                if (movie.imageKey && typeof StoreImages !== 'undefined') StoreImages.remove(movie.imageKey);
                 APP_STATE.movies = APP_STATE.movies.filter(function(m) { return m.id !== id; });
                 Store.setItem('cinecatalog_v126', Storage.toJSON());
                 Render.all();
@@ -1428,6 +1431,7 @@
                         if (data.movies) {
                             APP_STATE.movies = data.movies;
                             Store.setItem('cinecatalog_v126', Storage.toJSON());
+                            if (typeof StoreImages !== 'undefined') StoreImages.prune(APP_STATE.movies);
                             if (data.categories) {
                                 Store.setItem('cinecatalog_categories', JSON.stringify(data.categories));
                             }
@@ -1438,6 +1442,7 @@
                         } else {
                             APP_STATE.movies = data;
                             Store.setItem('cinecatalog_v126', Storage.toJSON());
+                            if (typeof StoreImages !== 'undefined') StoreImages.prune(APP_STATE.movies);
                         }
                         Storage.save();
                         Render.all();
@@ -1453,6 +1458,7 @@
                 if (confirm('Eliminar todos os dados permanentemente?')) {
                     APP_STATE.movies = [];
                     Store.removeItem('cinecatalog_v126');
+                    if (typeof StoreImages !== 'undefined') StoreImages.clear();
                     Render.all();
                     UI.updateCounters();
                     Logic.showStatus('Todos os dados eliminados');

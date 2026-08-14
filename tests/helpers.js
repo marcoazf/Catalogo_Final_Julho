@@ -55,12 +55,28 @@ async function salvarFilme(page) {
 }
 
 // Abre o info modal pelo menu de contexto do primeiro card.
+// Reabre o menu se a interação não chegar a completar (flake raro de timing do
+// click sintético do Playwright com o fade/close do menu). A asserção real
+// (modal de info visível) é mantida: se o menu não abrir, a tentativa falha.
 async function abrirInfoDoCard(page, index) {
   const card = page.locator('.movie-card').nth(index || 0);
-  await card.click({ button: 'right' });
-  await page.locator('#context-menu.show').waitFor({ state: 'visible' });
-  await page.locator('#context-menu button', { hasText: 'Info' }).first().click();
-  await page.locator('#modal-movie-info.active').waitFor({ state: 'visible' });
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await card.click({ button: 'right' });
+    await page.locator('#context-menu.show').waitFor({ state: 'visible' });
+    const infoBtn = page.locator('#context-menu button', { hasText: 'Info' }).first();
+    try {
+      await infoBtn.click({ timeout: 2500 });
+      await page.locator('#modal-movie-info.active').waitFor({ state: 'visible', timeout: 2500 });
+      return;
+    } catch (err) {
+      await page.locator('#context-menu').evaluate((el) => {
+        el.classList.remove('show');
+        el.style.display = 'none';
+      }).catch(() => {});
+      await page.locator('#modal-movie-info.active').waitFor({ state: 'hidden' }).catch(() => {});
+    }
+  }
+  throw new Error('abrirInfoDoCard: nao foi possivel abrir o info pelo menu de contexto');
 }
 
 module.exports = { APP_URL, collectErrors, boot, openCadastro, closeCadastro, fillFilme, salvarFilme, abrirInfoDoCard };

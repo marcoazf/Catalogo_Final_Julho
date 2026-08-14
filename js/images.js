@@ -134,6 +134,37 @@
                             m.image = _urls[m.imageKey] || '';
                         }
                     }
+                },
+
+                // Remove todas as capas (usado em "eliminar todos os dados").
+                clear: function() {
+                    var keys = Object.keys(_blobs);
+                    for (var i = 0; i < keys.length; i++) _revoke(keys[i]);
+                    _blobs = {};
+                    _urls = {};
+                    if (_idb) {
+                        var p = _idb.clear();
+                        if (p && p.catch) p.catch(function() {});
+                    }
+                },
+
+                // Remove capas órfãs: Blobs cuja chave não é referenciada por
+                // nenhum filme atual (ex.: após importar um catálogo novo).
+                prune: function(movies) {
+                    var keep = {};
+                    (movies || []).forEach(function(m) { if (m && m.imageKey) keep[m.imageKey] = true; });
+                    var keys = Object.keys(_blobs);
+                    for (var i = 0; i < keys.length; i++) {
+                        var k = keys[i];
+                        if (!keep[k]) {
+                            _revoke(k);
+                            delete _blobs[k];
+                            if (_idb) {
+                                var p = _idb.removeItem(k);
+                                if (p && p.catch) p.catch(function() {});
+                            }
+                        }
+                    }
                 }
             };
         })();
