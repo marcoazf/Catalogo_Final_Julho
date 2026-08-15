@@ -631,6 +631,7 @@
                 if (typeof Logic._applyMarqueeZoom === 'function') Logic._applyMarqueeZoom();
                 document.querySelectorAll('.zoom-btn').forEach((b, i) => b.classList.toggle('active', i + 1 === lvl));
                 APP_STATE.zoom = lvl;
+                if (typeof saveUIPrefs === 'function') saveUIPrefs();
             },
             initMediaPicker(prefix) {
                 var btn = document.getElementById(prefix + '-media-picker-btn');
@@ -1551,7 +1552,7 @@
                         '<div style="display:flex;justify-content:space-between;align-items:center;gap:0.5rem;font-family:Inter,sans-serif;min-height:' + fHeight + '">' +
                         '<div style="font-size:' + fDevSize + ';color:' + fDevColor + ';text-transform:uppercase;letter-spacing:0.05em;font-weight:500">' +
                         fDevText + '<span style="opacity:0.5;font-size:' + fCreatedSize + ';color:' + fCreatedColor + '">' + fCreatedText + '</span>' +
-                         ' | <span style="color:#C7D2FE;font-weight:600">v32.2.0</span>' +
+                         ' | <span style="color:#C7D2FE;font-weight:600">v32.3.0</span>' +
                         '</div>' +
                         '<div style="display:flex;align-items:center;gap:0.5rem">' +
                         '<span style="font-size:' + fStatusSize + ';color:' + fStatusColor + ';font-weight:900;text-transform:uppercase">0 TÍTULOS</span>' +
@@ -2169,6 +2170,8 @@
             _showSuggestionOnLoad() {
                 var cfg = window._appConfig;
                 if (!cfg || cfg.sugestoesActive !== true) return;
+                var hasItems = APP_STATE.movies.some(function(m) { return m.type === 'filmes' || m.type === 'series'; });
+                if (!hasItems) return;
                 var shown = Store.getItem('sugestao_shown_today');
                 var today = new Date().toISOString().slice(0, 10);
                 if (shown === today) return;

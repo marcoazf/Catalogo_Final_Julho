@@ -114,10 +114,16 @@
                 }
             });
 
+            if (typeof loadUIPrefs === 'function') loadUIPrefs();
             Storage.load();
             // Load saved theme
             var savedTheme = Store.getItem('cinecatalog_theme') || 'dark';
             Logic.setTheme(savedTheme);
+            // Restore persisted UI state (view, visualização, zoom)
+            Logic.setMainView(APP_STATE.currentView);
+            Logic.setViewMode(APP_STATE.viewMode);
+            UI.setZoom(APP_STATE.zoom);
+            UI.updateFilterButtonState();
             /* Tooltip do trailer: acompanha o cursor (abaixo e à direita) */
             ['mmi-trailer-link', 'msi-trailer-link'].forEach(function(tid) {
                 var tel = document.getElementById(tid);

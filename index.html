@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineCatalog Elo | v32.2.0 - Edição Premium</title>
+    <title>CineCatalog Elo | v32.3.0 - Edição Premium</title>
     
     <!-- PWA MANIFEST -->
     <link rel="manifest" href="manifest.json">
@@ -161,7 +161,7 @@
     <main id="content-canvas" class="custom-scroll">
         <!-- Empty State ajustado para centralização real -->
         <div id="empty-state">
-            <div class="w-28 h-28 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-[2rem] flex items-center justify-center mb-6 border border-blue-500/30 shadow-2xl shadow-blue-500/10">
+            <div class="w-28 h-28 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-[2rem] flex items-center justify-center mb-6 border border-blue-500/30 shadow-2xl shadow-blue-500/10 mx-auto">
                 <i class="fas fa-clapperboard text-blue-400 text-4xl"></i>
             </div>
             <h2 class="text-4xl font-black italic uppercase tracking-tighter mb-2">ACERVO VAZIO</h2>
@@ -179,7 +179,7 @@
     <footer class="px-6 py-2 border-t theme-border flex justify-between items-center bg-black/20">
         <div class="flex items-center gap-0" style="flex-wrap:nowrap">
             <div class="text-[0.75rem] text-gray-400 uppercase tracking-widest font-medium whitespace-nowrap" id="footer-dev-text">
-                ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CRIADO PARA JONAS THEODORO</span> | <span id="app-version-badge" style="color:#C7D2FE;font-size:0.8rem;font-weight:600;text-shadow:0 0 16px rgba(165,180,252,0.5)">v32.2.0</span>
+                ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CRIADO PARA JONAS THEODORO</span> | <span id="app-version-badge" style="color:#C7D2FE;font-size:0.8rem;font-weight:600;text-shadow:0 0 16px rgba(165,180,252,0.5)">v32.3.0</span>
             </div>
         </div>
         <div id="user-action-status" class="text-[0.75rem] text-emerald-500 font-bold uppercase opacity-0 pointer-events-none transition-opacity duration-300"></div>
@@ -1275,7 +1275,7 @@
                     <div class="config-row">
                         <label>Acervo Geral</label>
                         <div style="display:flex;gap:0.5rem;flex:1;align-items:center">
-                            <input type="text" id="cfg-acervo-backup-name" class="field-premium" placeholder="Nome do backup" style="flex:0 0 35%;font-size:12px" data-oninput="UI._onPathInput('cfg-path-acervo','cfg-path-acervo-active')">
+                            <input type="text" id="cfg-acervo-backup-name" class="field-premium" placeholder="Nome do backup" style="flex:0 0 35%;font-size:12px" data-oninput="UI._updateConfigPreview()">
                             <input type="text" id="cfg-path-acervo" class="field-premium" placeholder="C:\Users\...\Acervo Geral" style="flex:1;font-size:12px" data-oninput="UI._onPathInput('cfg-path-acervo','cfg-path-acervo-active')">
                         </div>
                         <button data-onclick="UI.pickFolder('cfg-path-acervo')" class="input-icon-btn" title="Selecionar pasta"><i class="fas fa-folder-open"></i></button>

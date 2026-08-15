@@ -91,7 +91,7 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 </head>
 <body>
 <h1>Manual do Catálogo</h1>
-<p class="subtitle">CineCatalog Elo — Edição Premium | Versão 32.2.0 <span class="badge badge-blue">ÍCONE DA APP</span></p>
+<p class="subtitle">CineCatalog Elo — Edição Premium | Versão 32.3.0 <span class="badge badge-blue">ÍCONE DA APP</span></p>
 
 <div class="nav">
 <a href="#s1">1. Visão Geral</a>
@@ -124,6 +124,7 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <a href="#s33">28. Lembretes</a>
 <a href="#s34">29. Funcionalidades (51)</a>
 <a href="#s35">30. Novidades v32.2.0</a>
+<a href="#s36">31. Novidades v32.3.0</a>
 </div>
 
 <h2 id="s1">1. Visão Geral</h2>
@@ -347,7 +348,7 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <h2 id="s14">14. Atualizações</h2>
 <p>O sistema verifica atualizações automaticamente através da GitHub API.</p>
 <ul>
-<li>Badge da versão no footer: <span class="badge badge-blue">v32.2.0</span></li>
+<li>Badge da versão no footer: <span class="badge badge-blue">v32.3.0</span></li>
 <li>Clique no badge para verificar manualmente</li>
 <li>Se atualizado: badge verde <span class="badge badge-green">✓ Atualizado</span></li>
 <li>Se nova versão: badge âmbar com link para download</li>
@@ -426,7 +427,7 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <p>O ficheiro <code>icon.png</code> encontra-se na raiz do projeto e é referenciado no <code>electron/main.js</code>.</p>
 <div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
 
-<p style="margin-top:2rem;text-align:center;color:#475569;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em">CineCatalog Elo v32.2.0 — Edição Premium — Jonas Theodoro</p>
+<p style="margin-top:2rem;text-align:center;color:#475569;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em">CineCatalog Elo v32.3.0 — Edição Premium — Jonas Theodoro</p>
 
 <h2 id="s21">21. Novidades da Versão 28.1</h2>
 <ul>
@@ -565,6 +566,20 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <li><strong>CADASTRO — Campo Elenco Maior:</strong> O campo Elenco Principal de FILMES e SÉRIES ganhou maior altura, com barra de rolagem minimalista azul (padrão da aplicação) que só aparece quando necessária</li>
 <li><strong>Rodapé — Versão:</strong> Versão do aplicativo atualizada para <span class="badge badge-blue">v32.2.0</span></li>
 <li><strong>Manual Atualizado:</strong> Todas as funcionalidades, links e versão do aplicativo atualizados para v32.2.0</li>
+</ul>
+<div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<h2 id="s36">31. Novidades da Versão 32.3.0</h2>
+<ul>
+<li><strong>ESTADO VAZIO PADRONIZADO:</strong> FILMES, SÉRIES e ESTRÉIAS agora exibem o mesmo ícone centralizado (tamanho 28) com título e subtítulo. SÉRIES e ESTRÉIAS passaram a usar o mesmo tamanho de ícone dos FILMES. ESTRÉIAS mostra a mensagem <strong>NENHUMAS ESTRÉIAS</strong> com o subtítulo <strong>NÃO HÁ ESTRÉIAS PARA SEREM EXIBIDAS NESTE MOMENTO</strong>. Removido o texto duplicado "Nenhuma estreia encontrada." no topo do Canvas</li>
+<li><strong>SUGESTÕES COM ACERVO VAZIO:</strong> A sugestão automática ao carregar o app deixou de ser exibida quando o acervo está vazio</li>
+<li><strong>CONFIG — ACERVO GERAL:</strong> O botão ATIVAR/INATIVAR agora reage apenas ao caminho do Acervo Geral (digitar apenas o Nome do Backup não ativa o caminho). O caminho completo configurado (local, nuvem ou dispositivo externo) é exibido na janela de Configurações</li>
+<li><strong>PERSISTÊNCIA DE PREFERÊNCIAS:</strong> O app lembra na inicialização a aba ativa (Filmes/Séries/Estreias), filtro, ordenação, ano, modo de visualização e nível de zoom, além dos caminhos configurados (capas, filmes/séries, backup e auto-save) e do tema</li>
+<li><strong>EXECUTAR NO PLAYER DEFINIDO:</strong> O botão Play nos cards e o botão EXECUTAR FILME na janela INFO agora reproduzem a mídia no player configurado (Padrão do Sistema, Windows Media Player ou Personalizado), em vez de apenas abrir uma nova aba</li>
+<li><strong>EDITAR SÉRIES:</strong> O campo Trailer é restaurado corretamente ao editar uma série (dado salvo em <code>trailUrl</code>)</li>
+<li><strong>MANUAL EMPACOTADO:</strong> O arquivo <code>manual_do_catalogo.html</code> passou a ser incluído no instalador e abre numa janela própria da aplicação ao clicar em Manual</li>
+<li><strong>Rodapé — Versão:</strong> Versão do aplicativo atualizada para <span class="badge badge-blue">v32.3.0</span></li>
+<li><strong>Manual Atualizado:</strong> Todas as funcionalidades, links e versão do aplicativo atualizados para v32.3.0</li>
 </ul>
 <div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
 </body>

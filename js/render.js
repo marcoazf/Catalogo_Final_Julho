@@ -83,23 +83,16 @@
                         emptyState.style.display = 'flex';
                         emptyState.innerHTML = '';
                         if (APP_STATE.currentView === 'estreias') {
-                            emptyState.innerHTML = '<div class="w-16 h-16 bg-gradient-to-br from-amber-600/20 to-orange-600/20 rounded-2xl flex items-center justify-center mb-5 border border-amber-500/30 shadow-2xl shadow-amber-500/10 mx-auto"><i class="fas fa-calendar-alt text-amber-400 text-3xl"></i></div><div style="font-size:16px;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:0.5rem;text-align:center;color:#F59E0B">Nenhuma Estreia</div><div style="font-size:11px;color:var(--text-secondary);font-weight:500;text-align:center">Nenhum lançamento cadastrado neste período</div>';
+                            emptyState.innerHTML = '<div class="w-28 h-28 bg-gradient-to-br from-amber-600/20 to-orange-600/20 rounded-[2rem] flex items-center justify-center mb-6 border border-amber-500/30 shadow-2xl shadow-amber-500/10 mx-auto"><i class="fas fa-calendar-alt text-amber-400 text-4xl"></i></div><h2 class="text-4xl font-black italic uppercase tracking-tighter mb-2">NENHUMAS ESTRÉIAS</h2><div class="text-[10px] theme-text-sec uppercase tracking-[0.2em] space-y-1"><p>NÃO HÁ ESTRÉIAS PARA SEREM EXIBIDAS NESTE MOMENTO</p></div>';
                         } else if (APP_STATE.currentView === 'series') {
-                            emptyState.innerHTML = '<div class="w-16 h-16 bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-2xl flex items-center justify-center mb-5 border border-purple-500/30 shadow-2xl shadow-purple-500/10 mx-auto"><i class="fas fa-tv text-purple-400 text-3xl"></i></div><h2 class="text-4xl font-black italic uppercase tracking-tighter mb-2">ACERVO VAZIO</h2><div class="text-[10px] theme-text-sec uppercase tracking-[0.2em] space-y-1"><p>O SEU CINEMA PARTICULAR COMEÇA,</p><p>COM O PRIMEIRO CADASTRO</p></div>';
+                            emptyState.innerHTML = '<div class="w-28 h-28 bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-[2rem] flex items-center justify-center mb-6 border border-purple-500/30 shadow-2xl shadow-purple-500/10 mx-auto"><i class="fas fa-tv text-purple-400 text-4xl"></i></div><h2 class="text-4xl font-black italic uppercase tracking-tighter mb-2">ACERVO VAZIO</h2><div class="text-[10px] theme-text-sec uppercase tracking-[0.2em] space-y-1"><p>O SEU CINEMA PARTICULAR COMEÇA,</p><p>COM O PRIMEIRO CADASTRO</p></div>';
                         } else {
-                            emptyState.innerHTML = '<div class="w-28 h-28 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-[2rem] flex items-center justify-center mb-6 border border-blue-500/30 shadow-2xl shadow-blue-500/10"><i class="fas fa-clapperboard text-blue-400 text-4xl"></i></div><h2 class="text-4xl font-black italic uppercase tracking-tighter mb-2">ACERVO VAZIO</h2><div class="text-[10px] theme-text-sec uppercase tracking-[0.2em] space-y-1"><p>O SEU CINEMA PARTICULAR COMEÇA,</p><p>COM O PRIMEIRO CADASTRO</p></div>';
+                            emptyState.innerHTML = '<div class="w-28 h-28 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-[2rem] flex items-center justify-center mb-6 border border-blue-500/30 shadow-2xl shadow-blue-500/10 mx-auto"><i class="fas fa-clapperboard text-blue-400 text-4xl"></i></div><h2 class="text-4xl font-black italic uppercase tracking-tighter mb-2">ACERVO VAZIO</h2><div class="text-[10px] theme-text-sec uppercase tracking-[0.2em] space-y-1"><p>O SEU CINEMA PARTICULAR COMEÇA,</p><p>COM O PRIMEIRO CADASTRO</p></div>';
                         }
                     }
                 } else {
                     emptyState.style.display = 'none';
                     emptyState.innerHTML = '';
-                    if (APP_STATE.currentView === 'estreias') {
-                        emptyState.innerHTML = '<div class="w-16 h-16 bg-gradient-to-br from-amber-600/20 to-orange-600/20 rounded-2xl flex items-center justify-center mb-5 border border-amber-500/30 shadow-2xl shadow-amber-500/10 mx-auto"><i class="fas fa-calendar-alt text-amber-400 text-3xl"></i></div><div style="font-size:16px;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:0.5rem;text-align:center;color:#F59E0B">Nenhuma Estreia</div><div style="font-size:11px;color:var(--text-secondary);font-weight:500;text-align:center">Nenhum lançamento cadastrado neste período</div>';
-                    } else if (APP_STATE.currentView === 'series') {
-                        emptyState.innerHTML = '<div class="w-16 h-16 bg-gradient-to-br from-purple-600/20 to-pink-600/20 rounded-2xl flex items-center justify-center mb-5 border border-purple-500/30 shadow-2xl shadow-purple-500/10 mx-auto"><i class="fas fa-tv text-purple-400 text-3xl"></i></div><h2 class="text-4xl font-black italic uppercase tracking-tighter mb-2">ACERVO VAZIO</h2><div class="text-[10px] theme-text-sec uppercase tracking-[0.2em] space-y-1"><p>O SEU CINEMA PARTICULAR COMEÇA,</p><p>COM O PRIMEIRO CADASTRO</p></div>';
-                    } else {
-                        emptyState.innerHTML = '<div class="w-28 h-28 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-[2rem] flex items-center justify-center mb-6 border border-blue-500/30 shadow-2xl shadow-blue-500/10"><i class="fas fa-clapperboard text-blue-400 text-4xl"></i></div><h2 class="text-4xl font-black italic uppercase tracking-tighter mb-2">ACERVO VAZIO</h2><div class="text-[10px] theme-text-sec uppercase tracking-[0.2em] space-y-1"><p>O SEU CINEMA PARTICULAR COMEÇA,</p><p>COM O PRIMEIRO CADASTRO</p></div>';
-                    }
                 }
                     if (APP_STATE.currentView === 'estreias') {
                         container.className = '';
@@ -219,7 +212,7 @@
                         '</div>';
                 }
                 if (!items.length) {
-                    html = '<div style="text-align:center;padding:3rem;color:var(--text-secondary);font-size:11px;font-weight:600">Nenhuma estreia encontrada.</div>';
+                    html = '';
                 }
                 container.innerHTML = html;
                 UI._updateEstreiaAutoDeleteWarning();

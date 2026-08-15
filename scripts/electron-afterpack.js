@@ -19,8 +19,8 @@ exports.default = async function (context) {
         '--set-version-string', 'ProductName', 'CineCatalog Elo',
         '--set-version-string', 'FileDescription', 'CineCatalog Elo - Catálogo pessoal de filmes e séries',
         '--set-version-string', 'CompanyName', 'CineCatalog',
-        '--set-file-version', '32.2.0.0',
-        '--set-product-version', '32.2.0.0'
+        '--set-file-version', '32.3.0.0',
+        '--set-product-version', '32.3.0.0'
     ];
 
     execFileSync(rcedit, args, { stdio: 'inherit' });

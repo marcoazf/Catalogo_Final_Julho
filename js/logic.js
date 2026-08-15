@@ -165,7 +165,7 @@
                         UI._seasonData = (movie.dynamicSeasons && movie.dynamicSeasons.length > 0) ? movie.dynamicSeasons.slice() : [];
                         UI._episodeData = (movie.dynamicEpisodesNew && movie.dynamicEpisodesNew.length > 0) ? movie.dynamicEpisodesNew.slice() : [];
                         var trEl = document.getElementById('fs-trailer-url');
-                        if (trEl) trEl.value = movie.trailerUrl || '';
+                        if (trEl) trEl.value = movie.trailUrl || movie.trailerUrl || '';
                         UI._renderSeasonBlocks();
                         UI._renderEpisodeBlocks();
                     } else if (movie.type === 'estreias') {
@@ -226,6 +226,7 @@
                 document.getElementById('link-filmes').classList.toggle('active', type === 'filmes');
                 document.getElementById('link-series').classList.toggle('active', type === 'series');
                 document.getElementById('link-estreias').classList.toggle('active', type === 'estreias');
+                saveUIPrefs();
                 Render.all();
             },
 
@@ -234,6 +235,7 @@
                 document.querySelectorAll('.view-btn[id^="view-"]').forEach(function(b) { b.classList.remove('active'); });
                 var btn = document.getElementById('view-' + mode);
                 if (btn) btn.classList.add('active');
+                saveUIPrefs();
                 Render.all();
             },
 
@@ -464,12 +466,14 @@
                 }
                 Render.all();
                 UI.updateFilterButtonState();
+                saveUIPrefs();
             },
 
             setYearFilter(year) {
                 APP_STATE.filterYear = APP_STATE.filterYear === year ? '' : year;
                 Render.all();
                 UI.updateFilterButtonState();
+                saveUIPrefs();
             },
 
             setTheme(name) {
@@ -536,28 +540,12 @@
             playMedia(id) {
                 const movie = APP_STATE.movies.find(m => m.id === id);
                 if (!movie) return;
-                var raw = movie.mediaFile || movie.trailUrl;
-                if (!raw) return;
-                var url = raw;
-                // Try portable reference JSON {blob, name, path}
-                if (raw.charAt(0) === '{' || raw.charAt(0) === '[') {
-                    try {
-                        var ref = JSON.parse(raw);
-                        if (ref.blob) url = ref.blob;
-                        else if (ref.path) url = ref.path;
-                    } catch(e) {}
+                var raw = movie.mediaFile || movie.trailUrl || '';
+                if (!raw) {
+                    Logic.showModalStatus('Este item não possui mídia para executar.', 'orange');
+                    return;
                 }
-                // Convert local Windows path to file:/// URL
-                if (!url.match(/^(https?:|blob:|file:)/i)) {
-                    url = 'file:///' + url.replace(/\\/g, '/');
-                }
-                var a = document.createElement('a');
-                a.href = url;
-                a.target = '_blank';
-                a.rel = 'noopener noreferrer';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
+                Logic.openMediaWithPlayer(raw, movie.type);
             },
 
             viewMovieCtx() {
@@ -1299,7 +1287,7 @@
                     {icon:'fa-download',label:'Exportar Dados',desc:'Exporte todo o seu acervo em formato JSON para backup ou transferência.'},
                     {icon:'fa-upload',label:'Importar Dados',desc:'Importe acervo de arquivos JSON. Restaure backups facilmente.'},
                     {icon:'fa-moon',label:'Modo Noturno',desc:'Alternância de temas com menu flutuante. Escolha entre Dark, Light, Amber e Midnight.'},
-                    {icon:'fa-info-circle',label:'Sobre o Sistema',desc:'CineCatalog Elo v32.2.0 — Edição Premium. Sistema completo de gestão de acervo cinematográfico.'},
+                    {icon:'fa-info-circle',label:'Sobre o Sistema',desc:'CineCatalog Elo v32.3.0 — Edição Premium. Sistema completo de gestão de acervo cinematográfico.'},
                     {icon:'fa-th-large',label:'Modos de Exibição',desc:'Três modos de visualização: Carrossel com setas, Grelha por gêneros, e Cine Marquee com animação. Ajuste velocidade e efeito no menu.'},
                     {icon:'fa-arrows-alt-h',label:'Navegação Carrossel',desc:'Navegue horizontalmente por linha com setas laterais. Duas linhas visíveis com rolagem infinita até o fim dos cards.'},
                     {icon:'fa-tachometer-alt',label:'Desempenho Otimizado',desc:'Renderizaçao lazy com batches de 20 cards. Scroll infinito suave sem travar a interface.'},

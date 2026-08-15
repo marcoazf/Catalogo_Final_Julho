@@ -33,6 +33,25 @@ function createWindow() {
 
     // Mídia local -> player do sistema; links externos/trailers -> navegador padrão
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+        // Manual do Catálogo: abre em uma janela própria da aplicação (empacotado no .asar)
+        if (/manual_do_catalogo\.html/i.test(url)) {
+            let manualWin = new BrowserWindow({
+                width: 1280,
+                height: 900,
+                icon: path.join(__dirname, '..', 'build', 'icon.png'),
+                backgroundColor: '#0f172a',
+                autoHideMenuBar: true,
+                webPreferences: {
+                    nodeIntegration: true,
+                    contextIsolation: false,
+                    sandbox: false,
+                    spellcheck: false
+                }
+            });
+            manualWin.loadURL(url);
+            manualWin.on('closed', () => { manualWin = null; });
+            return { action: 'deny' };
+        }
         if (/^https?:\/\//i.test(url)) {
             shell.openExternal(url);
         } else if (/^file:\/\//i.test(url)) {

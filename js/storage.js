@@ -9,7 +9,7 @@
             filterYear: '',
             viewMode: 'carrossel',
             marqueeEffect: 'linear',
-            zoom: 5
+            zoom: 1
         };
 
         const Storage = {
@@ -256,6 +256,35 @@
                 }
             }
             if (window.Render) window.Render.all();
+        }
+
+        const UI_PREFS_KEY = 'cinecatalog_ui_prefs';
+
+        function saveUIPrefs() {
+            try {
+                Store.setItem(UI_PREFS_KEY, JSON.stringify({
+                    currentView: APP_STATE.currentView,
+                    activeFilter: APP_STATE.activeFilter,
+                    filterYear: APP_STATE.filterYear,
+                    sortBy: APP_STATE.sortBy,
+                    viewMode: APP_STATE.viewMode,
+                    zoom: APP_STATE.zoom
+                }));
+            } catch(e) {}
+        }
+
+        function loadUIPrefs() {
+            try {
+                var raw = Store.getItem(UI_PREFS_KEY);
+                if (!raw) return;
+                var p = JSON.parse(raw);
+                if (p && ['filmes', 'series', 'estreias'].indexOf(p.currentView) > -1) APP_STATE.currentView = p.currentView;
+                if (p && ['carrossel', 'grid', 'marquee'].indexOf(p.viewMode) > -1) APP_STATE.viewMode = p.viewMode;
+                if (p && typeof p.activeFilter === 'string') APP_STATE.activeFilter = p.activeFilter;
+                if (p && typeof p.filterYear === 'string') APP_STATE.filterYear = p.filterYear;
+                if (p && typeof p.sortBy === 'string') APP_STATE.sortBy = p.sortBy;
+                if (p && typeof p.zoom === 'number' && p.zoom >= 1 && p.zoom <= 4) APP_STATE.zoom = p.zoom;
+            } catch(e) {}
         }
 
         window._appConfig = loadConfig();

@@ -15,7 +15,7 @@ test.describe('Últimas implementações (GUIA-TESTES-COMPLETO)', () => {
     // Estreias
     await page.locator('#link-estreias').click();
     await page.waitForTimeout(300);
-    await expect(page.locator('#empty-state')).toContainText('Nenhuma Estreia');
+    await expect(page.locator('#empty-state')).toContainText('NENHUMAS ESTRÉIAS');
   });
 
   test('b) Sugestão não aparece com acervo vazio e aparece após cadastro', async ({ page }) => {
