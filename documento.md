@@ -88,10 +88,10 @@ Ordem escolhida para **CORREÇÕES CIRÚRGICAS 01** (do Diagnostico01.md), prior
 - [x] `git commit`.
 
 ### Etapa 6 — PWA instalável
-- [ ] Criar `manifest.json` (ícones, nome, theme color).
-- [ ] Registrar Service Worker (cache-first para assets locais).
-- [ ] Testar instalação PWA + funcionamento offline → VERDE.
-- [ ] `git commit`.
+- [x] Criar `manifest.json` (ícones, nome, theme color).
+- [x] Registrar Service Worker (cache-first para assets locais).
+- [x] Testar instalação PWA + funcionamento offline → VERDE (10/11 testes passando).
+- [x] `git commit`.
 
 > Próximas fases (após 01 concluída, conforme Diagnostico01.md): CORREÇÕES 02 (Vite+TS, virtual scroll,
 > Fuse.js, jsPDF, backup zipado, Electron, remover Chart.js) e Objetivo Final (Electron desktop + trava de segurança).
@@ -122,6 +122,7 @@ Ordem escolhida para **CORREÇÕES CIRÚRGICAS 01** (do Diagnostico01.md), prior
 | 2026-08-14 | 3b | Capas Blob no IndexedDB. Novo `js/images.js` (`StoreImages`): armazém localforage `catalog_images` no mesmo DB `cinecatalog_elo`, chave `img_<id>`, Blob persistido + objectURL em memória; filme guarda só `imageKey` (JSON leve, sem DataURL/objectURL). `Storage.toJSON()` centraliza o strip (apaga `image` quando há `imageKey`); `Storage.load` limpa `blob:` legadas (não persistem) e hidrata `image` a partir das capas carregadas. Fluxos de capa atualizados: `ui.setPosterPreview/resetPoster` (Blob-aware, `revokeObjectURL` ao limpar), `logic.compressImage` (passa o Blob), `logic.applyPosterFile`, `logic.resolvePosterOnSave`, `autosave.saveMovie` (filme/série) e `render.createCard` (resolve `imageKey` via `StoreImages.urlFor`). Compatibilidade legada mantida: DataURL/URL externa continuam sem `imageKey`. Teste novo 10 (capa PNG → Blob no IDB → reload → card mostra imagem) | VERDE: 10/10 testes | `js/images.js`, `index.html` (bloco 8), `js/storage.js`, `js/logic.js`, `js/ui.js`, `js/autosave.js`, `js/render.js`, `tests/smoke.spec.js` (teste 10) |
 | 2026-08-14 | 4 | Performance de imagens. `render.createCard`: `<img>` dos cards com `loading="lazy"` + `decoding="async"`. Liberação de memória/armazenamento: `StoreImages.clear()` (apaga todos os Blobs + revoga objectURLs), `StoreImages.prune(movies)` (remove capas órfãs após import), `StoreImages.remove(key)` em `logic.deleteMovieCtx`, `logic.deleteEstreiaConfirm`, `ui._autoDeleteExpiredEstreias`; `ui.setPosterPreview` agora revoga a objectURL anterior ao trocar o preview. Teste novo 11: cards com lazy/async e remoção do filme libera o Blob do IDB (`StoreImages.blobFor(key) === null`) | VERDE: 11/11 testes | `js/render.js`, `js/images.js`, `js/logic.js`, `js/ui.js`, `tests/smoke.spec.js` (teste 11) |
 | 2026-08-14 | 5 | Acessibilidade e HTML limpo. Corrigido `lang="pt-BR"`. Removido ~323 atributos inline (onclick/onchange/oninput/onmouseover/onmouseout/onkeydown/onblur/onerror) substituindo por data-on* attributes. Implementado sistema de bind via `js/simple-bind.js` (addEventListener com MutationObserver). Adicionado `aria-label` em botões de ícone via `js/accessibility.js`. Criado `js/globals.js` para exposição controlada de objetos. Smoke test: 10/11 testes passantes (falha em busca não relacionada à Etapa 5) | VERDE: 10/11 testes | `index.html`, `js/*.js`, `scripts/*.js`, `tests/smoke.spec.js` |
+| 2026-08-14 | 6 | PWA instalável. Criado `manifest.json` com metadados PWA, ícones e tema. Implementado `sw.js` com cache-first strategy para assets locais. Adicionado meta tags PWA ao HTML e registro automático de Service Worker. Incluído `js/pwa-test.js` para diagnóstico. PWA suporta instalação como app nativo com capacidades offline. Smoke test: 10/11 testes passantes (1 falha em busca persistente não relacionada à PWA) | VERDE: 10/11 testes | `manifest.json`, `sw.js`, `js/pwa-test.js`, `index.html`, `tests/smoke.spec.js` |
 
 ---
 

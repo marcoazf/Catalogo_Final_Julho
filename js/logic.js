@@ -1817,13 +1817,26 @@
             },
 
             openDashboard() {
+                console.log('[LOGIC] Abrindo dashboard');
                 var el = document.getElementById('modal-dashboard');
                 var btn = document.getElementById('btn-dashboard');
-                if (!el) return;
-                if (el.classList.contains('active')) { el.classList.remove('active'); if (btn) btn.classList.remove('active'); return; }
+                if (!el) {
+                    console.error('[LOGIC] Modal dashboard não encontrado!');
+                    return;
+                }
+                if (!btn) {
+                    console.error('[LOGIC] Botão dashboard não encontrado!');
+                }
+                if (el.classList.contains('active')) {
+                    console.log('[LOGIC] Dashboard já está ativo, fechando...');
+                    el.classList.remove('active');
+                    if (btn) btn.classList.remove('active');
+                    return;
+                }
                 this._clearHeaderBtnActive();
                 el.classList.add('active');
                 if (btn) btn.classList.add('active');
+                console.log('[LOGIC] Dashboard aberto com sucesso');
                 UI._dashTimeFilter = 'todos';
                 UI._dashTimeFilterRange = null;
                 UI._dashChartStyle = null;

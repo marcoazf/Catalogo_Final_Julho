@@ -3,17 +3,58 @@
   "version": "32.2.0",
   "private": true,
   "description": "CineCatalog Elo - refatoração da fase correções cirúrgicas 01 (monólito -> modular, com testes)",
+  "main": "electron/main.js",
   "scripts": {
     "test": "playwright test",
     "test:ui": "playwright test --ui",
-    "build:css": "tailwindcss -i css/tailwind.input.css -o css/tailwind.css --minify"
+    "build:css": "tailwindcss -i css/tailwind.input.css -o css/tailwind.css --minify",
+    "start:electron": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win",
+    "dist:linux": "electron-builder --linux",
+    "dist:mac": "electron-builder --mac",
+    "make:icon": "node scripts/make-icon.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.49.0",
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3",
+    "localforage": "^1.10.0",
     "pngjs": "^7.0.0",
     "tailwindcss": "^3.4.19"
   },
-  "dependencies": {
-    "localforage": "^1.10.0"
+  "build": {
+    "appId": "com.cinecatalog.elo",
+    "productName": "CineCatalog Elo",
+    "directories": {
+      "output": "release"
+    },
+    "afterPack": "scripts/electron-afterpack.js",
+    "files": [
+      "index.html",
+      "sw.js",
+      "manifest.json",
+      "cinecatalogo.png",
+      "css/**/*",
+      "js/**/*",
+      "electron/**/*",
+      "build/icon.png"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "build/icon.ico",
+      "artifactName": "CineCatalog_Elo_Setup_${version}.${ext}",
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
   }
 }

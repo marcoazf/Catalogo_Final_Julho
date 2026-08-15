@@ -474,3 +474,59 @@ npm run dist:win   # Gerar instalador Windows
 npm run dist:linux # Gerar AppImage/Deb Linux
 npm run dist:mac   # Gerar DMG macOS
 ```
+
+---
+
+# ⚡ Atualização 14/08/2026 — Implementação real validada
+
+O empacotamento foi implementado e validado **dentro do próprio projeto** (sem duplicar a pasta), com as seguintes decisões em relação ao guia original:
+
+## Estrutura criada (na raiz do projeto)
+
+```
+├── electron/
+│   ├── main.js           # processo principal Electron (já com integrações)
+│   └── preload.js        # ponte window.electronAPI
+├── build/
+│   ├── icon.ico          # ícone Windows (16–256px, PNG-compressed)
+│   ├── icon.png          # ícone genérico 256x256
+│   └── rcedit-x64.exe    # usado pelo hook afterPack
+├── scripts/
+│   ├── make-icon.js      # gera os ícones (node scripts/make-icon.js)
+│   ├── electron-afterpack.js  # hook afterPack (ícone + metadados no exe)
+│   └── validate-packaged.js   # valida o app empacotado via Playwright
+├── release/              # saída do electron-builder
+│   └── CineCatalog_Elo_Setup_32.2.0.exe   # instalável NSIS (78,5 MB)
+└── package.json          # main, scripts electron e bloco "build"
+```
+
+## Diferenças do guia original (IMPORTANTE)
+
+1. **`nodeIntegration: true` + `contextIsolation: false`** (não `false/true` como no guia):
+   A SPA já usa `window.require('electron')`, `window.require('fs')` e `window.require('path')` diretamente
+   (`js/ui.js`, `js/logic.js`, `js/autosave.js`). Sem nodeIntegration esses recursos quebram.
+   O `preload.js` continua exposto (`window.electronAPI`) como complemento.
+2. **Não foi necessário adaptar `showDirectoryPicker`**: a lógica de folder pickers já tem fallback Electron
+   (`_isElectron() && window.require`) usando `electron.dialog.showOpenDialog`.
+3. **Service worker desativado no Electron** (em `file://` o SW falha): guarda `isElectronRuntime` no `index.html`.
+4. **`win.signAndEditExecutable: false`** + hook `afterPack` com `rcedit`: contorna o `winCodeSign`,
+   que não extrai nesta máquina (falha ao criar symlinks do macOS sem privilégio admin). O `rcedit`
+   aplica ícone + ProductName + versão no exe empacotado.
+
+## Comandos validados
+
+```bash
+npm install --save-dev electron@^31.7.7 electron-builder@^24.13.3
+npm run make:icon                     # gera build/icon.png + build/icon.ico
+$env:CSC_IDENTITY_AUTO_DISCOVERY='false'   # desativa descoberta de certificado
+npx electron-builder --win            # gera release/CineCatalog_Elo_Setup_32.2.0.exe
+node scripts/validate-packaged.js     # valida o app empacotado (release/win-unpacked)
+```
+
+> **Dica:** para rodar o app em desenvolvimento direto no Electron: `npm run start:electron`.
+
+## Testes automatizados adicionados
+
+- `tests/electron-smoke.spec.js` — 2 testes: boot sem erros + globals/`window.require`, e persistência em `file://`.
+
+Resultado final: suíte completa **18/18** verdes e instalável validado (instalação silenciosa OK em `%LOCALAPPDATA%\Programs\CineCatalog Elo`).

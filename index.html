@@ -1677,13 +1677,13 @@
     <script src="js/main.js"></script>
     <script src="js/globals.js"></script>
     <script src="js/accessibility.js"></script>
-    <script src="js/simple-bind.js"></script>
+    <script src="js/final-bind.js"></script>
     <script src="js/autosave.js"></script>
-    <script src="js/pwa-test.js"></script>
     
     <!-- SERVICE WORKER PWA -->
     <script>
-        if ('serviceWorker' in navigator) {
+        var isElectronRuntime = typeof window !== 'undefined' && !!window.process && !!window.process.versions && !!window.process.versions.electron;
+        if (!isElectronRuntime && 'serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js')
                     .then(registration => {

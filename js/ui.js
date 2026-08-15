@@ -40,8 +40,12 @@
                 }
             },
             closeModal(id) {
+                console.log('[UI] Fechando modal:', id);
                 const el = document.getElementById(id);
-                if (!el) return;
+                if (!el) {
+                    console.error('[UI] Modal não encontrado:', id);
+                    return;
+                }
                 el.classList.remove('active');
                 var modalBtnMap = {'modal-dashboard':'btn-dashboard','modal-generate-list':'btn-generate-list','modal-cadastro-log':'btn-cadastro-log','modal-config':'btn-config','modal-info':'btn-info'};
                 if (modalBtnMap[id]) { var b = document.getElementById(modalBtnMap[id]); if (b) b.classList.remove('active'); }
@@ -222,11 +226,45 @@
             },
             toggleSearchBar() {
                 var container = document.getElementById('search-bar-container');
+                if (!container) {
+                    console.error('[UI] search-bar-container não encontrado!');
+                    return;
+                }
+
                 var isOpening = !container.classList.contains('active');
-                container.classList.toggle('active');
-                var btn = document.querySelector('button[onclick*="toggleSearchBar"]');
-                if (btn) btn.classList.toggle('active', isOpening);
-                if (isOpening) setTimeout(function(){ document.getElementById('main-search').focus(); }, 100);
+                console.log('[UI] toggleSearchBar executado. isOpening:', isOpening);
+
+                // Aplica a classe active
+                if (isOpening) {
+                    container.classList.add('active');
+                } else {
+                    container.classList.remove('active');
+                }
+
+                // Atualiza o botão visualmente
+                var btn = document.querySelector('button[data-onclick*="toggleSearchBar"]');
+                if (btn) {
+                    if (isOpening) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                }
+
+                console.log('[UI] Classes atuais - Container:', container.className, 'Botão:', btn ? btn.className : 'N/A');
+
+                // Foca no input se abrindo
+                if (isOpening) {
+                    setTimeout(function(){ 
+                        var input = document.getElementById('main-search');
+                        if (input) {
+                            input.focus();
+                            console.log('[UI] Input focado com sucesso');
+                        } else {
+                            console.error('[UI] main-search não encontrado!');
+                        }
+                    }, 100);
+                }
             },
             toggleFilters() {
                 var dd = document.getElementById('filters-dropdown');
@@ -326,6 +364,41 @@
             closeReminderPanel() {
                 document.getElementById('reminder-panel').classList.remove('active');
                 document.getElementById('btn-reminders')?.classList.remove('active');
+            },
+            openSearchBar() {
+                // Se o fix manual já estiver ativo, não executar
+                if (window._searchBarFixed) {
+                    return;
+                }
+
+                console.log('[UI] openSearchBar chamado (via atalho)');
+                var container = document.getElementById('search-bar-container');
+                if (!container) {
+                    console.error('[UI] search-bar-container não encontrado!');
+                    return;
+                }
+                if (!container.classList.contains('active')) {
+                    container.classList.add('active');
+                    var btn = document.querySelector('button[data-onclick*="toggleSearchBar"]');
+                    if (btn) btn.classList.add('active');
+                    setTimeout(function(){ 
+                        var input = document.getElementById('main-search');
+                        if (input) input.focus();
+                        else console.error('[UI] main-search não encontrado!');
+                    }, 100);
+                }
+            },
+            closeSearchBar() {
+                console.log('[UI] closeSearchBar chamado');
+                var container = document.getElementById('search-bar-container');
+                if (container && container.classList.contains('active')) {
+                    container.classList.remove('active');
+                    var btn = document.querySelector('button[data-onclick*="toggleSearchBar"]');
+                    if (btn) btn.classList.remove('active');
+                    console.log('[UI] ✅ Barra de pesquisa fechada com sucesso');
+                } else {
+                    console.log('[UI] Barra de pesquisa já está fechada');
+                }
             },
             switchTab(type) {
                 document.querySelectorAll('.tab-premium').forEach(t => t.classList.toggle('active', t.dataset.tab === type));
@@ -1240,6 +1313,14 @@
                 var scrollArea = el.querySelector('.overflow-y-auto');
                 if (scrollArea) scrollArea.scrollTop = 0;
             },
+            _onPathInput(pathId, activeId) {
+                var pathInput = document.getElementById(pathId);
+                var activeCheckbox = document.getElementById(activeId);
+                if (pathInput && activeCheckbox) {
+                    var path = pathInput.value.trim();
+                    activeCheckbox.checked = path.length > 0;
+                }
+            },
             _populateConfigForm() {
                 var cfg = window._appConfig;
                 setVal('cfg-logo-url', cfg.logo);
@@ -1314,18 +1395,18 @@
                 setVal('cfg-year-size', cfg.cardYearSize);
                 setVal('cfg-status-size', cfg.cardStatusSize);
                 setVal('cfg-cat-size', cfg.cardCategorySize);
-                setVal('cfg-path-cards', cfg.pathCards);
-                setVal('cfg-path-series-cards', cfg.pathSeriesCards);
-                setVal('cfg-path-videos', cfg.pathVideos);
-                setVal('cfg-path-backups', cfg.pathBackups);
-                setVal('cfg-path-acervo', cfg.pathAcervo);
+                setVal('cfg-path-cards', cfg.pathCards || '');
+                setVal('cfg-path-series-cards', cfg.pathSeriesCards || '');
+                setVal('cfg-path-videos', cfg.pathVideos || '');
+                setVal('cfg-path-backups', cfg.pathBackups || '');
+                setVal('cfg-path-acervo', cfg.pathAcervo || '');
                 setVal('cfg-acervo-backup-name', cfg.acervoBackupName || '');
-                setChecked('cfg-path-cards-active', cfg.pathCardsActive);
-                setChecked('cfg-path-series-cards-active', cfg.pathSeriesCardsActive);
-                setChecked('cfg-path-videos-active', cfg.pathVideosActive);
-                setChecked('cfg-path-backups-active', cfg.pathBackupsActive);
-                setChecked('cfg-path-acervo-active', cfg.pathAcervoActive);
-                setChecked('cfg-autosave', cfg.autoSave);
+                setChecked('cfg-path-cards-active', !!(cfg.pathCards && cfg.pathCards.trim()));
+                setChecked('cfg-path-series-cards-active', !!(cfg.pathSeriesCards && cfg.pathSeriesCards.trim()));
+                setChecked('cfg-path-videos-active', !!(cfg.pathVideos && cfg.pathVideos.trim()));
+                setChecked('cfg-path-backups-active', !!(cfg.pathBackups && cfg.pathBackups.trim()));
+                setChecked('cfg-path-acervo-active', !!(cfg.pathAcervo && cfg.pathAcervo.trim()));
+                setChecked('cfg-autosave', cfg.autoSave !== false);
                 setVal('cfg-video-player', cfg.videoPlayer || 'system');
                 UI._populatePlayerOptions();
                 setVal('cfg-video-player', cfg.videoPlayer || 'system');
@@ -1992,6 +2073,11 @@
                     Logic.showStatus('Sugestão está desativada nas configurações');
                     return;
                 }
+                var hasItems = APP_STATE.movies.some(function(m) { return m.type === 'filmes' || m.type === 'series'; });
+                if (!hasItems) {
+                    Logic.showStatus('Acervo vazio - Cadastre filmes ou séries primeiro');
+                    return;
+                }
                 var filters = [];
                 if (cfg.sugestoesNovo !== false) filters.push('new');
                 if (cfg.sugestoesAssistir !== false) filters.push('watch');
@@ -2049,7 +2135,7 @@
 
                 var posterImg = document.getElementById('sug-poster');
                 var posterFallback = document.getElementById('sug-poster-fallback');
-                if (poster && poster.trim()) {
+                if (poster && poster.trim() && poster !== 'https://via.placeholder.com/300x450') {
                     posterImg.src = poster;
                     posterImg.style.display = 'block';
                     if (posterFallback) posterFallback.style.display = 'none';
