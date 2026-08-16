@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste PWA - CineCatalog Elo</title>
+    
+    <!-- PWA MANIFEST -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#3b82f6">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/tailwind.css">
+    
+    <style>
+        body { font-family: Inter, sans-serif; }
+        .btn { 
+            padding: 8px 16px; 
+            margin: 4px; 
+            cursor: pointer; 
+            border: 1px solid #ccc; 
+            border-radius: 6px; 
+            background: #f8f9fa;
+        }
+        .btn:hover { background: #e9ecef; }
+        .search-container { 
+            background: #f8f9fa; 
+            border: 1px solid #dee2e6; 
+            padding: 15px; 
+            margin: 10px 0; 
+            max-height: 0; 
+            overflow: hidden; 
+            transition: all 0.3s ease;
+        }
+        .search-container.active { 
+            max-height: 100px; 
+            padding: 15px;
+        }
+        #search-input { 
+            width: 100%; 
+            padding: 8px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+        }
+        .status { 
+            margin: 10px 0; 
+            padding: 10px; 
+            background: #e3f2fd; 
+            border-radius: 6px;
+            border-left: 4px solid #2196f3;
+        }
+        .header {
+            background: #1976d2;
+            color: white;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎬 Teste PWA - CineCatalog Elo</h1>
+        <p>Versão simplificada para testar funcionalidades</p>
+    </div>
+    
+    <div class="status" id="status">
+        Status: Aguardando teste...
+    </div>
+    
+    <div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+        <h2>🔍 Teste de Barra de Pesquisa</h2>
+        
+        <button class="btn" onclick="testSearchBar()">
+            <i class="fas fa-search"></i> Testar Barra de Pesquisa
+        </button>
+        
+        <button class="btn" onclick="checkPWA()">
+            <i class="fas fa-download"></i> Verificar PWA
+        </button>
+        
+        <button class="btn" onclick="clearLog()">
+            <i class="fas fa-trash"></i> Limpar Log
+        </button>
+        
+        <div class="search-container" id="search-container">
+            <input type="text" id="search-input" placeholder="Digite para pesquisar...">
+            <button class="btn" onclick="clearSearch()">
+                <i class="fas fa-times"></i> Limpar
+            </button>
+        </div>
+        
+        <h3>📋 Log de Testes</h3>
+        <div id="log" style="background: #f5f5f5; padding: 10px; border-radius: 6px; min-height: 200px; max-height: 400px; overflow-y: auto;"></div>
+    </div>
+
+    <script>
+        // Simula as funções principais
+        window.UI = {
+            toggleSearchBar: function() {
+                console.log('[UI] toggleSearchBar chamado');
+                const container = document.getElementById('search-container');
+                container.classList.toggle('active');
+                updateStatus('Barra de pesquisa ' + (container.classList.contains('active') ? 'aberta' : 'fechada'));
+                addLog('Botão de pesquisa clicado');
+            },
+            
+            clearSearch: function() {
+                console.log('[UI] clearSearch chamado');
+                const input = document.getElementById('search-input');
+                input.value = '';
+                updateStatus('Busca limpa');
+                addLog('Busca limpa');
+            }
+        };
+        
+        function updateStatus(message) {
+            document.getElementById('status').textContent = 'Status: ' + message;
+        }
+        
+        function addLog(message) {
+            const log = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            log.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        function testSearchBar() {
+            addLog('🧪 Iniciando teste da barra de pesquisa...');
+            
+            const searchBtn = document.querySelector('button[onclick="testSearchBar()"]');
+            const container = document.getElementById('search-container');
+            const input = document.getElementById('search-input');
+            
+            addLog('Elementos encontrados: ' + 
+                (container ? 'container_sim' : 'container_não') + ', ' +
+                (input ? 'input_sim' : 'input_não'));
+            
+            // Testa 1: Abrir barra
+            addLog('Teste 1: Abrindo barra...');
+            window.UI.toggleSearchBar();
+            
+            setTimeout(() => {
+                if (container.classList.contains('active')) {
+                    addLog('✅ Barra aberta com sucesso!');
+                    
+                    // Testa 2: Digitar
+                    setTimeout(() => {
+                        addLog('Teste 2: Digitando texto...');
+                        input.value = 'Filme Teste';
+                        input.dispatchEvent(new Event('input'));
+                        addLog('✅ Texto digitado: ' + input.value);
+                        
+                        // Testa 3: Limpar
+                        setTimeout(() => {
+                            addLog('Teste 3: Limpando busca...');
+                            window.UI.clearSearch();
+                            
+                            // Testa 4: Fechar
+                            setTimeout(() => {
+                                addLog('Teste 4: Fechando barra...');
+                                window.UI.toggleSearchBar();
+                                addLog('🎉 Teste concluído!');
+                            }, 1000);
+                        }, 1000);
+                    }, 1000);
+                } else {
+                    addLog('❌ Barra não abriu');
+                }
+            }, 500);
+        }
+        
+        function checkPWA() {
+            addLog('📱 Verificando PWA...');
+            
+            // Verifica manifest
+            if ('manifest' in navigator) {
+                addLog('✅ Manifest suportado');
+                navigator.serviceWorker.ready.then(registration => {
+                    addLog('✅ Service Worker registrado');
+                    addLog('📦 App pode ser instalada como PWA');
+                });
+            } else {
+                addLog('❌ Manifest não suportado');
+            }
+            
+            // Verifica instalação
+            if ('standalone' in navigator && navigator.standalone) {
+                addLog('✅ App instalada como PWA');
+            } else {
+                addLog('📱 App não instalada (use menu "Adicionar à tela inicial")');
+            }
+        }
+        
+        function clearSearch() {
+            const input = document.getElementById('search-input');
+            input.value = '';
+            updateStatus('Busca limpa manualmente');
+        }
+        
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+            addLog('Log limpo');
+        }
+        
+        // Auto-teste ao carregar
+        window.addEventListener('load', () => {
+            updateStatus('Página carregada - pronto para testes');
+            addLog('🚀 Página de teste carregada');
+            
+            // Verifica PWA
+            setTimeout(checkPWA, 1000);
+        });
+        
+        // Registra service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(registration => {
+                    addLog('✅ Service Worker registrado');
+                })
+                .catch(error => {
+                    addLog('❌ Service Worker falhou: ' + error.message);
+                });
+        }
+    </script>
+</body>
+</html>

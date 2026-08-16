@@ -75,6 +75,30 @@
                 // e migra localStorage -> IndexedDB. Retorna a Promise pronta.
                 init: function() {
                     _hasLS = _lsOk();
+                    var _firstRunCleanKey = 'cinecatalog_first_run_clean';
+
+                    // (b) Primeira execução: sempre carrega 100% limpo.
+                    // Remove qualquer dado de acervo, preferências, caminhos,
+                    // notificações, históricos e lembretes remanescentes.
+                    // Parte síncrona: limpa o espelho localStorage antes de semear.
+                    var _firstRunLS = true;
+                    if (_hasLS) {
+                        try {
+                            if (localStorage.getItem(_firstRunCleanKey)) _firstRunLS = false;
+                        } catch (e) {}
+                        if (_firstRunLS) {
+                            try {
+                                for (var _s = 0; _s < localStorage.length; _s++) {
+                                    var _sk = localStorage.key(_s);
+                                    if (_sk && _sk !== '__cc_probe' && _sk !== _firstRunCleanKey) {
+                                        localStorage.removeItem(_sk);
+                                    }
+                                }
+                                localStorage.setItem(_firstRunCleanKey, '1');
+                            } catch (e) {}
+                        }
+                    }
+
                     _seedFromLS();
 
                     _ready = (async function() {
@@ -86,6 +110,43 @@
                                 description: 'CineCatalog Elo — dados do acervo (IndexedDB)',
                                 driver: [localforage.INDEXEDDB, localforage.LOCALSTORAGE]
                             });
+
+                            // É primeira execução apenas se o marcador faltar em
+                            // AMBOS os armazenamentos (localStorage + IndexedDB).
+                            // Se o IndexedDB já tem dados (ex.: localStorage foi
+                            // limpo manualmente), NÃO apagar nada.
+                            var _isFirstRun = _firstRunLS;
+                            if (_isFirstRun) {
+                                try {
+                                    var _marker = await _idb.getItem(_firstRunCleanKey);
+                                    if (_marker) _isFirstRun = false;
+                                } catch (e) {}
+                            }
+                            if (_isFirstRun) {
+                                try {
+                                    var _allKeys = await _idb.keys();
+                                    for (var _a = 0; _a < _allKeys.length; _a++) {
+                                        if (_allKeys[_a] === _firstRunCleanKey) continue;
+                                        await _idb.removeItem(_allKeys[_a]);
+                                    }
+                                } catch (e) {}
+                                if (_hasLS) {
+                                    try {
+                                        for (var _b = 0; _b < localStorage.length; _b++) {
+                                            var _lk = localStorage.key(_b);
+                                            if (_lk && _lk !== '__cc_probe' && _lk !== _firstRunCleanKey) {
+                                                delete _mem[_lk];
+                                                localStorage.removeItem(_lk);
+                                            }
+                                        }
+                                    } catch (e) {}
+                                }
+                                try {
+                                    await _idb.setItem(_firstRunCleanKey, '1');
+                                    _mem[_firstRunCleanKey] = '1';
+                                    if (_hasLS) localStorage.setItem(_firstRunCleanKey, '1');
+                                } catch (e) {}
+                            }
 
                             var idbKeys = await _idb.keys();
 

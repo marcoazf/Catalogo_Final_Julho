@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineCatalog Elo | v32.2.0 - Versão Limpa</title>
+    
+    <!-- PWA MANIFEST -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#3b82f6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CineCatalog">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- RECURSOS EXTERNOS -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%200%20100%20100%22><text y=%22.9em%22 font-size=%2290%22>🎬</text></svg>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/tailwind.css">
+</head>
+<body class="antialiased custom-scroll">
+
+    <!-- [BLOCO 3: HEADER COMPLETO] -->
+    <header class="px-6 py-2 flex items-center justify-between">
+        <div id="logo-img" class="logo-header" style="display:flex;align-items:center"><img src="cinecatalogo.png" alt="CineCatalog Elo" style="height:100%;width:auto;object-fit:contain"></div>
+
+        <div class="flex items-center gap-1.5">
+            <button data-onclick="UI.toggleSearchBar()" class="btn-icon" title="Pesquisar"><i class="fas fa-search text-xs"></i></button>
+
+            <button data-onclick="UI.openGenerateList()" id="btn-generate-list" class="btn-icon" title="Gerar Lista"><i class="fas fa-print text-xs"></i></button>
+
+            <nav class="flex gap-1 theme-bg-input p-1 rounded-full theme-border">
+                <span data-onclick="Logic.setMainView('filmes')" id="link-filmes" class="nav-link active">Filmes</span>
+                <span data-onclick="Logic.setMainView('series')" id="link-series" class="nav-link">Séries</span>
+                <span data-onclick="Logic.setMainView('estreias')" id="link-estreias" class="nav-link">Estreias</span>
+            </nav>
+
+            <button data-onclick="UI.openModal('modal-cadastro')" class="btn-cadastrar bg-blue-600 text-white px-4 py-2 rounded-full font-black hover:bg-blue-700 transition uppercase tracking-widest shadow-lg shrink-0">
+                <i class="fas fa-plus mr-1"></i> Cadastrar
+            </button>
+
+            <div class="hidden lg:flex items-center gap-1.5">
+                <div class="flex theme-bg-input rounded-full p-1 theme-border gap-0.5">
+                    <button data-onclick="UI.setZoom(1)" id="z1" class="zoom-btn active" title="Zoom 1X (5 colunas)">1X</button>
+                    <button data-onclick="UI.setZoom(2)" id="z2" class="zoom-btn" title="Zoom 2X (6 colunas)">2X</button>
+                    <button data-onclick="UI.setZoom(3)" id="z3" class="zoom-btn" title="Zoom 3X (7 colunas)">3X</button>
+                    <button data-onclick="UI.setZoom(4)" id="z4" class="zoom-btn" title="Zoom 4X (8 colunas)">4X</button>
+                </div>
+
+                <button data-onclick="Logic.openDashboard()" id="btn-dashboard" class="btn-icon" title="Dashboard"><i class="fas fa-chart-pie text-xs"></i></button>
+
+                <div class="relative">
+                    <button data-onclick="UI.toggleFilters()" id="btn-filters" class="btn-icon" title="Filtros"><i class="fas fa-filter text-xs"></i></button>
+                    <div id="filters-dropdown" class="hidden absolute top-full right-0 mt-2 theme-bg-input theme-border rounded-xl p-2 shadow-2xl z-[110]">
+                        <div class="mb-2">
+                            <label class="text-xs font-black uppercase tracking-widest text-gray-500">ORDENAR POR</label>
+                            <select id="sort-select" class="w-full theme-bg-input theme-border rounded-lg p-2 text-sm">
+                                <option value="title">Título</option>
+                                <option value="year">Ano</option>
+                                <option value="rating">Avaliação</option>
+                                <option value="date">Data de Cadastro</option>
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <label class="text-xs font-black uppercase tracking-widest text-gray-500">FILTRAR POR</label>
+                            <select id="filter-select" class="w-full theme-bg-input theme-border rounded-lg p-2 text-sm">
+                                <option value="all">Todos</option>
+                                <option value="movie">Filmes</option>
+                                <option value="series">Séries</option>
+                                <option value="estreia">Estreias</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <button data-onclick="UI.toggleThemeMenu()" id="btn-theme" class="btn-icon" title="Temas"><i class="fas fa-moon text-xs" id="theme-icon"></i></button>
+                    <div id="theme-menu" class="hidden absolute top-full right-0 mt-2 theme-bg-input theme-border rounded-xl p-2 shadow-2xl z-[110]">
+                        <button data-onclick="Logic.setTheme('light')" class="theme-option w-full text-left p-2 rounded hover:bg-gray-100">☀️ Claro</button>
+                        <button data-onclick="Logic.setTheme('dark')" class="theme-option w-full text-left p-2 rounded hover:bg-gray-100">🌙 Escuro</button>
+                        <button data-onclick="Logic.setTheme('auto')" class="theme-option w-full text-left p-2 rounded hover:bg-gray-100">🌓 Automático</button>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <button data-onclick="UI.toggleNotifications()" id="btn-notifications" class="btn-icon relative" title="Notificações">
+                        <i class="fas fa-bell text-xs"></i>
+                        <span id="notification-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center hidden">0</span>
+                    </button>
+                    <div id="notification-panel" class="hidden absolute top-full right-0 mt-2 theme-bg-input theme-border rounded-xl p-2 shadow-2xl z-[110] w-80">
+                        <div class="text-xs font-black uppercase tracking-widest text-gray-500 mb-2">NOTIFICAÇÕES</div>
+                        <div id="notification-list" class="max-h-64 overflow-y-auto">
+                            <div class="text-center text-gray-500 py-4">Nenhuma notificação</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <button data-onclick="UI.toggleReminderPanel()" id="btn-reminders" class="btn-icon relative" title="Lembretes">
+                        <i class="fas fa-clock text-xs"></i>
+                        <span id="reminder-badge" class="absolute -top-1 -right-1 bg-blue-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center hidden">0</span>
+                    </button>
+                    <div id="reminder-panel" class="hidden absolute top-full right-0 mt-2 theme-bg-input theme-border rounded-xl p-2 shadow-2xl z-[110] w-80">
+                        <div class="text-xs font-black uppercase tracking-widest text-gray-500 mb-2">LEMBRETES</div>
+                        <div id="reminder-list" class="max-h-64 overflow-y-auto">
+                            <div class="text-center text-gray-500 py-4">Nenhum lembrete</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-1">
+                    <button data-onclick="Logic.exportData()" class="btn-icon" style="width:31px;height:31px;border:none" title="Exportar"><i class="fas fa-download text-[9px]"></i></button>
+                    <label class="btn-icon" style="width:31px;height:31px;border:none;cursor:pointer" title="Importar">
+                        <input type="file" id="import-file" class="hidden" accept=".json">
+                        <i class="fas fa-upload text-[9px]"></i>
+                    </label>
+                </div>
+
+                <button data-onclick="UI.openCadastroLog()" id="btn-cadastro-log" class="btn-icon" title="Histórico de Cadastro"><i class="fas fa-clipboard-list text-xs"></i></button>
+                <button data-onclick="UI.openConfig()" id="btn-config" class="btn-icon" title="Configurações"><i class="fas fa-cog text-xs"></i></button>
+                <button data-onclick="UI.toggleModal('modal-info')" id="btn-info" class="btn-icon" title="Funcionalidades"><i class="fas fa-info-circle text-xs"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <!-- [BLOCO 4: BARRA DE PESQUISA] -->
+    <div id="search-bar-container" class="hidden px-6 py-3 border-b theme-border">
+        <div class="flex items-center gap-3">
+            <button data-onclick="UI.toggleSearchBar()" class="btn-icon"><i class="fas fa-arrow-left text-xs"></i></button>
+            <input type="text" id="main-search" placeholder="pesquise títulos, diretores, elencos, ... (use + busca booleana)" class="w-full theme-bg-input theme-border rounded-2xl py-2.5 pl-12 pr-20 outline-none text-sm">
+            <button data-onclick="UI.clearSearch()" class="btn-icon"><i class="fas fa-times text-xs"></i></button>
+        </div>
+    </div>
+
+    <!-- [BLOCO 5: CONTEÚDO PRINCIPAL] -->
+    <main class="px-6 py-4">
+        <!-- [BLOCO 5.1: FILTROS E CONTADORES] -->
+        <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-4">
+                <div class="text-sm">
+                    <span id="total-count" class="font-black">0</span> 
+                    <span id="total-label" class="text-gray-500">filmes</span>
+                </div>
+                <div class="text-sm text-gray-500">
+                    <span id="filtered-count">0</span> filtrados
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button data-onclick="Logic.setViewMode('grid')" id="view-grid" class="view-btn active" title="Grade"><i class="fas fa-th"></i></button>
+                <button data-onclick="Logic.setViewMode('carrossel')" id="view-carrossel" class="view-btn" title="Carrossel"><i class="fas fa-film"></i></button>
+                <button data-onclick="Logic.setViewMode('marquee')" id="view-marquee" class="view-btn" title="Rolagem"><i class="fas fa-stream"></i></button>
+            </div>
+        </div>
+
+        <!-- [BLOCO 5.2: CONTAINER DE FILMES] -->
+        <div id="movies-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+            <!-- Cards serão inseridos aqui dinamicamente -->
+        </div>
+
+        <!-- [BLOCO 5.3: ESTADO VAZIO] -->
+        <div id="empty-state" class="text-center py-16">
+            <i class="fas fa-film text-6xl text-gray-300 mb-4"></i>
+            <h3 class="text-xl font-black mb-2">Seu acervo está vazio</h3>
+            <p class="text-gray-500 mb-6">Comece cadastrando seu primeiro filme!</p>
+            <button data-onclick="UI.openModal('modal-cadastro')" class="bg-blue-600 text-white px-6 py-3 rounded-full font-black hover:bg-blue-700 transition uppercase tracking-widest">
+                <i class="fas fa-plus mr-2"></i> Cadastrar Filme
+            </button>
+        </div>
+    </main>
+
+    <!-- [BLOCO 6: MODAIS] -->
+    <!-- Modal de Cadastro -->
+    <div id="modal-cadastro" class="modal fixed inset-0 bg-black bg-opacity-50 hidden z-[100] flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+            <div class="p-6 border-b">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-black">Cadastrar Filme</h2>
+                    <button data-onclick="UI.closeModal('modal-cadastro')" class="btn-close"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="p-6 overflow-y-auto custom-scroll" style="max-height:60vh">
+                <form id="cadastro-form">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-black mb-2">Título *</label>
+                            <input type="text" id="f-title" class="w-full theme-bg-input theme-border rounded-lg p-3" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-black mb-2">Ano</label>
+                            <input type="number" id="f-year" class="w-full theme-bg-input theme-border rounded-lg p-3" min="1900" max="2030">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-black mb-2">Diretor</label>
+                            <input type="text" id="f-director" class="w-full theme-bg-input theme-border rounded-lg p-3">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-black mb-2">Duração (min)</label>
+                            <input type="number" id="f-duration" class="w-full theme-bg-input theme-border rounded-lg p-3" min="1">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-black mb-2">Gênero</label>
+                            <select id="f-category" class="w-full theme-bg-input theme-border rounded-lg p-3">
+                                <option value="">Selecione...</option>
+                                <option value="ação">Ação</option>
+                                <option value="aventura">Aventura</option>
+                                <option value="comédia">Comédia</option>
+                                <option value="drama">Drama</option>
+                                <option value="terror">Terror</option>
+                                <option value="ficção científica">Ficção Científica</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-black mb-2">Avaliação</label>
+                            <div class="flex items-center gap-1">
+                                <div id="star-input-container" class="flex gap-1">
+                                    <i class="fas fa-star text-gray-300 cursor-pointer" data-v="1"></i>
+                                    <i class="fas fa-star text-gray-300 cursor-pointer" data-v="2"></i>
+                                    <i class="fas fa-star text-gray-300 cursor-pointer" data-v="3"></i>
+                                    <i class="fas fa-star text-gray-300 cursor-pointer" data-v="4"></i>
+                                    <i class="fas fa-star text-gray-300 cursor-pointer" data-v="5"></i>
+                                </div>
+                                <input type="hidden" id="f-stars" value="0">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-black mb-2">Sinopse</label>
+                        <textarea id="f-synopsis" class="w-full theme-bg-input theme-border rounded-lg p-3" rows="4"></textarea>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-black mb-2">Capa</label>
+                        <div class="flex items-center gap-4">
+                            <input type="file" id="f-poster" class="hidden" accept="image/*">
+                            <button data-onclick="UI.pickPoster('f')" class="btn-icon" title="Escolher capa"><i class="fas fa-image"></i></button>
+                            <div id="f-poster-preview" class="w-20 h-28 bg-gray-200 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-film text-gray-400"></i>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="p-6 border-t flex justify-end gap-3">
+                <button data-onclick="UI.closeModal('modal-cadastro')" class="px-4 py-2 border rounded-lg hover:bg-gray-50">Cancelar</button>
+                <button data-onclick="UI.saveMovie()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- [BLOCO 8: NÚCLEO DE LÓGICA] -->
+    <script src="js/vendor/localforage.min.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/images.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/render.js"></script>
+    <script src="js/logic.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/globals.js"></script>
+    <script src="js/accessibility.js"></script>
+    <script src="js/alt-bind.js"></script>
+    <script src="js/autosave.js"></script>
+    
+    <!-- SCRIPT DE LIMPEZA ACERVO -->
+    <script>
+        // Limpa o acervo ao carregar
+        console.log('Limpando acervo para versão de teste...');
+        localStorage.clear();
+        if (typeof localforage !== 'undefined') {
+            localforage.clear().then(() => {
+                console.log('Acervo limpo!');
+                // Inicializa o app com dados vazios
+                if (typeof window.APP_STATE !== 'undefined') {
+                    window.APP_STATE.movies = [];
+                    window.APP_STATE.currentView = 'filmes';
+                    window.APP_STATE.activeFilter = 'all';
+                    window.APP_STATE.searchQuery = '';
+                }
+            });
+        }
+    </script>
+    
+    <!-- SERVICE WORKER PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>

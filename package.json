@@ -1,8 +1,8 @@
 {
   "name": "cinecatalog-elo",
-  "version": "32.3.0",
+  "version": "32.9.0",
   "private": true,
-  "description": "CineCatalog Elo - refatoração da fase correções cirúrgicas 01 (monólito -> modular, com testes)",
+  "description": "CineCatalog Elo - Player Engine HTML implementado, melhorias de interface e otimizações",
   "main": "electron/main.js",
   "scripts": {
     "test": "playwright test",
@@ -18,6 +18,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.49.0",
+    "asar": "^3.2.0",
     "electron": "^31.7.7",
     "electron-builder": "^24.13.3",
     "localforage": "^1.10.0",
@@ -34,6 +35,7 @@
     "files": [
       "index.html",
       "manual_do_catalogo.html",
+      "player.html",
       "favicon_catalogo.svg",
       "sw.js",
       "manifest.json",
@@ -48,7 +50,7 @@
         "nsis"
       ],
       "icon": "build/icon.ico",
-      "artifactName": "CineCatalog_Elo_Setup_${version}.${ext}",
+      "artifactName": "CineCatalog_Elo_Setup_32.9.0.${ext}",
       "signAndEditExecutable": false
     },
     "nsis": {

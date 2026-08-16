@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste App Principal - CineCatalog Elo</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .btn { padding: 10px 20px; margin: 5px; cursor: pointer; border: 1px solid #ccc; border-radius: 5px; }
+        .status { margin: 10px 0; padding: 10px; background: #e8f5e8; border-radius: 5px; border-left: 4px solid #4caf50; }
+        .error { background: #ffebee; border-left-color: #f44336; }
+        .search-container { 
+            background: #f5f5f5; 
+            border: 1px solid #ddd; 
+            padding: 15px; 
+            margin: 10px 0; 
+            max-height: 0; 
+            overflow: hidden; 
+            transition: all 0.3s ease;
+        }
+        .search-container.active { 
+            max-height: 100px; 
+            padding: 15px;
+        }
+        #main-search { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        .log { background: #f9f9f9; padding: 10px; border-radius: 5px; max-height: 300px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <h1>🎬 Teste App Principal - CineCatalog Elo</h1>
+    
+    <div class="status" id="status">
+        Status: Aguardando teste...
+    </div>
+    
+    <div>
+        <button class="btn" onclick="testAppPrincipal()">
+            <i class="fas fa-play"></i> Testar App Principal
+        </button>
+        
+        <button class="btn" onclick="testSearchBar()">
+            <i class="fas fa-search"></i> Testar Barra de Pesquisa
+        </button>
+        
+        <button class="btn" onclick="testCadastro()">
+            <i class="fas fa-plus"></i> Testar Cadastro
+        </button>
+        
+        <button class="btn" onclick="checkBinding()">
+            <i class="fas fa-link"></i> Verificar Binding
+        </button>
+        
+        <button class="btn" onclick="clearLog()">
+            <i class="fas fa-trash"></i> Limpar Log
+        </button>
+    </div>
+    
+    <div class="search-container" id="search-bar-container">
+        <input type="text" id="main-search" placeholder="Digite para pesquisar...">
+        <button class="btn" onclick="clearSearch()">Limpar</button>
+    </div>
+    
+    <h3>📋 Log de Testes</h3>
+    <div id="log" class="log"></div>
+
+    <!-- Carrega scripts principais -->
+    <script src="js/vendor/localforage.min.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/images.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/render.js"></script>
+    <script src="js/logic.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/globals.js"></script>
+    <script src="js/accessibility.js"></script>
+    <script src="js/final-bind.js"></script>
+    <script src="js/autosave.js"></script>
+    
+    <script>
+        function updateStatus(message, isError = false) {
+            const status = document.getElementById('status');
+            status.textContent = 'Status: ' + message;
+            status.className = isError ? 'status error' : 'status';
+        }
+        
+        function addLog(message) {
+            const log = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            log.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+            addLog('Log limpo');
+        }
+        
+        function testAppPrincipal() {
+            addLog('🧪 Iniciando teste do app principal...');
+            
+            // Limpa dados
+            localStorage.clear();
+            if (typeof localforage !== 'undefined') {
+                localforage.clear().then(() => {
+                    addLog('✅ Dados limpos');
+                    
+                    // Verifica APP_STATE
+                    if (typeof window.APP_STATE !== 'undefined') {
+                        window.APP_STATE.movies = [];
+                        window.APP_STATE.currentView = 'filmes';
+                        window.APP_STATE.activeFilter = 'all';
+                        window.APP_STATE.searchQuery = '';
+                        window.APP_STATE.searchTimer = null;
+                        window.APP_STATE.selectedId = null;
+                        window.APP_STATE._editingId = null;
+                        addLog('✅ APP_STATE reiniciado');
+                        
+                        // Verifica Render
+                        if (typeof window.Render !== 'undefined') {
+                            window.Render.all();
+                            addLog('✅ Interface renderizada');
+                            updateStatus('App principal testado com sucesso!');
+                        } else {
+                            addLog('❌ Render não encontrado');
+                            updateStatus('Erro: Render não encontrado', true);
+                        }
+                    } else {
+                        addLog('❌ APP_STATE não encontrado');
+                        updateStatus('Erro: APP_STATE não encontrado', true);
+                    }
+                });
+            }
+        }
+        
+        function testSearchBar() {
+            addLog('🔍 Testando barra de pesquisa...');
+            
+            const searchBtn = document.querySelector('[data-onclick*="toggleSearchBar"]');
+            const searchContainer = document.getElementById('search-bar-container');
+            const searchInput = document.getElementById('main-search');
+            
+            if (!searchBtn) {
+                addLog('❌ Botão de pesquisa não encontrado');
+                updateStatus('Erro: Botão de pesquisa não encontrado', true);
+                return;
+            }
+            
+            addLog('✅ Botão de pesquisa encontrado');
+            
+            // Testa abrir
+            searchBtn.click();
+            addLog('✅ Botão clicado');
+            
+            setTimeout(() => {
+                if (searchContainer.classList.contains('active')) {
+                    addLog('✅ Barra aberta');
+                    
+                    // Testa digitar
+                    searchInput.value = 'teste';
+                    searchInput.dispatchEvent(new Event('input'));
+                    addLog('✅ Texto digitado: ' + searchInput.value);
+                    
+                    // Testa limpar
+                    setTimeout(() => {
+                        searchInput.value = '';
+                        searchInput.dispatchEvent(new Event('input'));
+                        addLog('✅ Busca limpa');
+                        
+                        // Testa fechar
+                        searchBtn.click();
+                        addLog('✅ Barra fechada');
+                        updateStatus('Barra de pesquisa testada com sucesso!');
+                    }, 1000);
+                } else {
+                    addLog('❌ Barra não abriu');
+                    updateStatus('Erro: Barra não abriu', true);
+                }
+            }, 500);
+        }
+        
+        function testCadastro() {
+            addLog('📝 Testando cadastro...');
+            
+            const addBtn = document.querySelector('[data-onclick*="openModal"]');
+            if (addBtn) {
+                addLog('✅ Botão de cadastro encontrado');
+                addBtn.click();
+                addLog('✅ Modal de cadastro aberto');
+                updateStatus('Cadastro testado com sucesso!');
+            } else {
+                addLog('❌ Botão de cadastro não encontrado');
+                updateStatus('Erro: Botão de cadastro não encontrado', true);
+            }
+        }
+        
+        function checkBinding() {
+            addLog('🔗 Verificando binding...');
+            
+            const elements = document.querySelectorAll('[data-on*]');
+            addLog(`Elementos com data-on*: ${elements.length}`);
+            
+            if (elements.length > 0) {
+                addLog('❌ Ainda existem elementos não vinculados:');
+                elements.forEach(el => {
+                    addLog(`- ${el.tagName}: ${el.outerHTML}`);
+                });
+                updateStatus('Erro: Elementos não vinculados encontrados', true);
+            } else {
+                addLog('✅ Todos elementos vinculados!');
+                updateStatus('Binding verificado com sucesso!');
+            }
+        }
+        
+        function clearSearch() {
+            const searchInput = document.getElementById('main-search');
+            searchInput.value = '';
+            updateStatus('Busca limpa manualmente');
+        }
+        
+        // Auto-teste
+        window.addEventListener('load', () => {
+            updateStatus('Página carregada - pronto para testes');
+            addLog('🚀 Página de teste carregada');
+            
+            setTimeout(() => {
+                addLog('Executando auto-teste...');
+                testAppPrincipal();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+Retome o trabalho de refatoração do CineCatalog Elo v32.2.0 (diretório atual). Leia primeiro o documento.md (log vivo) e siga exatamente o que está lá — faça a etapa pendente atual, a Etapa 3b: capas deixam de ser DataURL e viram Blob armazenadas no IndexedDB (via Store/localForage).
+Antes de codar:
+1. 
+Leia documento.md na íntegra (roteiro, log de passos, log de bugs) e o Diagnostico01.md.
+2. 
+Confira git log --oneline -5 e git status — o último commit deve ser 614d0b6 (etapa 3a).
+3. 
+Estude os pontos de uso de imagem/capa: js/render.js (createCard usa data.image), js/ui.js (troca/remoção de poster, linhas ~470/503), js/logic.js (cadastro/edição) e a camada js/store.js.
+Regras obrigatórias:
+- 
+Uma etapa só é concluída com npx playwright test VERDE (9/9) + commit com mensagem descritiva no padrão etapa 3b - ....
+- 
+Mexer em imagem exige cuidado: mantenha compatibilidade com dados legados (DataURL existentes continuam funcionando) e considere atualizar o teste de persistência se o formato mudar.
+- 
+Atualize documento.md a cada passo: log da etapa, bugs/correções (formato da tabela), e desmarque/marque os checkboxes do roteiro.
+- 
+Edite sempre preservando UTF-8 (use Node/ferramentas de edição, nunca PowerShell Set-Content para reescrever arquivos JS com acentos).
+- 
+Se algo falhar no teste, investigue a causa raiz e registre no log de bugs antes de corrigir.
+- 
+Ao terminar, me resuma o que foi feito, o commit, e qual a próxima etapa.
+Se a 3b for muito extensa, avise e divida em sub-etapas testáveis — não tente tudo de uma vez.

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineCatalog Elo - Versão de Teste</title>
+    
+    <!-- CSS Simples -->
+    <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --text-color: #ffffff;
+            --header-bg: #2d2d2d;
+            --card-bg: #3d3d3d;
+            --input-bg: #4d4d4d;
+            --border-color: #555555;
+            --accent-blue: #3b82f6;
+            --text-secondary: #cccccc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--header-bg);
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-blue);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            background: var(--input-bg);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .nav-link.active {
+            background: var(--accent-blue);
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+        }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--input-bg);
+            border: none;
+            color: var(--text-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Search Bar */
+        .search-container {
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem;
+            display: none;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-container.active {
+            display: flex;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat {
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .movie-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .movie-poster {
+            width: 100%;
+            height: 280px;
+            background: var(--input-bg);
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+
+        .movie-title {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .movie-info {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--header-bg);
+            border-radius: 10px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            color: var(--text-color);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state h2 {
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .movies-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">🎬 CineCatalog Elo</div>
+        <div class="nav-links">
+            <div class="nav-link active" data-view="filmes">Filmes</div>
+            <div class="nav-link" data-view="series">Séries</div>
+            <div class="nav-link" data-view="estreias">Estreias</div>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+            <button class="btn-icon" id="search-btn" title="Pesquisar">🔍</button>
+            <button class="btn" id="add-btn">+ Cadastrar</button>
+        </div>
+    </header>
+
+    <!-- Search Bar -->
+    <div class="search-container" id="search-container">
+        <button class="btn-icon" id="search-close">←</button>
+        <input type="text" class="search-input" id="search-input" placeholder="Pesquisar filmes, séries...">
+    </div>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="stats">
+            <div class="stat">
+                <div style="font-size: 2rem; font-weight: bold;" id="total-count">0</div>
+                <div>Total</div>
+            </div>
+            <div class="stat">
+                <div style="font-size: 2rem; font-weight: bold;" id="filtered-count">0</div>
+                <div>Filtrados</div>
+            </div>
+        </div>
+
+        <div class="movies-grid" id="movies-grid">
+            <!-- Movies will be inserted here -->
+        </div>
+
+        <div class="empty-state" id="empty-state">
+            <h2>Seu acervo está vazio</h2>
+            <p>Comece cadastrando seu primeiro filme!</p>
+            <button class="btn" id="add-empty-btn">Cadastrar Filme</button>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h2 style="margin-bottom: 1.5rem;">Cadastrar Filme</h2>
+            <form id="movie-form">
+                <div class="form-group">
+                    <label class="form-label">Título *</label>
+                    <input type="text" class="form-input" id="title" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Ano</label>
+                    <input type="number" class="form-input" id="year" min="1900" max="2030">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Diretor</label>
+                    <input type="text" class="form-input" id="director">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Gênero</label>
+                    <input type="text" class="form-input" id="genre">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn" id="cancel-btn" style="background: #666;">Cancelar</button>
+                    <button type="submit" class="btn">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // App State
+        const APP_STATE = {
+            movies: [],
+            currentView: 'filmes',
+            searchQuery: '',
+            filteredMovies: []
+        };
+
+        // DOM Elements
+        const elements = {
+            searchBtn: document.getElementById('search-btn'),
+            searchContainer: document.getElementById('search-container'),
+            searchClose: document.getElementById('search-close'),
+            searchInput: document.getElementById('search-input'),
+            addBtn: document.getElementById('add-btn'),
+            addEmptyBtn: document.getElementById('add-empty-btn'),
+            modal: document.getElementById('modal'),
+            movieForm: document.getElementById('movie-form'),
+            cancelBtn: document.getElementById('cancel-btn'),
+            moviesGrid: document.getElementById('movies-grid'),
+            emptyState: document.getElementById('empty-state'),
+            totalCount: document.getElementById('total-count'),
+            filteredCount: document.getElementById('filtered-count')
+        };
+
+        // Initialize
+        function init() {
+            // Clear any existing data
+            localStorage.clear();
+            APP_STATE.movies = [];
+            APP_STATE.filteredMovies = [];
+            
+            setupEventListeners();
+            updateDisplay();
+        }
+
+        // Event Listeners
+        function setupEventListeners() {
+            // Search
+            elements.searchBtn.addEventListener('click', toggleSearch);
+            elements.searchClose.addEventListener('click', toggleSearch);
+            elements.searchInput.addEventListener('input', handleSearch);
+
+            // Navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const view = e.target.dataset.view;
+                    setView(view);
+                });
+            });
+
+            // Modal
+            elements.addBtn.addEventListener('click', openModal);
+            elements.addEmptyBtn.addEventListener('click', openModal);
+            elements.cancelBtn.addEventListener('click', closeModal);
+            elements.modal.addEventListener('click', (e) => {
+                if (e.target === elements.modal) closeModal();
+            });
+
+            // Form
+            elements.movieForm.addEventListener('submit', handleSave);
+        }
+
+        // Functions
+        function toggleSearch() {
+            const isActive = elements.searchContainer.classList.contains('active');
+            elements.searchContainer.classList.toggle('active');
+            elements.searchBtn.classList.toggle('active');
+            
+            if (!isActive) {
+                elements.searchInput.focus();
+            }
+        }
+
+        function handleSearch(e) {
+            const query = e.target.value.toLowerCase();
+            APP_STATE.searchQuery = query;
+            
+            if (query.length < 2) {
+                APP_STATE.filteredMovies = [...APP_STATE.movies];
+            } else {
+                APP_STATE.filteredMovies = APP_STATE.movies.filter(movie =>
+                    movie.title.toLowerCase().includes(query) ||
+                    movie.director?.toLowerCase().includes(query) ||
+                    movie.genre?.toLowerCase().includes(query)
+                );
+            }
+            
+            updateDisplay();
+        }
+
+        function setView(view) {
+            APP_STATE.currentView = view;
+            
+            // Update nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.toggle('active', link.dataset.view === view);
+            });
+            
+            updateDisplay();
+        }
+
+        function openModal() {
+            elements.modal.classList.add('active');
+            elements.movieForm.reset();
+        }
+
+        function closeModal() {
+            elements.modal.classList.remove('active');
+        }
+
+        function handleSave(e) {
+            e.preventDefault();
+            
+            const movie = {
+                id: Date.now(),
+                title: document.getElementById('title').value,
+                year: document.getElementById('year').value,
+                director: document.getElementById('director').value,
+                genre: document.getElementById('genre').value,
+                view: APP_STATE.currentView
+            };
+            
+            APP_STATE.movies.push(movie);
+            APP_STATE.filteredMovies = [...APP_STATE.movies];
+            
+            closeModal();
+            updateDisplay();
+            
+            // Save to localStorage
+            localStorage.setItem('cinecatalog_test', JSON.stringify(APP_STATE.movies));
+        }
+
+        function updateDisplay() {
+            // Update counts
+            elements.totalCount.textContent = APP_STATE.movies.length;
+            elements.filteredCount.textContent = APP_STATE.filteredMovies.length;
+            
+            // Filter by current view
+            const viewMovies = APP_STATE.filteredMovies.filter(movie => movie.view === APP_STATE.currentView);
+            
+            // Show/hide empty state
+            if (viewMovies.length === 0) {
+                elements.emptyState.style.display = 'block';
+                elements.moviesGrid.style.display = 'none';
+            } else {
+                elements.emptyState.style.display = 'none';
+                elements.moviesGrid.style.display = 'grid';
+            }
+            
+            // Render movies
+            elements.moviesGrid.innerHTML = viewMovies.map(movie => `
+                <div class="movie-card" data-id="${movie.id}">
+                    <div class="movie-poster">
+                        <span style="font-size: 3rem;">🎬</span>
+                    </div>
+                    <div class="movie-title">${movie.title}</div>
+                    <div class="movie-info">
+                        ${movie.year ? `${movie.year} • ` : ''}${movie.director || 'Sem diretor'}
+                    </div>
+                    <div class="movie-info">${movie.genre || 'Sem gênero'}</div>
+                </div>
+            `).join('');
+        }
+
+        // Start the app
+        init();
+    </script>
+</body>
+</html>

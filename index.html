@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CineCatalog Elo | v32.3.0 - Edição Premium</title>
+    <title>CineCatalog Elo | v32.9.0 - Edição Premium</title>
     
     <!-- PWA MANIFEST -->
     <link rel="manifest" href="manifest.json">
@@ -179,7 +179,7 @@
     <footer class="px-6 py-2 border-t theme-border flex justify-between items-center bg-black/20">
         <div class="flex items-center gap-0" style="flex-wrap:nowrap">
             <div class="text-[0.75rem] text-gray-400 uppercase tracking-widest font-medium whitespace-nowrap" id="footer-dev-text">
-                ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CRIADO PARA JONAS THEODORO</span> | <span id="app-version-badge" style="color:#C7D2FE;font-size:0.8rem;font-weight:600;text-shadow:0 0 16px rgba(165,180,252,0.5)">v32.3.0</span>
+                 ELO SISTEMA E TECNOLOGIA | 2026 - <span class="opacity-50">CRIADO PARA JONAS THEODORO</span> | <span id="app-version-badge" style="color:#C7D2FE;font-size:0.8rem;font-weight:600;text-shadow:0 0 16px rgba(165,180,252,0.5)">v32.9.0</span>
             </div>
         </div>
         <div id="user-action-status" class="text-[0.75rem] text-emerald-500 font-bold uppercase opacity-0 pointer-events-none transition-opacity duration-300"></div>
@@ -1273,6 +1273,22 @@
                         </label>
                     </div>
                     <div class="config-row">
+                        <label>Backup Geral</label>
+                        <div style="display:flex;gap:0.5rem;flex:1;align-items:center">
+                            <input type="text" id="cfg-backup-geral-name" class="field-premium" placeholder="Nome do backup" style="flex:0 0 35%;font-size:12px" data-oninput="UI._updateConfigPreview()">
+                            <input type="text" id="cfg-path-backup-geral" class="field-premium" placeholder="C:\Users\...\Backup Geral" style="flex:1;font-size:12px" data-oninput="UI._onPathInput('cfg-path-backup-geral','cfg-path-backup-geral-active')">
+                        </div>
+                        <button data-onclick="UI.pickFolder('cfg-path-backup-geral')" class="input-icon-btn" title="Selecionar pasta"><i class="fas fa-folder-open"></i></button>
+                        <label class="config-switch">
+                            <input type="checkbox" id="cfg-path-backup-geral-active">
+                            <span class="slider"></span>
+                            <span class="switch-label">ATIVAR</span>
+                        </label>
+                    </div>
+                    <div style="font-size:0.65rem;color:var(--text-secondary);margin-top:0.1rem;margin-bottom:0.5rem;padding-left:80px">
+                        <i class="fas fa-info-circle mr-1"></i>Salva automaticamente, em um único arquivo, todas as configurações e todo o acervo cadastrado.
+                    </div>
+                    <div class="config-row">
                         <label>Acervo Geral</label>
                         <div style="display:flex;gap:0.5rem;flex:1;align-items:center">
                             <input type="text" id="cfg-acervo-backup-name" class="field-premium" placeholder="Nome do backup" style="flex:0 0 35%;font-size:12px" data-oninput="UI._updateConfigPreview()">
@@ -1543,7 +1559,7 @@
                     <span class="text-[1rem] font-black uppercase tracking-widest" style="color:var(--text-color);-webkit-text-fill-color:var(--text-color)">FUNCIONALIDADES</span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button data-onclick="window.open('manual_do_catalogo.html','_blank')" class="flex items-center gap-2 px-3 py-1.5 rounded-full text-[0.65rem] font-black uppercase tracking-wider transition-all" style="background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;box-shadow:0 4px 15px rgba(59,130,246,0.35);cursor:pointer;border:none" data-onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 25px rgba(59,130,246,0.5)'" data-onmouseout="this.style.transform='';this.style.boxShadow='0 4px 15px rgba(59,130,246,0.35)'" title="Abrir Manual do Catálogo em nova aba">
+                    <button data-onclick="window.open('manual_do_catalogo.html','_blank')" class="flex items-center gap-2 px-3 py-1.5 rounded-full text-[0.65rem] font-black uppercase tracking-wider transition-all" style="background:linear-gradient(135deg,#3B82F6,#8B5CF6);color:white;box-shadow:0 4px 15px rgba(59,130,246,0.35);cursor:pointer;border:none" data-onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 25px rgba(59,130,246,0.5)'" data-onmouseout="this.style.transform='';this.style.boxShadow='0 4px 15px rgba(59,130,246,0.35)'" title="Abrir Manual do Catálogo em nova aba maximizada em tela cheia">
                         <i class="fas fa-book-open" style="font-size:12px"></i>
                         <span>Manual</span>
                     </button>

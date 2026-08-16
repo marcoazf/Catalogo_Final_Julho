@@ -132,6 +132,30 @@
                     tel.style.setProperty('--tip-x', (e.clientX + 12) + 'px');
                     tel.style.setProperty('--tip-y', (e.clientY + 12) + 'px');
                 });
+                // Intercepta clique e abre no Player Engine com fullscreen
+                tel.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    var trailerUrl = tel.href;
+                    if (trailerUrl && typeof Logic !== 'undefined' && Logic.openMediaWithPlayer) {
+                        var title = tel.textContent || 'Trailer';
+                        Logic.openMediaWithPlayer(trailerUrl, 'filmes', title);
+                    }
+                });
+            });
+            //Intercepta clique em links de trailer na estreia e abre no Player Engine com fullscreen
+            document.addEventListener('click', function(e) {
+                var link = e.target.closest('.estreia-play-link');
+                if (link && link.href) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    var trailerUrl = link.href;
+                    var textNode = link.querySelector('i') ? link.querySelector('i').parentNode : link;
+                    var title = link.textContent || 'Trailer' || 'Estreia';
+                    if (typeof Logic !== 'undefined' && Logic.openMediaWithPlayer) {
+                        Logic.openMediaWithPlayer(trailerUrl, 'filmes', title);
+                    }
+                }
             });
             window.addEventListener('click', (e) => {
                 if (!e.target.closest('#context-menu')) Logic.closeCtxMenu();

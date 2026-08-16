@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste da Barra de Pesquisa</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .btn { padding: 10px 20px; margin: 5px; cursor: pointer; border: 1px solid #ccc; border-radius: 5px; }
+        .search-container { 
+            background: #f5f5f5; 
+            border: 1px solid #ddd; 
+            padding: 15px; 
+            margin: 10px 0; 
+            max-height: 0; 
+            overflow: hidden; 
+            transition: all 0.3s ease;
+        }
+        .search-container.active { 
+            max-height: 100px; 
+            padding: 15px;
+        }
+        #search-input { 
+            width: 100%; 
+            padding: 8px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+        }
+        .status { margin: 10px 0; padding: 10px; background: #f0f0f0; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Teste da Barra de Pesquisa</h1>
+    
+    <div class="status" id="status">Aguardando teste...</div>
+    
+    <button class="btn" onclick="testSearchBar()">Testar Barra de Pesquisa</button>
+    <button class="btn" onclick="checkBinding()">Verificar Binding</button>
+    <button class="btn" onclick="clearLog()">Limpar Log</button>
+    
+    <div class="search-container" id="search-container">
+        <input type="text" id="search-input" placeholder="Digite para pesquisar...">
+        <button class="btn" onclick="clearSearch()">Limpar</button>
+    </div>
+    
+    <div id="log"></div>
+
+    <script>
+        // Simula o UI.toggleSearchBar
+        window.UI = {
+            toggleSearchBar: function() {
+                console.log('[UI] toggleSearchBar chamado');
+                const container = document.getElementById('search-container');
+                container.classList.toggle('active');
+                updateStatus('Barra de pesquisa ' + (container.classList.contains('active') ? 'aberta' : 'fechada'));
+            }
+        };
+        
+        // Simula o UI.clearSearch
+        window.UI.clearSearch = function() {
+            console.log('[UI] clearSearch chamado');
+            const input = document.getElementById('search-input');
+            input.value = '';
+            updateStatus('Busca limpa');
+        };
+        
+        function updateStatus(message) {
+            document.getElementById('status').textContent = message;
+            addLog('Status: ' + message);
+        }
+        
+        function addLog(message) {
+            const log = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            log.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        function testSearchBar() {
+            addLog('Iniciando teste da barra de pesquisa...');
+            
+            // Verifica elementos
+            const searchBtn = document.querySelector('[onclick*="toggleSearchBar"]');
+            const container = document.getElementById('search-container');
+            const input = document.getElementById('search-input');
+            
+            addLog('Elementos encontrados: ' + 
+                (searchBtn ? 'btn_sim' : 'btn_não') + ', ' +
+                (container ? 'container_sim' : 'container_não') + ', ' +
+                (input ? 'input_sim' : 'input_não'));
+            
+            if (searchBtn) {
+                addLog('Clicando no botão...');
+                searchBtn.click();
+                
+                setTimeout(() => {
+                    if (container.classList.contains('active')) {
+                        addLog('✅ Barra aberta com sucesso!');
+                        
+                        // Testa digitação
+                        input.value = 'teste';
+                        input.dispatchEvent(new Event('input'));
+                        addLog('✅ Texto digitado: ' + input.value);
+                        
+                        // Testa limpeza
+                        setTimeout(() => {
+                            window.UI.clearSearch();
+                        }, 1000);
+                    } else {
+                        addLog('❌ Barra não abriu');
+                    }
+                }, 500);
+            } else {
+                addLog('❌ Botão não encontrado');
+            }
+        }
+        
+        function checkBinding() {
+            addLog('Verificando binding...');
+            
+            const elements = document.querySelectorAll('[data-on*]');
+            addLog(`Elementos com data-on*: ${elements.length}`);
+            
+            if (elements.length > 0) {
+                addLog('❌ Ainda existem elementos não vinculados:');
+                elements.forEach(el => {
+                    addLog(`- ${el.tagName}: ${el.outerHTML}`);
+                });
+            } else {
+                addLog('✅ Todos elementos vinculados!');
+            }
+        }
+        
+        function clearSearch() {
+            const input = document.getElementById('search-input');
+            input.value = '';
+            updateStatus('Busca limpa manualmente');
+        }
+        
+        // Auto-teste ao carregar
+        window.addEventListener('load', () => {
+            updateStatus('Página carregada - pronto para testes');
+            addLog('Página carregada');
+            
+            // Verifica binding inicial
+            setTimeout(checkBinding, 1000);
+        });
+    </script>
+</body>
+</html>

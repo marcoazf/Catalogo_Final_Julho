@@ -63,16 +63,58 @@
             }
         }
 
+        function _backupFileName(name, fallback) {
+            var n = (name || '').trim();
+            if (!n) return fallback;
+            return /\.json$/i.test(n) ? n : n + '.json';
+        }
+
         async function _autoSaveToFile() {
             var handle = await _getAcervoDirHandle();
             if (!handle) return;
-            await _writeJsonToHandle(handle, 'cinecatalog_autosave.json');
+            var cfg = window._appConfig || {};
+            var fileName = _backupFileName(cfg.acervoBackupName, 'cinecatalog_autosave.json');
+            await _writeJsonToHandle(handle, fileName);
         }
 
         async function _saveToAcervoFile() {
             var handle = await _getAcervoDirHandleForSave();
             if (!handle) return false;
-            return await _writeJsonToHandle(handle, 'cinecatalog_data.json');
+            var cfg = window._appConfig || {};
+            var fileName = _backupFileName(cfg.acervoBackupName, 'cinecatalog_data.json');
+            return await _writeJsonToHandle(handle, fileName);
+        }
+
+        // BACKUP GERAL (item d): um único arquivo com TODAS as configurações,
+        // categorias e todo o acervo (filmes, séries, estreias e lembretes).
+        async function _saveBackupGeralToFile() {
+            var cfg = window._appConfig;
+            if (!cfg || !cfg.pathBackupGeral || !cfg.pathBackupGeralActive) return false;
+            var targetPath = cfg.pathBackupGeral.trim();
+            if (_isElectron() && window.require) {
+                try {
+                    var fs = window.require('fs');
+                    var path = window.require('path');
+                    if (!fs.existsSync(targetPath)) return false;
+                    var fileName = _backupFileName(cfg.backupGeralName, 'CineCatalog_Backup_Geral.json');
+                    var payload = {
+                        app: 'CineCatalog Elo',
+                        version: '32.3.0',
+                        exportedAt: new Date().toISOString(),
+                        config: cfg,
+                        categories: (typeof Logic.getCategories === 'function') ? Logic.getCategories() : [],
+                        movies: APP_STATE.movies,
+                        theme: Store.getItem('cinecatalog_theme') || 'dark'
+                    };
+                    var fullPath = path.join(targetPath, fileName);
+                    fs.writeFileSync(fullPath, JSON.stringify(payload, null, 2), 'utf-8');
+                    return true;
+                } catch(e) {
+                    console.warn('Backup Geral save failed:', e);
+                    return false;
+                }
+            }
+            return false;
         }
 
         function _scheduleAutoSave() {
@@ -83,6 +125,7 @@
                     saveConfig();
                     var hasPath = (cfg.pathAcervo && cfg.pathAcervoActive);
                     if (hasPath) _autoSaveToFile();
+                    if (cfg.pathBackupGeral && cfg.pathBackupGeralActive) _saveBackupGeralToFile();
                 }
             }, 2000);
         }
@@ -419,7 +462,7 @@
                     sv('f-desc', last.desc || '');
                     sv('f-trailer-url', last.trailUrl || '');
                     sv('f-other-info', last.otherInfo || '');
-                    (function(){ var v = last.mediaFile || '', el = document.getElementById('f-media-url'); if (el) { try { var r = JSON.parse(v); el.value = r.name || ''; if (r.blob) el.dataset.ref = v; } catch(e) { el.value = v; } } })();
+                    (function(){ var v = last.mediaFile || '', el = document.getElementById('f-media-url'); if (el) { try { var r = JSON.parse(v); if (r.path && /^[A-Za-z]:[\\\/]/.test(r.path)) { el.value = r.name || r.path; el.dataset.path = r.path; delete el.dataset.ref; } else { el.value = r.name || r.path || ''; if (r.blob) el.dataset.ref = v; } } catch(e) { el.value = v; if (/^[A-Za-z]:[\\\/]/.test(v)) { el.dataset.path = v; delete el.dataset.ref; } } } })();
                     sv('f-category', last.genre || '');
                     sv('f-stars', last.stars || 0);
                     sc('f-status-new', last.statuses && last.statuses.new);

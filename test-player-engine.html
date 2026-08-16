@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Player Engine</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .btn { padding: 10px 20px; margin: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .btn:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>🎬 Teste Player Engine</h1>
+    <p>Teste se o Player Engine está funcionando:</p>
+    
+    <button class="btn" onclick="testYouTube()">Testar YouTube Trailer</button>
+    <button class="btn" onclick="testLocalFile()">Testar Arquivo Local</button>
+    <button class="btn" onclick="testPlayerEngine()">Testar Player Engine Direto</button>
+    
+    <div id="status" style="margin-top: 20px; padding: 10px; background: #f8f9fa; border-radius: 5px;"></div>
+
+    <script>
+        function log(message) {
+            const status = document.getElementById('status');
+            status.innerHTML += '<p>' + new Date().toLocaleTimeString() + ': ' + message + '</p>';
+        }
+
+        function testYouTube() {
+            log('Testando YouTube...');
+            if (window.electronAPI && window.electronAPI.playMedia) {
+                log('✅ electronAPI disponível');
+                window.electronAPI.playMedia({
+                    url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                    kind: 'trailer',
+                    title: 'Teste YouTube',
+                    forceFullscreen: true
+                }).then(() => {
+                    log('✅ YouTube chamado com sucesso');
+                }).catch(err => {
+                    log('❌ Erro YouTube: ' + err.message);
+                });
+            } else {
+                log('❌ electronAPI não disponível');
+            }
+        }
+
+        function testLocalFile() {
+            log('Testando arquivo local...');
+            if (window.electronAPI && window.electronAPI.playMedia) {
+                log('✅ electronAPI disponível');
+                // Substitua por um caminho real de arquivo
+                const testFile = 'C:\\teste.mp4';
+                window.electronAPI.playMedia({
+                    url: testFile,
+                    kind: 'file',
+                    title: 'Teste Arquivo Local',
+                    forceFullscreen: true
+                }).then(() => {
+                    log('✅ Arquivo local chamado com sucesso');
+                }).catch(err => {
+                    log('❌ Erro arquivo local: ' + err.message);
+                });
+            } else {
+                log('❌ electronAPI não disponível');
+            }
+        }
+
+        function testPlayerEngine() {
+            log('Testando Player Engine diretamente...');
+            // Abre o player.html diretamente
+            window.open('player.html?url=https://www.youtube.com/watch?v=dQw4w9WgXcQ&title=Teste+Player&isTrailer=true', '_blank');
+        }
+
+        // Verificar se electronAPI está disponível
+        window.addEventListener('load', () => {
+            if (window.electronAPI) {
+                log('✅ electronAPI está disponível');
+                if (window.electronAPI.playMedia) {
+                    log('✅ playMedia está disponível');
+                } else {
+                    log('❌ playMedia NÃO está disponível');
+                }
+            } else {
+                log('❌ electronAPI NÃO está disponível');
+                log('❌ A aplicação não está rodando no Electron');
+            }
+        });
+    </script>
+</body>
+</html>

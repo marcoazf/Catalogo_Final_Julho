@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Botão de Pesquisa</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .test-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+        }
+        .test-button {
+            background: linear-gradient(135deg, #3B82F6, #2563EB);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+        .test-button:active {
+            transform: translateY(0);
+        }
+        .search-bar-container {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.3s, opacity 0.3s;
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--border-color);
+            margin-top: 20px;
+        }
+        .search-bar-container.active {
+            max-height: 70px;
+            opacity: 1;
+            padding: 1rem 2rem;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Teste Botão de Pesquisa</h1>
+        <p>Este é um teste simples do botão de pesquisa.</p>
+
+        <button class="test-button" id="btn-test">Testar Botão de Pesquisa</button>
+        <button class="test-button" id="btn-reset">Resetar Teste</button>
+
+        <div class="search-bar-container" id="search-bar-container">
+            <div class="max-w-4xl mx-auto relative flex items-center">
+                <i class="fas fa-search absolute left-5 text-blue-500"></i>
+                <input type="text" id="main-search" placeholder="pesquise títulos, diretores, elencos, ... (use + busca booleana)" class="w-full theme-bg-input theme-border rounded-2xl py-2.5 pl-12 pr-20 outline-none text-sm">
+                <button id="btn-clear" class="absolute right-4 w-6 h-6 flex items-center justify-center rounded-full text-red-500 hover:bg-red-500 hover:text-white transition" title="Limpar pesquisa">
+                    <i class="fas fa-times text-xs"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="status" id="status">
+            <p>Status: <strong>Aguardando teste...</strong></p>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <h2>📝 Log:</h2>
+            <pre id="log" style="background: var(--bg); padding: 15px; border-radius: 8px; max-height: 200px; overflow-y: auto; font-size: 12px; color: var(--text-secondary);"></pre>
+        </div>
+    </div>
+
+    <script>
+        // Função para logar mensagens
+        function log(message) {
+            const logElement = document.getElementById('log');
+            logElement.textContent = new Date().toLocaleTimeString() + ' - ' + message + '\n' + logElement.textContent;
+            console.log(message);
+        }
+
+        // Variáveis globais para testes
+        let isSearchBarActive = false;
+
+        // Elementos
+        const searchBtn = document.getElementById('btn-test');
+        const resetBtn = document.getElementById('btn-reset');
+        const container = document.getElementById('search-bar-container');
+        const searchInput = document.getElementById('main-search');
+        const status = document.getElementById('status');
+
+        // Função para atualizar status
+        function updateStatus(message, isSuccess = true) {
+            status.innerHTML = '<p>Status: <strong>' + message + '</strong></p>';
+            if (isSuccess) {
+                status.style.background = 'rgba(16, 185, 129, 0.1)';
+                status.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+            } else {
+                status.style.background = 'rgba(239, 68, 68, 0.1)';
+                status.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+            }
+        }
+
+        // Função para testar o botão de pesquisa
+        function testSearchButton() {
+            log('🧪 Testando botão de pesquisa...');
+            log('   Botão encontrado: ' + (searchBtn ? '✅' : '❌'));
+            log('   Container encontrado: ' + (container ? '✅' : '❌'));
+            log('   Input encontrado: ' + (searchInput ? '✅' : '❌'));
+
+            if (searchBtn && container && searchInput) {
+                // Verifica estado inicial
+                isSearchBarActive = container.classList.contains('active');
+                log('   Estado inicial: ' + (isSearchBarActive ? 'ativo' : 'inativo'));
+                log('   Botão clicado: ' + searchBtn.textContent);
+
+                // Clica no botão
+                searchBtn.click();
+                log('   ✅ Clique realizado no botão');
+
+                // Verifica estado após o clique
+                setTimeout(function() {
+                    isSearchBarActive = container.classList.contains('active');
+                    log('   Estado após clique: ' + (isSearchBarActive ? 'ativo' : 'inativo'));
+                    log('   Container maxHeight: ' + container.style.maxHeight);
+                    log('   Container opacity: ' + container.style.opacity);
+
+                    if (isSearchBarActive) {
+                        log('   ✅ Barra de pesquisa aberta com sucesso!');
+                        updateStatus('Barra de pesquisa aberta com sucesso!', true);
+                    } else {
+                        log('   ❌ Barra de pesquisa não abriu!');
+                        updateStatus('Barra de pesquisa não abriu!', false);
+                    }
+
+                    // Foca no input após 100ms
+                    setTimeout(function() {
+                        if (searchInput) {
+                            searchInput.focus();
+                            log('   ✅ Input de pesquisa focado!');
+                        }
+                    }, 100);
+                }, 300);
+            } else {
+                log('   ❌ Elementos não encontrados!');
+                updateStatus('Elementos não encontrados!', false);
+            }
+        }
+
+        // Função para resetar o teste
+        function resetTest() {
+            log('🔄 Resetando teste...');
+            container.classList.remove('active');
+            searchInput.value = '';
+            isSearchBarActive = false;
+            updateStatus('Aguardando teste...', true);
+            log('   ✅ Teste resetado');
+        }
+
+        // Event listeners
+        searchBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            testSearchButton();
+        });
+
+        resetBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            resetTest();
+        });
+
+        // Teste inicial
+        log('📝 Iniciando teste do botão de pesquisa...');
+        setTimeout(testSearchButton, 500);
+    </script>
+</body>
+</html>

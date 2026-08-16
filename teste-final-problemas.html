@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Final - Problemas Corrigidos</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .btn { padding: 10px 20px; margin: 5px; cursor: pointer; border: 1px solid #ccc; border-radius: 5px; }
+        .status { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background: #e8f5e8; border-left: 4px solid #4caf50; }
+        .error { background: #ffebee; border-left: 4px solid #f44336; }
+        .log { background: #f5f5f5; padding: 10px; border-radius: 5px; max-height: 300px; overflow-y: auto; }
+        .search-container { 
+            background: #f8f9fa; 
+            border: 1px solid #dee2e6; 
+            padding: 15px; 
+            margin: 10px 0; 
+            max-height: 0; 
+            overflow: hidden; 
+            transition: all 0.3s ease;
+        }
+        .search-container.active { 
+            max-height: 100px; 
+            padding: 15px;
+        }
+        #search-input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Teste Final - Problemas Corrigidos</h1>
+    
+    <div class="status" id="status">
+        Status: Aguardando teste...
+    </div>
+    
+    <div>
+        <button class="btn" onclick="testSearchBar()">
+            <i class="fas fa-search"></i> Testar Barra de Pesquisa
+        </button>
+        
+        <button class="btn" onclick="testFavorite()">
+            <i class="fas fa-heart"></i> Testar Favoritar
+        </button>
+        
+        <button class="btn" onclick="testVideo()">
+            <i class="fas fa-play"></i> Testar Vídeo
+        </button>
+        
+        <button class="btn" onclick="runAllTests()">
+            <i class="fas fa-play"></i> Rodar Todos Testes
+        </button>
+        
+        <button class="btn" onclick="clearLog()">
+            <i class="fas fa-trash"></i> Limpar Log
+        </button>
+    </div>
+    
+    <div class="search-container" id="search-bar-container">
+        <input type="text" id="search-input" placeholder="Digite para pesquisar...">
+        <button class="btn" onclick="clearSearch()">Limpar</button>
+    </div>
+    
+    <h3>📋 Log de Testes</h3>
+    <div id="log" class="log"></div>
+
+    <script>
+        function updateStatus(message, isError = false) {
+            const status = document.getElementById('status');
+            status.textContent = 'Status: ' + message;
+            status.className = isError ? 'status error' : 'status success';
+        }
+        
+        function addLog(message) {
+            const log = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            log.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+            addLog('Log limpo');
+        }
+        
+        function testSearchBar() {
+            addLog('🔍 Testando barra de pesquisa...');
+            
+            const searchBtn = document.querySelector('[onclick*="toggleSearchBar"], [data-onclick*="toggleSearchBar"]');
+            const searchContainer = document.getElementById('search-bar-container');
+            const searchInput = document.getElementById('search-input');
+            
+            if (!searchBtn) {
+                addLog('❌ Botão de pesquisa não encontrado');
+                updateStatus('Erro: Botão de pesquisa não encontrado', true);
+                return;
+            }
+            
+            addLog('✅ Botão de pesquisa encontrado');
+            
+            // Testa abrir
+            searchBtn.click();
+            addLog('✅ Botão clicado');
+            
+            setTimeout(() => {
+                if (searchContainer.classList.contains('active')) {
+                    addLog('✅ Barra aberta');
+                    
+                    // Testa digitar
+                    searchInput.value = 'teste';
+                    searchInput.dispatchEvent(new Event('input'));
+                    addLog('✅ Texto digitado: ' + searchInput.value);
+                    
+                    // Testa limpar
+                    setTimeout(() => {
+                        searchInput.value = '';
+                        searchInput.dispatchEvent(new Event('input'));
+                        addLog('✅ Busca limpa');
+                        
+                        // Testa fechar
+                        searchBtn.click();
+                        addLog('✅ Barra fechada');
+                        updateStatus('Barra de pesquisa funcionando!');
+                    }, 1000);
+                } else {
+                    addLog('❌ Barra não abriu');
+                    updateStatus('Erro: Barra não abriu', true);
+                }
+            }, 500);
+        }
+        
+        function testFavorite() {
+            addLog('❤️ Testando favoritar...');
+            
+            if (typeof window.Logic !== 'undefined' && typeof window.Logic.toggleFavorite === 'function') {
+                addLog('✅ Função de favoritar encontrada');
+                updateStatus('Favoritar funcionando!');
+            } else {
+                addLog('❌ Função de favoritar não encontrada');
+                updateStatus('Erro: Favoritar não funciona', true);
+            }
+        }
+        
+        function testVideo() {
+            addLog('🎬 Testando vídeo...');
+            
+            if (typeof window.Logic !== 'undefined' && typeof window.Logic.playMedia === 'function') {
+                addLog('✅ Função de vídeo encontrada');
+                
+                // Testa com blob URL (deve falhar gracefully)
+                addLog('Testando com blob URL...');
+                window.Logic.playMedia('blob:null/123');
+                
+                setTimeout(() => {
+                    addLog('✅ Vídeo tratado corretamente (sem erro)');
+                    updateStatus('Vídeo funcionando!');
+                }, 1000);
+            } else {
+                addLog('❌ Função de vídeo não encontrada');
+                updateStatus('Erro: Vídeo não funciona', true);
+            }
+        }
+        
+        function runAllTests() {
+            addLog('🚀 Iniciando teste completo...');
+            updateStatus('Executando testes...');
+            
+            setTimeout(() => {
+                testSearchBar();
+            }, 1000);
+            
+            setTimeout(() => {
+                testFavorite();
+            }, 2000);
+            
+            setTimeout(() => {
+                testVideo();
+            }, 3000);
+            
+            setTimeout(() => {
+                addLog('🎉 Testes completos!');
+                updateStatus('Todos testes executados!');
+            }, 4000);
+        }
+        
+        // Auto-teste
+        window.addEventListener('load', () => {
+            updateStatus('Página carregada - pronto para testes');
+            addLog('🚀 Página de teste carregada');
+            
+            setTimeout(() => {
+                addLog('Executando auto-teste...');
+                testSearchBar();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

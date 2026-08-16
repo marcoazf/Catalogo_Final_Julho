@@ -33,7 +33,21 @@
             load() {
                 const data = Store.getItem('cinecatalog_v126');
                 if (data) {
-                    try { APP_STATE.movies = JSON.parse(data); } catch(e) { APP_STATE.movies = []; }
+                    try { APP_STATE.movies = JSON.parse(data); } catch(e) { APP_STATE.movies = [];
+                        // Limpeza automática de caminhos de mídia: remove filenames se já estiverem incluidos
+// Isso evita problemas como "C:\pastas\arquivo.mp4\arquivo.mp4"
+var camposCaminho = ['pathVideos', 'pathBackups', 'pathCards', 'pathSeriesCards', 'pathAcervo'];
+camposCaminho.forEach(function(campo) {
+    if (APP_STATE[campo] && typeof APP_STATE[campo] === 'string') {
+        // Remove filename do final do path se existir
+        var regex = /[\\/]([^\\/]+)$/;
+        var match = APP_STATE[campo].match(regex);
+        if (match) {
+            APP_STATE[campo] = APP_STATE[campo].replace(regex, '');
+        }
+    }
+});
+                     }
                     APP_STATE.movies.forEach(function(m) {
                         if (!m._createdAt) m._createdAt = m.id || Date.now().toString();
                         if (!m.statuses && (m.status || m.watched !== undefined)) {
@@ -108,11 +122,14 @@
                 pathBackups: '',
                 pathAcervo: '',
                 acervoBackupName: '',
+                pathBackupGeral: '',
+                backupGeralName: '',
                 pathCardsActive: false,
                 pathSeriesCardsActive: false,
                 pathVideosActive: false,
                 pathBackupsActive: false,
                 pathAcervoActive: false,
+                pathBackupGeralActive: false,
                 placeholderColor: '',
                 placeholderOpacity: 100,
                 autoSave: false,

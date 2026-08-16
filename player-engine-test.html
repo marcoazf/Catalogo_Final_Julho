@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Player Engine - CineCatalog Elo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            color: #fff;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #3b82f6;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+        }
+
+        .test-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .test-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #60a5fa;
+        }
+
+        .test-section p {
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .test-section code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #60a5fa;
+        }
+
+        .test-section ul {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .test-section li {
+            margin-bottom: 0.5rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+
+        .status.success {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .status.warning {
+            background: rgba(234, 179, 8, 0.2);
+            color: #eab308;
+        }
+
+        .status.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .example-trailer {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .example-trailer strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .example-trailer code {
+            color: #60a5fa;
+        }
+
+        .checklist {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .checklist-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .checklist-item h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: #94a3b8;
+        }
+
+        .checklist-item p {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <h1>🎬 Player Engine HTML - CineCatalog Elo</h1>
+    <p class="subtitle">Implementação do Problema 1 do Engine-Midias.md</p>
+
+    <div class="test-section">
+        <h2>📝 Descrição</h2>
+        <p>O Player Engine HTML criado uma arquitetura dedicada para reprodução de trailers de vídeo no Electron. A solução:</p>
+        <ul>
+            <li>Cria uma janela <strong>BrowserWindow dedicada</strong> para reprodução</li>
+            <li>Suporta <strong>múltiplas plataformas</strong>: YouTube, Vimeo, Dailymotion e vídeos diretos</li>
+            <li>Não <strong>armazena trailers</strong> localmente - apenas links/IDs</li>
+            <li>Fornece <strong>controles completos</strong> via teclado e interface</li>
+            <li>Oferece experiência <strong>Netflix-like</strong> com fullscreen automático</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>⚙️ Recursos Implementados</h2>
+        <div class="checklist">
+            <div class="checklist-item">
+                <h3>🔄 Reprodução Multi-Plataforma</h3>
+                <p>YouTube, Vimeo, vídeos MP4 locais e outros formatos</p>
+            </div>
+            <div class="checklist-item">
+                <h3>⌨️ Controles de Teclado</h3>
+                <p>ESC fecha player, F fullscreen, Space play/pause, ← → avança/retrocede</p>
+            </div>
+            <div class="checklist-item">
+                <h3>🎬 Controles de Interface</h3>
+                <p>Botão play/pause, reiniciar, fullscreen discreto e título do vídeo</p>
+            </div>
+            <div class="checklist-item">
+                <h3>🎨 UI Premium</h3>
+                <p>Overlay de carregamento, mensagens de erro, timestamp e hints</p>
+            </div>
+            <div class="checklist-item">
+                <h3>🔒 Segurança</h3>
+                <p>Bloqueio de redirecionamentos indesejados e isolamento sandbox</p>
+            </div>
+            <div class="checklist-item">
+                <h3>🚀 Performance</h3>
+                <p>Suporte para PWA, cache de ícones e tratamento de erros</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>📁 Arquivos Criados/Modificados</h2>
+        <ul>
+            <li><code>player.html</code> - Novo Player Engine HTML dedicado</li>
+            <li><code>electron/main.js</code> - Handlers IPC e lógica do player</li>
+            <li><code>electron/preload.js</code> - Ponte IPC para o player</li>
+            <li><code>js/logic.js</code> - Passagem de título e parâmetros</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>🧪 Testar o Player</h2>
+        <p>Para testar o Player Engine no aplicativo CineCatalog Elo:</p>
+        <ol>
+            <li>Inicie o servidor: <code>npm start</code></li>
+            <li>Inicie o Electron: <code>npm run start:electron</code></li>
+            <li>Clique no botão <strong>Assistir</strong> ou <strong>Play</strong> em qualquer filme/serie</li>
+            <li>Se o trailer estiver no formato YouTube, o player HTML dedicado será aberto</li>
+        </ol>
+        <div class="example-trailer">
+            <strong>Exemplo de URL de trailer:</strong>
+            <code>https://www.youtube.com/watch?v=dQw4w9WgXcQ</code>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>📊 Comparação Antes/Depois</h2>
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+            <tr style="background: rgba(59, 130, 246, 0.1);">
+                <th style="padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.2);">Recurso</th>
+                <th style="padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.2);">Antes</th>
+                <th style="padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.2);">Depois (Player Engine)</th>
+            </tr>
+            <tr>
+                <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Abertura de trailer</td>
+                <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);"><span class="status warning">Janela padrão</span></td>
+                <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);"><span class="status success">Janela dedicada + fullscreen</span></td>
+            </tr>
+            <tr>
+                <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Plataformas suportadas</td>
+                <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);">YouTube + navegador padrão</td>
+                <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);">YouTube + Vimeo + MP4 local + mais</td>
+            </tr>
+            <tr>
+                <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Armazenamento local</td>
+                <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Não aplicável</td>
+                <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);"><span class="status warning">Apenas links/IDs</span></td>
+            </tr>
+            <tr>
+                <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Controles de teclado</td>
+                <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Não suportados</td>
+                <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);"><span class="status success">Completo (ESC, F, Space, ← →)</span></td>
+            </tr>
+            <tr>
+                <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Interface</td>
+                <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);">Navegador padrão</td>
+                <td style="padding: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.1);"><span class="status success">Netflix-like premium</span></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="test-section">
+        <h2>✅ Próximos Passos</h2>
+        <ul>
+            <li>Testar em diferentes plataformas (YouTube, Vimeo, MP4)</li>
+            <li>Adicionar suporte a novos formatos (VLC, mpv)</li>
+            <li>Otimizar tratamento de erros e timeouts</li>
+            <li>Implementar suporte a legendas</li>
+        </ul>
+    </div>
+</body>
+</html>

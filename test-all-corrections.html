@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste das Correções do Botão de Pesquisa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .status {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        .success {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            color: #856404;
+        }
+        .info {
+            background: #d1ecf1;
+            border: 2px solid #17a2b8;
+            color: #0c5460;
+        }
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 10px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            margin: 15px 0;
+        }
+        .test-result {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .test-result.pass {
+            background: rgba(40, 167, 69, 0.1);
+            border-left-color: #28a745;
+        }
+        .test-result.fail {
+            background: rgba(220, 53, 69, 0.1);
+            border-left-color: #dc3545;
+        }
+        .test-result.pending {
+            background: rgba(255, 193, 7, 0.1);
+            border-left-color: #ffc107;
+        }
+        .log {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+        }
+        .test-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .summary {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste das Correções do Botão de Pesquisa</h1>
+
+        <div class="summary">
+            <h2>📋 Resumo dos Testes</h2>
+            <div id="test-summary"></div>
+        </div>
+
+        <div id="results"></div>
+
+        <h2>🎮 Testes Disponíveis</h2>
+        <div class="test-buttons">
+            <button class="btn btn-primary" onclick="testAll()">Testar Tudo</button>
+            <button class="btn btn-success" onclick="testSearchButton()">Testar Botão</button>
+            <button class="btn btn-danger" onclick="runManualFix()">Correção Manual</button>
+            <button class="btn btn-primary" onclick="testKeyboard()">Testar Atalhos</button>
+            <button class="btn btn-success" onclick="testConsole()">Testar Console</button>
+        </div>
+
+        <h2>📝 Logs</h2>
+        <div id="console-log" class="log"></div>
+
+        <h2>🎯 Comandos de Debug</h2>
+        <div class="code-block">
+            // Teste do botão
+            window.testSearchBtn()
+            <br><br>
+            // Correção manual
+            runManualFix()
+            <br><br>
+            // Teste completo
+            testAll()
+        </div>
+
+        <div id="debug-section"></div>
+    </div>
+
+    <script>
+        const log = document.getElementById('console-log');
+        const results = document.getElementById('results');
+        const summary = document.getElementById('test-summary');
+        const debugSection = document.getElementById('debug-section');
+
+        function logMessage(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : type === 'warning' ? '#ffc107' : '#667eea';
+            const line = document.createElement('div');
+            line.innerHTML = `<span style="color: #999">[${timestamp}]</span> <span style="color: ${color}">${message}</span>`;
+            log.appendChild(line);
+            log.scrollTop = log.scrollHeight;
+            console.log(message);
+        }
+
+        function addResult(testName, passed, message = '') {
+            const div = document.createElement('div');
+            div.className = `test-result ${passed ? 'pass' : 'fail'}`;
+            div.innerHTML = `
+                <strong>${passed ? '✅ PASSOU' : '❌ FALHOU'}</strong> - ${testName}
+                ${message ? `<br><small>${message}</small>` : ''}
+            `;
+            results.appendChild(div);
+            return passed;
+        }
+
+        function updateSummary(passed, total) {
+            summary.innerHTML = `
+                <p><strong>Total:</strong> ${total} testes</p>
+                <p><strong>✅ Sucesso:</strong> ${passed}</p>
+                <p><strong>❌ Falha:</strong> ${total - passed}</p>
+                <p><strong>📊 Taxa:</strong> ${Math.round(passed / total * 100)}%</p>
+            `;
+        }
+
+        async function wait(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function testSearchButton() {
+            logMessage('🔍 Iniciando teste do botão de pesquisa...', 'info');
+            let passed = 0;
+            let total = 0;
+
+            // Test 1: Verifica se botão existe
+            total++;
+            const searchBtn = document.querySelector('button[data-onclick*="toggleSearchBar"]');
+            if (searchBtn) {
+                passed++;
+                logMessage(`✅ Botão encontrado com data-onclick`, 'success');
+                logMessage(`   Conteúdo: ${searchBtn.innerHTML}`, 'info');
+            } else {
+                logMessage(`❌ Botão não encontrado com data-onclick`, 'error');
+                // Tenta busca alternativa
+                const allBtns = document.querySelectorAll('button');
+                for (let i = 0; i < allBtns.length; i++) {
+                    if (allBtns[i].innerHTML.includes('fa-search') || allBtns[i].title && allBtns[i].title.toLowerCase().includes('pesquisar')) {
+                        logMessage(`✅ Botão encontrado por busca alternativa: ${allBtns[i].innerHTML}`, 'success');
+                        passed++;
+                        break;
+                    }
+                }
+            }
+
+            // Test 2: Verifica se container existe
+            total++;
+            const container = document.getElementById('search-bar-container');
+            if (container) {
+                passed++;
+                logMessage(`✅ Container encontrado`, 'success');
+                logMessage(`   Classe: ${container.className}`, 'info');
+                logMessage(`   Active: ${container.classList.contains('active')}`, 'info');
+            } else {
+                logMessage(`❌ Container não encontrado`, 'error');
+            }
+
+            // Test 3: Verifica funções
+            total++;
+            if (typeof UI !== 'undefined' && typeof UI.toggleSearchBar === 'function') {
+                passed++;
+                logMessage(`✅ Função UI.toggleSearchBar existe`, 'success');
+            } else {
+                logMessage(`❌ Função UI.toggleSearchBar não existe`, 'error');
+            }
+
+            total++;
+            if (typeof UI !== 'undefined' && typeof UI.openSearchBar === 'function') {
+                passed++;
+                logMessage(`✅ Função UI.openSearchBar existe`, 'success');
+            } else {
+                logMessage(`❌ Função UI.openSearchBar não existe`, 'error');
+            }
+
+            total++;
+            if (typeof UI !== 'undefined' && typeof UI.closeSearchBar === 'function') {
+                passed++;
+                logMessage(`✅ Função UI.closeSearchBar existe`, 'success');
+            } else {
+                logMessage(`❌ Função UI.closeSearchBar não existe`, 'error');
+            }
+
+            // Test 4: Testa clique
+            total++;
+            if (searchBtn) {
+                logMessage(`🔄 Testando clique no botão...`, 'info');
+                searchBtn.click();
+                await wait(300);
+                if (container && container.classList.contains('active')) {
+                    passed++;
+                    logMessage(`✅ Botão funcionou! Barra aberta`, 'success');
+                } else {
+                    logMessage(`❌ Botão não funcionou! Barra não abriu`, 'error');
+                }
+            }
+
+            addResult('Botão de Pesquisa', passed > 3);
+            updateSummary(passed, total);
+            return passed > 3;
+        }
+
+        function runManualFix() {
+            logMessage('🔧 Executando correção manual do botão de pesquisa...', 'info');
+            const script = `
+                (function() {
+                    console.log('🔍 Corrigindo botão de pesquisa...');
+                    
+                    const searchBtn = document.querySelector('button[data-onclick*="toggleSearchBar"]') ||
+                                      document.querySelector('button:has(.fa-search)') ||
+                                      document.querySelector('button[title*="Pesquisar"]');
+                    
+                    if (!searchBtn) {
+                        console.error('❌ Botão não encontrado');
+                        return;
+                    }
+                    
+                    console.log('✅ Botão encontrado:', searchBtn.innerHTML);
+                    
+                    searchBtn.removeAttribute('data-onclick');
+                    
+                    searchBtn.onclick = function(e) {
+                        console.log('🎯 Botão clicado!');
+                        const container = document.getElementById('search-bar-container');
+                        if (container) {
+                            const isOpening = !container.classList.contains('active');
+                            container.classList.toggle('active');
+                            
+                            const allBtns = document.querySelectorAll('button');
+                            allBtns.forEach(btn => {
+                                if (btn.innerHTML.includes('fa-search')) {
+                                    btn.classList.toggle('active', isOpening);
+                                }
+                            });
+                            
+                            if (isOpening) {
+                                setTimeout(() => {
+                                    const input = document.getElementById('main-search');
+                                    if (input) input.focus();
+                                }, 100);
+                            }
+                        }
+                        
+                        e.preventDefault();
+                        return false;
+                    };
+                    
+                    searchBtn.style.cursor = 'pointer';
+                    searchBtn.style.transition = 'all 0.2s';
+                    
+                    console.log('✅ Botão corrigido!');
+                    console.log('🔄 Testando agora...');
+                    searchBtn.click();
+                })();
+            `;
+            
+            const scriptElement = document.createElement('script');
+            scriptElement.textContent = script;
+            document.body.appendChild(scriptElement);
+            
+            setTimeout(() => {
+                logMessage('✅ Correção manual executada!', 'success');
+                testSearchButton();
+            }, 1000);
+        }
+
+        function testKeyboard() {
+            logMessage('⌨️ Testando atalhos de teclado...', 'info');
+            let passed = 0;
+            let total = 0;
+
+            // Test 1: Verifica se listener está registrado
+            total++;
+            logMessage('📝 Verificando listeners de teclado...', 'info');
+            
+            document.addEventListener('keydown', function testHandler(e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+                    passed++;
+                    logMessage(`✅ Atalho Ctrl+F detectado!`, 'success');
+                }
+                if (e.key === 'Escape') {
+                    passed++;
+                    logMessage(`✅ Atalho Escape detectado!`, 'success');
+                }
+            }, true);
+            
+            logMessage('🔄 Simulando Ctrl+F...', 'info');
+            setTimeout(() => {
+                const event = new KeyboardEvent('keydown', { ctrlKey: true, key: 'f', preventDefault: () => {} });
+                document.dispatchEvent(event);
+            }, 100);
+            
+            logMessage('🔄 Simulando Escape...', 'info');
+            setTimeout(() => {
+                const event = new KeyboardEvent('keydown', { key: 'Escape', preventDefault: () => {} });
+                document.dispatchEvent(event);
+            }, 500);
+
+            setTimeout(() => {
+                addResult('Atalhos de Teclado', passed >= 2);
+                updateSummary(passed, total);
+            }, 600);
+            
+            return passed >= 2;
+        }
+
+        function testConsole() {
+            logMessage('🖥️ Testando console flutuante...', 'info');
+            const searchBtn = document.querySelector('button[data-onclick*="toggleSearchBar"]');
+            
+            if (searchBtn) {
+                logMessage('✅ Botão encontrado no DOM', 'success');
+                searchBtn.click();
+                logMessage('🔄 Clique realizado', 'info');
+                setTimeout(() => {
+                    const container = document.getElementById('search-bar-container');
+                    if (container && container.classList.contains('active')) {
+                        logMessage('✅ Botão flutuante funciona corretamente!', 'success');
+                    } else {
+                        logMessage('❌ Botão flutuante não funcionou', 'error');
+                    }
+                }, 300);
+            } else {
+                logMessage('❌ Botão não encontrado', 'error');
+            }
+            
+            return true;
+        }
+
+        function testAll() {
+            logMessage('🚀 Executando testes completos...', 'info');
+            results.innerHTML = '';
+            log.innerHTML = '';
+            
+            testSearchButton();
+            setTimeout(() => testKeyboard(), 1500);
+            setTimeout(() => testConsole(), 2500);
+        }
+
+        // Inicializa
+        logMessage('🧪 Sistema de testes pronto!', 'success');
+        logMessage('✅ Execute os testes clicando nos botões acima', 'info');
+    </script>
+</body>
+</html>

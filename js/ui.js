@@ -633,79 +633,109 @@
                 APP_STATE.zoom = lvl;
                 if (typeof saveUIPrefs === 'function') saveUIPrefs();
             },
+            _mediaBaseFor(kind) {
+                var cfg = window._appConfig || {};
+                if (kind === 'poster-film') return cfg.pathCards || '';
+                if (kind === 'poster-series') return (cfg.pathSeriesCardsActive && cfg.pathSeriesCards) ? cfg.pathSeriesCards : (cfg.pathCards || '');
+                if (kind === 'media-film') return cfg.pathVideos || '';
+                if (kind === 'media-series') return cfg.pathBackups || '';
+                return '';
+            },
+            _openVideoPicker(defaultPath, cb) {
+                if (window.electronAPI && typeof window.electronAPI.selectVideo === 'function') {
+                    window.electronAPI.selectVideo({
+                        title: 'Selecionar vídeo',
+                        defaultPath: defaultPath || undefined
+                    }).then(function(res) {
+                        if (res && res.path) cb({ path: res.path, name: res.name || res.path.split(/[\\\/]/).pop() || '' });
+                    }).catch(function() {});
+                    return;
+                }
+                if (_isElectron() && window.require) {
+                    try {
+                        var electron = window.require('electron');
+                        if (electron && electron.dialog) {
+                            electron.dialog.showOpenDialog({
+                                title: 'Selecionar vídeo',
+                                defaultPath: defaultPath || undefined,
+                                properties: ['openFile'],
+                                filters: [{ name: 'Vídeos', extensions: ['mp4', 'mkv', 'avi', 'mov', 'webm', 'flv', 'wmv'] }]
+                            }).then(function(res) {
+                                if (res && !res.canceled && res.filePaths && res.filePaths[0]) {
+                                    var p = res.filePaths[0];
+                                    cb({ path: p, name: p.split(/[\\\/]/).pop() || '' });
+                                }
+                            }).catch(function() {});
+                            return;
+                        }
+                    } catch(e) {}
+                }
+                if (defaultPath && 'showOpenFilePicker' in window) {
+                    (async function() {
+                        try {
+                            var handles = await window.showOpenFilePicker({ types: [{ description: 'Vídeos', accept: { 'video/*': ['.mp4','.mkv','.avi','.mov','.webm','.flv','.wmv'] } }], multiple: false });
+                            if (handles && handles[0]) {
+                                var file = await handles[0].getFile();
+                                var base = defaultPath.replace(/[\\\/]+$/, '');
+                                cb({ path: file.path || (base ? base + '\\' + file.name : ''), name: file.name });
+                            }
+                        } catch(e) {
+                            UI._openVideoPickerLegacy(cb);
+                        }
+                    })();
+                    return;
+                }
+                UI._openVideoPickerLegacy(cb);
+            },
+            _openVideoPickerLegacy(cb) {
+                var input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'video/*';
+                input.style.display = 'none';
+                document.body.appendChild(input);
+                input.addEventListener('change', function() {
+                    var f = this.files && this.files[0];
+                    if (f) cb({ path: f.path || '', name: f.name });
+                    document.body.removeChild(input);
+                });
+                input.click();
+            },
             initMediaPicker(prefix) {
                 var btn = document.getElementById(prefix + '-media-picker-btn');
                 var fileInput = document.getElementById(prefix + '-media-file');
                 var urlField = document.getElementById(prefix + '-media-url');
                 if (btn && fileInput && urlField) {
                     btn.addEventListener('click', function() {
-                        var cfg = window._appConfig || {};
-                        var basePath = '';
-                        if (prefix === 'f' || prefix === 'fs') {
-                            basePath = cfg.pathVideos || '';
-                        }
-                        if (_isElectron() && window.require) {
-                            try {
-                                var electron = window.require('electron');
-                                if (electron && electron.dialog) {
-                                    electron.dialog.showOpenDialog({
-                                        title: 'Selecionar vídeo',
-                                        defaultPath: basePath || undefined,
-                                        properties: ['openFile'],
-                                        filters: [{ name: 'Vídeos', extensions: ['mp4', 'mkv', 'avi', 'mov', 'webm', 'flv', 'wmv'] }]
-                                    }).then(function(res) {
-                                        if (res && !res.canceled && res.filePaths && res.filePaths[0]) {
-                                            var selPath = res.filePaths[0];
-                                            urlField.value = selPath;
-                                            delete urlField.dataset.ref;
-                                            urlField.dataset.path = selPath;
-                                            try {
-                                                var fs = window.require('fs');
-                                                var buf = fs.readFileSync(selPath);
-                                                var fName = selPath.split(/[\\\/]/).pop() || 'video';
-                                                var file = new File([buf], fName, { type: 'video/*' });
-                                                var blobUrl = URL.createObjectURL(file);
-                                                var ref = {blob: blobUrl, name: fName};
-                                                urlField.value = selPath;
-                                                urlField.dataset.ref = JSON.stringify(ref);
-                                            } catch(e2) {}
-                                        }
-                                    }).catch(function() {});
-                                    return;
-                                }
-                            } catch(e) {}
-                        }
-                        if (basePath && 'showOpenFilePicker' in window) {
-                            (async function() {
-                                try {
-                                    var handles = await window.showOpenFilePicker({ types: [{ description: 'Vídeos', accept: { 'video/*': ['.mp4','.mkv','.avi','.mov','.webm','.flv','.wmv'] } }], multiple: false });
-                                    if (handles && handles[0]) {
-                                        var file = await handles[0].getFile();
-                                        var blobUrl = URL.createObjectURL(file);
-                                        var ref = {blob: blobUrl, name: file.name};
-                                        urlField.value = basePath + '\\' + file.name;
-                                        urlField.dataset.ref = JSON.stringify(ref);
-                                    }
-                                } catch(e) {
-                                    fileInput.click();
-                                }
-                            })();
-                        } else {
-                            fileInput.click();
-                        }
+                        var basePath = UI._mediaBaseFor(prefix === 'fs' ? 'media-series' : 'media-film');
+                        UI._openVideoPicker(basePath, function(res) {
+                            if (!res) return;
+                            if (res.path && /^[A-Za-z]:[\\\/]/.test(res.path)) {
+                                urlField.value = res.path;
+                                delete urlField.dataset.ref;
+                                urlField.dataset.path = res.path;
+                            } else if (res.path) {
+                                urlField.value = res.name || res.path;
+                                urlField.dataset.ref = JSON.stringify({ path: res.path, name: res.name || '' });
+                            } else {
+                                urlField.value = res.name || '';
+                                urlField.dataset.ref = JSON.stringify({ path: '', name: res.name || '' });
+                            }
+                        });
                     });
                     fileInput.addEventListener('change', function() {
                         if (this.files && this.files[0]) {
                             var file = this.files[0];
                             var cfg = window._appConfig || {};
-                            var basePath = '';
-                            if (prefix === 'f' || prefix === 'fs') {
-                                basePath = cfg.pathVideos || '';
+                            var basePath = prefix === 'fs' ? (cfg.pathBackups || '') : (cfg.pathVideos || '');
+                            var selPath = file.path || (basePath ? basePath.replace(/[\\\/]+$/, '') + '\\' + file.name : '');
+                            if (selPath && /^[A-Za-z]:[\\\/]/.test(selPath)) {
+                                urlField.value = selPath;
+                                delete urlField.dataset.ref;
+                                urlField.dataset.path = selPath;
+                            } else {
+                                urlField.value = file.name;
+                                urlField.dataset.ref = JSON.stringify({ path: selPath, name: file.name });
                             }
-                            var blobUrl = URL.createObjectURL(file);
-                            var ref = {blob: blobUrl, name: file.name};
-                            urlField.value = basePath ? (basePath + '\\' + file.name) : file.name;
-                            urlField.dataset.ref = JSON.stringify(ref);
                             this.value = '';
                         }
                     });
@@ -717,7 +747,42 @@
                 if (area && fileInput) {
                     area.addEventListener('click', function() {
                         var cfg = window._appConfig || {};
-                        var basePath = (prefix === 'fs' && cfg.pathSeriesCardsActive && cfg.pathSeriesCards) ? cfg.pathSeriesCards : (cfg.pathCards || '');
+                        var basePath = UI._mediaBaseFor(prefix === 'fs' ? 'poster-series' : 'poster-film');
+                        if (window.electronAPI && typeof window.electronAPI.selectImage === 'function') {
+                            window.electronAPI.selectImage({
+                                title: 'Selecionar capa',
+                                defaultPath: basePath || undefined
+                            }).then(function(res) {
+                                if (res && res.path) {
+                                    var selPath = res.path;
+                                    var pu = document.getElementById(prefix + '-poster-url');
+                                    if (pu) pu.value = selPath;
+                                    try {
+                                        var fs = window.require('fs');
+                                        var buf = fs.readFileSync(selPath);
+                                        var fName = selPath.split(/[\\\/]/).pop() || 'capa';
+                                        var file = new File([buf], fName, { type: 'image/*' });
+                                        Logic.applyPosterFile(file, prefix);
+                                    } catch(e) {
+                                        try {
+                                            var self = UI;
+                                            window.electronAPI.readFileAsDataURL(selPath).then(function(dataUrl) {
+                                                if (!dataUrl) return;
+                                                var parts = dataUrl.split(',');
+                                                var bin = atob(parts[1]);
+                                                var arr = new Uint8Array(bin.length);
+                                                for (var i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+                                                var blob = new Blob([arr], { type: 'image/*' });
+                                                self._posterBlobs = self._posterBlobs || {};
+                                                self._posterBlobs[prefix] = blob;
+                                                UI.setPosterPreview(dataUrl, prefix);
+                                            });
+                                        } catch(e2) {}
+                                    }
+                                }
+                            }).catch(function() {});
+                            return;
+                        }
                         if (_isElectron() && window.require) {
                             try {
                                 var electron = window.require('electron');
@@ -770,7 +835,7 @@
                         if (this.files && this.files[0]) {
                             var file = this.files[0];
                             var cfg = window._appConfig || {};
-                            var basePath = (prefix === 'fs' && cfg.pathSeriesCardsActive && cfg.pathSeriesCards) ? cfg.pathSeriesCards : (cfg.pathCards || '');
+                            var basePath = UI._mediaBaseFor(prefix === 'fs' ? 'poster-series' : 'poster-film');
                             Logic.applyPosterFile(file, prefix);
                             var pu = document.getElementById(prefix + '-poster-url');
                             if (pu) pu.value = basePath ? (basePath + '\\' + file.name) : file.name;
@@ -1402,11 +1467,14 @@
                 setVal('cfg-path-backups', cfg.pathBackups || '');
                 setVal('cfg-path-acervo', cfg.pathAcervo || '');
                 setVal('cfg-acervo-backup-name', cfg.acervoBackupName || '');
+                setVal('cfg-path-backup-geral', cfg.pathBackupGeral || '');
+                setVal('cfg-backup-geral-name', cfg.backupGeralName || '');
                 setChecked('cfg-path-cards-active', !!(cfg.pathCards && cfg.pathCards.trim()));
                 setChecked('cfg-path-series-cards-active', !!(cfg.pathSeriesCards && cfg.pathSeriesCards.trim()));
                 setChecked('cfg-path-videos-active', !!(cfg.pathVideos && cfg.pathVideos.trim()));
                 setChecked('cfg-path-backups-active', !!(cfg.pathBackups && cfg.pathBackups.trim()));
                 setChecked('cfg-path-acervo-active', !!(cfg.pathAcervo && cfg.pathAcervo.trim()));
+                setChecked('cfg-path-backup-geral-active', !!(cfg.pathBackupGeral && cfg.pathBackupGeral.trim()));
                 setChecked('cfg-autosave', cfg.autoSave !== false);
                 setVal('cfg-video-player', cfg.videoPlayer || 'system');
                 UI._populatePlayerOptions();
@@ -1712,17 +1780,21 @@
                 cfg.cardCategoryColor = _combineColor('cfg-cat-color', 'op-cfg-cat-color');
                 cfg.cardCategoryBg = _combineColor('cfg-cat-bg', 'op-cfg-cat-bg');
                 cfg.cardCategorySize = getVal('cfg-cat-size');
-                cfg.pathCards = getVal('cfg-path-cards');
-                cfg.pathSeriesCards = getVal('cfg-path-series-cards');
-                cfg.pathVideos = getVal('cfg-path-videos');
-                cfg.pathBackups = getVal('cfg-path-backups');
-                cfg.pathAcervo = getVal('cfg-path-acervo');
+                var pathRegex = /[\\/]([^\\/]+)$/;
+                cfg.pathCards = getVal('cfg-path-cards').replace(pathRegex, '');
+                cfg.pathSeriesCards = getVal('cfg-path-series-cards').replace(pathRegex, '');
+                cfg.pathVideos = getVal('cfg-path-videos').replace(pathRegex, '');
+                cfg.pathBackups = getVal('cfg-path-backups').replace(pathRegex, '');
+                cfg.pathAcervo = getVal('cfg-path-acervo').replace(pathRegex, '');
                 cfg.acervoBackupName = getVal('cfg-acervo-backup-name') || '';
+                cfg.pathBackupGeral = getVal('cfg-path-backup-geral');
+                cfg.backupGeralName = getVal('cfg-backup-geral-name') || '';
                 cfg.pathCardsActive = document.getElementById('cfg-path-cards-active')?.checked || false;
                 cfg.pathSeriesCardsActive = document.getElementById('cfg-path-series-cards-active')?.checked || false;
                 cfg.pathVideosActive = document.getElementById('cfg-path-videos-active')?.checked || false;
                 cfg.pathBackupsActive = document.getElementById('cfg-path-backups-active')?.checked || false;
                 cfg.pathAcervoActive = document.getElementById('cfg-path-acervo-active')?.checked || false;
+                cfg.pathBackupGeralActive = document.getElementById('cfg-path-backup-geral-active')?.checked || false;
                 cfg.autoSave = document.getElementById('cfg-autosave')?.checked || false;
                 cfg.videoPlayer = getVal('cfg-video-player') || 'system';
                 cfg.customPlayerPath = getVal('cfg-custom-player-path') || '';
@@ -1768,6 +1840,22 @@
                 var input = document.getElementById(inputId);
                 if (!input) return;
                 var self = this;
+                // Electron: usa o seletor nativo (mostra o caminho completo e
+                // ativa o botão ATIVAR automaticamente).
+                if (window.electronAPI && typeof window.electronAPI.selectDirectory === 'function') {
+                    window.electronAPI.selectDirectory({
+                        title: 'Selecionar Pasta',
+                        defaultPath: input.value && input.value.trim() ? input.value.trim() : undefined
+                    }).then(function(selected) {
+                        if (selected && selected.trim()) {
+                            input.value = selected.trim();
+                            self._autoActivatePath(inputId);
+                            self._onPathInput(inputId, inputId + '-active');
+                            self._updateConfigPreview();
+                        }
+                    }).catch(function() {});
+                    return;
+                }
                 _legacyPick();
                 function _legacyPick() {
                     var fileInput = document.getElementById('folder-picker-helper');
@@ -1790,6 +1878,7 @@
                                 input.value = path;
                             }
                             self._autoActivatePath(inputId);
+                            self._onPathInput(inputId, inputId + '-active');
                             self._updateConfigPreview();
                         }
                         this.value = '';
@@ -2231,7 +2320,7 @@
                 }
                 html += '<h1>CATÁLOGO ' + viewLabel + '</h1>';
                 html += '<div class="sub">CineCatalog Elo — Acervo ' + APP_STATE.movies.length + ' títulos</div>';
-                html += '<div class="datetime">Gerado em ' + dateStr + ' | Página ' + page + ' de ' + totalPages + '</div>';
+                html += '<div class="datetime" style="font-size:22px;">Gerado em ' + dateStr + ' | Página ' + page + ' de ' + totalPages + '</div>';
                 html += '</div>';
                 var isEstreiaList = APP_STATE.currentView === 'estreias';
                 var listHeaders = isEstreiaList
@@ -2366,10 +2455,10 @@
                 var allCount = all.length;
                 var html = '<div class="log-inner">';
                 html += '<div class="log-header">';
-                html += '<div style="font-size:24px;color:#3B82F6;margin-bottom:0.3rem"><i class="fas fa-film"></i></div>';
+                html += '<div style="font-size:28px;color:#3B82F6;margin-bottom:0.4rem"><i class="fas fa-film"></i></div>';
                 html += '<h1>HISTÓRICO DE CADASTRO</h1>';
                 html += '<div class="sub">CineCatalog Elo — ' + allCount + ' títulos cadastrados</div>';
-                html += '<div class="datetime">Gerado em ' + dateStr + ' | Página ' + page + ' de ' + totalPages + '</div>';
+                html += '<div class="datetime" style="font-size:22px;">Gerado em ' + dateStr + ' | Página ' + page + ' de ' + totalPages + '</div>';
                 html += '</div>';
                 // Totalizadores e Status dinâmicos (em tempo real)
                 var tFilmes = all.filter(function(m) { return m.type === 'filmes'; }).length;
@@ -2377,19 +2466,19 @@
                 var tNew = all.filter(function(m) { return m.statuses && m.statuses.new; }).length;
                 var tWatch = all.filter(function(m) { return m.statuses && m.statuses.watch; }).length;
                 var tFav = all.filter(function(m) { return m.statuses && m.statuses.favorite; }).length;
-                html += '<div style="display:flex;flex-wrap:wrap;gap:0.4rem;justify-content:center;align-items:center;margin:0.8rem 0 1rem">' +
-                    '<div style="background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;border-radius:8px;padding:0.3rem 0.75rem;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em">Filmes: ' + tFilmes + '</div>' +
-                    '<div style="background:#f5f3ff;border:1px solid #ddd6fe;color:#5b21b6;border-radius:8px;padding:0.3rem 0.75rem;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em">Séries: ' + tSeries + '</div>' +
-                    '<div style="background:#e0f2fe;border:1px solid #7dd3fc;color:#075985;border-radius:8px;padding:0.3rem 0.75rem;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em">Novos: ' + tNew + '</div>' +
-                    '<div style="background:#fffbeb;border:1px solid #fcd34d;color:#b45309;border-radius:8px;padding:0.3rem 0.75rem;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em">Assistir: ' + tWatch + '</div>' +
-                    '<div style="background:#fef2f2;border:1px solid #fca5a5;color:#b91c1c;border-radius:8px;padding:0.3rem 0.75rem;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em">Favoritos: ' + tFav + '</div>' +
+html += '<div style="display:flex;flex-wrap:wrap;gap:0.4rem;justify-content:center;align-items:center;margin:0.8rem 0 1rem">' +
+                    '<div style="background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;border-radius:8px;padding:0.5rem 1rem;font-size:22px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em">Filmes: ' + tFilmes + '</div>' +
+                    '<div style="background:#f5f3ff;border:1px solid #ddd6fe;color:#5b21b6;border-radius:8px;padding:0.5rem 1rem;font-size:22px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em">Séries: ' + tSeries + '</div>' +
+                    '<div style="background:#e0f2fe;border:1px solid #7dd3fc;color:#075985;border-radius:8px;padding:0.5rem 1rem;font-size:22px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em">Novos: ' + tNew + '</div>' +
+                    '<div style="background:#fffbeb;border:1px solid #fcd34d;color:#b91c1c;border-radius:8px;padding:0.5rem 1rem;font-size:22px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em">Assistir: ' + tWatch + '</div>' +
+                    '<div style="background:#fef2f2;border:1px solid #fca5a5;color:#b91c1c;border-radius:8px;padding:0.5rem 1rem;font-size:22px;font-weight:800;text-transform:uppercase;letter-spacing:0.04em">Favoritos: ' + tFav + '</div>' +
                     '</div>';
                 if (!monthKeys.length) {
                     html += '<div style="text-align:center;padding:2rem;color:#94a3b8;font-size:10px">Nenhum título cadastrado ainda.</div>';
                 } else {
                     pageMonths.forEach(function(key) {
                         var mData = months[key];
-                        html += '<div class="log-month">' + mData.label + ' <span style="font-weight:400;color:#64748b;font-size:8px">(' + mData.items.length + ' títulos)</span></div>';
+                        html += '<div class="log-month">' + mData.label + ' <span style="font-weight:400;color:#64748b;font-size:10px">(' + mData.items.length + ' títulos)</span></div>';
                         html += '<table><thead><tr><th>#</th><th>Data</th><th>Dia</th><th>Título</th><th>Tipo</th><th>Gêneros</th><th>Status</th></tr></thead><tbody>';
                         mData.items.forEach(function(m, i) {
                             var d = m._cadastroDate;
@@ -2399,10 +2488,10 @@
                             var typeLabel = m.type === 'filmes' ? 'Filme' : m.type === 'series' ? 'Série' : 'Estreia';
                             var st = m.statuses || {};
                             var stBadges = '';
-                            if (st.new) stBadges += '<span style="display:inline-block;background:#2563EB;color:#fff;padding:1px 6px;border-radius:999px;font-size:8px;font-weight:700;margin-right:3px">Novo</span>';
-                            if (st.watch) stBadges += '<span style="display:inline-block;background:#D97706;color:#fff;padding:1px 6px;border-radius:999px;font-size:8px;font-weight:700;margin-right:3px">Assistir</span>';
-                            if (st.favorite) stBadges += '<span style="display:inline-block;background:#DC2626;color:#fff;padding:1px 6px;border-radius:999px;font-size:8px;font-weight:700;margin-right:3px">Fav</span>';
-                            if (!stBadges) stBadges = '<span style="color:#94a3b8;font-size:8px">—</span>';
+                            if (st.new) stBadges += '<span style="display:inline-block;background:#2563EB;color:#fff;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;margin-right:3px">Novo</span>';
+                            if (st.watch) stBadges += '<span style="display:inline-block;background:#D97706;color:#fff;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;margin-right:3px">Assistir</span>';
+                            if (st.favorite) stBadges += '<span style="display:inline-block;background:#DC2626;color:#fff;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;margin-right:3px">Fav</span>';
+                            if (!stBadges) stBadges = '<span style="color:#94a3b8;font-size:10px">—</span>';
                             html += '<tr><td>' + (i+1) + '</td><td>' + dateStr2 + ' ' + timeStr + '</td><td>' + dayName + '</td><td>' + (m.titlePt || m.originalTitle || '—') + '</td><td>' + typeLabel + '</td><td>' + (m.genre || '—') + '</td><td>' + stBadges + '</td></tr>';
                         });
                         html += '</tbody></table>';
@@ -2622,7 +2711,7 @@
                     var seasonEl = block.querySelector('[data-field="season"]');
                     if (seasonEl) d.season = seasonEl.value;
                     var mediaEl = block.querySelector('[data-field="mediaUrl"]');
-                    if (mediaEl) d.mediaUrl = mediaEl.dataset.ref || mediaEl.value;
+                    if (mediaEl) d.mediaUrl = mediaEl.dataset.path || mediaEl.dataset.ref || mediaEl.value;
                     if (d.year) d.date = d.year;
                     if (d.cast) d.guestCast = d.cast;
                 });
@@ -2650,11 +2739,15 @@
                         opts += '<option value="' + s + '"' + (String(d.season) === String(s) ? ' selected' : '') + '>Temporada ' + s + '</option>';
                     }
                     var dispMedia = d.mediaUrl || '';
+                    var dispMediaPath = '';
                     if (dispMedia.charAt(0) === '{') {
                         try {
                             var mr = JSON.parse(dispMedia);
-                            dispMedia = mr.name || '';
+                            if (mr.path && /^[A-Za-z]:[\\\/]/.test(mr.path)) dispMediaPath = mr.path;
+                            dispMedia = mr.name || mr.path || '';
                         } catch(e) {}
+                    } else if (/^[A-Za-z]:[\\\/]/.test(dispMedia)) {
+                        dispMediaPath = dispMedia;
                     }
                     var dispCast = d.cast || d.guestCast || '';
                     var dispYear = d.year || d.date || '';
@@ -2670,7 +2763,7 @@
                         '<input type="text" data-field="year" value="' + (dispYear || '').replace(/"/g, '&quot;') + '" placeholder="Ano" class="field-premium series-field" style="flex:0 0 70px">' +
                         '<input type="text" data-field="duration" value="' + (d.duration || '').replace(/"/g, '&quot;') + '" placeholder="Duração" class="field-premium series-field" style="flex:0 0 85px">' +
                         '<div style="display:flex;gap:0.25rem;align-items:center;flex:1;min-width:0">' +
-                        '<input type="text" data-field="mediaUrl" value="' + (dispMedia || '').replace(/"/g, '&quot;') + '" placeholder="Link da Série" class="field-premium series-field">' +
+                        '<input type="text" data-field="mediaUrl" data-path="' + (dispMediaPath || '').replace(/"/g, '&quot;') + '" value="' + (dispMedia || '').replace(/"/g, '&quot;') + '" placeholder="Link da Série" class="field-premium series-field">' +
                         '<button type="button" class="input-icon-btn" data-onclick="UI._pickEpisodeFile(' + i + ')" title="Selecionar ficheiro local"><i class="fas fa-folder-open"></i></button>' +
                         '</div>' +
                         '</div>' +
@@ -2684,26 +2777,23 @@
                 if (fsEp) fsEp.value = UI._episodeData.length;
             },
             _pickEpisodeFile(idx) {
-                var input = document.createElement('input');
-                input.type = 'file';
-                input.accept = 'video/*';
-                input.style.display = 'none';
-                document.body.appendChild(input);
-                input.addEventListener('change', function() {
-                    if (this.files && this.files[0]) {
-                        var file = this.files[0];
-                        var blobUrl = URL.createObjectURL(file);
-                        var ref = {blob: blobUrl, name: file.name};
-                        var block = document.querySelector('.series-dyn-block.episode[data-index="' + idx + '"]');
-                        var mediaEl = block ? block.querySelector('[data-field="mediaUrl"]') : null;
-                        if (mediaEl) {
-                            mediaEl.value = file.name;
-                            mediaEl.dataset.ref = JSON.stringify(ref);
+                var basePath = UI._mediaBaseFor('media-series');
+                UI._openVideoPicker(basePath, function(res) {
+                    if (!res || !res.path) return;
+                    var block = document.querySelector('.series-dyn-block.episode[data-index="' + idx + '"]');
+                    var mediaEl = block ? block.querySelector('[data-field="mediaUrl"]') : null;
+                    if (mediaEl) {
+                        if (/^[A-Za-z]:[\\\/]/.test(res.path)) {
+                            mediaEl.value = res.name || res.path;
+                            delete mediaEl.dataset.ref;
+                            mediaEl.dataset.path = res.path;
+                        } else {
+                            mediaEl.value = res.name || res.path;
+                            mediaEl.dataset.path = '';
+                            mediaEl.dataset.ref = JSON.stringify({ path: res.path, name: res.name || '' });
                         }
                     }
-                    document.body.removeChild(input);
                 });
-                input.click();
             },
 
             toggleDynButtons() {
@@ -3058,7 +3148,7 @@
                         if (!t) return;
                         var d = duration ? duration.value.trim() : '';
                         var y = year ? year.value.trim() : '';
-                        var l = linkEl ? (linkEl.dataset.ref || linkEl.value) : '';
+                        var l = linkEl ? (linkEl.dataset.path || linkEl.dataset.ref || linkEl.value) : '';
                         var epData = {num: epNum, season: season, title: t, duration: d, year: y, link: l};
                         var existing = -1;
                         for (var i = 0; i < saved[key].length; i++) {
@@ -3075,32 +3165,29 @@
                 Logic.showStatus(count + ' episódios salvos com sucesso!');
             },
             _pickEpFile(epId) {
-                var input = document.createElement('input');
-                input.type = 'file';
-                input.accept = 'video/*';
-                input.style.display = 'none';
-                document.body.appendChild(input);
-                input.addEventListener('change', function() {
-                    if (this.files && this.files[0]) {
-                        var file = this.files[0];
-                        var blobUrl = URL.createObjectURL(file);
-                        var ref = {blob: blobUrl, name: file.name};
-                        var linkField = document.getElementById(epId + '-link');
-                        if (linkField) {
-                            linkField.value = file.name;
-                            linkField.dataset.ref = JSON.stringify(ref);
+                var basePath = UI._mediaBaseFor('media-series');
+                UI._openVideoPicker(basePath, function(res) {
+                    if (!res || !res.path) return;
+                    var linkField = document.getElementById(epId + '-link');
+                    if (linkField) {
+                        if (/^[A-Za-z]:[\\\/]/.test(res.path)) {
+                            linkField.value = res.name || res.path;
+                            delete linkField.dataset.ref;
+                            linkField.dataset.path = res.path;
+                        } else {
+                            linkField.value = res.name || res.path;
+                            linkField.dataset.path = '';
+                            linkField.dataset.ref = JSON.stringify({ path: res.path, name: res.name || '' });
                         }
                     }
-                    document.body.removeChild(input);
                 });
-                input.click();
             },
             _applyEpisode(epId, season, episode) {
                 var title = document.getElementById(epId + '-title').value.trim();
                 var duration = document.getElementById(epId + '-duration').value.trim();
                 var year = document.getElementById(epId + '-year').value.trim();
                 var linkEl = document.getElementById(epId + '-link');
-                var link = linkEl ? (linkEl.dataset.ref || linkEl.value) : '';
+                var link = linkEl ? (linkEl.dataset.path || linkEl.dataset.ref || linkEl.value) : '';
                 if (!title) { Logic.showStatus('Preencha o título do episódio'); return; }
                 var epData = {num: episode, season: season, title: title, duration: duration, year: year, link: link};
                 var saved = JSON.parse(Store.getItem('_dyn_series_episodes') || '{}');

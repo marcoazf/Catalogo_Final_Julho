@@ -82,7 +82,22 @@
                         if (movie.mediaFile) {
                             var fMedia = document.getElementById('f-media-url');
                             if (fMedia) {
-                                try { var r = JSON.parse(movie.mediaFile); fMedia.value = r.name || ''; if (r.blob) fMedia.dataset.ref = movie.mediaFile; } catch(e) { fMedia.value = movie.mediaFile; }
+                                try {
+                                    var r = JSON.parse(movie.mediaFile);
+                                    if (r.path && /^[A-Za-z]:[\\\/]/.test(r.path)) {
+                                        fMedia.dataset.path = r.path;
+                                        delete fMedia.dataset.ref;
+                                        fMedia.value = r.name || r.path;
+                                    } else if (r.blob) {
+                                        fMedia.dataset.ref = movie.mediaFile;
+                                        fMedia.value = r.name || '';
+                                    } else {
+                                        fMedia.value = r.path || r.name || '';
+                                    }
+                                } catch(e) {
+                                    fMedia.value = movie.mediaFile;
+                                    if (/^[A-Za-z]:[\\\/]/.test(movie.mediaFile)) { fMedia.dataset.path = movie.mediaFile; delete fMedia.dataset.ref; }
+                                }
                             }
                         }
                         var st = movie.statuses || {};
@@ -142,9 +157,20 @@
                                 var linkEl = document.getElementById(epId + '-link');
                                 if (linkEl) {
                                     if (ep.link && ep.link.charAt(0) === '{') {
-                                        try { var r = JSON.parse(ep.link); linkEl.value = r.name || ''; linkEl.dataset.ref = ep.link; } catch(e) { linkEl.value = ep.link; }
+                                        try {
+                                            var r = JSON.parse(ep.link);
+                                            if (r.path && /^[A-Za-z]:[\\\/]/.test(r.path)) {
+                                                linkEl.value = r.name || r.path;
+                                                delete linkEl.dataset.ref;
+                                                linkEl.dataset.path = r.path;
+                                            } else {
+                                                linkEl.value = r.name || '';
+                                                if (r.blob) linkEl.dataset.ref = ep.link;
+                                            }
+                                        } catch(e) { linkEl.value = ep.link; }
                                     } else {
                                         linkEl.value = ep.link || '';
+                                        if (/^[A-Za-z]:[\\\/]/.test(ep.link || '')) { linkEl.dataset.path = ep.link; delete linkEl.dataset.ref; }
                                     }
                                 }
                             });
@@ -545,7 +571,8 @@
                     Logic.showModalStatus('Este item não possui mídia para executar.', 'orange');
                     return;
                 }
-                Logic.openMediaWithPlayer(raw, movie.type);
+                const title = movie.titlePt || movie.originalTitle || 'Vídeo';
+                Logic.openMediaWithPlayer(raw, movie.type, title);
             },
 
             viewMovieCtx() {
@@ -858,15 +885,7 @@
                     Logic.showModalStatus('Este item não possui mídia para executar.', 'orange');
                     return;
                 }
-                var url = raw;
-                if (raw.charAt(0) === '{' || raw.charAt(0) === '[') {
-                    try {
-                        var ref = JSON.parse(raw);
-                        if (ref.blob) url = ref.blob;
-                        else if (ref.path) url = ref.path;
-                    } catch(e) {}
-                }
-                Logic.openMediaWithPlayer(url, type);
+                Logic.openMediaWithPlayer(raw, type);
             },
             playInfoSeason: function(seasonNum) {
                 var m = _infoMovieList[_infoMovieIndex];
@@ -1183,77 +1202,120 @@
                 }
                 setTimeout(() => el.style.opacity = '0', dur);
             },
-
-            openMediaWithPlayer(url, mediaType) {
+openMediaWithPlayer(url, mediaType, title = 'Vídeo') {
                 if (!url || !url.trim()) return;
+                var _ref = null;
                 if (url.charAt(0) === '{' || url.charAt(0) === '[') {
-                    try {
-                        var ref = JSON.parse(url);
-                        if (ref.blob) url = ref.blob;
-                        else if (ref.path) url = ref.path;
-                    } catch(e) {}
+                    try { _ref = JSON.parse(url); } catch(e) { _ref = null; }
                 }
-                var cfg = window._appConfig;
-                var player = cfg.videoPlayer || 'system';
+                // 1) Caminho local real tem sempre prioridade sobre blob.
+                if (_ref) {
+                    if (_ref.path) url = _ref.path;
+                    else if (_ref.blob) url = _ref.blob;
+                }
+                // 2) Caminho: completa contra as pastas configuradas (Filmes/Séries) OU converte para file:///
+                if (url && url.length > 0) {
+                    // Se o URL já for um caminho absoluto (ex: C:\pastas\arquivo.mp4), usa diretamente
+                    if (/^[A-Za-z]:[\\\/]/.test(url)) {
+                        // Caminho absoluto - já está completo, usa como está
+                    } else {
+                        var cfg0 = window._appConfig || {};
+                        var bases0 = [];
+                        if (mediaType === 'series') bases0.push(cfg0.pathBackups || '');
+                        else bases0.push(cfg0.pathVideos || '');
+                        bases0.push(cfg0.pathVideos || '', cfg0.pathBackups || '', cfg0.pathCards || '', cfg0.pathSeriesCards || '', cfg0.pathAcervo || '');
+                        var urlResolvido = null;
+                        for (var bi = 0; bi < bases0.length; bi++) {
+                            var b0 = (bases0[bi] || '').replace(/[\\\/]+$/, '');
+                            if (!b0) continue;
+                            var cand0 = b0 + '\\' + url;
+                            try {
+                                if (typeof require !== 'undefined') {
+                                    if (require('fs').existsSync(cand0)) {
+                                        urlResolvido = cand0;
+                                        break;
+                                    }
+                                } else {
+                                    urlResolvido = cand0;
+                                    break;
+                                }
+                            } catch(e) {}
+                        }
+                        // Se arquivo foi resolvido contra pastas configuradas, usa o caminho resolvido
+                        // Se não, mantém o URL original para tentar abrir (será convertido para file:/// depois se necessário)
+                        if (urlResolvido) { url = urlResolvido; }
+                    }
+                }
+                // 3) Referência blob legada: tenta recuperar o ficheiro real pelo nome
+                //    dentro das pastas configuradas antes de desistir.
+                if (_ref && _ref.blob && !_ref.path && _ref.name) {
+                    var cfg1 = window._appConfig || {};
+                    var bases1 = [cfg1.pathVideos, cfg1.pathBackups, cfg1.pathCards, cfg1.pathSeriesCards, cfg1.pathAcervo];
+                    for (var bj = 0; bj < bases1.length; bj++) {
+                        var b1 = (bases1[bj] || '').replace(/[\\\/]+$/, '');
+                        if (!b1) continue;
+                        var cand1 = b1 + '\\' + _ref.name;
+                        try {
+                            if (typeof require !== 'undefined' && require('fs').existsSync(cand1)) { url = cand1; break; }
+                        } catch(e) {}
+
+                    }
+                }
+                // 4) Blob irrecuperável não pode ser aberto pelo SO / player externo.
+                if (/^blob:/i.test(url)) {
+                    Logic.showModalStatus('Mídia com referência temporária (blob) — selecione novamente o ficheiro local no cadastro para reproduzir.', 'orange');
+                    return;
+                }
+                var cfg = window._appConfig || {};
                 var isTrailer = (url.indexOf('youtube.com') >= 0 || url.indexOf('youtu.be') >= 0 || url.indexOf('trailer') >= 0);
-                if (isTrailer) {
-                    var w = window.open(url, '_blank');
-                    if (w) {
+                
+                // SEMPRE usa Player Engine Electron - fullscreen independente da configuracao do usuario
+                var useElectronApi = (typeof window !== 'undefined' && window.electronAPI && typeof window.electronAPI.playMedia === 'function');
+                
+                if (useElectronApi) {
+                    try {
+                        window.electronAPI.playMedia({
+                            url: url,
+                            kind: isTrailer ? 'trailer' : 'file',
+                            title: title,
+                            forceFullscreen: true
+                        }).catch(function(error) {
+                            console.error('[DEBUG] Player Engine: Erro ao chamar playMedia:', error);
+                        });
+                        return;
+                    } catch (e) {
+                        console.error('[DEBUG] Player Engine: Erro na chamada:', e);
+                        // Se falhar ao chamar electronAPI, continua para o fallback
+                    }
+                }
+                
+                // Fallback: usa player do sistema em janela maximizada
+                // Este fallback evita abrir caminhos de arquivo inválidos diretamente
+                var openUrl = url;
+                if (!openUrl.match(/^(https?:|blob:|file:)/i)) {
+                    // Tenta resolver o caminho relativo usando as pastas configuradas
+                    var bases = [cfg.pathVideos, cfg.pathBackups, cfg.pathCards, cfg.pathSeriesCards, cfg.pathAcervo];
+                    var urlResolvido = null;
+                    for (var bi = 0; bi < bases.length; bi++) {
+                        var b = (bases[bi] || '').replace(/[\\\/]+$/, '');
+                        if (!b) continue;
+                        var cand = b + '\\' + url;
                         try {
-                            if (w.document && w.document.documentElement) {
-                                w.document.documentElement.requestFullscreen().catch(function() {});
+                            if (typeof require !== 'undefined' && require('fs').existsSync(cand)) {
+                                urlResolvido = 'file:///' + cand.replace(/\\/g, '/');
+                                break;
                             }
                         } catch(e) {}
                     }
-                    return;
-                }
-                if (player === 'system') {
-                    var openUrl = url;
-                    if (!openUrl.match(/^(https?:|blob:|file:)/i)) {
-                        openUrl = 'file:///' + openUrl.replace(/\\/g, '/');
+                    if (urlResolvido) {
+                        openUrl = urlResolvido;
                     }
-                    var sw = screen.availWidth, sh = screen.availHeight;
-                    var w = window.open(openUrl, '_blank', 'width=' + sw + ',height=' + sh + ',top=0,left=0');
-                    if (!w) w = window.open(openUrl, '_blank');
-                    if (w) {
-                        try {
-                            if (w.document && w.document.documentElement) {
-                                w.document.documentElement.requestFullscreen().catch(function() {});
-                            }
-                        } catch(e) {}
-                    }
-                    return;
                 }
-                var playerPath = '';
-                if (player === 'wmp') {
-                    playerPath = 'wmplayer.exe';
-                } else if (player === 'custom') {
-                    playerPath = cfg.customPlayerPath || '';
-                } else if (window._detectedPlayers && window._detectedPlayers[player]) {
-                    playerPath = window._detectedPlayers[player];
-                }
-                if (playerPath) {
-                    var isLocal = /^[A-Za-z]:[\\\/]/.test(url) || url.startsWith('\\\\');
-                    if (isLocal) {
-                        try {
-                            if (typeof require !== 'undefined') {
-                                var cp = require('child_process');
-                                var args = player === 'wmp' ? ['"'+url+'"'] : ['"'+url+'"'];
-                                cp.exec('"' + playerPath + '" ' + args.join(' '), function() {});
-                                return;
-                            }
-                        } catch(e) {}
-                        try {
-                            var link = document.createElement('a');
-                            link.href = 'file:///' + url.replace(/\\/g, '/');
-                            link.target = '_blank';
-                            link.click();
-                            return;
-                        } catch(e) {}
-                    }
-                    window.open(url, '_blank');
-                } else {
-                    window.open(url, '_blank');
+                
+                // Fallback player do sistema - sempre maximizado
+                var win = window.open(openUrl, '_blank', 'width=' + screen.availWidth + ',height=' + screen.availHeight + ',top=0,left=0');
+                if (win && win.document && win.document.documentElement) {
+                    win.document.documentElement.requestFullscreen().catch(function() {});
                 }
             },
 
@@ -1286,8 +1348,10 @@
                     {icon:'fa-print',label:'Gerar Lista A4',desc:'Imprima ou exporte para PDF/JPG uma lista completa dos itens visualizados em formato A4 tabelado.'},
                     {icon:'fa-download',label:'Exportar Dados',desc:'Exporte todo o seu acervo em formato JSON para backup ou transferência.'},
                     {icon:'fa-upload',label:'Importar Dados',desc:'Importe acervo de arquivos JSON. Restaure backups facilmente.'},
+                    {icon:'fa-play-circle',label:'Player Engine HTML',desc:'Trailer integrado com Player Engine dedicado. Reprodução multi-plataforma (YouTube, Vimeo, MP4) em janela dedicada com fullscreen automático e controles completos.'},
+                    {icon:'fa-video',label:'Reprodução Multi-Plataforma',desc:'YouTube, Vimeo, Dailymotion e MP4 direto. Player Engine HTML dedicado com interface premium Netflix-like.'},
                     {icon:'fa-moon',label:'Modo Noturno',desc:'Alternância de temas com menu flutuante. Escolha entre Dark, Light, Amber e Midnight.'},
-                    {icon:'fa-info-circle',label:'Sobre o Sistema',desc:'CineCatalog Elo v32.3.0 — Edição Premium. Sistema completo de gestão de acervo cinematográfico.'},
+                    {icon:'fa-info-circle',label:'Sobre o Sistema',desc:'CineCatalog Elo v32.6.0 — Edição Premium. Sistema completo de gestão de acervo cinematográfico com Player Engine HTML em Tela Cheia.'},
                     {icon:'fa-th-large',label:'Modos de Exibição',desc:'Três modos de visualização: Carrossel com setas, Grelha por gêneros, e Cine Marquee com animação. Ajuste velocidade e efeito no menu.'},
                     {icon:'fa-arrows-alt-h',label:'Navegação Carrossel',desc:'Navegue horizontalmente por linha com setas laterais. Duas linhas visíveis com rolagem infinita até o fim dos cards.'},
                     {icon:'fa-tachometer-alt',label:'Desempenho Otimizado',desc:'Renderizaçao lazy com batches de 20 cards. Scroll infinito suave sem travar a interface.'},

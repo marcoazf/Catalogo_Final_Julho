@@ -3,11 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="fullscreen" content="true">
 <title>Manual do Catálogo — CineCatalog Elo</title>
 <link rel="icon" type="image/svg+xml" href="favicon_catalogo.svg">
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'Inter','Segoe UI',sans-serif; background: #0f172a; color: #e2e8f0; padding: 2rem; max-width: 1200px; margin: 0 auto; line-height: 1.8; }
+.fullscreen-btn { position: fixed; right: 1rem; top: 1rem; width: 36px; height: 36px; border: none; border-radius: 50%; background: rgba(255,255,255,0.1); color: #e2e8f0; font-size: 1.2rem; cursor: pointer; z-index: 100; transition: background 0.2s; }
+.fullscreen-btn:hover { background: rgba(255,255,255,0.2); }
+.fullscreen-btn:focus { outline: 2px solid #60A5FA; }
 h1 { font-size: 1.8rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; background: linear-gradient(135deg,#60A5FA,#A78BFA); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.25rem; }
 .subtitle { color: #94a3b8; font-size: 0.95rem; margin-bottom: 2rem; border-bottom: 1px solid #1e293b; padding-bottom: 1rem; }
 h2 { font-size: 1.2rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.04em; color: #3B82F6; margin: 1.5rem 0 0.75rem; padding-bottom: 0.3rem; border-bottom: 1px solid #1e293b; }
@@ -91,6 +95,7 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 </head>
 <body>
 <h1>Manual do Catálogo</h1>
+<button class="fullscreen-btn" onclick="toggleFullScreen()" aria-label="Tela Cheia"><i class="fas fa-expand"></i></button>
 <p class="subtitle">CineCatalog Elo — Edição Premium | Versão 32.3.0 <span class="badge badge-blue">ÍCONE DA APP</span></p>
 
 <div class="nav">
@@ -123,8 +128,8 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <a href="#s32">27. Estatísticas com Filtros</a>
 <a href="#s33">28. Lembretes</a>
 <a href="#s34">29. Funcionalidades (51)</a>
-<a href="#s35">30. Novidades v32.2.0</a>
-<a href="#s36">31. Novidades v32.3.0</a>
+<a href="#s35">30. Novidades v32.9.0</a>
+<a href="#s36">31. Novidades v32.9.0</a>
 </div>
 
 <h2 id="s1">1. Visão Geral</h2>
@@ -348,7 +353,7 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <h2 id="s14">14. Atualizações</h2>
 <p>O sistema verifica atualizações automaticamente através da GitHub API.</p>
 <ul>
-<li>Badge da versão no footer: <span class="badge badge-blue">v32.3.0</span></li>
+<li>Badge da versão no footer: <span class="badge badge-blue">v32.9.0</span></li>
 <li>Clique no badge para verificar manualmente</li>
 <li>Se atualizado: badge verde <span class="badge badge-green">✓ Atualizado</span></li>
 <li>Se nova versão: badge âmbar com link para download</li>
@@ -427,7 +432,7 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <p>O ficheiro <code>icon.png</code> encontra-se na raiz do projeto e é referenciado no <code>electron/main.js</code>.</p>
 <div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
 
-<p style="margin-top:2rem;text-align:center;color:#475569;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em">CineCatalog Elo v32.3.0 — Edição Premium — Jonas Theodoro</p>
+<p style="margin-top:2rem;text-align:center;color:#475569;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.1em">CineCatalog Elo v32.9.0 — Edição Premium — Jonas Theodoro</p>
 
 <h2 id="s21">21. Novidades da Versão 28.1</h2>
 <ul>
@@ -510,8 +515,8 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <li><strong>Cadastro SÉRIES — Gêneros Estendidos:</strong> O campo de gêneros de séries passou a aceitar formatos livres como "Drama, História / Suspense Histórico". O Sistema de Gestão de Gêneros continua disponível para criar novas categorias</li>
 <li><strong>Cards de Séries:</strong> Quando nenhum gênero é escolhido, a área de gênero não é mais exibida no card da série</li>
 <li><strong>Cadastro SÉRIES — Novo Layout:</strong> Redesign do cadastro com capa central à esquerda (50%), campos à direita, remoção individual de temporadas e episódios, totalizadores e ordens otimizadas</li>
-<li><strong>Rodapé — Versão:</strong> Versão do aplicativo atualizada para <span class="badge badge-blue">v32.1.0</span></li>
-<li><strong>Manual Atualizado:</strong> Todas as funcionalidades, links e versão do aplicativo atualizados para v32.1.0</li>
+<li><strong>Rodapé — Versão:</strong> Versão do aplicativo atualizada para <span class="badge badge-blue">v32.9.0</span></li>
+<li><strong>Manual Atualizado:</strong> Todas as funcionalidades, links e versão do aplicativo atualizados para v32.9.0</li>
 <li><strong>FUNCIONALIDADES — Layout Aprimorado:</strong> Grid de funcionalidades agora com 7 colunas, espaçamento aumentado entre itens (0.75rem), padding superior para distanciar do texto informativo e padding inferior equivalente, modal com largura aumentada (850px) para melhor respiração visual</li>
 <li><strong>FUNCIONALIDADES — Favicon Colorido:</strong> Atualização do favicon do Manual com cores mais vibrantes e alegres (gradientes de coral, turquesa e amarelo) substituindo o tema escuro anterior</li>
 <li><strong>INFO — Fallback de Imagem:</strong> Adicionado fallback para capa de filmes/séries na janela de edição, mostrando ícone com texto padrão caso a imagem não carregue corretamente, mantendo o mesmo tamanho e estilo dos cards na tela principal</li>
@@ -564,8 +569,8 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <li><strong>EDITAR — Capa acima do Fallback:</strong> Ao editar um FILME ou SÉRIE, carregar um Card posiciona agora a imagem por cima do fallback (fundo, ícone e texto). Ao remover a imagem com o "X", o fallback volta a aparecer automaticamente</li>
 <li><strong>CADASTRO — Linha do Link:</strong> Classificação e Status passaram a partilhar a mesma linha do Link do Filme, com alinhamento perfeito entre os três campos</li>
 <li><strong>CADASTRO — Campo Elenco Maior:</strong> O campo Elenco Principal de FILMES e SÉRIES ganhou maior altura, com barra de rolagem minimalista azul (padrão da aplicação) que só aparece quando necessária</li>
-<li><strong>Rodapé — Versão:</strong> Versão do aplicativo atualizada para <span class="badge badge-blue">v32.2.0</span></li>
-<li><strong>Manual Atualizado:</strong> Todas as funcionalidades, links e versão do aplicativo atualizados para v32.2.0</li>
+<li><strong>Rodapé — Versão:</strong> Versão do aplicativo atualizada para <span class="badge badge-blue">v32.9.0</span></li>
+<li><strong>Manual Atualizado:</strong> Todas as funcionalidades, links e versão do aplicativo atualizados para v32.9.0</li>
 </ul>
 <div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
 
@@ -578,9 +583,21 @@ kbd { background: #1e293b; border: 1px solid #334155; padding: 0.1rem 0.4rem; bo
 <li><strong>EXECUTAR NO PLAYER DEFINIDO:</strong> O botão Play nos cards e o botão EXECUTAR FILME na janela INFO agora reproduzem a mídia no player configurado (Padrão do Sistema, Windows Media Player ou Personalizado), em vez de apenas abrir uma nova aba</li>
 <li><strong>EDITAR SÉRIES:</strong> O campo Trailer é restaurado corretamente ao editar uma série (dado salvo em <code>trailUrl</code>)</li>
 <li><strong>MANUAL EMPACOTADO:</strong> O arquivo <code>manual_do_catalogo.html</code> passou a ser incluído no instalador e abre numa janela própria da aplicação ao clicar em Manual</li>
-<li><strong>Rodapé — Versão:</strong> Versão do aplicativo atualizada para <span class="badge badge-blue">v32.3.0</span></li>
-<li><strong>Manual Atualizado:</strong> Todas as funcionalidades, links e versão do aplicativo atualizados para v32.3.0</li>
+<li><strong>Rodapé — Versão:</strong> Versão do aplicativo atualizada para <span class="badge badge-blue">v32.9.0</span></li>
+<li><strong>Manual Atualizado:</strong> Todas as funcionalidades, links e versão do aplicativo atualizados para v32.9.0</li>
 </ul>
 <div class="back-top"><a href="#"><i class="fas fa-arrow-up"></i> Voltar ao topo</a></div>
+
+<script>
+function toggleFullScreen() {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
+}
+</script>
 </body>
 </html>
